@@ -1,0 +1,5 @@
+glob:*/bin/*
+glob:*/obj/*
+glob:*.suo
+glob:*.user
+glob:*/data/cache/*

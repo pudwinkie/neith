@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{CE0B7471-43B9-4319-854B-EF8F81078E5E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Smdn.Security.Authentication.Sasl.Tests</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <RootNamespace>Smdn.Security.Authentication.Sasl.Tests</RootNamespace>
+    <OutputPath>bin\</OutputPath>
+    <IntermediateOutputPath>obj\</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\netfx3.5\</OutputPath>
+    <IntermediateOutputPath>obj\Debug\netfx3.5\</IntermediateOutputPath>
+    <DefineConstants>NET_2_0;NET_3_5;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>NET_2_0;NET_3_5</DefineConstants>
+    <OutputPath>bin\Release\netfx3.5\</OutputPath>
+    <IntermediateOutputPath>obj\Release\netfx3.5\</IntermediateOutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\Smdn.Security.Authentication.Sasl-netfx3.5.csproj">
+      <Project>{D661D52C-F0B6-45CC-99FF-AF98628317BA}</Project>
+      <Name>Smdn.Security.Authentication.Sasl-netfx3.5</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Smdn\Smdn-netfx3.5.csproj">
+      <Project>{94EE5515-F253-491B-8F0F-09F70D03B1B6}</Project>
+      <Name>Smdn-netfx3.5</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Smdn.Security.Authentication.Sasl.Client\" />
+    <Folder Include="Smdn.Security.Authentication.Sasl\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Smdn.Security.Authentication.Sasl.Client\PlainMechanism.cs" />
+    <Compile Include="Smdn.Security.Authentication.Sasl.Client\BytesAssert.cs" />
+    <Compile Include="Smdn.Security.Authentication.Sasl.Client\LoginMechanism.cs" />
+    <Compile Include="Smdn.Security.Authentication.Sasl.Client\DigestMD5Mechanism.cs" />
+    <Compile Include="Smdn.Security.Authentication.Sasl.Client\CRAMMD5Mechanism.cs" />
+    <Compile Include="Smdn.Security.Authentication.Sasl.Client\AnonymousMechanism.cs" />
+    <Compile Include="Smdn.Security.Authentication.Sasl.Client\NTLMMechanism.cs" />
+    <Compile Include="Smdn.Security.Authentication.Sasl.Client\SaslClientMechanism.cs" />
+    <Compile Include="Smdn.Security.Authentication.Sasl\SaslMechanisms.cs" />
+  </ItemGroup>
+</Project>

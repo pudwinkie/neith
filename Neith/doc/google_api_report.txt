@@ -1,0 +1,361 @@
+# GoogleAPIの調査など
+
+
+http://spreadsheets.google.com/pub?key=0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c&output=json
+
+0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/public/basic
+
+http://code.google.com/intl/ja/apis/spreadsheets/data/3.0/reference.html#ListFeed
+
+
+# シートアクセス
+http://spreadsheets.google.com/feeds/worksheets/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/private/values
+
+# 行アクセス
+http://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values
+
+
+
+
+
+
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns='http://www.w3.org/2005/Atom' xmlns:openSearch='http://a9.com/-/spec/opensearchrss/1.0/' xmlns:gsx='http://schemas.google.com/spreadsheets/2006/extended'>
+<id>https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values</id>
+<updated>2010-09-24T06:05:13.532Z</updated>
+<category scheme='http://schemas.google.com/spreadsheets/2006' term='http://schemas.google.com/spreadsheets/2006#list'/>
+<title type='text'>シート1</title>
+<link rel='alternate' type='text/html' href='https://spreadsheets.google.com/ccc?key=0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c'/>
+<link rel='http://schemas.google.com/g/2005#feed' type='application/atom+xml' href='https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values'/>
+<link rel='self' type='application/atom+xml' href='https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values'/>
+<author>
+<name>lucia.neith.vb</name>
+<email>lucia.neith.vb@gmail.com</email>
+</author>
+<openSearch:totalResults>18</openSearch:totalResults>
+<openSearch:startIndex>1</openSearch:startIndex>
+
+<entry>
+	<id>https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/cokwr</id>
+	<updated>2010-09-24T06:05:13.532Z</updated>
+	<category scheme='http://schemas.google.com/spreadsheets/2006' term='http://schemas.google.com/spreadsheets/2006#list'/>
+	<title type='text'>知人</title>
+	<content type='text'>属性名: contact, 一般説明人物の場合:  連絡先が分かる知人</content>
+	<link rel='self' type='application/atom+xml' href='https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/cokwr'/>
+	<gsx:種別>知人</gsx:種別>
+	<gsx:属性名>contact</gsx:属性名>
+	<gsx:一般説明人物の場合> 連絡先が分かる知人</gsx:一般説明人物の場合>
+	<gsx:きぼう></gsx:きぼう>
+	<gsx:クエスト></gsx:クエスト>
+	<gsx:地名></gsx:地名>
+	<gsx:アイテム></gsx:アイテム>
+</entry>
+
+<entry>
+<id>https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/cpzh4</id>
+<updated>2010-09-24T06:05:13.532Z</updated>
+<category scheme='http://schemas.google.com/spreadsheets/2006' term='http://schemas.google.com/spreadsheets/2006#list'/>
+<title type='text'>知人</title>
+<content type='text'>属性名: acquaintance, 一般説明人物の場合: 挨拶程度の知人</content>
+<link rel='self' type='application/atom+xml' href='https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/cpzh4'/>
+<gsx:種別>知人</gsx:種別>
+<gsx:属性名>acquaintance</gsx:属性名>
+<gsx:一般説明人物の場合>挨拶程度の知人</gsx:一般説明人物の場合>
+<gsx:きぼう>
+</gsx:きぼう>
+<gsx:クエスト>
+</gsx:クエスト>
+<gsx:地名>
+</gsx:地名>
+<gsx:アイテム>
+</gsx:アイテム>
+</entry>
+
+<entry>
+<id>https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/cre1l</id>
+<updated>2010-09-24T06:05:13.532Z</updated>
+<category scheme='http://schemas.google.com/spreadsheets/2006' term='http://schemas.google.com/spreadsheets/2006#list'/>
+<title type='text'>知人</title>
+<content type='text'>属性名: friend, 一般説明人物の場合: 友達。親密な仲間, きぼう: 信頼サイト</content>
+<link rel='self' type='application/atom+xml' href='https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/cre1l'/>
+<gsx:種別>知人</gsx:種別>
+<gsx:属性名>friend</gsx:属性名>
+<gsx:一般説明人物の場合>友達。親密な仲間</gsx:一般説明人物の場合>
+<gsx:きぼう>信頼サイト</gsx:きぼう>
+<gsx:クエスト>
+</gsx:クエスト>
+<gsx:地名>
+</gsx:地名>
+<gsx:アイテム>
+</gsx:アイテム>
+</entry>
+<entry>
+<id>https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/chk2m</id>
+<updated>2010-09-24T06:05:13.532Z</updated>
+<category scheme='http://schemas.google.com/spreadsheets/2006' term='http://schemas.google.com/spreadsheets/2006#list'/>
+<title type='text'>知り合い</title>
+<content type='text'>属性名: met, 一般説明人物の場合: 会ったことのある人, きぼう: 会いたい, クエスト: 関係者/場所</content>
+<link rel='self' type='application/atom+xml' href='https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/chk2m'/>
+<gsx:種別>知り合い</gsx:種別>
+<gsx:属性名>met</gsx:属性名>
+<gsx:一般説明人物の場合>会ったことのある人</gsx:一般説明人物の場合>
+<gsx:きぼう>会いたい</gsx:きぼう>
+<gsx:クエスト>関係者/場所</gsx:クエスト>
+<gsx:地名>
+</gsx:地名>
+<gsx:アイテム>
+</gsx:アイテム>
+</entry>
+<entry>
+<id>https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/ciyn3</id>
+<updated>2010-09-24T06:05:13.532Z</updated>
+<category scheme='http://schemas.google.com/spreadsheets/2006' term='http://schemas.google.com/spreadsheets/2006#list'/>
+<title type='text'>仕事</title>
+<content type='text'>属性名: co-worker, 一般説明人物の場合: 職場の同僚, クエスト: 難易度/攻略</content>
+<link rel='self' type='application/atom+xml' href='https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/ciyn3'/>
+<gsx:種別>仕事</gsx:種別>
+<gsx:属性名>co-worker</gsx:属性名>
+<gsx:一般説明人物の場合>職場の同僚</gsx:一般説明人物の場合>
+<gsx:きぼう>
+</gsx:きぼう>
+<gsx:クエスト>難易度/攻略</gsx:クエスト>
+<gsx:地名>
+</gsx:地名>
+<gsx:アイテム>
+</gsx:アイテム>
+</entry>
+<entry>
+<id>https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/ckd7g</id>
+<updated>2010-09-24T06:05:13.532Z</updated>
+<category scheme='http://schemas.google.com/spreadsheets/2006' term='http://schemas.google.com/spreadsheets/2006#list'/>
+<title type='text'>仕事</title>
+<content type='text'>属性名: colleague, 一般説明人物の場合: 同じ研究/活動分野の仲間, きぼう: 修理したい, アイテム: 修理素材</content>
+<link rel='self' type='application/atom+xml' href='https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/ckd7g'/>
+<gsx:種別>仕事</gsx:種別>
+<gsx:属性名>colleague</gsx:属性名>
+<gsx:一般説明人物の場合>同じ研究/活動分野の仲間</gsx:一般説明人物の場合>
+<gsx:きぼう>修理したい</gsx:きぼう>
+<gsx:クエスト>
+</gsx:クエスト>
+<gsx:地名>
+</gsx:地名>
+<gsx:アイテム>修理素材</gsx:アイテム>
+</entry>
+<entry>
+<id>https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/clrrx</id>
+<updated>2010-09-24T06:05:13.532Z</updated>
+<category scheme='http://schemas.google.com/spreadsheets/2006' term='http://schemas.google.com/spreadsheets/2006#list'/>
+<title type='text'>場所</title>
+<content type='text'>属性名: co-resident, 一般説明人物の場合: 同居人</content>
+<link rel='self' type='application/atom+xml' href='https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/clrrx'/>
+<gsx:種別>場所</gsx:種別>
+<gsx:属性名>co-resident</gsx:属性名>
+<gsx:一般説明人物の場合>同居人</gsx:一般説明人物の場合>
+<gsx:きぼう>
+</gsx:きぼう>
+<gsx:クエスト>
+</gsx:クエスト>
+<gsx:地名>
+</gsx:地名>
+<gsx:アイテム>
+</gsx:アイテム>
+</entry>
+<entry>
+<id>https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/cyevm</id>
+<updated>2010-09-24T06:05:13.532Z</updated>
+<category scheme='http://schemas.google.com/spreadsheets/2006' term='http://schemas.google.com/spreadsheets/2006#list'/>
+<title type='text'>場所</title>
+<content type='text'>属性名: neighbor, 一般説明人物の場合: 隣人</content>
+<link rel='self' type='application/atom+xml' href='https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/cyevm'/>
+<gsx:種別>場所</gsx:種別>
+<gsx:属性名>neighbor</gsx:属性名>
+<gsx:一般説明人物の場合>隣人</gsx:一般説明人物の場合>
+<gsx:きぼう>
+</gsx:きぼう>
+<gsx:クエスト>
+</gsx:クエスト>
+<gsx:地名>
+</gsx:地名>
+<gsx:アイテム>
+</gsx:アイテム>
+</entry>
+<entry>
+<id>https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/cztg3</id>
+<updated>2010-09-24T06:05:13.532Z</updated>
+<category scheme='http://schemas.google.com/spreadsheets/2006' term='http://schemas.google.com/spreadsheets/2006#list'/>
+<title type='text'>家族</title>
+<content type='text'>属性名: child, 一般説明人物の場合: 子供（養子も含む）, アイテム: 生産素材</content>
+<link rel='self' type='application/atom+xml' href='https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/cztg3'/>
+<gsx:種別>家族</gsx:種別>
+<gsx:属性名>child</gsx:属性名>
+<gsx:一般説明人物の場合>子供（養子も含む）</gsx:一般説明人物の場合>
+<gsx:きぼう>
+</gsx:きぼう>
+<gsx:クエスト>
+</gsx:クエスト>
+<gsx:地名>
+</gsx:地名>
+<gsx:アイテム>生産素材</gsx:アイテム>
+</entry>
+<entry>
+<id>https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/d180g</id>
+<updated>2010-09-24T06:05:13.532Z</updated>
+<category scheme='http://schemas.google.com/spreadsheets/2006' term='http://schemas.google.com/spreadsheets/2006#list'/>
+<title type='text'>家族</title>
+<content type='text'>属性名: parent, 一般説明人物の場合: 親, クエスト: 発生条件, 地名: 上位地名</content>
+<link rel='self' type='application/atom+xml' href='https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/d180g'/>
+<gsx:種別>家族</gsx:種別>
+<gsx:属性名>parent</gsx:属性名>
+<gsx:一般説明人物の場合>親</gsx:一般説明人物の場合>
+<gsx:きぼう>
+</gsx:きぼう>
+<gsx:クエスト>発生条件</gsx:クエスト>
+<gsx:地名>上位地名</gsx:地名>
+<gsx:アイテム>
+</gsx:アイテム>
+</entry>
+<entry>
+<id>https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/d2mkx</id>
+<updated>2010-09-24T06:05:13.532Z</updated>
+<category scheme='http://schemas.google.com/spreadsheets/2006' term='http://schemas.google.com/spreadsheets/2006#list'/>
+<title type='text'>家族</title>
+<content type='text'>属性名: sibling, 一般説明人物の場合: 兄弟、姉妹, きぼう: 進めたい, クエスト: 次の目標</content>
+<link rel='self' type='application/atom+xml' href='https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/d2mkx'/>
+<gsx:種別>家族</gsx:種別>
+<gsx:属性名>sibling</gsx:属性名>
+<gsx:一般説明人物の場合>兄弟、姉妹</gsx:一般説明人物の場合>
+<gsx:きぼう>進めたい</gsx:きぼう>
+<gsx:クエスト>次の目標</gsx:クエスト>
+<gsx:地名>
+</gsx:地名>
+<gsx:アイテム>
+</gsx:アイテム>
+</entry>
+<entry>
+<id>https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/cssly</id>
+<updated>2010-09-24T06:05:13.532Z</updated>
+<category scheme='http://schemas.google.com/spreadsheets/2006' term='http://schemas.google.com/spreadsheets/2006#list'/>
+<title type='text'>家族</title>
+<content type='text'>属性名: spouse, 一般説明人物の場合: 配偶者</content>
+<link rel='self' type='application/atom+xml' href='https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/cssly'/>
+<gsx:種別>家族</gsx:種別>
+<gsx:属性名>spouse</gsx:属性名>
+<gsx:一般説明人物の場合>配偶者</gsx:一般説明人物の場合>
+<gsx:きぼう>
+</gsx:きぼう>
+<gsx:クエスト>
+</gsx:クエスト>
+<gsx:地名>
+</gsx:地名>
+<gsx:アイテム>
+</gsx:アイテム>
+</entry>
+<entry>
+<id>https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/cu76f</id>
+<updated>2010-09-24T06:05:13.532Z</updated>
+<category scheme='http://schemas.google.com/spreadsheets/2006' term='http://schemas.google.com/spreadsheets/2006#list'/>
+<title type='text'>家族</title>
+<content type='text'>属性名: kin, 一般説明人物の場合: 親戚, きぼう: 所有</content>
+<link rel='self' type='application/atom+xml' href='https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/cu76f'/>
+<gsx:種別>家族</gsx:種別>
+<gsx:属性名>kin</gsx:属性名>
+<gsx:一般説明人物の場合>親戚</gsx:一般説明人物の場合>
+<gsx:きぼう>所有</gsx:きぼう>
+<gsx:クエスト>
+</gsx:クエスト>
+<gsx:地名>
+</gsx:地名>
+<gsx:アイテム>
+</gsx:アイテム>
+</entry>
+<entry>
+<id>https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/cvlqs</id>
+<updated>2010-09-24T06:05:13.532Z</updated>
+<category scheme='http://schemas.google.com/spreadsheets/2006' term='http://schemas.google.com/spreadsheets/2006#list'/>
+<title type='text'>想い</title>
+<content type='text'>属性名: muse, 一般説明人物の場合: 尊敬する人, アイテム: 上位アイテム</content>
+<link rel='self' type='application/atom+xml' href='https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/cvlqs'/>
+<gsx:種別>想い</gsx:種別>
+<gsx:属性名>muse</gsx:属性名>
+<gsx:一般説明人物の場合>尊敬する人</gsx:一般説明人物の場合>
+<gsx:きぼう>
+</gsx:きぼう>
+<gsx:クエスト>
+</gsx:クエスト>
+<gsx:地名>
+</gsx:地名>
+<gsx:アイテム>上位アイテム</gsx:アイテム>
+</entry>
+<entry>
+<id>https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/cx0b9</id>
+<updated>2010-09-24T06:05:13.532Z</updated>
+<category scheme='http://schemas.google.com/spreadsheets/2006' term='http://schemas.google.com/spreadsheets/2006#list'/>
+<title type='text'>想い</title>
+<content type='text'>属性名: crush, 一般説明人物の場合: 想い人、片思いの相手, きぼう: 欲しい, クエスト: 報酬, 地名: 売り物</content>
+<link rel='self' type='application/atom+xml' href='https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/cx0b9'/>
+<gsx:種別>想い</gsx:種別>
+<gsx:属性名>crush</gsx:属性名>
+<gsx:一般説明人物の場合>想い人、片思いの相手</gsx:一般説明人物の場合>
+<gsx:きぼう>欲しい</gsx:きぼう>
+<gsx:クエスト>報酬</gsx:クエスト>
+<gsx:地名>売り物</gsx:地名>
+<gsx:アイテム>
+</gsx:アイテム>
+</entry>
+<entry>
+<id>https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/d9ney</id>
+<updated>2010-09-24T06:05:13.532Z</updated>
+<category scheme='http://schemas.google.com/spreadsheets/2006' term='http://schemas.google.com/spreadsheets/2006#list'/>
+<title type='text'>想い</title>
+<content type='text'>属性名: date, 一般説明人物の場合: デート相手, きぼう: 日時予定</content>
+<link rel='self' type='application/atom+xml' href='https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/d9ney'/>
+<gsx:種別>想い</gsx:種別>
+<gsx:属性名>date</gsx:属性名>
+<gsx:一般説明人物の場合>デート相手</gsx:一般説明人物の場合>
+<gsx:きぼう>日時予定</gsx:きぼう>
+<gsx:クエスト>
+</gsx:クエスト>
+<gsx:地名>
+</gsx:地名>
+<gsx:アイテム>
+</gsx:アイテム>
+</entry>
+<entry>
+<id>https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/db1zf</id>
+<updated>2010-09-24T06:05:13.532Z</updated>
+<category scheme='http://schemas.google.com/spreadsheets/2006' term='http://schemas.google.com/spreadsheets/2006#list'/>
+<title type='text'>想い</title>
+<content type='text'>属性名: sweetheart, 一般説明人物の場合: 恋人</content>
+<link rel='self' type='application/atom+xml' href='https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/db1zf'/>
+<gsx:種別>想い</gsx:種別>
+<gsx:属性名>sweetheart</gsx:属性名>
+<gsx:一般説明人物の場合>恋人</gsx:一般説明人物の場合>
+<gsx:きぼう>
+</gsx:きぼう>
+<gsx:クエスト>
+</gsx:クエスト>
+<gsx:地名>
+</gsx:地名>
+<gsx:アイテム>
+</gsx:アイテム>
+</entry>
+<entry>
+<id>https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/dcgjs</id>
+<updated>2010-09-24T06:05:13.532Z</updated>
+<category scheme='http://schemas.google.com/spreadsheets/2006' term='http://schemas.google.com/spreadsheets/2006#list'/>
+<title type='text'>特定</title>
+<content type='text'>属性名: me, 一般説明人物の場合: 自分自身</content>
+<link rel='self' type='application/atom+xml' href='https://spreadsheets.google.com/feeds/list/0AlnLTLNQTaTJdE4ydGt4LV8zSzlkaWExNzZuUlNVV2c/od6/private/values/dcgjs'/>
+<gsx:種別>特定</gsx:種別>
+<gsx:属性名>me</gsx:属性名>
+<gsx:一般説明人物の場合>自分自身</gsx:一般説明人物の場合>
+<gsx:きぼう>
+</gsx:きぼう>
+<gsx:クエスト>
+</gsx:クエスト>
+<gsx:地名>
+</gsx:地名>
+<gsx:アイテム>
+</gsx:アイテム>
+</entry>
+</feed>

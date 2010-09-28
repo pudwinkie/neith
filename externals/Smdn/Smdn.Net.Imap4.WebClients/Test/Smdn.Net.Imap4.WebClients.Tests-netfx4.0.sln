@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Net.Imap4.WebClients.Tests-netfx4.0", "Smdn.Net.Imap4.WebClients.Tests-netfx4.0.csproj", "{2EE5021F-AEF1-4259-98E7-42A07655689C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn-netfx4.0", "..\..\Smdn\Smdn-netfx4.0.csproj", "{3FDF8CFA-B168-466F-B303-AEDDBED87BB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Core.Standards-netfx4.0", "..\..\Smdn.Core.Standards\Smdn.Core.Standards-netfx4.0.csproj", "{B5EDEF88-678E-427E-9281-325417D7EAC9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Net.MessageAccessProtocols-netfx4.0", "..\..\Smdn.Net.MessageAccessProtocols\Smdn.Net.MessageAccessProtocols-netfx4.0.csproj", "{85D967BA-2403-4167-90F8-D711084D66B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Security.Authentication.Sasl-netfx4.0", "..\..\Smdn.Security.Authentication.Sasl\Smdn.Security.Authentication.Sasl-netfx4.0.csproj", "{33510B82-7100-4BF5-AEE0-95751B272B0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Net.Imap4-netfx4.0", "..\..\Smdn.Net.Imap4\Smdn.Net.Imap4-netfx4.0.csproj", "{CBF73660-7437-4193-8658-BCDF0DFA8DD2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Net.Imap4.Client-netfx4.0", "..\..\Smdn.Net.Imap4.Client\Smdn.Net.Imap4.Client-netfx4.0.csproj", "{532788EE-4DFD-47D6-AD93-049D0E097B91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Net.Imap4.WebClients-netfx4.0", "..\Smdn.Net.Imap4.WebClients-netfx4.0.csproj", "{DFFA5E0F-58FC-4253-8C22-811264E60AFA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2EE5021F-AEF1-4259-98E7-42A07655689C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EE5021F-AEF1-4259-98E7-42A07655689C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EE5021F-AEF1-4259-98E7-42A07655689C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EE5021F-AEF1-4259-98E7-42A07655689C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33510B82-7100-4BF5-AEE0-95751B272B0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33510B82-7100-4BF5-AEE0-95751B272B0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33510B82-7100-4BF5-AEE0-95751B272B0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33510B82-7100-4BF5-AEE0-95751B272B0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FDF8CFA-B168-466F-B303-AEDDBED87BB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FDF8CFA-B168-466F-B303-AEDDBED87BB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FDF8CFA-B168-466F-B303-AEDDBED87BB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FDF8CFA-B168-466F-B303-AEDDBED87BB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{532788EE-4DFD-47D6-AD93-049D0E097B91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{532788EE-4DFD-47D6-AD93-049D0E097B91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{532788EE-4DFD-47D6-AD93-049D0E097B91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{532788EE-4DFD-47D6-AD93-049D0E097B91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85D967BA-2403-4167-90F8-D711084D66B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85D967BA-2403-4167-90F8-D711084D66B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85D967BA-2403-4167-90F8-D711084D66B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85D967BA-2403-4167-90F8-D711084D66B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5EDEF88-678E-427E-9281-325417D7EAC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5EDEF88-678E-427E-9281-325417D7EAC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5EDEF88-678E-427E-9281-325417D7EAC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5EDEF88-678E-427E-9281-325417D7EAC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBF73660-7437-4193-8658-BCDF0DFA8DD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBF73660-7437-4193-8658-BCDF0DFA8DD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBF73660-7437-4193-8658-BCDF0DFA8DD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBF73660-7437-4193-8658-BCDF0DFA8DD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFFA5E0F-58FC-4253-8C22-811264E60AFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFFA5E0F-58FC-4253-8C22-811264E60AFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFFA5E0F-58FC-4253-8C22-811264E60AFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFFA5E0F-58FC-4253-8C22-811264E60AFA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Smdn.Net.Imap4.WebClients.Tests-netfx4.0.csproj
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{46B3B462-FB9C-444A-90E8-52DE282CF536}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Smdn.Net.Imap4.Tests</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <RootNamespace>Smdn.Net.Imap4.Tests</RootNamespace>
+    <OutputPath>bin\</OutputPath>
+    <IntermediateOutputPath>obj\</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>NET_2_0</DefineConstants>
+    <OutputPath>bin\Debug\netfx2.0\</OutputPath>
+    <IntermediateOutputPath>obj\Debug\netfx2.0\</IntermediateOutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Execution>
+      <Execution clr-version="Net_2_0" />
+    </Execution>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>NET_2_0</DefineConstants>
+    <OutputPath>bin\Release\netfx2.0\</OutputPath>
+    <IntermediateOutputPath>obj\Release\netfx2.0\</IntermediateOutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Execution>
+      <Execution clr-version="Net_2_0" />
+    </Execution>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Smdn.Net.Imap4\ImapUri.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapSequenceSet.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapThreadingAlgorithm.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapDateTimeFormat.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapMatchedSequenceSet.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapAddress.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapStyleUriParser.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapNamespace.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapNamespaceDesc.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapMessageFlag.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapPartialRange.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol\ImapSender.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol\ImapReceiver.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapMetadata.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol\ImapResponseCode.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapCapabilityList.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapStringEnum.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol\ImapData.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapUriBuilder.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapMessageFlagList.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapMailboxFlagList.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapBodyDisposition.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapBodyStructureUtils.cs" />
+    <Compile Include="Smdn.Net.Imap4\IImapBodyStructure.cs" />
+    <Compile Include="..\..\Smdn.Net.MessageAccessProtocols\Test\Smdn.Net\TestUtils.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapException.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol\ImapConnectionException.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol\ImapUpgradeConnectionException.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol\ImapSecureConnectionException.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol\ImapMalformedDataException.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol\ImapFormatException.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapString.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <ChangeLogPolicy UpdateMode="None" VcsIntegration="None" inheritsSet="Mono" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
+  <ItemGroup>
+    <ProjectReference Include="..\Smdn.Net.Imap4-netfx2.0.csproj">
+      <Project>{E780A5E5-0D67-461F-BCC8-B3FB9241A736}</Project>
+      <Name>Smdn.Net.Imap4-netfx2.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Smdn.Net.MessageAccessProtocols\Smdn.Net.MessageAccessProtocols-netfx2.0.csproj">
+      <Project>{7B3EF55E-F7BF-11DE-ACDF-0018F344D241}</Project>
+      <Name>Smdn.Net.MessageAccessProtocols-netfx2.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Smdn\Smdn-netfx2.0.csproj">
+      <Project>{9778FCEA-6A63-11DE-B228-0018F344D241}</Project>
+      <Name>Smdn-netfx2.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Smdn.Core.Standards\Smdn.Core.Standards-netfx2.0.csproj">
+      <Project>{72E150F4-F71B-11DE-8995-0018F344D241}</Project>
+      <Name>Smdn.Core.Standards-netfx2.0</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Smdn.Net.Imap4.Protocol\" />
+  </ItemGroup>
+</Project>

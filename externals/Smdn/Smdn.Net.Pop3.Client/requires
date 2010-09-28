@@ -1,0 +1,6 @@
+Smdn.Net.Pop3/Smdn.Net.Pop3.csproj
+Smdn/Smdn/Action.cs
+Smdn/Smdn/Func.cs
+Smdn/Smdn.IO/StreamExtensions.cs
+Smdn/Smdn.IO/ChunkedMemoryStream.cs
+Smdn/Smdn.Collections/Enumerable.cs

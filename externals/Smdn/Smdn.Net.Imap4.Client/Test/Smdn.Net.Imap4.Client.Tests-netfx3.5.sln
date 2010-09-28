@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Net.Imap4.Client.Tests-netfx3.5", "Smdn.Net.Imap4.Client.Tests-netfx3.5.csproj", "{1BC6E337-2243-409C-B70D-009D4991EBBA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn-netfx3.5", "..\..\Smdn\Smdn-netfx3.5.csproj", "{94EE5515-F253-491B-8F0F-09F70D03B1B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Core.Standards-netfx3.5", "..\..\Smdn.Core.Standards\Smdn.Core.Standards-netfx3.5.csproj", "{A749376E-4C07-400D-9FDA-F6A9DF2E7B18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Net.MessageAccessProtocols-netfx3.5", "..\..\Smdn.Net.MessageAccessProtocols\Smdn.Net.MessageAccessProtocols-netfx3.5.csproj", "{D13880FC-AFAC-40A6-BD74-E2D5B21A5B00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Security.Authentication.Sasl-netfx3.5", "..\..\Smdn.Security.Authentication.Sasl\Smdn.Security.Authentication.Sasl-netfx3.5.csproj", "{D661D52C-F0B6-45CC-99FF-AF98628317BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Net.Imap4-netfx3.5", "..\..\Smdn.Net.Imap4\Smdn.Net.Imap4-netfx3.5.csproj", "{748A84A5-0E96-45E4-9B6A-3B0816980A24}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Net.Imap4.Client-netfx3.5", "..\Smdn.Net.Imap4.Client-netfx3.5.csproj", "{88298724-F211-41BD-9AEA-E263728A5CF6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1BC6E337-2243-409C-B70D-009D4991EBBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BC6E337-2243-409C-B70D-009D4991EBBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BC6E337-2243-409C-B70D-009D4991EBBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BC6E337-2243-409C-B70D-009D4991EBBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{748A84A5-0E96-45E4-9B6A-3B0816980A24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{748A84A5-0E96-45E4-9B6A-3B0816980A24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{748A84A5-0E96-45E4-9B6A-3B0816980A24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{748A84A5-0E96-45E4-9B6A-3B0816980A24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88298724-F211-41BD-9AEA-E263728A5CF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88298724-F211-41BD-9AEA-E263728A5CF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88298724-F211-41BD-9AEA-E263728A5CF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88298724-F211-41BD-9AEA-E263728A5CF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94EE5515-F253-491B-8F0F-09F70D03B1B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94EE5515-F253-491B-8F0F-09F70D03B1B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94EE5515-F253-491B-8F0F-09F70D03B1B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94EE5515-F253-491B-8F0F-09F70D03B1B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A749376E-4C07-400D-9FDA-F6A9DF2E7B18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A749376E-4C07-400D-9FDA-F6A9DF2E7B18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A749376E-4C07-400D-9FDA-F6A9DF2E7B18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A749376E-4C07-400D-9FDA-F6A9DF2E7B18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D13880FC-AFAC-40A6-BD74-E2D5B21A5B00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D13880FC-AFAC-40A6-BD74-E2D5B21A5B00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D13880FC-AFAC-40A6-BD74-E2D5B21A5B00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D13880FC-AFAC-40A6-BD74-E2D5B21A5B00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D661D52C-F0B6-45CC-99FF-AF98628317BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D661D52C-F0B6-45CC-99FF-AF98628317BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D661D52C-F0B6-45CC-99FF-AF98628317BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D661D52C-F0B6-45CC-99FF-AF98628317BA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Smdn.Net.Imap4.Client.Tests-netfx3.5.csproj
+	EndGlobalSection
+EndGlobal

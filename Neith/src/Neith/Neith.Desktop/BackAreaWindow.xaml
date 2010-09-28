@@ -1,0 +1,9 @@
+﻿<Window x:Class="Neith.Desktop.BackAreaWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        AllowsTransparency="True" Background="Transparent" WindowStyle="None"
+        Title="BackAreaWindow" Height="300" Width="300" Initialized="Window_Initialized">
+    <Grid>
+        <Rectangle Name="rectangle1" Stroke="#86FFFFFF" RadiusX="12" RadiusY="12" StrokeThickness="4" />
+    </Grid>
+</Window>

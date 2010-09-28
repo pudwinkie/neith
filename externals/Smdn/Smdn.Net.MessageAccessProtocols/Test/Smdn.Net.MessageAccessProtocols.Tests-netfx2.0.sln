@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Net.MessageAccessProtocols.Tests-netfx2.0", "Smdn.Net.MessageAccessProtocols.Tests-netfx2.0.csproj", "{40947B68-9D11-4AD9-8FEC-A06B4497410E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn-netfx2.0", "..\..\Smdn\Smdn-netfx2.0.csproj", "{9778FCEA-6A63-11DE-B228-0018F344D241}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Net.MessageAccessProtocols-netfx2.0", "..\Smdn.Net.MessageAccessProtocols-netfx2.0.csproj", "{7B3EF55E-F7BF-11DE-ACDF-0018F344D241}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Core.Standards-netfx2.0", "..\..\Smdn.Core.Standards\Smdn.Core.Standards-netfx2.0.csproj", "{72E150F4-F71B-11DE-8995-0018F344D241}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{40947B68-9D11-4AD9-8FEC-A06B4497410E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40947B68-9D11-4AD9-8FEC-A06B4497410E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40947B68-9D11-4AD9-8FEC-A06B4497410E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40947B68-9D11-4AD9-8FEC-A06B4497410E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72E150F4-F71B-11DE-8995-0018F344D241}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72E150F4-F71B-11DE-8995-0018F344D241}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72E150F4-F71B-11DE-8995-0018F344D241}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72E150F4-F71B-11DE-8995-0018F344D241}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B3EF55E-F7BF-11DE-ACDF-0018F344D241}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B3EF55E-F7BF-11DE-ACDF-0018F344D241}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B3EF55E-F7BF-11DE-ACDF-0018F344D241}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B3EF55E-F7BF-11DE-ACDF-0018F344D241}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9778FCEA-6A63-11DE-B228-0018F344D241}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9778FCEA-6A63-11DE-B228-0018F344D241}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9778FCEA-6A63-11DE-B228-0018F344D241}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9778FCEA-6A63-11DE-B228-0018F344D241}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Smdn.Net.MessageAccessProtocols.Tests-netfx2.0.csproj
+	EndGlobalSection
+EndGlobal

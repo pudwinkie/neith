@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A756729B-CC5E-486B-9EF4-A31BD8552B96}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Smdn.Formats.Ini.Tests</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <RootNamespace>Smdn.Formats.Ini.Tests</RootNamespace>
+    <OutputPath>bin\</OutputPath>
+    <IntermediateOutputPath>obj\</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>NET_2_0</DefineConstants>
+    <OutputPath>bin\Debug\netfx2.0\</OutputPath>
+    <IntermediateOutputPath>obj\Debug\netfx2.0\</IntermediateOutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Execution>
+      <Execution clr-version="Net_2_0" />
+    </Execution>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>NET_2_0</DefineConstants>
+    <OutputPath>bin\Release\netfx2.0\</OutputPath>
+    <IntermediateOutputPath>obj\Release\netfx2.0\</IntermediateOutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Execution>
+      <Execution clr-version="Net_2_0" />
+    </Execution>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Smdn.Formats.Ini\Parser.cs" />
+    <Compile Include="Smdn.Formats.Ini\IniDocument.cs" />
+    <Compile Include="Smdn.Formats.Ini\IniSection.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Smdn.Formats.Ini-netfx2.0.csproj">
+      <Project>{1F6CDDED-B516-4BE0-97A5-6085FA1D2CCA}</Project>
+      <Name>Smdn.Formats.Ini-netfx2.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Smdn\Smdn-netfx2.0.csproj">
+      <Project>{9778FCEA-6A63-11DE-B228-0018F344D241}</Project>
+      <Name>Smdn-netfx2.0</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <ChangeLogPolicy UpdateMode="None" VcsIntegration="None" inheritsSet="Mono" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
+</Project>

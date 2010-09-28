@@ -1,0 +1,6 @@
+Smdn.Net.MessageAccessProtocols/Smdn.Net.MessageAccessProtocols.csproj
+Smdn.Security.Authentication.Sasl/Smdn.Security.Authentication.Sasl.csproj
+Smdn.Core.Standards/Smdn.Formats/FromPercentEncodedTransform.cs
+Smdn.Core.Standards/Smdn.Formats/PercentEncoding.cs
+Smdn.Core.Standards/Smdn.Formats/ToPercentEncodedTransform.cs
+Smdn.Core.Standards/Smdn.Formats/ToPercentEncodedTransformMode.cs

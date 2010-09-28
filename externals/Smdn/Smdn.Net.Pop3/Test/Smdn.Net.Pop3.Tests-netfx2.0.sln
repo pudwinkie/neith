@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Net.Pop3.Tests-netfx2.0", "Smdn.Net.Pop3.Tests-netfx2.0.csproj", "{32E978FA-5454-4AF9-B50C-9538F071013B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn-netfx2.0", "..\..\Smdn\Smdn-netfx2.0.csproj", "{9778FCEA-6A63-11DE-B228-0018F344D241}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Core.Standards-netfx2.0", "..\..\Smdn.Core.Standards\Smdn.Core.Standards-netfx2.0.csproj", "{72E150F4-F71B-11DE-8995-0018F344D241}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Net.MessageAccessProtocols-netfx2.0", "..\..\Smdn.Net.MessageAccessProtocols\Smdn.Net.MessageAccessProtocols-netfx2.0.csproj", "{7B3EF55E-F7BF-11DE-ACDF-0018F344D241}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Net.Pop3-netfx2.0", "..\Smdn.Net.Pop3-netfx2.0.csproj", "{2E2A0CA3-3D22-47BF-9F55-B59063FBB941}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Security.Authentication.Sasl-netfx2.0", "..\..\Smdn.Security.Authentication.Sasl\Smdn.Security.Authentication.Sasl-netfx2.0.csproj", "{2F1FB300-76C5-11DE-B228-0018F344D241}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2E2A0CA3-3D22-47BF-9F55-B59063FBB941}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E2A0CA3-3D22-47BF-9F55-B59063FBB941}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E2A0CA3-3D22-47BF-9F55-B59063FBB941}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E2A0CA3-3D22-47BF-9F55-B59063FBB941}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F1FB300-76C5-11DE-B228-0018F344D241}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F1FB300-76C5-11DE-B228-0018F344D241}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F1FB300-76C5-11DE-B228-0018F344D241}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F1FB300-76C5-11DE-B228-0018F344D241}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32E978FA-5454-4AF9-B50C-9538F071013B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32E978FA-5454-4AF9-B50C-9538F071013B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32E978FA-5454-4AF9-B50C-9538F071013B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32E978FA-5454-4AF9-B50C-9538F071013B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72E150F4-F71B-11DE-8995-0018F344D241}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72E150F4-F71B-11DE-8995-0018F344D241}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72E150F4-F71B-11DE-8995-0018F344D241}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72E150F4-F71B-11DE-8995-0018F344D241}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B3EF55E-F7BF-11DE-ACDF-0018F344D241}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B3EF55E-F7BF-11DE-ACDF-0018F344D241}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B3EF55E-F7BF-11DE-ACDF-0018F344D241}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B3EF55E-F7BF-11DE-ACDF-0018F344D241}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9778FCEA-6A63-11DE-B228-0018F344D241}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9778FCEA-6A63-11DE-B228-0018F344D241}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9778FCEA-6A63-11DE-B228-0018F344D241}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9778FCEA-6A63-11DE-B228-0018F344D241}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Smdn.Net.Pop3.Tests-netfx2.0.csproj
+	EndGlobalSection
+EndGlobal
