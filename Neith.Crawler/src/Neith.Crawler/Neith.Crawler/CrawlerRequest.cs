@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Net;
 
 namespace Neith.Crawler
 {
@@ -34,6 +35,8 @@ namespace Neith.Crawler
         private string etag;
         private const string ETAG_KEY="etag.txt";
 
+        /// <summary>WebRequest</summary>
+        public HttpWebRequest Request { get; set; }
 
 
         /// <summary>
@@ -45,8 +48,6 @@ namespace Neith.Crawler
             URL = (new Uri(url)).AbsoluteUri;
             Cache = CrawlerCache.Create(URL);
         }
-
-
 
     }
 }
