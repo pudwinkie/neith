@@ -12,7 +12,7 @@ namespace Neith.Crawler.Test
     [TestFixture]
     public class WebAccessTest
     {
-        //[Test]
+        [Test]
         public void WebGetTest()
         {
             var text = "";
@@ -26,7 +26,7 @@ namespace Neith.Crawler.Test
         }
 
 
-        //[Test]
+        [Test]
         public void WebETagTest()
         {
             var etag = "";

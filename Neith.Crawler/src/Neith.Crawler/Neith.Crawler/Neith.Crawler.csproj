@@ -55,6 +55,7 @@
     <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.CoreEx, Version=1.0.2617.102, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -88,6 +89,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reflection\AssemblyUtil.cs" />
     <Compile Include="Extensions\CryptoExtensions.cs" />
+    <Compile Include="Sites\Neith\NeithXFN.cs" />
+    <Compile Include="Util\CsvUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

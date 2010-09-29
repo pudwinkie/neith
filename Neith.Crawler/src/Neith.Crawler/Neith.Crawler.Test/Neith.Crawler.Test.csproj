@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="CacheTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SitesTest.cs" />
     <Compile Include="WebAccessTest.cs" />
   </ItemGroup>
   <ItemGroup>

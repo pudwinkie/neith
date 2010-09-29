@@ -9,6 +9,22 @@ namespace Neith.Crawler
     {
         static void Main(string[] args)
         {
+            Run();
+        }
+
+        public static void Run()
+        {
+            Observable
+                .Merge(EnTask())
+                .LastOrDefault();
+        }
+
+        private static IEnumerable<IObservable<bool>> EnTask()
+        {
+            yield break;
+
+
+
         }
     }
 }
