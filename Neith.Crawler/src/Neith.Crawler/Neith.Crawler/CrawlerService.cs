@@ -28,14 +28,12 @@ namespace Neith.Crawler
         public static IObservable<string> GetWebContents(this IObservable<HttpWebRequest> rxReq)
         {
             return rxReq
-                .Select(req =>
-                {
+                .Select(req => {
                     req.Method = "GET";
                     return req;
                 })
                 .GetResponse()
-                .Select(res =>
-                {
+                .Select(res => {
                     using (var st = res.GetResponseStream())
                     using (var reader = new StreamReader(st, Encoding.UTF8)) {
                         return reader.ReadToEnd();
@@ -46,14 +44,12 @@ namespace Neith.Crawler
         public static IObservable<string> GetResponseHeader(this IObservable<HttpWebRequest> rxReq, string headerName)
         {
             return rxReq
-                .Select(req =>
-                {
+                .Select(req => {
                     req.Method = "HEAD";
                     return req;
                 })
                 .GetResponse()
-                .Select(res =>
-                {
+                .Select(res => {
                     using (res) return res.GetResponseHeader(headerName);
                 });
         }

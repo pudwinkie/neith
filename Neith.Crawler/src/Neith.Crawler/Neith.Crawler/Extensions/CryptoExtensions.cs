@@ -21,12 +21,12 @@ namespace System.Security.Cryptography
         public static string ToHashString(this string text)
         {
             return text
-                .ToUtf8Bytes()
+                .ToBytesUtf8()
                 .ToSHA1()
                 .ToBase64Urlsafe();
         }
 
-        public static byte[] ToUtf8Bytes(this string text)
+        public static byte[] ToBytesUtf8(this string text)
         {
             return Encoding.UTF8.GetBytes(text);
         }
