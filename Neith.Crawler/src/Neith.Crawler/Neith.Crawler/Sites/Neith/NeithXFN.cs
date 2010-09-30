@@ -15,38 +15,43 @@ namespace Neith.Crawler.Sites.Neith
         {
             return @"http://spreadsheets.google.com/pub?key=0AlnLTLNQTaTJdGFZb1c2RTFuV01fUnBxbThNaGpWUXc&single=true&gid=0&output=csv"
                 .RxGetUpdateWebResponseStream()
-                .Select(st => {
-                    if (st == null) {
-                        Debug.WriteLine("[NeithXFN::ReadTypes] False!");
-                        return false;
-                    }
-                    var qType = from a in CsvUtil.ReadCsv(st, Encoding.UTF8).FitCsv()
-                                let el = new TypeElement(a)
-                                select el;
-                    // ここで読み切る
-                    using (st) qType = qType.ToArray();
-
-                    // ツリー構造の解析
-                    var qKeys = from a in qType group a by a.ParentKey;
-                    var qParent = from c in qKeys
-                                  join p in qType on c.Key equals p.Key
-                                  select new { p.ParentKey, Parent = p, Children = c };
-                    foreach (var pair in qParent) {
-                        var p = pair.Parent;
-                        foreach (var child in pair.Children) {
-                            child.Parent = p;
-                            p.Children.Add(child);
-                        }
-                    }
-
-                    // ファイル出力
-                    foreach (var el in qType) {
-                        var path = el.GetPath(Const.NeithXFNTypesDir);
-                        Directory.CreateDirectory(path.ToDirectoryName());
-                        File.WriteAllText(path, el.ToHTML());
-                    }
+                .SelectMany(st => { return Analysis(st).ToObservable(); })
+                .Select(el => {
+                    var path = el.GetPath(Const.NeithXFNTypesDir);
+                    Directory.CreateDirectory(path.ToDirectoryName());
+                    File.WriteAllText(path, el.ToHTML());
                     return true;
-                });
+                })
+                .TakeLast(0);
+        }
+
+        private static IEnumerable<TypeElement> Analysis(Stream st)
+        {
+            if (st == null) {
+                Debug.WriteLine("[NeithXFN::ReadTypes] False!");
+                return new TypeElement[0];
+            }
+            var qType = from a in CsvUtil.ReadCsv(st, Encoding.UTF8).FitCsv()
+                        let el = new TypeElement(a)
+                        select el;
+            // ここで読み切る
+            using (st) qType = qType.ToArray();
+
+            // ツリー構造の解析
+            var qKeys = from a in qType group a by a.ParentKey;
+            var qParent = from c in qKeys
+                          join p in qType on c.Key equals p.Key
+                          select new { p.ParentKey, Parent = p, Children = c };
+            foreach (var pair in qParent) {
+                var p = pair.Parent;
+                foreach (var child in pair.Children) {
+                    child.Parent = p;
+                    p.Children.Add(child);
+                }
+            }
+
+            // ファイル出力
+            return qType;
         }
 
         private static IEnumerable<string[]> FitCsv(this IEnumerable<string[]> csv)

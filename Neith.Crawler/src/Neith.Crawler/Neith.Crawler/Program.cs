@@ -16,8 +16,8 @@ namespace Neith.Crawler
         public static void Run()
         {
             Observable
-                .Merge(EnTask())
-                .LastOrDefault();
+                .Merge(EnTask(), System.Concurrency.Scheduler.ThreadPool)
+                .Run();
         }
 
         private static IEnumerable<IObservable<bool>> EnTask()
