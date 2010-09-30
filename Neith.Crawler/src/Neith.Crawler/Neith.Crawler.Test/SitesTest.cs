@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SITES = Neith.Crawler.Sites;
 
 namespace Neith.Crawler.Test
 {
@@ -12,8 +13,7 @@ namespace Neith.Crawler.Test
         [Test]
         public void NeithXFNTest()
         {
-            Neith.Crawler.Sites.Neith.NeithXFN.ReadTypes()
-                .Run();
+            SITES.Neith.NeithXFN.ReadTypes().Run();
         }
     }
 }

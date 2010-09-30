@@ -9,7 +9,7 @@ using System.Diagnostics;
 namespace Neith.Crawler.Test
 {
     using NUnit.Framework;
-    [TestFixture]
+    //[TestFixture]
     public class WebAccessTest
     {
         [Test]

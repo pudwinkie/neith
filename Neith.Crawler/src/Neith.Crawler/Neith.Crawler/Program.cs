@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SITES = Neith.Crawler.Sites;
 
 namespace Neith.Crawler
 {
@@ -21,10 +22,7 @@ namespace Neith.Crawler
 
         private static IEnumerable<IObservable<bool>> EnTask()
         {
-            yield break;
-
-
-
+            yield return SITES.Neith.NeithXFN.ReadTypes();
         }
     }
 }

@@ -18,6 +18,9 @@ namespace Neith.Crawler
         /// <summary>Cache格納パス</summary>
         public static string CacheDir { get; internal set; }
 
+        /// <summary>NeithXFN Type情報格納パス</summary>
+        public static string NeithXFNTypesDir { get; internal set; }
+
 
         static Const()
         {
@@ -26,6 +29,7 @@ namespace Neith.Crawler
                 .PathConbine("..", "..", "..", "..", "..", "data")
                 .ToFullPath();
             CacheDir = DataDir.PathConbine("cache").ToFullPath();
+            NeithXFNTypesDir = DataDir.PathConbine("xfn").ToFullPath();
         }
     }
 }

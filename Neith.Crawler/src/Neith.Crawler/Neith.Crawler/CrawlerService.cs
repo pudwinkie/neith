@@ -186,8 +186,10 @@ namespace Neith.Crawler
                                 res.StatusCode, res.StatusDescription));
                     }
                     var etag = res.Headers[HttpResponseHeader.ETag];
-                    if (etag == cRes.Request.ETag) return null;
-                    cRes.Request.ETag = etag;
+                    if (etag != null) {
+                        if (etag == cRes.Request.ETag) return null;
+                        cRes.Request.ETag = etag;
+                    }
                     return cRes;
                 });
         }
