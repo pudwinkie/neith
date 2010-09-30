@@ -33,7 +33,7 @@ namespace Neith.Crawler.Sites.Neith
                                   select new { p.ParentKey, Parent = p, Children = c };
                     foreach (var pair in qParent) {
                         var p = pair.Parent;
-                        foreach (var child in pair.Children ) {
+                        foreach (var child in pair.Children) {
                             child.Parent = p;
                             p.Children.Add(child);
                         }
@@ -151,7 +151,7 @@ namespace Neith.Crawler.Sites.Neith
 <ul class=""child"">{3}</ul>
 <address class=""note"">
   presented by
-  <a href=""twitter.jp/lucia_neith_vb/"">VesperBell@Lucia</a> 
+  <a href=""http://twitter.jp/lucia_neith_vb/"">Lucia@VesperBell</a> 
   under
   <a rel=""license"" href=""http://creativecommons.org/publicdomain/zero/1.0/""> 
   <img src=""http://i.creativecommons.org/l/zero/1.0/80x15.png""/> 
@@ -160,7 +160,7 @@ namespace Neith.Crawler.Sites.Neith
 </body>
 </html>";
                 // bodyのclass
-                var bodyClass = "types " + KeyName;
+                var bodyClass = "globalNeithXFN NeithXFN " + KeyName;
 
                 // 名前
                 var name = Name.ToHtmlEncode();
@@ -173,7 +173,7 @@ namespace Neith.Crawler.Sites.Neith
 
                 // 子リスト
                 var childBuf = new StringBuilder();
-                childBuf.AppendLine("\n<li>" + name + "</li>");
+                childBuf.AppendLine();
                 foreach (var item in from c in Children select c.GetLink("child"))
                     childBuf.AppendLine("<li>" + item + "</li>");
 
