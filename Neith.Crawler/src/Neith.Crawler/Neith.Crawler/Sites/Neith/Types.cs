@@ -9,9 +9,9 @@ using Neith.Crawler.Util;
 
 namespace Neith.Crawler.Sites.Neith
 {
-    public static class NeithXFN
+    public static class Types
     {
-        public static IObservable<bool> ReadTypes()
+        public static IObservable<bool> Task()
         {
             return @"http://spreadsheets.google.com/pub?key=0AlnLTLNQTaTJdGFZb1c2RTFuV01fUnBxbThNaGpWUXc&single=true&gid=0&output=csv"
                 .RxGetUpdateWebResponseStream()
@@ -156,7 +156,7 @@ namespace Neith.Crawler.Sites.Neith
 <ul class=""child"">{3}</ul>
 <address class=""note"">
   presented by
-  <a href=""http://twitter.jp/lucia_neith_vb/"">Lucia@VesperBell</a> 
+  <a href=""http://twitter.com/lucia_neith/"">Lucia@VesperBell</a> 
   under
   <a rel=""license"" href=""http://creativecommons.org/publicdomain/zero/1.0/""> 
   <img src=""http://i.creativecommons.org/l/zero/1.0/80x15.png""/> 

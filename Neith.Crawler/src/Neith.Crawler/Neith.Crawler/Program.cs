@@ -22,7 +22,8 @@ namespace Neith.Crawler
 
         private static IEnumerable<IObservable<bool>> EnTask()
         {
-            yield return SITES.Neith.NeithXFN.ReadTypes();
+            yield return SITES.Neith.Types.Task();
+            yield return SITES.Zam.AbilityList.Task();
         }
     }
 }

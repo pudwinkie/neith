@@ -59,21 +59,13 @@
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.CoreEx, Version=1.0.2617.102, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Interactive, Version=1.0.2617.102, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-    </Reference>
+    <Reference Include="System.CoreEx, Version=1.0.2698.102, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Interactive, Version=1.0.2698.102, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Observable, Version=1.0.0.102, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Reactive, Version=1.0.2617.102, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Threading, Version=1.0.2617.102, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <Private>True</Private>
-    </Reference>
+    <Reference Include="System.Reactive, Version=1.0.2698.102, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Threading, Version=1.0.2698.102, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -93,7 +85,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Reflection\AssemblyUtil.cs" />
     <Compile Include="Extensions\CryptoExtensions.cs" />
-    <Compile Include="Sites\Neith\NeithXFN.cs" />
+    <Compile Include="Sites\Neith\Types.cs" />
+    <Compile Include="Sites\Zam\AbilityList.cs" />
     <Compile Include="Util\CsvUtil.cs" />
   </ItemGroup>
   <ItemGroup>
