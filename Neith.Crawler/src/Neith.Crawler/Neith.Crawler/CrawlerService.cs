@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.IO;
+using System.Diagnostics;
+using System.Xml.Linq;
 
 namespace Neith.Crawler
 {
@@ -235,6 +237,32 @@ namespace Neith.Crawler
                 .Finally(() => { cRes.Dispose(); });
         }
 
+        public static IObservable<XElement> ToXHtmlElement(this IObservable<Stream> rxSt)
+        {
+            return rxSt
+                .Select(st =>
+                {
+                    using (st)
+                    using (var reader = new StreamReader(st, Encoding.UTF8)) {
+                        var text = reader
+                            .ReadToEnd()
+                            .Replace("&nbsp;", "&#32;")
+                            .Replace("&laquo;", "&#171;")
+                            .Replace("&raquo;", "&#187;")
+                            ;
+                        try {
+                            return XElement.Parse(text);
+                        }
+                        catch (Exception) {
+                            Debug.WriteLine("XHTML 読み込み失敗！");
+                            Debug.WriteLine("################################ HTML READ START");
+                            Debug.WriteLine(text);
+                            Debug.WriteLine("################################ HTML READ END");
+                            throw;
+                        }
+                    }
+                });
+        }
 
     }
 }

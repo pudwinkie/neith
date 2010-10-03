@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestRunner", "..\..\..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestExtensions35", "..\..\..\UnitTestUtil\src\UnitTestExtensions\UnitTestExtensions35.csproj", "{D6B57990-6E54-444C-A1CF-319C76B85E65}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HTMLparserLibDotNet20", "..\..\..\externals\HTMLparser\HTMLparserLibDotNet20.csproj", "{499C0FA8-9B6C-4590-926B-FF5061AE6C18}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,10 +37,6 @@ Global
 		{D6B57990-6E54-444C-A1CF-319C76B85E65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6B57990-6E54-444C-A1CF-319C76B85E65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6B57990-6E54-444C-A1CF-319C76B85E65}.Release|Any CPU.Build.0 = Release|Any CPU
-		{499C0FA8-9B6C-4590-926B-FF5061AE6C18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{499C0FA8-9B6C-4590-926B-FF5061AE6C18}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{499C0FA8-9B6C-4590-926B-FF5061AE6C18}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{499C0FA8-9B6C-4590-926B-FF5061AE6C18}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
