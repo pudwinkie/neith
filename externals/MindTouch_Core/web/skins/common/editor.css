@@ -1,0 +1,115 @@
+body { 
+	font-family: Tahoma, Verdana, Arial, Sans-Serif;
+	background-color: #ffffff;
+	font-size: 12px
+} 
+table, tr, td {
+	font-size: 1em;
+}
+a {
+	cursor: default;
+}
+.plain { 
+	background-color: #dbdbdb;
+	border: 1px dotted #bbb;
+}
+h1, .header_1,
+h2, .header_2, 
+h3, .header_3,
+h4, .header_4,
+h5, .header_5,
+h6, .header_6 {
+	margin: 15px 0 7px 0;
+	border-bottom: 1px solid #e6e6e6;
+	font-family: Georgia;
+	font-weight: normal;
+	background-position: top right;
+	background-repeat: no-repeat;
+}
+blockquote {
+	color: #736357;
+	padding: 10px 0 0 23px;
+}
+pre {
+	background-color: #efefef;
+	border: 1px solid #ccc;
+	padding: 8px;
+	margin-left: 3em;
+	margin-top: 2em;
+}
+
+h1, .header_1 {
+	color: #003471;
+	font-size: 18pt;
+	font-weight: bold;
+}
+h2, .header_2 {
+	font-size: 18pt;
+	background-image: url('icons/editor_h1.gif');
+}
+h3, .header_3 {
+	font-size: 16pt;
+	background-image: url('icons/editor_h2.gif');
+}
+h4, .header_4 {
+	font-size: 14pt;
+	background-image: url('icons/editor_h3.gif');
+}
+h5, .header_5 {
+	font-size: 13pt;
+	background-image: url('icons/editor_h4.gif');
+}
+h6, .header_6 {
+	font-size: 12pt;
+	background-image: url('icons/editor_h5.gif');
+	color: #777;
+}
+p,
+li {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+a.internal, 
+a:link.internal {
+	color: #3366cc;
+}	
+a.external, 
+a:link.external {
+	background-position: top right;
+	background-repeat: no-repeat;
+	background-image: url('icons/icon-external.gif');
+	padding-right: 13px;
+	color: #3366cc;
+}
+.edimportant {
+	font-weight: bold;
+	color: #f00;
+	border-bottom: 1px dotted #000;
+	background: none;
+}
+.edhighlight {
+	font-weight: normal;
+	color: #000;
+	border: none;
+	background-color: #ff0;
+}
+.edsubtle {
+	color: #999;
+	border: none;
+	background: none;
+}
+.edcomment {
+	font-size: 10pt;
+	font-weight: bold;
+	color: #99f;
+	color: #000;
+	border: 1px dotted #36c;
+	background-color: #efefef;
+}
+.edcode {
+	font-family: Courier New, Courier, Serif;
+	background-color: #f5f5f5;
+}
+.widget {
+	display: none;
+}

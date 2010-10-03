@@ -1,0 +1,66 @@
+/*
+ * MindTouch Deki - enterprise collaboration and integration platform
+ * Copyright (C) 2006-2009 MindTouch, Inc.
+ * www.mindtouch.com  oss@mindtouch.com
+ *
+ * For community documentation and downloads visit www.opengarden.org;
+ * please review the licensing section.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * http://www.gnu.org/copyleft/gpl.html
+ */
+
+/**
+ * @file Wrapper for mindtouch dialog.
+ */
+
+(function()
+{
+	CKEDITOR.plugins.add( 'mindtouchdialog',
+	{
+		/**
+		 * Dialog command. It opens a specific mindtouch dialog when executed.
+		 * @constructor
+		 * @param {string} dialogName The name of the dialog to open when executing
+		 *		this command.
+		 * @param {Object} dialogParams
+		 * @example
+		 * // Register the "link" command, which opens the "link" dialog.
+		 * editor.addCommand( 'mindtouchlink', <b>new CKEDITOR.plgins.get( 'mindtouchdialog' ).openDialog( 'mindtouchlink', { url : '/skins/common/popups/link_dialog.php' } )</b> );
+		 */
+		openDialog : function( dialogName, dialogParams )
+		{
+			this.dialogName = dialogName;
+			this.dialogParams = dialogParams;
+			
+			var dialog = new Deki.Dialog(
+				{
+					'src' : this.dialogParams.url,
+					'width' : this.dialogParams.width,
+					'height' : this.dialogParams.height,
+					'buttons' : [
+						Deki.Dialog.BTN_OK,
+						Deki.Dialog.BTN_CANCEL
+					],
+					'args' : this.dialogParams.params,
+					'callback' : this.dialogParams.callback,
+					'scope' : this.dialogParams.scope
+				}) ;
+
+			dialog.render();
+			dialog.show();
+		}
+	});
+})();

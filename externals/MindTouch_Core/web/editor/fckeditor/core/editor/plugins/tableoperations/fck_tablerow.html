@@ -1,0 +1,426 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
+<!--
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2009 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *	http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *	http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *	http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * Row properties dialog window.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Table Row Properties</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="robots" content="noindex, nofollow" />
+	<script src="../../dialog/common/fck_dialog_common.js" type="text/javascript"></script>
+	<script type="text/javascript">
+
+var dialog	= window.parent ;
+var oEditor = dialog.InnerDialogLoaded() ;
+var FCKLang = oEditor.FCKLang ;
+var FCKBrowserInfo = oEditor.FCKBrowserInfo ;
+var FCKStyles = oEditor.FCKStyles ;
+var FCKTools = oEditor.FCKTools ;
+var FCKDomTools = oEditor.FCKDomTools ;
+var FCKInlineStyle = oEditor.FCKInlineStyle ;
+
+var FCKDomTools = oEditor.FCKDomTools ;
+
+//Add some tabs
+dialog.AddTab( 'General', FCKLang.DlgDivGeneralTab );
+dialog.AddTab( 'Advanced', FCKLang.DlgDivAdvancedTab ) ;
+
+// Array of selected rows
+var aCells = oEditor.FCKTableHandler.GetSelectedCells() ;
+var aRows = [] ;
+var aUniqueRows = [] ;
+
+for ( var i = 0; i < aCells.length; i++ )
+{
+	var oRow = aCells[i].parentNode ;
+	aUniqueRows[oRow.rowIndex] = oRow ;
+}
+
+for ( var i in aUniqueRows )
+{
+	if ( aUniqueRows[i] )
+		aRows.push( aUniqueRows[i] ) ;
+}
+
+function OnDialogTabChange( tabCode )
+{
+	ShowE( 'cellGeneral', tabCode == 'General' ) ;
+	ShowE( 'cellAdvanced', tabCode == 'Advanced' ) ;
+	dialog.SetAutoSize( true ) ;
+}
+
+function AddStyleOption( styleName )
+{
+	var el = GetE( 'selStyle' ) ;
+	var opt = document.createElement( 'option' ) ;
+	opt.text = opt.value = styleName ;
+
+	if ( FCKBrowserInfo.IsIE )
+		el.add( opt ) ;
+	else
+		el.add( opt, null ) ;
+}
+
+window.onload = function()
+{
+	// First of all, translate the dialog box texts
+	oEditor.FCKLanguageManager.TranslatePage( document ) ;
+
+	SetStartupValue() ;
+
+	dialog.SetOkButton( true ) ;
+	dialog.SetAutoSize( true ) ;
+	SelectField( 'txtWidth' ) ;
+}
+
+function SetStartupValue()
+{
+	var styles = FCKStyles.GetStyles() ;
+	var selectableStyles = {} ;
+	for ( var i in styles )
+	{
+		if ( ! /^_FCK_/.test( i ) && styles[i].Element == 'tr' )
+			selectableStyles[i] = styles[i] ;
+	}
+	
+	AddStyleOption( "" ) ;
+
+	for ( var i in selectableStyles )
+		AddStyleOption( i ) ;
+	
+	if ( aRows.length > 0 )
+	{
+		var oRow = aRows[0] ;
+		
+		var iWidth = FCKInlineStyle.GetNormalizedValue( oRow, 'width' ) ;
+		var iHeight = FCKInlineStyle.GetNormalizedValue( oRow, 'height' ) ;
+		
+		if ( FCKInlineStyle.GetUnit( iWidth ) == '%' )
+		{
+			GetE('selWidthType').value = 'percent' ;
+		}
+
+		GetE('txtWidth').value			= FCKInlineStyle.GetNum( iWidth ) ;
+		GetE('txtHeight').value			= FCKInlineStyle.GetNum( iHeight ) ;
+		GetE('selHAlign').value			= GetAttribute( oRow, 'align' ) ;
+		GetE('selVAlign').value			= GetAttribute( oRow, 'vAlign' ) ;
+		GetE('selRowType').value		= oRow.parentNode.nodeName.toLowerCase() ;
+
+		GetE( 'txtClass' ).value = oRow.className ;
+		GetE( 'txtId' ).value = oRow.id ;
+		// GetE( 'txtStyle' ).value = oRow.style.cssText ;
+
+		GetE( 'txtBackColor' ).value = FCKInlineStyle.GetNormalizedValue( oRow, 'backgroundColor' ) ;
+		GetE( 'txtBackImage' ).value = FCKInlineStyle.GetNormalizedValue( oRow, 'backgroundImage' ) ;
+		
+		var match = null ;
+		for ( var i in selectableStyles )
+		{
+			if ( oRow && styles[i].CheckElementRemovable( oRow, true ) )
+				match = i ;
+		}
+
+		if ( match )
+			GetE( 'selStyle' ).value = match ;
+
+	}
+}
+
+// Fired when the user press the OK button
+function Ok()
+{
+	oEditor.FCKUndo.SaveUndoStep() ;
+	
+	var rowUpdate = GetE('selRowUpdate').value ;
+	var aAffectedRows = [], oRow = null ;
+	
+	if ( aRows.length > 0 )
+	{
+		var oTable = FCKTools.GetElementAscensor( aRows[0], 'TABLE' ) ;
+	}
+	
+	switch ( rowUpdate )
+	{
+		case 'current':
+			for (var i = 0; i < aRows.length; i++)
+			{
+				oRow = UpdateRow(aRows[i]);
+				aAffectedRows.push( oRow ) ;
+			}
+			break ;
+		case 'all':
+			var aAllRows = oTable.getElementsByTagName( "tr" ) ;
+			for (var i = 0; i < aAllRows.length; i++)
+			{
+				oRow = UpdateRow(aAllRows[i], true);
+				aAffectedRows.push( oRow ) ;
+			}
+			break ;
+		case 'odd':
+		case 'even':
+			var aAllRows = oTable.getElementsByTagName( "tr" ) ;
+			for ( var i = 0 ; i < aAllRows.length ; i++ )
+			{
+				if ( (i % 2 == 0 && rowUpdate == "odd") || (i % 2 != 0 && rowUpdate == "even") )
+				{
+					oRow = UpdateRow( aAllRows[i], true, true ) ;
+					aAffectedRows.push( oRow ) ;
+				}
+			}
+			break ;
+	}
+
+	// The cells need to be reselected, otherwise the caret will appear inside the table borders (Gecko)
+	// or sent back to the beginning of the document (Opera and Safari).
+	// Strangely, IE works ok so no change is needed for IE.
+	if ( !oEditor.FCKBrowserInfo.IsIE )
+	{
+		var selection = oEditor.FCK.EditorWindow.getSelection() ;
+		selection.removeAllRanges() ;
+		for ( var i = 0 ; i < aAffectedRows.length ; i++ )
+		{
+			for (var j = 0; j < aAffectedRows[i].cells.length; j++)
+			{
+				var oCell = aAffectedRows[i].cells[j] ;
+				var range = oEditor.FCK.EditorDocument.createRange();
+				range.selectNode( oCell ) ;
+				selection.addRange( range ) ;
+			}
+		}
+	}
+
+	return true ;
+}
+
+function UpdateRow( oRow, bSkipId, bSkipParent )
+{
+	var curRowType = oRow.parentNode.nodeName.toLowerCase() ;
+	var rowType = GetE('selRowType').value ;
+	
+	if ( GetE('txtWidth').value.length > 0 )
+		oRow.style.width	= GetE('txtWidth').value + ( GetE('selWidthType').value == 'percent' ? '%' : 'px') ;
+	else
+		oRow.style.width = '' ;
+		
+	if ( GetE('txtHeight').value.length > 0 )
+		oRow.style.height	= GetE('txtHeight').value + 'px' ;
+	else
+		oRow.style.height = '' ;
+
+	SetAttribute( oRow, 'align'		, GetE('selHAlign').value ) ;
+	SetAttribute( oRow, 'vAlign'	, GetE('selVAlign').value ) ;
+	SetAttribute( oRow, 'class'		, GetE('txtClass').value ) ;
+	
+	if ( !bSkipId )
+		SetAttribute( oRow, 'id'		, GetE('txtId').value ) ;
+	
+	var styleName = GetE( 'selStyle' ).value ;
+
+	if ( styleName )
+		FCKStyles.GetStyle( styleName ).ApplyToObject( oRow ) ;
+
+	var backImage = GetE( 'txtBackImage' ).value ;
+	oRow.style.backgroundImage = ( backImage.length > 0 ) ? "url('" + GetE( 'txtBackImage' ).value + "')" : '' ;
+	oRow.style.backgroundColor = GetE( 'txtBackColor' ).value ;
+	
+	// Setup new rowtype
+	if ( curRowType != rowType && !bSkipParent )
+	{
+		// first, clone the node we are working on
+		var newRow = FCKDomTools.CloneElement( oRow, true ) ;
+
+		// next, find the parent of its new destination (creating it if necessary)
+		var oTable = FCKTools.GetElementAscensor( oRow, 'TABLE' ) ;
+		var dest = rowType;
+		var newParent = null;
+
+		for ( var i = 0 ; i < oTable.childNodes.length ; i++ )
+		{
+			if ( oTable.childNodes[i].nodeName.toLowerCase() == dest )
+				newParent = oTable.childNodes[i];
+		}
+
+		if ( newParent == null )
+		{
+			newParent = oEditor.FCK.EditorDocument.createElement( dest ) ;
+
+			if ( dest == "thead" )
+			{
+				if ( oTable.firstChild.nodeName == 'CAPTION' )
+					FCKDomTools.InsertAfterNode( oTable.firstChild, newParent ) ;
+				else
+					oTable.insertBefore( newParent, oTable.firstChild ) ;
+			}
+			else
+				oTable.appendChild( newParent ) ;
+		}
+		
+		// append the row to the new parent
+		newParent.appendChild( newRow ) ;
+
+		// remove the original
+		oRow.parentNode.removeChild( oRow ) ;
+
+		// set tr_elm to the new node
+		oRow = newRow;
+	}
+	
+	SetAttribute( oRow, '_fckstyle', oRow.style.cssText ) ;
+	
+	oRow.removeAttribute( 'width', 0 ) ;
+	oRow.removeAttribute( 'height', 0 ) ;
+	oRow.removeAttribute( 'bgColor', 0 ) ;
+	
+	return oRow ;
+}
+
+function SelectBackColor( color )
+{
+	if ( color && color.length > 0 )
+		GetE('txtBackColor').value = color ;
+}
+
+function SelectColor()
+{
+	oEditor.FCKDialog.OpenDialog( 'FCKDialog_Color', oEditor.FCKLang.DlgColorTitle, 'dialog/fck_colorselector.html', 410, 320, SelectBackColor ) ;
+}
+
+	</script>
+</head>
+<body scroll="no" style="overflow: hidden">
+	<div id="cellGeneral">
+		<table cellspacing="0" cellpadding="0" border="0">
+			<tr>
+				<td nowrap="nowrap">
+					<label for="txtWidth" fcklang="DlgCellWidth">Width</label>:</td>
+				<td>
+					&nbsp;<input onkeypress="return IsDigit(event);" id="txtWidth" type="text" maxlength="4"
+						size="3" />&nbsp;<select id="selWidthType">
+							<option fcklang="DlgCellWidthPx" value="pixels" selected="selected">pixels</option>
+							<option fcklang="DlgCellWidthPc" value="percent">percent</option>
+						</select></td>
+			</tr>
+			<tr>
+				<td nowrap="nowrap">
+					<label for="txtHeight" fcklang="DlgCellHeight">Height</label>:</td>
+				<td>
+					&nbsp;<input id="txtHeight" type="text" maxlength="4" size="3" onkeypress="return IsDigit(event);" />&nbsp;<span
+						fcklang="DlgCellWidthPx">pixels</span></td>
+			</tr>
+			<tr>
+				<td>
+					&nbsp;</td>
+				<td>
+					&nbsp;</td>
+			</tr>
+			<tr>
+				<td nowrap="nowrap">
+					<label for="selRowType" fcklang="DlgRowType">Row in table part</label>:</td>
+				<td>
+					&nbsp;<select id="selRowType">
+						<option value="thead">Table Head</option>
+						<option value="tbody" selected="selected">Table Body</option>
+						<option value="tfoot">Table Foot</option>
+					</select></td>
+			</tr>
+			<tr>
+				<td>
+					&nbsp;</td>
+				<td>
+					&nbsp;</td>
+			</tr>
+			<tr>
+				<td nowrap="nowrap">
+					<label for="selHAlign" fcklang="DlgCellHorAlign">Horizontal Alignment</label>:</td>
+				<td>
+					&nbsp;<select id="selHAlign">
+						<option fcklang="DlgCellHorAlignNotSet" value="" selected>&lt;Not set&gt;</option>
+						<option fcklang="DlgCellHorAlignLeft" value="left">Left</option>
+						<option fcklang="DlgCellHorAlignCenter" value="center">Center</option>
+						<option fcklang="DlgCellHorAlignRight" value="right">Right</option>
+					</select></td>
+			</tr>
+			<tr>
+				<td nowrap="nowrap">
+					<label for="selVAlign" fcklang="DlgCellVerAlign">Vertical Alignment</label>:</td>
+				<td>
+					&nbsp;<select id="selVAlign">
+						<option fcklang="DlgCellVerAlignNotSet" value="" selected>&lt;Not set&gt;</option>
+						<option fcklang="DlgCellVerAlignTop" value="top">Top</option>
+						<option fcklang="DlgCellVerAlignMiddle" value="middle">Middle</option>
+						<option fcklang="DlgCellVerAlignBottom" value="bottom">Bottom</option>
+						<option fcklang="DlgCellVerAlignBaseline" value="baseline">Baseline</option>
+					</select></td>
+			</tr>
+		</table>
+	</div>
+	<div id="cellAdvanced" style="display: none">
+		<table cellspacing="0" cellpadding="0" width="100%" border="0" style="margin-bottom:1em">
+			<tr>
+				<td nowrap="nowrap">
+					<label for="selStyle" fcklang="DlgGenStyle">Style</label></td>
+				<td>
+					&nbsp;<select id="selStyle" style="width: 100%;"></select>
+				</td>
+			</tr>
+			<tr>
+				<td nowrap="nowrap">
+					<label for="txtClass" fcklang="DlgGenClass">Stylesheet Classes</label></td>
+				<td>
+					&nbsp;<input id="txtClass" style="width: 100%" type="text" /></td>
+			</tr>
+			<tr>
+				<td nowrap="nowrap">
+					<label for="txtId" fcklang="DlgGenId">Id</label></td>
+				<td>
+					&nbsp;<input id="txtId" style="width: 100%" type="text" /></td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td nowrap="nowrap">
+					<label for="txtBackColor" fcklang="DlgCellBackColor">Background Color</label>:</td>
+				<td>
+					&nbsp;<input id="txtBackColor" type="text" size="8" />
+					&nbsp;<input type="button" fcklang="DlgCellBtnSelect" value="Select..." onclick="SelectColor()"></td>
+			</tr>
+			<tr>
+				<td nowrap="nowrap">
+					<label for="txtBackImage" fcklang="DlgGenBackImage">Background Image</label>:</td>
+				<td colspan="2">
+					&nbsp;<input id="txtBackImage" type="text" /></td>
+			</tr>
+
+		</table>
+	</div>
+	<div id="rowUpdate" style="margin-top:1.5em">
+		<select id="selRowUpdate">
+			<option value="current" selected="selected" fcklang="DlgRowUpdateCurrent">Update current row</option>
+			<option value="odd" fcklang="DlgRowUpdateOdd">Update odd rows in table</option>
+			<option value="even" fcklang="DlgRowUpdateEven">Update even rows in table</option>
+			<option value="all" fcklang="DlgRowUpdateAll">Update all rows in table</option>
+		</select>
+	</div>
+</body>
+</html>

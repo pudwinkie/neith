@@ -1,0 +1,127 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5232C631-8494-4898-9691-0C6796F5E3E8}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MindTouch.Tools</RootNamespace>
+    <AssemblyName>mindtouch.deki.mwconverter</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Signed Release|AnyCPU' ">
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>TRACE;SIGNED</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Signed Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;SIGNED</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mindtouch.core, Version=1.5.1.22766, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\mindtouch.core.dll</HintPath>
+    </Reference>
+    <Reference Include="mindtouch.deki, Version=8.5.2.17963, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="mindtouch.deki.ext, Version=1.8.0.20964, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\mindtouch.deki.ext.dll</HintPath>
+    </Reference>
+    <Reference Include="mindtouch.deki.script, Version=1.8.0.32983, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\mindtouch.deki.script.dll</HintPath>
+    </Reference>
+    <Reference Include="mindtouch.dream, Version=1.5.0.24178, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\mindtouch.dream.dll</HintPath>
+    </Reference>
+    <Reference Include="mindtouch.indexservice, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\mindtouch.indexservice.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Data, Version=5.1.4.0, Culture=neutral, PublicKeyToken=e9e00af2ac704681, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\redist\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="IPBlockBE.cs" />
+    <Compile Include="LogBE.cs" />
+    <Compile Include="MediaWikiConverterContext.cs" />
+    <Compile Include="MediaWikiConverterService.cs" />
+    <Compile Include="MediaWikiDA.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RecentChangeBE.cs" />
+    <Compile Include="Site.cs" />
+    <Compile Include="WatchlistBE.cs" />
+    <Compile Include="WikiTextProcessor.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="mindtouch.deki.mwconverter.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\services\mindtouch.deki.data.mysql\mindtouch.deki.data.mysql.csproj">
+      <Project>{59941B89-CF3E-4056-9E10-4A5FDCE41235}</Project>
+      <Name>mindtouch.deki.data.mysql</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\services\mindtouch.deki.data\mindtouch.deki.data.csproj">
+      <Project>{B0E05E6F-0F20-4301-BD78-344C4345DB01}</Project>
+      <Name>mindtouch.deki.data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\services\mindtouch.deki.util\mindtouch.deki.util.csproj">
+      <Project>{8E1EC397-A8C9-4C35-8EDE-597EE5606B23}</Project>
+      <Name>mindtouch.deki.util</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

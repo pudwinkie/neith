@@ -1,0 +1,222 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
+<!--
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2009 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * Table dialog window.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Sort Table</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="robots" content="noindex, nofollow">
+	<link rel="stylesheet" type="text/css" href="css/style.css" media="all">
+	<script src="../../dialog/common/fck_dialog_common.js" type="text/javascript"></script>
+	<script src="js/sorttable.js" type="text/javascript"></script>
+	<script type="text/javascript">
+
+var dialog	= window.parent ;
+var oEditor = dialog.InnerDialogLoaded() ;
+var FCKLang = oEditor.FCKLang ;
+var FCKBrowserInfo = oEditor.FCKBrowserInfo ;
+
+var FCKDomTools = oEditor.FCKDomTools ;
+var FCKTools = oEditor.FCKTools ;
+
+// Gets the table if there is one selected.
+var table ;
+var e = dialog.Selection.GetSelectedElement() ;
+
+if ( !e || ( e && e.tagName != 'TABLE' ) )
+	e = oEditor.FCKSelection.MoveToAncestorNode( 'TABLE' ) ;
+
+if ( e && e.tagName == "TABLE" )
+	table = e ;
+
+// Fired when the window loading process is finished. It sets the fields with the
+// actual values if a table is selected in the editor.
+window.onload = function()
+{
+	// First of all, translate the dialog box texts
+	oEditor.FCKLanguageManager.TranslatePage(document) ;
+	
+	if ( table )
+	{
+		var colCount = table.rows[0].cells.length ;
+
+		for ( var i = 0 ; i < colCount ; i++ )
+		{
+			var colNum = i + 1 ;
+
+			for ( var j = 0 ; j < 3 ; j++ )
+			{
+				var selElement = GetE( 'selSortBy' + j ) ;
+				FCKTools.AddSelectOption( selElement, 'Column ' + colNum, i ) ;
+			}
+		}
+	}
+
+	SelectField( 'selSortBy0' ) ;
+
+	dialog.SetOkButton( true ) ;
+	dialog.SetAutoSize( true ) ;
+}
+
+// Fired when the user press the OK button
+function Ok()
+{
+	if ( table == null )
+		return true ;
+
+	var oDoc = oEditor.FCK.EditorDocument ;
+	oEditor.FCKUndo.SaveUndoStep() ;
+
+	var aCols = [] ;
+
+	for ( var i = 0 ; i < 3 ; i++ )
+	{
+		var chkKey = GetE( 'chkKey' + i ) ;
+
+		if ( chkKey && !chkKey.checked )
+			continue ;
+
+		var oCol = {} ;
+	
+		oCol.column = GetE( 'selSortBy' + i ).value ;
+		oCol.type = GetE( 'selSortType' + i ).value ;
+		oCol.order = GetE( 'rdbOrderAsc' + i ).checked ? 'asc' : 'desc' ;
+	
+		aCols.push(oCol);
+	}
+
+	var oSortTable = new SortTable( table ) ;
+	oSortTable.Sort( GetE( 'selSort' ).value, aCols ) ;
+
+	return true ;
+}
+
+function CheckKey( chkKey )
+{
+	var isDisabled = !chkKey.checked ;
+	var eTr = FCKTools.GetElementAscensor( chkKey, 'TR' ) ;
+
+	if ( eTr )
+	{
+		var aSel = eTr.getElementsByTagName( 'select' ) ;
+		for ( var i = 0 ; i < aSel.length ; i++ )
+		{
+			aSel[i].disabled = isDisabled ;
+		}
+
+		var aRadio = eTr.getElementsByTagName( 'input' ) ;
+		for ( i = 0 ; i < aRadio.length ; i++ )
+		{
+			if ( aRadio[i] == chkKey )
+				continue ;
+
+			aRadio[i].disabled = isDisabled ;
+		}
+	}
+
+	return true ;
+}
+	</script>
+</head>
+<body style="overflow: hidden">
+	<table cellspacing="1" cellpadding="1" width="100%" border="0">
+		<colgroup>
+			<col width="5%">
+			<col width="25%">
+			<col width="30%">
+			<col width="40%">
+		</colgroup>
+		<tbody>
+			<tr>
+				<td></td>
+				<td><span fcklang="DlgTableSortBy">Sort by</span></td>
+				<td><span fcklang="DlgTableSortType">Type</span></td>
+				<td><span fcklang="DlgTableSortOrder">Order</span></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+					<select id="selSortBy0">
+					</select>
+				</td>
+				<td>
+					<select id="selSortType0">
+						<option value="alphanumeric" fcklang="DlgTableSortAlphanumeric">Alphanumeric</option>
+						<option value="numeric" fcklang="DlgTableSortNumeric">Numeric</option>
+						<option value="date" fcklang="DlgTableSortDate">Date</option>
+					</select>
+				</td>
+				<td>
+					<input type="radio" id="rdbOrderAsc0" name="rdbOrder0" value="asc" checked="checked">&nbsp;<label for="rdbOrderAsc0" fcklang="DlgTableSortAsc">asc</label>
+					<input type="radio" id="rdbOrderDesc0" name="rdbOrder0" value="desc">&nbsp;<label for="rdbOrderDesc0" fcklang="DlgTableSortDesc">desc</label>
+				</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" id="chkKey1" name="chkKey1" value="key1" onclick="return CheckKey(this);"></td>
+				<td>
+					<select id="selSortBy1" disabled="disabled">
+					</select>
+				</td>
+				<td>
+					<select id="selSortType1" disabled="disabled">
+						<option value="alphanumeric" fcklang="DlgTableSortAlphanumeric">Alphanumeric</option>
+						<option value="numeric" fcklang="DlgTableSortNumeric">Numeric</option>
+						<option value="date" fcklang="DlgTableSortDate">Date</option>
+					</select>
+				</td>
+				<td>
+					<input type="radio" id="rdbOrderAsc1" name="rdbOrder1" value="asc" checked="checked" disabled="disabled">&nbsp;<label for="rdbOrderAsc1" fcklang="DlgTableSortAsc">asc</label>
+					<input type="radio" id="rdbOrderDesc1" name="rdbOrder1" value="desc" disabled="disabled">&nbsp;<label for="rdbOrderDesc1" fcklang="DlgTableSortDesc">desc</label>
+				</td>
+			</tr>
+			<tr>
+				<td><input type="checkbox" id="chkKey2" name="chkKey2" value="key2" onclick="return CheckKey(this);"></td>
+				<td>
+					<select id="selSortBy2" disabled="disabled">
+					</select>
+				</td>
+				<td>
+					<select id="selSortType2" disabled="disabled">
+						<option value="alphanumeric" fcklang="DlgTableSortAlphanumeric">Alphanumeric</option>
+						<option value="numeric" fcklang="DlgTableSortNumeric">Numeric</option>
+						<option value="date" fcklang="DlgTableSortDate">Date</option>
+					</select>
+				</td>
+				<td>
+					<input type="radio" id="rdbOrderAsc2" name="rdbOrder2" checked="checked" disabled="disabled" value="asc">&nbsp;<label for="rdbOrderAsc2" fcklang="DlgTableSortAsc">asc</label>
+					<input type="radio" id="rdbOrderDesc2" name="rdbOrder2" disabled="disabled" value="desc">&nbsp;<label for="rdbOrderDesc2" fcklang="DlgTableSortDesc">desc</label>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<select id="selSort">
+						<option value="thead" fcklang="DlgTableSortHead">Sort the HEAD of the table</option>
+						<option value="tbody" selected="selected" fcklang="DlgTableSortBody">Sort the BODY of the table</option>
+						<option value="tfoot" fcklang="DlgTableSortFoot">Sort the FOOT of the table</option>
+					</select>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>

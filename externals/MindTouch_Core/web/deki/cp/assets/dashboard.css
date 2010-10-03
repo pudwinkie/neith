@@ -1,0 +1,328 @@
+/***
+ * Dashboard-specific styles
+ */
+/* content */
+
+div.content {
+	border-top: 3px solid #454545;
+}
+
+div.block {
+	float: left;
+}
+
+div.activation {
+	width: 250px;
+	float: left;
+	background: url(images/vert_line.gif) repeat-y top right;
+	padding-right: 7px;
+	margin-bottom: 10px;
+}
+
+div.indent {
+	padding: 0 0 10px 6px;
+}
+
+div.info {
+	padding-left: 260px;
+}
+
+div.credits {
+	clear: both;
+}
+
+div.status,
+div.expires,
+div.version {
+	padding-bottom: 8px;
+}
+
+div.status-active {
+	float: left;
+	background: url(images/activated.png) no-repeat center top;
+	height: 60px;
+	width: 60px;
+	margin-right: 10px;
+}
+
+div.status-inactive {
+	float: left;
+	background: url(images/activate_seal.gif) no-repeat center top;
+	height: 61px;
+	width: 61px;
+	margin-right: 6px;
+}
+
+div.license,
+div.more {
+	padding-bottom: 14px;
+}
+
+div.version-details {
+	padding-left: 70px;
+}
+div.version-update {
+	padding-top: 14px;
+	color: #f00;
+	font-size: 11px;
+	font-weight: bold;
+}
+
+/***
+ * Credit logos
+ */
+div.logos {
+	overflow: hidden;
+}
+
+div.logos span {
+	display: none;
+}
+
+div.column {
+	width: 20%;	
+	padding: 0;
+	margin: 0;
+}
+
+div.column a {
+	margin: 0 auto; /* center all the image links! */
+}
+
+div.debian {
+	float: left;
+}
+
+div.debian a {
+	display: block;
+	background: url(images/debian.png) no-repeat center center;
+	width: 130px;
+	height: 137px;
+	padding: 4px 0 0 16px;
+}
+
+div.mysql a {
+	display: block;
+	background: url(images/mysql.png) no-repeat center center;
+	width: 122px;
+	height: 77px;
+	padding-bottom: 6px;
+}
+
+div.php a {
+	display: block;
+	background: url(images/php.png) no-repeat center center;
+	width: 96px;
+	height: 51px;
+}
+
+div.lucene a {
+	display: block;
+	background: url(images/lucene.png) no-repeat center center;
+	width: 132px;
+	height: 28px;
+	padding: 6px 0 8px 28px;
+}
+
+div.apache a {
+	display: block;
+	background: url(images/apache.png) no-repeat center center;
+	width: 95px;
+	height: 97px;
+	padding-left: 56px;
+}
+
+div.mono a {
+	display: block;
+	background: url(images/mono.png) no-repeat center center;
+	width: 104px;
+	height: 91px;
+	padding: 2px 0 6px 16px;
+}
+
+div.jquery a {
+	display: block;
+	background: url(images/jquery.png) no-repeat center center;
+	width: 120px;
+	height: 38px;
+}
+
+div.fckeditor a {
+	display: block;
+	background: url(images/fckeditor.png) no-repeat center center;
+	width: 144px;
+	height: 36px;
+	padding: 20px 0 6px 18px;
+}
+
+div.prince a {
+	display: block;
+	background: url(images/prince.png) no-repeat center center;
+	width: 83px;
+	height: 81px;
+	padding-left: 80px;
+}
+
+div.links {
+	overflow: hidden;
+	width: 100%;
+	margin: 0 auto;
+	padding: 14px 0;
+}
+
+div.links ul.list {
+	float: left;
+	width: 20%;
+}
+
+ul.list li {
+	padding-bottom: 4px;
+	text-align: center;
+}
+
+ul.list li a {
+	color: #000;
+	text-decoration: none;
+}
+
+ul.list li a:hover {
+	text-decoration: underline;
+}
+
+/***
+ * Product activation
+ */
+
+div.activate {
+	background: url(images/activate_seal.gif) no-repeat center left;
+	height: 60px;
+	width: 170px;
+	padding: 6px 0 0 78px;
+	font-size: 12px;
+}
+div.product h4 {
+	padding: 20px 0 0 8px;
+	font-weight: bold;
+}
+
+div.contact {
+	font-size: 11px;
+	padding: 4px 0 5px 10px;
+	line-height: 1.3;
+}
+
+div.expires span {
+	font-weight: bold;
+}	
+
+/***
+ * Videos page
+ */
+
+div.videos {
+	float: left;
+	padding: 6px 0 0 6px;
+	width: 49%;
+}
+
+div.video {
+	overflow: hidden;
+	margin-bottom: 20px;
+}
+
+div.video a.thumb {
+	clear: left;
+	float: left;
+}
+
+div.video div.text {
+	float: left;
+	width: 250px;
+}
+
+div.text a.title {
+	display: block;
+	padding: 18px 0 0 18px;
+	color: #000;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+div.text span.date {
+	clear: left;
+	display: block;
+	padding: 6px 0 0 20px;
+	font-size: 11px;
+}
+
+/***
+ * Blog page
+ */
+
+div.subtitle a {
+	color: #fff;
+}
+
+div.subtitle a:hover {
+	text-decoration: underline;
+}
+
+div.block-blog {
+	padding: 4px 0 10px 6px;
+	height: 130px;
+}
+
+div.block-blog h2 {
+	padding-bottom: 4px;
+}
+
+div.block-blog p {
+	padding: 0 0 4px 72px;
+}
+
+div.block-blog h2 a {
+	font-weight: bold;
+	font-size: 14px;
+	text-decoration: none;
+}
+
+div.block-blog h2 a:hover {
+	text-decoration: underline;
+}
+
+div.block-blog div.icon {
+	float: left;
+	width: 60px;
+	border: 1px solid #000;
+	margin-right: 10px;
+}
+
+div.text p.username,
+div.text p.date {
+	font-size: 11px;
+	color: #767676;
+	padding: 0 0 0 72px;
+}
+
+/* API Assembly Versions */
+h2.versions {
+	font-weight: bold;
+	font-size: 110%;
+	margin-bottom: 10px;
+}
+dl.alternate-row {
+	background-color: #eee;
+}
+
+dl.assemblies dt {
+	float: left;
+}
+
+dl.assemblies dd {
+	padding: 0 0 8px 200px;
+}
+span.built, 
+span.svn {
+	font-size: 11px;
+	color: #888;	
+}

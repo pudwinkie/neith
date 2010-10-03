@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta content="noindex, nofollow" name="robots">
+		<script type="text/javascript">
+
+var dialog  = window.parent ;
+var oEditor = window.parent.InnerDialogLoaded() ;
+
+function OnLoad()
+{
+	// First of all, translate the dialog box texts.
+	oEditor.FCKLanguageManager.TranslatePage( document ) ;
+
+	dialog.SetOkButton( true ) ;
+    dialog.SetAutoSize( true ) ;
+}
+
+function otherStat()
+{
+	var sel = document.getElementById('selSeparateAt') ;
+    var txtChar = document.getElementById('txtChar') ;
+    
+    var value = sel.options[sel.selectedIndex].value ;
+    
+    var bDisabled  = !( value == "other" ) ;
+    txtChar.disabled = bDisabled ;
+    
+    if ( !bDisabled )
+    {
+        txtChar.focus() ;
+    }
+}
+
+function Ok()
+{
+    var sel = document.getElementById('selSeparateAt') ;
+    var value = sel.options[sel.selectedIndex].value ;
+
+	if ( value = "other" && document.getElementById('txtChar').value.length == 0 )
+		return ;
+
+	Convert() ;
+    
+    return true ;
+}
+
+function Convert()
+{
+    oEditor.FCKUndo.SaveUndoStep() ;
+    
+    var oRange = new oEditor.FCKDomRange( oEditor.FCK.EditorWindow );
+    oRange.MoveToSelection() ;
+    
+    var oDoc = oEditor.FCK.EditorDocument ;
+    
+    var oTable = oEditor.FCKSelection.MoveToAncestorNode( 'TABLE' ) ;
+    var aRows = oTable.rows ;
+    
+    var aParagraphs = [], p, sRowText ;
+    
+    var sel = document.getElementById('selSeparateAt') ;
+
+    var sSeparateTextAt = sel.options[sel.selectedIndex].value ;
+    var sChar = document.getElementById('txtChar').value ;
+    
+    for ( var i = 0 ; i < aRows.length ; i++ )
+    {
+        for ( var j = 0 ; j < aRows[i].cells.length ; j++ )
+        {
+            if ( sSeparateTextAt == "paragraph" || j == 0 )
+            {
+                p = oDoc.createElement( 'p' ) ;
+                sRowText = '' ;
+            }
+
+            var cell = aRows[i].cells[j] ;
+            
+            if ( j > 0 && sSeparateTextAt != "paragraph" )
+            {
+                switch ( sSeparateTextAt )
+                {
+                    case "tabs":
+                        sRowText += "&nbsp;&nbsp;&nbsp;&nbsp;" ;
+                        break ;
+                    case "semicolons":
+                        sRowText += ";" ;
+                        break ;
+                    default:
+                        sRowText += sChar ;
+                        break;
+                }
+            }
+            
+            sRowText += cell.innerHTML ;
+            
+            if ( sSeparateTextAt == "paragraph" || j == aRows[i].cells.length - 1 )
+            {
+                p.innerHTML = sRowText ;
+                aParagraphs.push( p ) ;
+            }
+        }
+    }
+    
+    var node = oTable ;
+    
+    for ( var i = 0 ; i < aParagraphs.length ; i++ )
+    {
+        node = oEditor.FCKDomTools.InsertAfterNode( node, aParagraphs[i] ) ;
+    }
+    
+    oEditor.FCKTableHandler.DeleteTable( oTable ) ;
+    
+    oRange.SetStart( aParagraphs[0], 1 ) ;
+    oRange.SetEnd( node, 2 ) ;
+    
+    oRange.Select() ;
+    oRange.Release() ;
+}
+
+		</script>
+	</head>
+	<body onload="OnLoad()" scroll="no" style="OVERFLOW: hidden">
+		<table cellSpacing="0" cellPadding="0" width="100%" border="0" style="height: 100%">
+			<tr>
+				<td width="40%">
+					<label for="txtFind" fckLang="DlgSeparateTextLbl">Separate Text At:</label>&nbsp;
+				</td>
+				<td>
+					<select id="selSeparateAt" onchange="otherStat()">
+					    <option value="tabs" fckLang="DlgSeparateTabsLbl">Tabs</option>
+                        <option value="paragraph" fckLang="DlgSeparateParagraphLbl">Paragraph</option>
+                        <option value="semicolons" fckLang="DlgSeparateSemicolonsLbl">Semicolons</option>
+                        <option value="other" fckLang="DlgSeparateOtherLbl">Other</option>
+					</select>
+				</td>
+				<td>
+					<input id="txtChar" style="WIDTH: 3em;" disabled="disabled"
+						type="text" value=",">
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

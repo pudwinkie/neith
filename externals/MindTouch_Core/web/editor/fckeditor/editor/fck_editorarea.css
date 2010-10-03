@@ -1,0 +1,59 @@
+@CHARSET "UTF-8";
+
+/* Reset style for comboboxes */
+
+#topic .SC_Panel p, #topic .SC_Panel dl,
+#topic .SC_Panel ul, #topic .SC_Panel table,
+#topic .SC_Panel blockquote, #topic .SC_Panel pre
+{
+    margin: 0;
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    line-height: normal;
+}
+
+#topic .SC_Panel pre
+{
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+#topic .SC_Panel h1,
+#topic .SC_Panel h2,
+#topic .SC_Panel h3,
+#topic .SC_Panel h4,
+#topic .SC_Panel h5,
+#topic .SC_Panel h6
+{
+    border: none;
+    background: none;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+/* Clearing floats */
+
+#topic .clearfix { zoom:1; }
+#topic .clearfix:after
+{
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+dl {
+	padding: 0;
+	margin: 0;
+}
+
+dl dt {
+	font-weight: bold;
+}
+
+dl dd {
+	border-bottom: 1px dashed #999;
+	margin: 0 0 20px 0;
+	padding: 2px 0 4px 16px;
+}

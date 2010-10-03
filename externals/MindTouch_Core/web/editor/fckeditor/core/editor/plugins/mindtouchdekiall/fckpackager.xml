@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * This is the configuration file to be used with FCKpackager to generate the
+ * compressed code files in the "js" folder.
+ *
+ * Please check http://www.fckeditor.net for more info.
+-->
+<Package>
+	<Header><![CDATA[/*
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2008 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * This file has been compressed for better performance.
+ */
+ 
+/*
+ * MindTouch Deki - enterprise collaboration and integration platform
+ * Copyright (C) 2006-2009 MindTouch, Inc.
+ * www.mindtouch.com  oss@mindtouch.com
+ *
+ * For community documentation and downloads visit www.opengarden.org;
+ * please review the licensing section.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ * http://www.gnu.org/copyleft/gpl.html
+ */
+]]></Header>
+	<PackageFile path="fckplugin.js">
+		<File path="../mindtouchdeki/fckplugin.js" />
+		<File path="../inlinestyle/fckplugin.js" />
+		<File path="../fckoverrides/fckplugin.js" />
+		<File path="../fckstyle/fckplugin.js" />
+		<File path="../enterkey/fckplugin.js" />
+        <File path="../keystroke/fckplugin.js" />
+        <File path="../save/fckplugin.js" />
+        <File path="../insertimage/fckplugin.js" />
+        <File path="../attachimage/fckplugin.js" />
+        <File path="../insertlink/fckplugin.js" />
+        <File path="../inserttemplate/fckplugin.js" />
+        <File path="../insertextension/fckplugin.js" />
+        <File path="../insertvideo/fckplugin.js" />
+        <File path="../transform/fckplugin.js" />
+        <File path="../findreplace/fckplugin.js" />
+        <File path="../tableconvert/fckplugin.js" />
+		<File path="../tableoperations/fckplugin.js" />
+	</PackageFile>
+</Package>

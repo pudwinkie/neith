@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>mindtouch.core</name>
+    </assembly>
+    <members>
+        <member name="T:MindTouch.Dream.Http.HttpHandler">
+            <summary>
+            Provides an <see cref="T:System.Web.IHttpHandler"/> implementation to load Dream inside of IIS.
+            </summary>
+        </member>
+        <member name="M:MindTouch.Dream.Http.HttpHandler.#ctor">
+            <summary>
+            Create new handler instance
+            </summary>
+        </member>
+        <member name="M:MindTouch.Dream.CoreUtil.ExecuteAction(MindTouch.Dream.Plug,MindTouch.Dream.DreamHeaders,MindTouch.Xml.XDoc)">
+            <summary>
+            WARNING: This method is thread-blocking.  Please avoid using it if possible.
+            </summary>
+        </member>
+        <member name="M:MindTouch.Dream.CoreUtil.ExecutePipe(MindTouch.Dream.Plug,MindTouch.Dream.DreamHeaders,MindTouch.Xml.XDoc)">
+            <summary>
+            WARNING: This method is thread-blocking.  Please avoid using it if possible.
+            </summary>
+        </member>
+        <member name="T:MindTouch.Dream.DreamHost">
+            <summary>
+            Provides a hosting environment for <see cref="T:MindTouch.Dream.IDreamService"/> based services.
+            </summary>
+        </member>
+        <member name="F:MindTouch.Dream.DreamHost.DEFAULT_PORT">
+            <summary>
+            Default dream host port: 8081
+            </summary>
+        </member>
+        <member name="M:MindTouch.Dream.DreamHost.#ctor">
+            <summary>
+            Create a new host with default settings.
+            </summary>
+        </member>
+        <member name="M:MindTouch.Dream.DreamHost.#ctor(MindTouch.Xml.XDoc)">
+            <summary>
+            Create a new host with provided configuration.
+            </summary>
+            <param name="config">Host configuration.</param>
+        </member>
+        <member name="M:MindTouch.Dream.DreamHost.#ctor(MindTouch.Xml.XDoc,Autofac.IContainer)">
+            <summary>
+            Create a new host with provided configuration and an Inversion of Control container.
+            </summary>
+            <remarks>
+            The IoC container is also injected into default activator, so that <see cref="T:MindTouch.Dream.IDreamService"/> instances
+            can be resolved from the container. The host configuration is provided to the container as a typed parameter.
+            </remarks>
+            <param name="config">Host configuration.</param>
+            <param name="container">IoC Container.</param>
+        </member>
+        <member name="M:MindTouch.Dream.DreamHost.Finalize">
+            <summary>
+            Finalizer to clean-up an undisposed host.
+            </summary>
+        </member>
+        <member name="M:MindTouch.Dream.DreamHost.RunScripts(MindTouch.Xml.XDoc,System.String)">
+            <summary>
+            Execute a set of scripts against the host.
+            </summary>
+            <remarks>
+            This method is thread-blocking.  Please avoid using it if possible.
+            </remarks>
+            <param name="scripts">Scripts document.</param>
+            <param name="path">Host path to post the scripts against.</param>
+        </member>
+        <member name="M:MindTouch.Dream.DreamHost.RunScript(MindTouch.Xml.XDoc,System.String)">
+            <summary>
+            Execute a script against the host.
+            </summary>
+            <remarks>
+            This method is thread-blocking.  Please avoid using it if possible.
+            </remarks>
+            <param name="script">Script document.</param>
+            <param name="path">Host path to post the script against.</param>
+        </member>
+        <member name="M:MindTouch.Dream.DreamHost.WaitUntilShutdown">
+            <summary>
+            Block the current thread until the host shuts down.
+            </summary>
+            <remarks>
+            This call does not initiate a shut down.
+            </remarks>
+        </member>
+        <member name="M:MindTouch.Dream.DreamHost.AddActivityDescription(System.Object,System.String)">
+            <summary>
+            Add a host activity.
+            </summary>
+            <param name="key">Activity key.</param>
+            <param name="description">Description of activity.</param>
+        </member>
+        <member name="M:MindTouch.Dream.DreamHost.RemoveActivityDescription(System.Object)">
+            <summary>
+            Remove a host activity.
+            </summary>
+            <param name="key">Activity key.</param>
+        </member>
+        <member name="M:MindTouch.Dream.DreamHost.UpdateInfoMessage(System.String,System.String)">
+            <summary>
+            Update the host's info message.
+            </summary>
+            <param name="source">Message source.</param>
+            <param name="message">Info message.</param>
+        </member>
+        <member name="M:MindTouch.Dream.DreamHost.Dispose">
+            <summary>
+            Shut down and clean up the host's resources.
+            </summary>
+        </member>
+        <member name="P:MindTouch.Dream.DreamHost.Self">
+            <summary>
+            Http location of host <see cref="T:MindTouch.Dream.IDreamService"/>.
+            </summary>
+        </member>
+        <member name="P:MindTouch.Dream.DreamHost.GlobalId">
+            <summary>
+            Global Id used for local:// uri's
+            </summary>
+        </member>
+        <member name="P:MindTouch.Dream.DreamHost.IsRunning">
+            <summary>
+            <see langword="True"/> if the host is running.
+            </summary>
+        </member>
+        <member name="P:MindTouch.Dream.DreamHost.LocalMachineUri">
+            <summary>
+            Root local:// uri for this host.
+            </summary>
+        </member>
+        <member name="P:MindTouch.Dream.DreamHost.ActivityMessages">
+            <summary>
+            Current host activity.
+            </summary>
+        </member>
+        <member name="T:MindTouch.Dream.IServiceActivator">
+            <summary>
+            Provides a mechanism for instantiating <see cref="T:MindTouch.Dream.IDreamService"/> instances.
+            </summary>
+        </member>
+        <member name="M:MindTouch.Dream.IServiceActivator.Create(MindTouch.Xml.XDoc,System.Type)">
+            <summary>
+            Create a new <see cref="T:MindTouch.Dream.IDreamService"/> instance.
+            </summary>
+            <param name="config">Service configuration that will later be used to initialize the instance.</param>
+            <param name="type">Type of the <see cref="T:MindTouch.Dream.IDreamService"/> implemntor to instantiate.</param>
+            <returns>A service instance.</returns>
+        </member>
+    </members>
+</doc>

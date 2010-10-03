@@ -1,0 +1,65 @@
+@CHARSET "UTF-8";
+
+a:active {
+	outline: none;
+}
+
+a:focus {
+	-moz-outline-style: none;
+}
+
+table td {
+	vertical-align: top;
+	padding-bottom: 1em;
+}
+
+table textarea {
+	width: 100%;
+	height: 50px;
+	font-size: 120%;
+}
+
+ul {
+	margin: 0;
+	padding: 0;
+}
+
+ul li {
+	list-style: none;
+	float: left;
+}
+
+ul li a {
+	display: block;
+	padding: .5em;
+	border: 1px solid #D5D59D;
+	margin-right: .5em;
+	text-decoration: none;
+	color: #737357;
+}
+
+ul li.selected a {
+	font-weight: bolder;
+	background-color: #E3E3C7;
+}
+
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+ 
+.clearfix {
+	display: inline-block;
+}
+ 
+html[xmlns] .clearfix {
+	display: block;
+}
+ 
+* html .clearfix {
+	height: 1%;
+}

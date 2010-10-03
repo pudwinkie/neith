@@ -1,0 +1,335 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
+<!--
+ * FCKeditor - The text editor for Internet - http://www.fckeditor.net
+ * Copyright (C) 2003-2009 Frederico Caldeira Knabben
+ *
+ * == BEGIN LICENSE ==
+ *
+ * Licensed under the terms of any of the following licenses at your
+ * choice:
+ *
+ *  - GNU General Public License Version 2 or later (the "GPL")
+ *    http://www.gnu.org/licenses/gpl.html
+ *
+ *  - GNU Lesser General Public License Version 2.1 or later (the "LGPL")
+ *    http://www.gnu.org/licenses/lgpl.html
+ *
+ *  - Mozilla Public License Version 1.1 or later (the "MPL")
+ *    http://www.mozilla.org/MPL/MPL-1.1.html
+ *
+ * == END LICENSE ==
+ *
+ * Table dialog window.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>DekiScript Attributes</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="robots" content="noindex, nofollow" />
+	<link rel="stylesheet" type="text/css" href="css/style.css" media="all">
+	<script src="../../dialog/common/fck_dialog_common.js" type="text/javascript"></script>
+	<script type="text/javascript">
+
+var dialog	= window.parent ;
+var oEditor = dialog.InnerDialogLoaded() ;
+var FCKLang = oEditor.FCKLang ;
+var FCKBrowserInfo = oEditor.FCKBrowserInfo ;
+
+var FCKTools = oEditor.FCKTools ;
+var FCKDomTools = oEditor.FCKDomTools ;
+var FCKSelection = oEditor.FCKSelection ;
+var FCKElementPath = oEditor.FCKElementPath ;
+
+var Elements = [] ;
+var ListItems = [] ;
+var SelectedElement = null ;
+var AttrCounter = 0 ;
+var IsChanged = false ;
+
+var Attributes = [ 'init', 'if', 'foreach', 'where', 'block', 'function', 'ctor' ] ;
+
+function AddAttrOption( el, attrName, isSelected )
+{
+	var opt = document.createElement( 'option' ) ;
+	opt.text = opt.value = attrName ;
+
+	if ( isSelected )
+		opt.selected = true ;
+
+	if ( FCKBrowserInfo.IsIE )
+		el.add( opt ) ;
+	else
+		el.add( opt, null ) ;
+}
+
+window.onload = function()
+{
+	// First of all, translate the dialog box texts
+	oEditor.FCKLanguageManager.TranslatePage(document) ;
+
+	var node = dialog.Args().CustomValue ;
+	var path = new FCKElementPath( node ) ;
+	Elements = path.Elements ;
+
+	var elList = GetE( 'elList' ) ;
+
+	for ( var i = Elements.length - 1 ; i > -1  ; i-- )
+	{
+		var el = Elements[i], nodeName = el.nodeName.toLowerCase() ;
+
+		if ( nodeName == 'body' )
+			continue ;
+
+		var li = document.createElement( 'li' ) ;
+		var a  = document.createElement( 'a' ) ;
+
+		a.href = '#' + i ;
+		a.innerHTML = nodeName ;
+
+		if ( FCKDomTools.HasAttribute( el, 'id' ) )
+		{
+			a.innerHTML += '#' + FCKDomTools.GetAttributeValue( el, 'id' ) ;
+		}
+		else if ( FCKDomTools.HasAttribute( el, 'class' ) )
+		{
+			a.innerHTML += '.' + FCKDomTools.GetAttributeValue( el, 'class' ) ;
+		}
+
+		li.appendChild( a ) ;
+
+		if ( i == 0 )
+		{
+			li.className = 'selected' ;
+			SelectedElement = el ;
+		}
+
+		elList.appendChild( li ) ;
+		ListItems.push( li ) ;
+
+		FCKTools.AddEventListener( a, 'click', SelectElement ) ;
+	}
+
+	LoadAttributes() ;
+	IsChanged = false ;
+
+	FCKTools.AddEventListener( GetE( 'btnAddAttr' ), 'click', function() { AddAttr() } ) ;
+	FCKTools.AddEventListener( GetE( 'btnRemoveAll' ), 'click', RemoveAll ) ;
+
+	dialog.SetOkButton( true ) ;
+	dialog.SetAutoSize( true ) ;
+}
+
+function LoadAttributes()
+{
+	for ( var i in Attributes )
+	{
+		if ( FCKDomTools.HasAttribute( SelectedElement, Attributes[i] ) )
+		{
+			AddAttr( Attributes[i], SelectedElement.getAttribute( Attributes[i] ) ) ;
+		}
+	}
+}
+
+function SelectElement( ev )
+{
+	var a = GetEventTarget( ev ) ;
+
+	if ( a )
+	{
+		if ( IsChanged && !window.confirm( oEditor.FCKLang.DlgDekiScriptAttrConfirm ) )
+			return false ;
+		
+		var i = parseInt( a.getAttribute( 'href' ).substring( 1 ) ) ;
+		SelectedElement = Elements[ i ] ;
+
+		for ( i = 0 ; i < ListItems.length ; i++ )
+		{
+			ListItems[i].className = '' ;
+		}
+
+		a.parentNode.className = 'selected' ;
+
+		RemoveAll() ;
+		LoadAttributes() ;
+
+		IsChanged = false ;
+	}
+
+	return false ;
+}
+
+function AddAttr( attrName, attrValue )
+{
+	var elRow, elCell, elSelect, elTextArea, elButton ;
+
+	elRow = document.createElement( 'tr' ) ;
+	elRow.id = 'attr-' + AttrCounter ;
+
+	elCell = document.createElement( 'td' ) ;
+	elSelect = document.createElement( 'select' ) ;
+	elSelect.id = 'selAttr-' + AttrCounter ;
+
+	for ( var i in Attributes )
+		AddAttrOption( elSelect, Attributes[i], (attrName && attrName == Attributes[i]) ) ;
+		
+	elCell.appendChild( elSelect ) ;
+	elRow.appendChild( elCell ) ;
+
+	elCell = document.createElement( 'td' ) ;
+	elTextArea = document.createElement( 'textarea' ) ;
+	elTextArea.id = 'taAttrVal-' + AttrCounter ;
+
+	if ( attrValue && attrValue.length > 0 )
+		elTextArea.value = attrValue ;
+
+	elCell.appendChild( elTextArea ) ;
+	elRow.appendChild( elCell ) ;
+
+	elCell = document.createElement( 'td' ) ;
+	elButton = document.createElement( 'input' ) ;
+	elButton.type = 'button' ;
+	elButton.name = 'btnRemoveAttr-' + AttrCounter ;
+	elButton.id = 'btnRemoveAttr-' + AttrCounter ;
+	elButton.value = oEditor.FCKLang.DlgDekiScriptAttrRemove ;
+
+	elCell.appendChild( elButton ) ;
+	elRow.appendChild( elCell ) ;
+
+	var elBody = GetE( 'attributes' ).getElementsByTagName( 'tbody' )[0] ;
+	elBody.appendChild( elRow ) ;
+
+	FCKTools.AddEventListener( elButton, 'click', RemoveAttr ) ;
+	FCKTools.AddEventListener( elTextArea, 'change', function() { IsChanged = true ; } ) ;
+	
+	AttrCounter++ ;
+	IsChanged = true ;
+	dialog.SetAutoSize( true ) ;
+}
+
+function RemoveAll( ev )
+{
+	var elBody = GetE( 'attributes' ).getElementsByTagName( 'tbody' )[0] ;
+
+	while ( elBody.firstChild )
+	{
+		FCKDomTools.RemoveNode( elBody.firstChild ) ;
+		IsChanged = true ;
+	}
+}
+
+function RemoveAttr( ev )
+{
+	var btn = GetEventTarget( ev ) ;
+
+	if ( btn )
+	{
+		var i = parseInt( btn.getAttribute( 'id' ).substring( 'btnRemoveAttr-'.length ) ) ;
+		var elRow = GetE( 'attr-' + i ) ;
+
+		if ( elRow )
+		{
+			FCKDomTools.RemoveNode( elRow ) ;
+			IsChanged = true ;
+		}
+	}
+}
+
+function GetEventTarget( ev )
+{
+	var targ ;
+	
+	if ( !ev )
+		var ev = window.event ;
+
+	if ( ev.target )
+		targ = ev.target ;
+	else if ( ev.srcElement )
+		targ = ev.srcElement ;
+
+	if ( targ.nodeType == 3 ) // defeat Safari bug
+		targ = targ.parentNode ;
+
+	return targ ;
+}
+
+// Fired when the user press the OK button
+function Ok()
+{
+	if ( !SelectedElement )
+		return false ;
+
+	for ( var i in Attributes )
+		FCKDomTools.RemoveAttribute( SelectedElement, Attributes[i] ) ;
+
+	var elBody = GetE( 'attributes' ).getElementsByTagName( 'tbody' )[0] ;
+
+	for ( var i = 0 ; i < elBody.childNodes.length ; i++ )
+	{
+		var el = elBody.childNodes[i] ;
+		
+		if ( el.nodeName.toLowerCase() == 'tr' )
+		{
+			var j = parseInt( el.getAttribute( 'id' ).substring( 'attr-'.length ) ) ;
+			var attr = GetE( 'selAttr-' + j ) ;
+
+			if ( attr )
+			{
+				var val = GetE( 'taAttrVal-' + j ) ;
+				SelectedElement.setAttribute( attr.value, val.value.Trim() ) ;
+			}
+		}
+	}
+
+	return true ;
+}
+
+	</script>
+</head>
+<body style="overflow: hidden">
+	<table id="attributes" cellspacing="1" cellpadding="1" width="100%" border="0">
+		<colgroup>
+			<col width="20%">
+			<col width="70%">
+			<col width="10%">
+		</colgroup>
+		<thead>
+			<tr>
+				<td colspan="3">
+					<p><span fcklang="DlgDekiScriptAttrChooseElement">Choose an element to which attributes will be applied.</span></p>
+					<ul id="elList"></ul>
+					<div class="clearfix"></div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3">
+					<input type="button" name="btnAddAttr" id="btnAddAttr" fcklang="DlgDekiScriptAttrAdd" value="Add Attribute">
+					<input type="button" name="btnRemoveAll" id="btnRemoveAll" fcklang="DlgDekiScriptAttrRemoveAll" value="Remove All Attributes">
+				</td>
+			</tr>
+		</thead>
+		<tbody>
+			<!-- 
+			<tr id="attr-0">
+				<td>
+					<select id="selAttr-0">
+						<option value="init">init</option>
+						<option value="if">if</option>
+						<option value="foreach">foreach</option>
+						<option value="where">where</option>
+						<option value="block">block</option>
+						<option value="function">function</option>
+						<option value="ctor">ctor</option>
+					</select>
+				</td>
+				<td>
+					<textarea id="taAttrVal-0"></textarea>
+				</td>
+				<td>
+					<input type="button" name="btnRemoveAttr-0" id="btnRemoveAttr-0" value="Remove">
+				</td>
+			</tr>
+			 -->
+		</tbody>
+	</table>
+</body>
+</html>
