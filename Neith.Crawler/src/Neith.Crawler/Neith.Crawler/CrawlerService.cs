@@ -14,104 +14,8 @@ namespace Neith.Crawler
     /// </summary>
     public static class CrawlerService
     {
-        public static IObservable<WebResponse> RxGetResponse(this WebRequest req)
-        {
-            return Observable.FromAsyncPattern<WebResponse>(
-                req.BeginGetResponse, req.EndGetResponse)();
-        }
+        #region URLから直接取得する非同期処理
 
-        public static IObservable<HttpWebResponse> GetResponse(this IObservable<HttpWebRequest> rxReq)
-        {
-            return rxReq
-                .SelectMany(req => req.RxGetResponse())
-                .Select(res => res as HttpWebResponse);
-        }
-
-        public static IObservable<string> GetWebContents(this IObservable<HttpWebRequest> rxReq)
-        {
-            return rxReq
-                .Select(req => {
-                    req.Method = "GET";
-                    return req;
-                })
-                .GetResponse()
-                .Select(res => {
-                    using (var st = res.GetResponseStream())
-                    using (var reader = new StreamReader(st, Encoding.UTF8)) {
-                        return reader.ReadToEnd();
-                    }
-                });
-        }
-
-        public static IObservable<string> GetResponseHeader(this IObservable<HttpWebRequest> rxReq, string headerName)
-        {
-            return rxReq
-                .Select(req => {
-                    req.Method = "HEAD";
-                    return req;
-                })
-                .GetResponse()
-                .Select(res => {
-                    using (res) return res.GetResponseHeader(headerName);
-                });
-        }
-
-
-        /// <summary>
-        /// 指定されたURL文字列よりコンテンツを取得します。
-        /// </summary>
-        /// <param name="url"></param>
-        /// <returns></returns>
-        public static IObservable<string> RxGetWebContents(this string url)
-        {
-            return Observable
-                .Start(() => { return WebRequest.Create(url) as HttpWebRequest; })
-                .GetWebContents();
-        }
-
-
-        /// <summary>
-        /// 指定されたURLのコンテンツよりレスポンスヘッダを取得します。
-        /// </summary>
-        /// <param name="url"></param>
-        /// <returns></returns>
-        public static IObservable<string> RxGetResponseHeader(this string url, string headerName)
-        {
-            return Observable
-                .Start(() => { return WebRequest.Create(url) as HttpWebRequest; })
-                .GetResponseHeader(headerName);
-        }
-
-        /// <summary>
-        /// 指定されたURLのクロールを発行します。
-        /// コンテンツに更新があった場合にレスポンスストリームを返します。
-        /// 更新がない場合、内容がなかった場合はnullを返します。
-        /// </summary>
-        /// <param name="url"></param>
-        /// <returns></returns>
-        public static IObservable<Stream> RxGetUpdateWebResponseStream(this string url)
-        {
-            return url
-                .RxStartUpdate()
-                .RxCrowlImpl()
-                .GetResponseStream();
-        }
-
-
-        /// <summary>
-        /// 指定されたURLのクロールを発行します。
-        /// コンテンツに更新があった場合に内容を返します。
-        /// 更新がない場合、内容がなかった場合はnullを返します。
-        /// </summary>
-        /// <param name="url"></param>
-        /// <returns></returns>
-        public static IObservable<string> RxGetUpdateWebContents(this string url)
-        {
-            return url
-                .RxStartUpdate()
-                .RxCrowlImpl()
-                .GetContents();
-        }
 
         /// <summary>
         /// 指定されたURLのクロールを発行します。
@@ -120,15 +24,28 @@ namespace Neith.Crawler
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public static IObservable<string> RxGetExWebContents(this string url)
+        public static IObservable<CrawlerResponse> RxGetCrowlAny(this string url)
         {
             return url
-                .RxStartEx()
+                .RxStartAny()
                 .RxCrowlImpl()
-                .GetContents();
+                ;
         }
 
-
+        /// <summary>
+        /// 指定されたURLのクロールを発行します。
+        /// コンテンツに更新があった場合にレスポンスを返します。
+        /// 更新がない場合、内容がなかった場合はnullを返します。
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public static IObservable<CrawlerResponse> RxGetCrowlUpdate(this string url)
+        {
+            return url
+                .RxStartUpdate()
+                .RxCrowlImpl()
+                ;
+        }
 
         /// <summary>
         /// 更新コンテンツの取得リクエスト開始。
@@ -138,7 +55,9 @@ namespace Neith.Crawler
         private static IObservable<CrawlerRequest> RxStartUpdate(this string url)
         {
             return Observable
-                .Start(() => { return new CrawlerRequest(url); });
+                .Return(url)
+                .ToCrawlerRequest()
+                ;
         }
 
         /// <summary>
@@ -146,15 +65,32 @@ namespace Neith.Crawler
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        private static IObservable<CrawlerRequest> RxStartEx(this string url)
+        private static IObservable<CrawlerRequest> RxStartAny(this string url)
         {
-            return Observable
-                .Start(() => {
-                    var req = new CrawlerRequest(url);
-                    req.Cache.Clear();
-                    return req;
-                });
+            return url
+                .RxStartUpdate()
+                .Do(req => { req.Cache.Clear(); })
+                ;
         }
+
+        #endregion
+
+        #region リクエスト
+
+        /// <summary>
+        /// クローラリクエストに変換。
+        /// </summary>
+        /// <param name="rxUrl"></param>
+        /// <returns></returns>
+        public static IObservable<CrawlerRequest> ToCrawlerRequest(this IObservable<string> rxUrl)
+        {
+            return rxUrl
+                .Select(url => { return new CrawlerRequest(url); })
+                ;
+        }
+
+        #endregion
+
 
         /// <summary>
         /// クロール処理本体。
@@ -193,28 +129,8 @@ namespace Neith.Crawler
                         cRes.Request.ETag = etag;
                     }
                     return cRes;
-                });
-        }
-
-        private static IObservable<Stream> GetResponseStream(this IObservable<CrawlerResponse> rxRes)
-        {
-            return rxRes.Select(cRes => {
-                if (cRes == null) return null;
-                return cRes.Response.GetResponseStream();
-            });
-        }
-
-        private static IObservable<string> GetContents(this IObservable<CrawlerResponse> rxRes)
-        {
-            return rxRes.Select(cRes => {
-                if (cRes == null) return null;
-                var res = cRes.Response;
-                using (var st = res.GetResponseStream())
-                using (var reader = new StreamReader(
-                    st, Encoding.GetEncoding(res.CharacterSet))) {
-                    return reader.ReadToEnd();
-                }
-            });
+                })
+                ;
         }
 
         private static IObservable<CrawlerResponse> GetResponse(this IObservable<CrawlerRequest> rxReq)
@@ -229,7 +145,7 @@ namespace Neith.Crawler
                 .SelectMany(cReq => Observable
                     .FromAsyncPattern<CrawlerResponse>(
                         cReq.Request.BeginGetResponse,
-                        (async) => {
+                        async => {
                             var res = cReq.Request.EndGetResponse(async);
                             cRes = new CrawlerResponse(cReq, res);
                             return cRes;
@@ -237,32 +153,28 @@ namespace Neith.Crawler
                 .Finally(() => { cRes.Dispose(); });
         }
 
-        public static IObservable<XElement> ToXHtmlElement(this IObservable<Stream> rxSt)
+
+
+        #region レスポンス変換
+        public static IObservable<Stream> ToResponseStream(this IObservable<CrawlerResponse> rxRes)
         {
-            return rxSt
-                .Select(st =>
-                {
-                    using (st)
-                    using (var reader = new StreamReader(st, Encoding.UTF8)) {
-                        var text = reader
-                            .ReadToEnd()
-                            .Replace("&nbsp;", "&#32;")
-                            .Replace("&laquo;", "&#171;")
-                            .Replace("&raquo;", "&#187;")
-                            ;
-                        try {
-                            return XElement.Parse(text);
-                        }
-                        catch (Exception) {
-                            Debug.WriteLine("XHTML 読み込み失敗！");
-                            Debug.WriteLine("################################ HTML READ START");
-                            Debug.WriteLine(text);
-                            Debug.WriteLine("################################ HTML READ END");
-                            throw;
-                        }
-                    }
-                });
+            return rxRes
+                .Select(cRes => {
+                if (cRes == null) return null;
+                return cRes.Response.GetResponseStream();
+            });
         }
+
+        public static IObservable<string> ToContents(this IObservable<CrawlerResponse> rxRes)
+        {
+            return rxRes
+                .ToResponseStream()
+                .ToContents()
+                ;
+        }
+
+
+        #endregion
 
     }
 }

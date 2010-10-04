@@ -14,7 +14,8 @@ namespace Neith.Crawler.Sites.Neith
         public static IObservable<bool> Task()
         {
             return @"http://spreadsheets.google.com/pub?key=0AlnLTLNQTaTJdGFZb1c2RTFuV01fUnBxbThNaGpWUXc&single=true&gid=0&output=csv"
-                .RxGetUpdateWebResponseStream()
+                .RxGetCrowlUpdate()
+                .ToResponseStream()
                 .SelectMany(st => { return Analysis(st).ToObservable(); })
                 .Select(el => {
                     var path = el.GetPath(Const.NeithXFNTypesDir);

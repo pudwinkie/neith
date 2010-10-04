@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading;
 using Neith.Crawler;
-using System.Diagnostics;
 
 namespace Neith.Crawler.Test
 {
@@ -31,7 +32,7 @@ namespace Neith.Crawler.Test
         {
             var etag = "";
             "http://xfn.vbel.net/"
-                .RxGetResponseHeader("ETag")
+                .RxGetResponseHeaderItem("ETag")
                 .Run(item => { etag = item; });
             Assert.IsFalse(string.IsNullOrEmpty(etag));
             Debug.WriteLine("ETag: " + etag);
@@ -43,18 +44,16 @@ namespace Neith.Crawler.Test
         {
             var rc1 = "";
             "http://xfn.vbel.net/"
-                .RxGetExWebContents()
-                .Run(item => {
-                    rc1 = item;
-                });
+                .RxGetCrowlAny()
+                .ToContents()
+                .Run(item => { rc1 = item; });
             Assert.IsFalse(string.IsNullOrEmpty(rc1));
 
             var rc2 = "";
             "http://xfn.vbel.net/"
-                .RxGetUpdateWebContents()
-                .Run(item => {
-                    rc2 = item;
-                });
+                .RxGetCrowlUpdate()
+                .ToContents()
+                .Run(item => { rc2 = item; });
             Assert.IsNull(rc2);
 
         }
