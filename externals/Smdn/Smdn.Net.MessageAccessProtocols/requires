@@ -1,0 +1,4 @@
+Smdn/Smdn.Formats/Octets.cs
+Smdn/System.Runtime.CompilerServices/ExtensionAttribute.cs
+Smdn.Core.Standards/Smdn.IO/LineOrientedStream.cs
+Smdn.Core.Standards/Smdn.IO/StrictLineOrientedStream.cs

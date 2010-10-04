@@ -1,0 +1,6 @@
+Name: Smdn.Net.Imap4.Client
+Description: Smdn.Net.Imap4.Client
+Version: 0.1
+
+Requires: 
+Libs: -r:@expanded_libdir@/@PACKAGE@/Smdn.Net.Imap4.Client.dll

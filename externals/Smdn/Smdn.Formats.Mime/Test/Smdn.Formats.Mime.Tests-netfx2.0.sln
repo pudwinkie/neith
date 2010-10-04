@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Formats.Mime.Tests-netfx2.0", "Smdn.Formats.Mime.Tests-netfx2.0.csproj", "{7809F0CD-48AC-4CF1-8D2A-A88AF09CFA83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Core.Standards-netfx2.0", "..\..\Smdn.Core.Standards\Smdn.Core.Standards-netfx2.0.csproj", "{72E150F4-F71B-11DE-8995-0018F344D241}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn-netfx2.0", "..\..\Smdn\Smdn-netfx2.0.csproj", "{9778FCEA-6A63-11DE-B228-0018F344D241}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Formats.Mime-netfx2.0", "..\Smdn.Formats.Mime-netfx2.0.csproj", "{029DC466-AA61-40B0-8FA2-FCB7C87A9C3C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{029DC466-AA61-40B0-8FA2-FCB7C87A9C3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{029DC466-AA61-40B0-8FA2-FCB7C87A9C3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{029DC466-AA61-40B0-8FA2-FCB7C87A9C3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{029DC466-AA61-40B0-8FA2-FCB7C87A9C3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72E150F4-F71B-11DE-8995-0018F344D241}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72E150F4-F71B-11DE-8995-0018F344D241}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72E150F4-F71B-11DE-8995-0018F344D241}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72E150F4-F71B-11DE-8995-0018F344D241}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7809F0CD-48AC-4CF1-8D2A-A88AF09CFA83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7809F0CD-48AC-4CF1-8D2A-A88AF09CFA83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7809F0CD-48AC-4CF1-8D2A-A88AF09CFA83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7809F0CD-48AC-4CF1-8D2A-A88AF09CFA83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9778FCEA-6A63-11DE-B228-0018F344D241}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9778FCEA-6A63-11DE-B228-0018F344D241}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9778FCEA-6A63-11DE-B228-0018F344D241}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9778FCEA-6A63-11DE-B228-0018F344D241}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Smdn.Formats.Mime.Tests-netfx2.0.csproj
+	EndGlobalSection
+EndGlobal

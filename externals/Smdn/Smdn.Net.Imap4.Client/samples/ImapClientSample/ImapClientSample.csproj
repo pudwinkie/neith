@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{AA8A5C8A-B9BE-4D24-AFE1-15A7485C0801}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>ImapClientSample</RootNamespace>
+    <AssemblyName>ImapClientSample</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Main.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Smdn.Core.Standards\Smdn.Core.Standards-netfx2.0.csproj">
+      <Project>{72E150F4-F71B-11DE-8995-0018F344D241}</Project>
+      <Name>Smdn.Core.Standards-netfx2.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Smdn.Net.Imap4.Client\Smdn.Net.Imap4.Client-netfx2.0.csproj">
+      <Project>{8CE3E4A2-799A-11DE-B228-0018F344D241}</Project>
+      <Name>Smdn.Net.Imap4.Client-netfx2.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Smdn.Net.Imap4\Smdn.Net.Imap4-netfx2.0.csproj">
+      <Project>{E780A5E5-0D67-461F-BCC8-B3FB9241A736}</Project>
+      <Name>Smdn.Net.Imap4-netfx2.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Smdn.Security.Authentication.Sasl\Smdn.Security.Authentication.Sasl-netfx2.0.csproj">
+      <Project>{2F1FB300-76C5-11DE-B228-0018F344D241}</Project>
+      <Name>Smdn.Security.Authentication.Sasl-netfx2.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Smdn\Smdn-netfx2.0.csproj">
+      <Project>{9778FCEA-6A63-11DE-B228-0018F344D241}</Project>
+      <Name>Smdn-netfx2.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Smdn.Net.MessageAccessProtocols\Smdn.Net.MessageAccessProtocols-netfx2.0.csproj">
+      <Project>{7B3EF55E-F7BF-11DE-ACDF-0018F344D241}</Project>
+      <Name>Smdn.Net.MessageAccessProtocols-netfx2.0</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ImapClientSample.exe.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

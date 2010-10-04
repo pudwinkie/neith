@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{63B41DAA-A9CD-4A62-951B-BF7869586961}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Smdn.Net.Imap4.Client.Tests</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <RootNamespace>Smdn.Net.Imap4.Client.Tests</RootNamespace>
+    <OutputPath>bin\</OutputPath>
+    <IntermediateOutputPath>obj\</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>NET_2_0;NET_3_5</DefineConstants>
+    <OutputPath>bin\Debug\netfx3.5-combined\</OutputPath>
+    <IntermediateOutputPath>obj\Debug\netfx3.5-combined\</IntermediateOutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Execution>
+      <Execution clr-version="Net_2_0" />
+    </Execution>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>NET_2_0;NET_3_5</DefineConstants>
+    <OutputPath>bin\Release\netfx3.5-combined\</OutputPath>
+    <IntermediateOutputPath>obj\Release\netfx3.5-combined\</IntermediateOutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Execution>
+      <Execution clr-version="Net_2_0" />
+    </Execution>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapSession.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapCommandSender.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapResponseReceiver.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapFetchDataItem.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapSearchCriteria.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapSearchResultOptions.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapStatusDataItem.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapStoreDataItem.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapPseudoServer.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapListReturnOptions.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapListSelectionOptions.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapSessionCommandsAnyState.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapSessionCommandsAuthenticatedOrSelectedState.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapSessionCommandsAuthenticatedState.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapSessionCommandsNonAuthenticatedState.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapSessionCommandsSelectedState.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapSessionCommandsAppend.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapSessionCommandsFetch.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapSessionTestsBase.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapDataResponseConverter.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapResponseTextConverter.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapSessionCreator.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapClient.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapSortCriteria.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapMailboxInfo.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\TestUtils.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapMessageInfoBase.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapMessageInfo.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapOpenedMailboxInfo.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapMessageInfoList.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapMailbox.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapClientProfile.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapAuthenticationException.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapErrorResponseException.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapIncapableException.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapProtocolViolationException.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapMalformedResponseException.cs" />
+    <Compile Include="..\..\Smdn.Net.MessageAccessProtocols\Test\Smdn.Net\TestUtils.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\SaslPseudoMechanism.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Smdn.Net.Imap4.Client-netfx3.5-combined.csproj">
+      <Project>{0FFF4096-EFD1-4A90-8013-356B486185D5}</Project>
+      <Name>Smdn.Net.Imap4.Client-netfx3.5-combined</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <ChangeLogPolicy UpdateMode="None" VcsIntegration="None" inheritsSet="Mono" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
+</Project>

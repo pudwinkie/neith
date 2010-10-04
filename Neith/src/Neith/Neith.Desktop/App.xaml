@@ -1,0 +1,11 @@
+﻿<Application x:Class="Neith.Desktop.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Startup="AppStartup"
+             Exit="AppExit"
+             SessionEnding="AppSessionEnding"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+         
+    </Application.Resources>
+</Application>

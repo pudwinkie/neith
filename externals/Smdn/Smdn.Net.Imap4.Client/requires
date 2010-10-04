@@ -1,0 +1,8 @@
+Smdn.Net.Imap4/Smdn.Net.Imap4.csproj
+Smdn/Smdn/Lazy.cs
+Smdn/Smdn/Tuple.cs
+Smdn.Core.Standards/Smdn.Formats/DateTimeConvert.cs
+Smdn.Core.Standards/Smdn.Formats.Mime/FromQuotedPrintableTransform.cs
+Smdn.Core.Standards/Smdn.Formats.Mime/ContentTransferEncoding.cs
+Smdn.Core.Standards/Smdn.Formats.Mime/ContentTransferEncodingMethod.cs
+Smdn.Core.Standards/Smdn.Formats.Mime/ToQuotedPrintableTransform.cs

@@ -1,0 +1,8 @@
+﻿<Window x:Class="Neith.Desktop.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="222" Width="276">
+    <Grid>
+        
+    </Grid>
+</Window>

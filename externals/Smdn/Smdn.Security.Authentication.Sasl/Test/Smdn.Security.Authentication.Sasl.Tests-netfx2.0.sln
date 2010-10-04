@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Security.Authentication.Sasl.Tests-netfx2.0", "Smdn.Security.Authentication.Sasl.Tests-netfx2.0.csproj", "{60061D33-AC44-4A97-9434-A2185AB2EF91}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Security.Authentication.Sasl-netfx2.0", "..\Smdn.Security.Authentication.Sasl-netfx2.0.csproj", "{2F1FB300-76C5-11DE-B228-0018F344D241}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn-netfx2.0", "..\..\Smdn\Smdn-netfx2.0.csproj", "{9778FCEA-6A63-11DE-B228-0018F344D241}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2F1FB300-76C5-11DE-B228-0018F344D241}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F1FB300-76C5-11DE-B228-0018F344D241}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F1FB300-76C5-11DE-B228-0018F344D241}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F1FB300-76C5-11DE-B228-0018F344D241}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60061D33-AC44-4A97-9434-A2185AB2EF91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60061D33-AC44-4A97-9434-A2185AB2EF91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60061D33-AC44-4A97-9434-A2185AB2EF91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60061D33-AC44-4A97-9434-A2185AB2EF91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9778FCEA-6A63-11DE-B228-0018F344D241}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9778FCEA-6A63-11DE-B228-0018F344D241}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9778FCEA-6A63-11DE-B228-0018F344D241}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9778FCEA-6A63-11DE-B228-0018F344D241}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Smdn.Security.Authentication.Sasl.Tests-netfx2.0.csproj
+	EndGlobalSection
+EndGlobal

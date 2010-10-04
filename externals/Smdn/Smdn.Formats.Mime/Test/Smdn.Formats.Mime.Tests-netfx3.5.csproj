@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0C77B5F9-47A2-413C-99B8-D0F2368704C7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Smdn.Formats.Mime.Tests</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <RootNamespace>Smdn.Formats.Mime.Tests</RootNamespace>
+    <OutputPath>bin\</OutputPath>
+    <IntermediateOutputPath>obj\</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>NET_2_0;NET_3_5</DefineConstants>
+    <OutputPath>bin\Debug\netfx3.5\</OutputPath>
+    <IntermediateOutputPath>obj\Debug\netfx3.5\</IntermediateOutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Execution>
+      <Execution clr-version="Net_2_0" />
+    </Execution>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>NET_2_0;NET_3_5</DefineConstants>
+    <OutputPath>bin\Release\netfx3.5\</OutputPath>
+    <IntermediateOutputPath>obj\Release\netfx3.5\</IntermediateOutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <Execution>
+      <Execution clr-version="Net_2_0" />
+    </Execution>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Smdn.Formats.Mime\Decoder.cs" />
+    <Compile Include="Smdn.Formats.Mime\Encoder.cs" />
+    <Compile Include="Smdn.Formats.Mime\Parser.cs" />
+    <Compile Include="Smdn.Formats.Mime\Formatter.cs" />
+    <Compile Include="Smdn.Formats.Mime\MimeHeaderCollection.cs" />
+    <Compile Include="Smdn.Formats.Mime\Charsets.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Smdn.Formats.Mime-netfx3.5.csproj">
+      <Project>{8D4D153E-B0F2-4EC4-B135-E667739645AD}</Project>
+      <Name>Smdn.Formats.Mime-netfx3.5</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Smdn\Smdn-netfx3.5.csproj">
+      <Project>{94EE5515-F253-491B-8F0F-09F70D03B1B6}</Project>
+      <Name>Smdn-netfx3.5</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Smdn.Core.Standards\Smdn.Core.Standards-netfx3.5.csproj">
+      <Project>{A749376E-4C07-400D-9FDA-F6A9DF2E7B18}</Project>
+      <Name>Smdn.Core.Standards-netfx3.5</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <ChangeLogPolicy UpdateMode="None" VcsIntegration="None" inheritsSet="Mono" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
+</Project>

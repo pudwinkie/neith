@@ -1,0 +1,65 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReactiveOAuth", "ReactiveOAuth\ReactiveOAuth.csproj", "{C20883A2-C104-45EF-BADE-A888328981EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console", "Sample\Console\Console.csproj", "{17383F02-272C-40D6-8C2F-E39A871B6BB7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPF", "Sample\WPF\WPF.csproj", "{E0FD5556-A8D9-4EAE-843A-49DC303C0B07}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sample", "Sample", "{EC825208-2EBF-4C9A-BC28-C44EA4AE43B0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B5909268-A8BC-4B12-B32D-79EF54E83D99}"
+	ProjectSection(SolutionItems) = preProject
+		ReadMe.txt = ReadMe.txt
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C20883A2-C104-45EF-BADE-A888328981EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C20883A2-C104-45EF-BADE-A888328981EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C20883A2-C104-45EF-BADE-A888328981EB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C20883A2-C104-45EF-BADE-A888328981EB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C20883A2-C104-45EF-BADE-A888328981EB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C20883A2-C104-45EF-BADE-A888328981EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C20883A2-C104-45EF-BADE-A888328981EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C20883A2-C104-45EF-BADE-A888328981EB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C20883A2-C104-45EF-BADE-A888328981EB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C20883A2-C104-45EF-BADE-A888328981EB}.Release|x86.ActiveCfg = Release|Any CPU
+		{17383F02-272C-40D6-8C2F-E39A871B6BB7}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{17383F02-272C-40D6-8C2F-E39A871B6BB7}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{17383F02-272C-40D6-8C2F-E39A871B6BB7}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{17383F02-272C-40D6-8C2F-E39A871B6BB7}.Debug|x86.ActiveCfg = Debug|x86
+		{17383F02-272C-40D6-8C2F-E39A871B6BB7}.Debug|x86.Build.0 = Debug|x86
+		{17383F02-272C-40D6-8C2F-E39A871B6BB7}.Release|Any CPU.ActiveCfg = Release|x86
+		{17383F02-272C-40D6-8C2F-E39A871B6BB7}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{17383F02-272C-40D6-8C2F-E39A871B6BB7}.Release|Mixed Platforms.Build.0 = Release|x86
+		{17383F02-272C-40D6-8C2F-E39A871B6BB7}.Release|x86.ActiveCfg = Release|x86
+		{17383F02-272C-40D6-8C2F-E39A871B6BB7}.Release|x86.Build.0 = Release|x86
+		{E0FD5556-A8D9-4EAE-843A-49DC303C0B07}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{E0FD5556-A8D9-4EAE-843A-49DC303C0B07}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{E0FD5556-A8D9-4EAE-843A-49DC303C0B07}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{E0FD5556-A8D9-4EAE-843A-49DC303C0B07}.Debug|x86.ActiveCfg = Debug|x86
+		{E0FD5556-A8D9-4EAE-843A-49DC303C0B07}.Debug|x86.Build.0 = Debug|x86
+		{E0FD5556-A8D9-4EAE-843A-49DC303C0B07}.Release|Any CPU.ActiveCfg = Release|x86
+		{E0FD5556-A8D9-4EAE-843A-49DC303C0B07}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{E0FD5556-A8D9-4EAE-843A-49DC303C0B07}.Release|Mixed Platforms.Build.0 = Release|x86
+		{E0FD5556-A8D9-4EAE-843A-49DC303C0B07}.Release|x86.ActiveCfg = Release|x86
+		{E0FD5556-A8D9-4EAE-843A-49DC303C0B07}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E0FD5556-A8D9-4EAE-843A-49DC303C0B07} = {EC825208-2EBF-4C9A-BC28-C44EA4AE43B0}
+		{17383F02-272C-40D6-8C2F-E39A871B6BB7} = {EC825208-2EBF-4C9A-BC28-C44EA4AE43B0}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{532788EE-4DFD-47D6-AD93-049D0E097B91}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Smdn.Net.Imap4.Client</RootNamespace>
+    <AssemblyName>Smdn.Net.Imap4.Client</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <OutputPath>..\build\bin\</OutputPath>
+    <IntermediateOutputPath>..\build\obj\</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>NET_2_0;NET_3_5;NET_4_0;DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>3</WarningLevel>
+    <OutputType>Library</OutputType>
+    <OutputPath>..\build\bin\Debug\netfx4.0\</OutputPath>
+    <IntermediateOutputPath>..\build\obj\Debug\netfx4.0\</IntermediateOutputPath>
+    <RootNamespace>Smdn.Net.Imap4.Client</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>NET_2_0;NET_3_5;NET_4_0;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>3</WarningLevel>
+    <OutputType>Library</OutputType>
+    <OutputPath>..\build\bin\Release\netfx4.0\</OutputPath>
+    <IntermediateOutputPath>..\build\obj\Release\netfx4.0\</IntermediateOutputPath>
+    <RootNamespace>Smdn.Net.Imap4.Client</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapCommand.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapCommandContinuationRequest.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapCommandSender.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapConnection.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapDataResponse.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapDataResponseConverter.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapDataResponseType.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapMalformedResponseException.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapResponse.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapResponseReceiver.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapResponseText.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapResponseTextConverter.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapStatusResponse.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapTaggedStatusResponse.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapUntaggedStatusResponse.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\AppendTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\AuthenticateTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\CapabilityTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\CheckTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\CloseTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\CompressTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\CopyTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\CreateTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\DeleteTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\EnableTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\ExamineTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\ExpungeTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\FetchTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\GenericCommandTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\GreetingTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\IdTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\IdleTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\ListTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\ListTransactionBase.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\LoginTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\LogoutTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\LsubTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\NamespaceTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\NoOpTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\NoOpTransactionBase.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\RListTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\RLsubTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\RenameTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\SearchTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\SearchTransactionBase.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\SelectTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\SelectTransactionBase.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\SendCommandTransactionBase.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\SortTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\StartTlsTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\StatusTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\StoreTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\SubscribeTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\SubscribeTransactionBase.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\ThreadTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\UnselectTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\UnsubscribeTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction\IImapTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction\ImapTransactionBase.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapLoginReferralException.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapMailboxManager.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapMailboxReferralException.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapReferralException.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapSession.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapAppendedUidSet.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapCopiedUidSet.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapFetchDataItem.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapMailbox.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapSearchCriteria.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapSearchResultOptions.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapSortCriteria.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapStatusDataItem.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapStoreDataItem.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapUpdatedStatus.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\Trace.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\LanguageTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\ComparatorTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\ListExtendedTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapListReturnOptions.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapListSelectionOptions.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\XListTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapKeepIdleCallback.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\SetQuotaTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\GetQuotaTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\GetQuotaRootTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\GetSetQuotaTransactionBase.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\SetMetadataTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\GetMetadataTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapGetMetadataOptions.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapSession.CommandsAnyState.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapSession.CommandsNonAuthenticatedState.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapSession.CommandsAuthenticatedState.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapSession.CommandsSelectedState.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapSession.CommandsAuthenticatedOrSelectedState.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapSession.TransactionProcessing.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\IImapSessionProfile.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapSessionCreator.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapFetchDataItemMacro.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapFetchMessageBodyStream.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapClient.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapClientProfile.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapMailboxInfo.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapMailboxListOptions.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapMessageInfo.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapOpenedMailboxInfo.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapMailboxNotFoundException.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapMessageNotFoundException.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapMessageInfoList.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapMessageInfoBase.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapAppendMessageBodyStream.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapIncapableException.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapInvalidOperationException.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapProtocolViolationException.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapMessageFetchBodyOptions.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapMessageFetchAttributeOptions.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapMailboxClosedException.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\IImapMessageQuery.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapMessageDeletedException.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\FetchStoreTransactionBase.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapMessageInfoCollection.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapMailboxSizeChangedEventArgs.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapMessageStatusChangedEventArgs.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapErrorResponseException.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapCommandResult.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapCommandResultCode.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapAuthenticationException.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapClient.Operations.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <StandardHeader Text="&#xA;Author:&#xA;      ${AuthorName} &lt;${AuthorEmail}&gt;&#xA;&#xA;Copyright (c) 2008-${Year} ${CopyrightHolder}&#xA;&#xA;Permission is hereby granted, free of charge, to any person obtaining a copy&#xA;of this software and associated documentation files (the &quot;Software&quot;), to deal&#xA;in the Software without restriction, including without limitation the rights&#xA;to use, copy, modify, merge, publish, distribute, sublicense, and/or sell&#xA;copies of the Software, and to permit persons to whom the Software is&#xA;furnished to do so, subject to the following conditions:&#xA;&#xA;The above copyright notice and this permission notice shall be included in&#xA;all copies or substantial portions of the Software.&#xA;&#xA;THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR&#xA;IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,&#xA;FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE&#xA;AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER&#xA;LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,&#xA;OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN&#xA;THE SOFTWARE." inheritsSet="MITX11License" />
+          <ChangeLogPolicy UpdateMode="None" VcsIntegration="None" inheritsSet="Mono" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
+  <ItemGroup>
+    <ProjectReference Include="..\Smdn\Smdn-netfx4.0.csproj">
+      <Project>{3FDF8CFA-B168-466F-B303-AEDDBED87BB9}</Project>
+      <Name>Smdn-netfx4.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Smdn.Net.Imap4\Smdn.Net.Imap4-netfx4.0.csproj">
+      <Project>{CBF73660-7437-4193-8658-BCDF0DFA8DD2}</Project>
+      <Name>Smdn.Net.Imap4-netfx4.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Smdn.Security.Authentication.Sasl\Smdn.Security.Authentication.Sasl-netfx4.0.csproj">
+      <Project>{33510B82-7100-4BF5-AEE0-95751B272B0E}</Project>
+      <Name>Smdn.Security.Authentication.Sasl-netfx4.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Smdn.Core.Standards\Smdn.Core.Standards-netfx4.0.csproj">
+      <Project>{B5EDEF88-678E-427E-9281-325417D7EAC9}</Project>
+      <Name>Smdn.Core.Standards-netfx4.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Smdn.Net.MessageAccessProtocols\Smdn.Net.MessageAccessProtocols-netfx4.0.csproj">
+      <Project>{85D967BA-2403-4167-90F8-D711084D66B5}</Project>
+      <Name>Smdn.Net.MessageAccessProtocols-netfx4.0</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Smdn.Net.Imap4.Client\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="requires" />
+  </ItemGroup>
+</Project>
