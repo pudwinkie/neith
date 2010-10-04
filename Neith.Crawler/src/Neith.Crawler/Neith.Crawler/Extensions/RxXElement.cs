@@ -19,9 +19,9 @@ namespace System.Xml.Linq
             using (st)
             using (var reader = new StreamReader(st, Encoding.UTF8)) {
                 var src = reader.ReadToEnd();
-                Debug.WriteLine("################################ HTML READ START");
-                Debug.WriteLine(src);
-                Debug.WriteLine("################################ HTML READ END");
+                //Debug.WriteLine("################################ HTML READ START");
+                //Debug.WriteLine(src);
+                //Debug.WriteLine("################################ HTML READ END");
                 var text = src
                     .Replace("&nbsp;", "&#32;")
                     .Replace("&laquo;", "&#171;")
