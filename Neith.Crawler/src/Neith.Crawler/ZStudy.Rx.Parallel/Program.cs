@@ -17,7 +17,7 @@ namespace ZStudy.Rx.Parallel
                 ;
             var stopwatch = new System.Diagnostics.Stopwatch();
 
-            // １つのパイプを実行
+            // ■１つのパイプを実行
             Console.WriteLine("#### TEST 1 ####");
             stopwatch.Restart();
             pipe
@@ -26,8 +26,11 @@ namespace ZStudy.Rx.Parallel
             stopwatch.Stop();
             Console.WriteLine("#### TEST 1 ==> time {0:00000}ms\n\n"
                 , stopwatch.ElapsedMilliseconds);
+            // ---> 処理は直列化されています。
+            //      １つのタスクが終わるまで次はスケジュールされません。
 
-            // ２つのパイプをマージ
+
+            // ■２つのパイプをマージ
             Console.WriteLine("#### TEST 2 ####");
             stopwatch.Restart();
             Observable.Merge(
@@ -41,9 +44,11 @@ namespace ZStudy.Rx.Parallel
             stopwatch.Stop();
             Console.WriteLine("#### TEST 2 ==> time {0:00000}ms\n\n"
                 , stopwatch.ElapsedMilliseconds);
+            // ---> ２つのタスクは並列実行されます。
+            //      それぞれのタスクは直列に実行されています。
 
 
-            // １つのパイプに２つの処理を続けて実行
+            // ■１つのパイプに２つの処理を続けて実行
             Console.WriteLine("#### TEST 3 ####");
             stopwatch.Restart();
             pipe
@@ -53,9 +58,11 @@ namespace ZStudy.Rx.Parallel
             stopwatch.Stop();
             Console.WriteLine("#### TEST 3 ==> time {0:00000}ms\n\n"
                 , stopwatch.ElapsedMilliseconds);
+            // ---> ２つの処理は直列実行されます。
+            //      ２つの処理が終わるまで次のタスクはスケジュールされません。
 
 
-            // １つのパイプに２つの処理をスケジューラ切り替えをはさんで実行
+            // ■１つのパイプに２つの処理をスケジューラ切り替えをはさんで実行
             Console.WriteLine("#### TEST 4 ####");
             stopwatch.Restart();
             pipe
@@ -67,6 +74,9 @@ namespace ZStudy.Rx.Parallel
             stopwatch.Stop();
             Console.WriteLine("#### TEST 4 ==> time {0:00000}ms\n\n"
                 , stopwatch.ElapsedMilliseconds);
+            // ---> ２つの処理は並列実行されます。
+            //      パイプ内で処理が追い抜かれることはありません。
+
 
             Console.WriteLine("\n#### 終了しました、何かキーを押してください。 ####");
             Console.Read();
