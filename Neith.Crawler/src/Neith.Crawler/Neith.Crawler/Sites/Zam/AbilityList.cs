@@ -12,81 +12,19 @@ namespace Neith.Crawler.Sites.Zam
     {
         private static readonly XNamespace ns = "http://www.w3.org/1999/xhtml";
 
+        /// <summary>
+        /// 実行タスクを定義します。
+        /// </summary>
+        /// <returns></returns>
         public static IObservable<bool> Task()
         {
-            var baseURL = @"http://ffxiv.zam.com/ja/abilitylist.html";
-
-            return baseURL
-                .RxGetCrowlUpdate()
-                .ToResponseStream()
-                .ToXHtmlElement()
-                .Select(doc => {
-                    // 次の要素を抽出
-                    var next = (from a in doc.Descendants(ns + "a")
-                                where (string)a.Attribute("class") == "non-box next"
-                                select a).FirstOrDefault();
-                    if (next != null) {
-                        Debug.WriteLine("################################ AbilityList START");
-                        Debug.WriteLine("NEXT要素：");
-                        Debug.WriteLine(next.ToString());
-                        Debug.WriteLine("################################ AbilityList END");
-                    }
-
-                    // データテーブルの抽出
-                    var data = from a in doc.Descendants(ns + "table")
-                               where (string)a.Attribute("class") == "datatable sortable"
-                               select a;
-                    Debug.WriteLine("################################ AbilityList START");
-                    Debug.WriteLine("データテーブル抽出数：" + data.Count().ToString());
-                    Debug.WriteLine("################################ AbilityList END");
-                    return true;
-                })
-                .TakeLast(0)
-                ;
+            return @"http://ffxiv.zam.com/ja/abilitylist.html"
+                .RxPageCrowl(GetNextPage, ParseTable);
         }
 
-
-
-        public static IObservable<bool> Task2()
+        private static string GetNextPage(XElement doc)
         {
-            var baseURL = @"http://ffxiv.zam.com/ja/abilitylist.html";
-
-            var getSub = new AsyncSubject<string>();
-
-            
-            var parseSub = new AsyncSubject<XElement>();
-
-
-
-
-
-
-            return parseSub.Select(ParseTask);
-        }
-
-        /*
-        private static IObservable<bool> TaskGet(this IObservable<string> rxUrl
-            , IObserver<XElement> parseTask
-            , IObserver<string> getTask)
-        {
-            return rxUrl
-                .ToUpdateWebResponseStream()
-                .ToXHtmlElement()
-                .Do(parseTask.OnNext)
-                .Select(doc => {
-                    // 次のデータは？
-                    var nextURL = GetNextURL(doc);
-                    if (nextURL != null) getTask.OnNext(nextURL);
-                    else {
-                        getTask.OnCompleted();
-                        parseTask.OnCompleted();
-                    }
-                    return true;
-                });
-        }
-        */
-        private static string GetNextURL(XElement doc)
-        {
+            // 次のページがあればURLを返す
             var next = (from a in doc.Descendants(ns + "a")
                         where (string)a.Attribute("class") == "non-box next"
                         select a).FirstOrDefault();
@@ -99,21 +37,20 @@ namespace Neith.Crawler.Sites.Zam
             return null;
         }
 
-        /// <summary>
-        /// テーブルの解析
-        /// </summary>
-        /// <param name="rxTable"></param>
-        /// <returns></returns>
-        public static bool ParseTask(XElement doc)
+        private static IObservable<bool> ParseTable(IObservable<XElement> rxDoc)
         {
-            // データテーブルの抽出
-            var data = from a in doc.Descendants(ns + "table")
-                       where (string)a.Attribute("class") == "datatable sortable"
-                       select a;
-            Debug.WriteLine("################################ AbilityList START");
-            Debug.WriteLine("データテーブル抽出数：" + data.Count().ToString());
-            Debug.WriteLine("################################ AbilityList END");
-            return true;
+            return rxDoc
+                .Select(doc => {
+                    // データテーブルの抽出処理
+                    var data = from a in doc.Descendants(ns + "table")
+                               where (string)a.Attribute("class") == "datatable sortable"
+                               select a;
+                    Debug.WriteLine("################################ AbilityList START");
+                    Debug.WriteLine("データテーブル抽出数：" + data.Count().ToString());
+                    Debug.WriteLine("################################ AbilityList END");
+                    return true;
+                })
+                ;
         }
 
     }

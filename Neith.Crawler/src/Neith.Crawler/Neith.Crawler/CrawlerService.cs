@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Concurrency;
 using System.Linq;
 using System.Text;
 using System.Net;
@@ -22,15 +23,33 @@ namespace Neith.Crawler
         /// コンテンツの更新にかかわらず内容を取得します。
         /// 取得できなかった場合はnullを返します。
         /// </summary>
+        /// <param name="rxUrl"></param>
+        /// <returns></returns>
+        public static IObservable<CrawlerResponse> TpCrowlAny(this IObservable<string> rxUrl)
+        {
+            return rxUrl
+                .ToCrawlerRequest()
+                .Do(req => { req.Cache.Clear(); })
+                .RxCrowlImpl()
+                ;
+        }
+
+        /// <summary>
+        /// 指定されたURLのクロールを発行します。
+        /// コンテンツの更新にかかわらず内容を取得します。
+        /// 取得できなかった場合はnullを返します。
+        /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
         public static IObservable<CrawlerResponse> RxGetCrowlAny(this string url)
         {
-            return url
-                .RxStartAny()
-                .RxCrowlImpl()
+            return RxExtensions
+                .ReturnPool(url)
+                .TpCrowlAny()
                 ;
         }
+
+
 
         /// <summary>
         /// 指定されたURLのクロールを発行します。
@@ -39,39 +58,74 @@ namespace Neith.Crawler
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public static IObservable<CrawlerResponse> RxGetCrowlUpdate(this string url)
+        public static IObservable<CrawlerResponse> ToCrowlUpdate(this IObservable<string> rxUrl)
         {
-            return url
-                .RxStartUpdate()
+            return rxUrl
+                .ToCrawlerRequest()
                 .RxCrowlImpl()
                 ;
         }
-
         /// <summary>
-        /// 更新コンテンツの取得リクエスト開始。
+        /// 指定されたURLのクロールを発行します。
+        /// コンテンツに更新があった場合にレスポンスを返します。
+        /// 更新がない場合、内容がなかった場合はnullを返します。
+        /// 戻り値のCrawlerResponseは処理後に開放してください。
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        private static IObservable<CrawlerRequest> RxStartUpdate(this string url)
+        public static IObservable<CrawlerResponse> RxGetCrowlUpdate(this string url)
         {
-            return Observable
-                .Return(url)
-                .ToCrawlerRequest()
+            return RxExtensions
+                .ReturnPool(url)
+                .ToCrowlUpdate()
                 ;
         }
 
+
         /// <summary>
-        /// 無条件取得コンテンツの取得リクエスト開始。
+        /// ページを読み込むクローラを定義します。
         /// </summary>
-        /// <param name="url"></param>
         /// <returns></returns>
-        private static IObservable<CrawlerRequest> RxStartAny(this string url)
+        public static IObservable<bool> RxPageCrowl(this string startUrl
+            , Func<XElement, string> getNextUrl
+            , Func<IObservable<XElement>, IObservable<bool>> rxParse)
         {
-            return url
-                .RxStartUpdate()
-                .Do(req => { req.Cache.Clear(); })
+            var subject = new Subject<string>(Scheduler.ThreadPool);
+            // 処理パイプ
+            var pipe1 = subject
+                .ToCrowlUpdate()
+                .ToResponseStream()
+                .ToXHtmlElement()
+                .Do(doc => {
+                    // 次のデータがあれば実行を予約
+                    var nextURL = getNextUrl(doc);
+                    if (nextURL != null) subject.OnNext(nextURL);
+                    else subject.OnCompleted();
+                })
                 ;
+            var pipe2 = rxParse(pipe1);
+
+            // １つ目の要素を設定して実行
+            subject.OnNext(startUrl);
+            return pipe2;
         }
+
+                /// <summary>
+        /// ページを読み込むクローラを定義します。
+        /// </summary>
+        /// <returns></returns>
+        public static IObservable<bool> RxPageCrowl(this string startUrl
+            , Func<XElement, string> getNextUrl
+            , Func<XElement, bool> parse)
+        {
+            return startUrl
+                .RxPageCrowl(getNextUrl, rxDoc => {
+                    return rxDoc
+                        .Select(parse)
+                        ;
+                });
+        }
+
 
         #endregion
 
@@ -133,9 +187,13 @@ namespace Neith.Crawler
                 ;
         }
 
+        /// <summary>
+        /// CrawlerResponseを取得する。
+        /// </summary>
+        /// <param name="rxReq"></param>
+        /// <returns></returns>
         private static IObservable<CrawlerResponse> GetResponse(this IObservable<CrawlerRequest> rxReq)
         {
-            CrawlerResponse cRes = null;
             return rxReq
                 .Select(cReq => {
                     var req = cReq.Request;
@@ -147,10 +205,9 @@ namespace Neith.Crawler
                         cReq.Request.BeginGetResponse,
                         async => {
                             var res = cReq.Request.EndGetResponse(async);
-                            cRes = new CrawlerResponse(cReq, res);
-                            return cRes;
+                            return new CrawlerResponse(cReq, res); ;
                         })())
-                .Finally(() => { cRes.Dispose(); });
+                ;
         }
 
 
@@ -160,9 +217,9 @@ namespace Neith.Crawler
         {
             return rxRes
                 .Select(cRes => {
-                if (cRes == null) return null;
-                return cRes.Response.GetResponseStream();
-            });
+                    if (cRes == null) return null;
+                    return cRes.Response.GetResponseStream();
+                });
         }
 
         public static IObservable<string> ToContents(this IObservable<CrawlerResponse> rxRes)
