@@ -10,112 +10,49 @@ namespace Neith.Crawler.Sites.Zam
 {
     public static class AbilityList
     {
-        private static readonly XNamespace ns = "http://www.w3.org/1999/xhtml";
+        private const string startURL = @"http://ffxiv.zam.com/ja/abilitylist.html";
 
-        public static IObservable<bool> Task()
+        /// <summary>
+        /// 実行タスクを定義します。
+        /// </summary>
+        /// <returns></returns>
+        public static IObservable<Unit> Task()
         {
-            var baseURL = @"http://ffxiv.zam.com/ja/abilitylist.html";
+            return startURL
+                .RxPageCrowl(GetNextPage, ParseTable);
+        }
 
-            return baseURL
-                .RxGetCrowlUpdate()
-                .ToResponseStream()
-                .ToXHtmlElement()
+        /// <summary>
+        /// 次ページへのリンクを探し、URLを返します。
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <returns></returns>
+        private static string GetNextPage(XElement doc)
+        {
+            return doc
+                .GetLinkUrlByClassName("non-box next")
+                .MargeUri(startURL)
+                ;
+        }
+
+        private static IObservable<Unit> ParseTable(IObservable<XElement> rxDoc)
+        {
+            return rxDoc
                 .Select(doc => {
-                    // 次の要素を抽出
-                    var next = (from a in doc.Descendants(ns + "a")
-                                where (string)a.Attribute("class") == "non-box next"
-                                select a).FirstOrDefault();
-                    if (next != null) {
-                        Debug.WriteLine("################################ AbilityList START");
-                        Debug.WriteLine("NEXT要素：");
-                        Debug.WriteLine(next.ToString());
-                        Debug.WriteLine("################################ AbilityList END");
-                    }
-
-                    // データテーブルの抽出
+                    // データテーブルの抽出処理
                     var data = from a in doc.Descendants(ns + "table")
                                where (string)a.Attribute("class") == "datatable sortable"
                                select a;
                     Debug.WriteLine("################################ AbilityList START");
                     Debug.WriteLine("データテーブル抽出数：" + data.Count().ToString());
                     Debug.WriteLine("################################ AbilityList END");
-                    return true;
+                    return new Unit();
                 })
-                .TakeLast(0)
                 ;
         }
 
 
-
-        public static IObservable<bool> Task2()
-        {
-            var baseURL = @"http://ffxiv.zam.com/ja/abilitylist.html";
-
-            var getSub = new AsyncSubject<string>();
-
-            
-            var parseSub = new AsyncSubject<XElement>();
-
-
-
-
-
-
-            return parseSub.Select(ParseTask);
-        }
-
-        /*
-        private static IObservable<bool> TaskGet(this IObservable<string> rxUrl
-            , IObserver<XElement> parseTask
-            , IObserver<string> getTask)
-        {
-            return rxUrl
-                .ToUpdateWebResponseStream()
-                .ToXHtmlElement()
-                .Do(parseTask.OnNext)
-                .Select(doc => {
-                    // 次のデータは？
-                    var nextURL = GetNextURL(doc);
-                    if (nextURL != null) getTask.OnNext(nextURL);
-                    else {
-                        getTask.OnCompleted();
-                        parseTask.OnCompleted();
-                    }
-                    return true;
-                });
-        }
-        */
-        private static string GetNextURL(XElement doc)
-        {
-            var next = (from a in doc.Descendants(ns + "a")
-                        where (string)a.Attribute("class") == "non-box next"
-                        select a).FirstOrDefault();
-            if (next != null) {
-                Debug.WriteLine("################################ AbilityList START");
-                Debug.WriteLine("NEXT要素：");
-                Debug.WriteLine(next.ToString());
-                Debug.WriteLine("################################ AbilityList END");
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// テーブルの解析
-        /// </summary>
-        /// <param name="rxTable"></param>
-        /// <returns></returns>
-        public static bool ParseTask(XElement doc)
-        {
-            // データテーブルの抽出
-            var data = from a in doc.Descendants(ns + "table")
-                       where (string)a.Attribute("class") == "datatable sortable"
-                       select a;
-            Debug.WriteLine("################################ AbilityList START");
-            Debug.WriteLine("データテーブル抽出数：" + data.Count().ToString());
-            Debug.WriteLine("################################ AbilityList END");
-            return true;
-        }
-
+        private static readonly XNamespace ns = "http://www.w3.org/1999/xhtml";
     }
 
 }

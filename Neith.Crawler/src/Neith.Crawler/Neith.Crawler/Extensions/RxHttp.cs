@@ -57,8 +57,8 @@ namespace System.Net
         /// <returns></returns>
         public static IObservable<string> RxGetWebContents(this string url)
         {
-            return Observable
-                .Return(WebRequest.Create(url) as HttpWebRequest)
+            return RxExtensions
+                .ReturnPool(WebRequest.Create(url) as HttpWebRequest)
                 .ToGetContents();
         }
 
@@ -91,8 +91,8 @@ namespace System.Net
         /// <returns></returns>
         public static IObservable<string> RxGetResponseHeaderItem(this string url, string headerName)
         {
-            return Observable
-                .Return(WebRequest.Create(url) as HttpWebRequest)
+            return RxExtensions
+                .ReturnPool(WebRequest.Create(url) as HttpWebRequest)
                 .GetHeaderItem(headerName);
         }
 

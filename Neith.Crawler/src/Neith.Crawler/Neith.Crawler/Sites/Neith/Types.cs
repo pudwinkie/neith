@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Concurrency;
 using System.Linq;
 using System.Text;
 using System.IO;
@@ -11,20 +12,23 @@ namespace Neith.Crawler.Sites.Neith
 {
     public static class Types
     {
-        public static IObservable<bool> Task()
+        public static IObservable<Unit> Task()
         {
             return @"http://spreadsheets.google.com/pub?key=0AlnLTLNQTaTJdGFZb1c2RTFuV01fUnBxbThNaGpWUXc&single=true&gid=0&output=csv"
                 .RxGetCrowlUpdate()
                 .ToResponseStream()
                 .SelectMany(st => { return Analysis(st).ToObservable(); })
+                .AsParallel()
                 .Select(el => {
+                    // 合成
                     var path = el.GetPath(Const.NeithXFNTypesDir);
                     Directory.CreateDirectory(path.ToDirectoryName());
                     File.WriteAllText(path, el.ToHTML());
-                    return true;
+                    return new Unit();
                 })
-                .TakeLast(0);
+                ;
         }
+
 
         private static IEnumerable<TypeElement> Analysis(Stream st)
         {
@@ -137,7 +141,7 @@ namespace Neith.Crawler.Sites.Neith
 
             public string GetLink(string rel)
             {
-                return string.Format(@"<a rel=""{0}"" href=""{1}"">{2}</a>"
+                return string.Format(@"<span class=""vcard""><a rel=""{0}"" href=""{1}"">{2}</a></span>"
                        , rel, URL, Name.ToHtmlEncode());
             }
 
@@ -149,15 +153,19 @@ namespace Neith.Crawler.Sites.Neith
 <head>
   <meta charset=""utf-8"">
   <title>{1}</title>
-  <link rel=""stylesheet"" href=""http://xfn.vbel.net/NeithXFN.css"">
+  <link rel=""stylesheet"" href=""/NeithXFN.css"">
 </head>
 <body class=""{0}"">
-<h1>{1}</h1>
+<div class=""vcard about entry-author"">
+	<img style=""float:left; margin-right:4px"" src=""image.png"" alt=""イメージ"" class=""photo"" />
+	<h1 class=""fn n"">{1}</h1>
+	<div class=""adr""></div>
+</div>
 <ul class=""parent"">{2}</ul>
 <ul class=""child"">{3}</ul>
-<address class=""note"">
+<address class=""vcard note"">
   presented by
-  <a href=""http://twitter.com/lucia_neith/"">Lucia@VesperBell</a> 
+  <a href=""http://twitter.com/lucia_neith"" rel=""contact"">Lucia@VesperBell</a> 
   under
   <a rel=""license"" href=""http://creativecommons.org/publicdomain/zero/1.0/""> 
   <img src=""http://i.creativecommons.org/l/zero/1.0/80x15.png""/> 
@@ -165,6 +173,23 @@ namespace Neith.Crawler.Sites.Neith
 </address>
 </body>
 </html>";
+
+/* サンプル
+<div class="vcard">
+	<img style="float:left; margin-right:4px" src="http://vbel.net/" alt="LuciaNeith の写真" class="photo" />
+	<span class="fn n">
+		<span class="family-name">Lucia</span>
+		<span class="given-name">Neith</span>
+	</span>
+	<div class="adr">
+	</div>
+	<ul>
+		<li><a href="http://meyerweb.com" rel="friend colleague met">Eric Meyer</a></li>
+		<li><a href="http://photomatt.net" rel="friend colleague met">Matt Mullenweg</a></li>
+	</ul>
+</div>
+*/
+
                 // bodyのclass
                 var bodyClass = "globalNeithXFN NeithXFN " + KeyName;
 
