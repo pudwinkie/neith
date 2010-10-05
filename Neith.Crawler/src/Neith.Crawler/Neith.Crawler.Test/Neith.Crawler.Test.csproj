@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Neith.Crawler.Test</RootNamespace>
     <AssemblyName>Neith.Crawler.Test</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -64,9 +64,9 @@
     <Compile Include="WebAccessTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\UnitTestUtil\src\UnitTestExtensions\UnitTestExtensions35.csproj">
+    <ProjectReference Include="..\..\..\..\UnitTestUtil\src\UnitTestExtensions\UnitTestExtensions.csproj">
       <Project>{D6B57990-6E54-444C-A1CF-319C76B85E65}</Project>
-      <Name>UnitTestExtensions35</Name>
+      <Name>UnitTestExtensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\Neith.Crawler\Neith.Crawler.csproj">
       <Project>{4BA61FEF-2EF8-4CA9-98BC-105A65F79896}</Project>
