@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Concurrency;
 using System.Linq;
 using System.Text;
 using SITES = Neith.Crawler.Sites;
@@ -16,7 +17,7 @@ namespace Neith.Crawler
         public static void Run()
         {
             Observable
-                .Merge(EnTask(), System.Concurrency.Scheduler.ThreadPool)
+                .Merge(EnTask(), Scheduler.ThreadPool)
                 .Run();
         }
 
