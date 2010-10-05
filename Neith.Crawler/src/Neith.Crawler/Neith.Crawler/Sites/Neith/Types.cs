@@ -12,7 +12,7 @@ namespace Neith.Crawler.Sites.Neith
 {
     public static class Types
     {
-        public static IObservable<bool> Task()
+        public static IObservable<Unit> Task()
         {
             return @"http://spreadsheets.google.com/pub?key=0AlnLTLNQTaTJdGFZb1c2RTFuV01fUnBxbThNaGpWUXc&single=true&gid=0&output=csv"
                 .RxGetCrowlUpdate()
@@ -24,7 +24,7 @@ namespace Neith.Crawler.Sites.Neith
                     var path = el.GetPath(Const.NeithXFNTypesDir);
                     Directory.CreateDirectory(path.ToDirectoryName());
                     File.WriteAllText(path, el.ToHTML());
-                    return true;
+                    return new Unit();
                 })
                 ;
         }

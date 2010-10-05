@@ -10,34 +10,32 @@ namespace Neith.Crawler.Sites.Zam
 {
     public static class AbilityList
     {
-        private static readonly XNamespace ns = "http://www.w3.org/1999/xhtml";
+        private const string startURL = @"http://ffxiv.zam.com/ja/abilitylist.html";
 
         /// <summary>
         /// 実行タスクを定義します。
         /// </summary>
         /// <returns></returns>
-        public static IObservable<bool> Task()
+        public static IObservable<Unit> Task()
         {
-            return @"http://ffxiv.zam.com/ja/abilitylist.html"
+            return startURL
                 .RxPageCrowl(GetNextPage, ParseTable);
         }
 
+        /// <summary>
+        /// 次ページへのリンクを探し、URLを返します。
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <returns></returns>
         private static string GetNextPage(XElement doc)
         {
-            // 次のページがあればURLを返す
-            var next = (from a in doc.Descendants(ns + "a")
-                        where (string)a.Attribute("class") == "non-box next"
-                        select a).FirstOrDefault();
-            if (next != null) {
-                Debug.WriteLine("################################ AbilityList START");
-                Debug.WriteLine("NEXT要素：");
-                Debug.WriteLine(next.ToString());
-                Debug.WriteLine("################################ AbilityList END");
-            }
-            return null;
+            return doc
+                .GetLinkUrlByClassName("non-box next")
+                .MargeUri(startURL)
+                ;
         }
 
-        private static IObservable<bool> ParseTable(IObservable<XElement> rxDoc)
+        private static IObservable<Unit> ParseTable(IObservable<XElement> rxDoc)
         {
             return rxDoc
                 .Select(doc => {
@@ -48,11 +46,13 @@ namespace Neith.Crawler.Sites.Zam
                     Debug.WriteLine("################################ AbilityList START");
                     Debug.WriteLine("データテーブル抽出数：" + data.Count().ToString());
                     Debug.WriteLine("################################ AbilityList END");
-                    return true;
+                    return new Unit();
                 })
                 ;
         }
 
+
+        private static readonly XNamespace ns = "http://www.w3.org/1999/xhtml";
     }
 
 }

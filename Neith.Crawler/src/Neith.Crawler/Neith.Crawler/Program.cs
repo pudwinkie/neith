@@ -21,7 +21,7 @@ namespace Neith.Crawler
                 .Run();
         }
 
-        private static IEnumerable<IObservable<bool>> EnCrawlTask()
+        private static IEnumerable<IObservable<Unit>> EnCrawlTask()
         {
             yield return SITES.Neith.Types.Task();
             yield return SITES.Zam.AbilityList.Task();

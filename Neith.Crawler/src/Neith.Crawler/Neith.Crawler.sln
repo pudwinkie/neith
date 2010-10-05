@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestExtensions35", "..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SgmlReaderDll2010", "..\..\..\externals\sgmlreader\sgmlreaderdll\SgmlReaderDll2010.csproj", "{499527FF-AE52-450F-B3E3-4AD53E1712AD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZStudy.Rx.Parallel", "ZStudy.Rx.Parallel\ZStudy.Rx.Parallel.csproj", "{6EDF0F30-4C19-41DD-8D33-1DA63A8D6A52}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{499527FF-AE52-450F-B3E3-4AD53E1712AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{499527FF-AE52-450F-B3E3-4AD53E1712AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{499527FF-AE52-450F-B3E3-4AD53E1712AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6EDF0F30-4C19-41DD-8D33-1DA63A8D6A52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6EDF0F30-4C19-41DD-8D33-1DA63A8D6A52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6EDF0F30-4C19-41DD-8D33-1DA63A8D6A52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6EDF0F30-4C19-41DD-8D33-1DA63A8D6A52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

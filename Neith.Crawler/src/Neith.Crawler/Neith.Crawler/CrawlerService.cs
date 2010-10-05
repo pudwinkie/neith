@@ -86,9 +86,9 @@ namespace Neith.Crawler
         /// ページを読み込むクローラを定義します。
         /// </summary>
         /// <returns></returns>
-        public static IObservable<bool> RxPageCrowl(this string startUrl
+        public static IObservable<Unit> RxPageCrowl(this string startUrl
             , Func<XElement, string> getNextUrl
-            , Func<IObservable<XElement>, IObservable<bool>> rxParse)
+            , Func<IObservable<XElement>, IObservable<Unit>> rxParse)
         {
             var subject = new Subject<string>(Scheduler.ThreadPool);
             // 処理パイプ
@@ -114,9 +114,9 @@ namespace Neith.Crawler
         /// ページを読み込むクローラを定義します。
         /// </summary>
         /// <returns></returns>
-        public static IObservable<bool> RxPageCrowl(this string startUrl
+        public static IObservable<Unit> RxPageCrowl(this string startUrl
             , Func<XElement, string> getNextUrl
-            , Func<XElement, bool> parse)
+            , Func<XElement, Unit> parse)
         {
             return startUrl
                 .RxPageCrowl(getNextUrl, rxDoc => {
