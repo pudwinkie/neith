@@ -117,7 +117,5 @@ namespace Neith.Crawler
             return File.ReadAllText(path);
         }
 
-
-
     }
 }

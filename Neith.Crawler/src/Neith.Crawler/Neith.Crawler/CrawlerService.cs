@@ -43,8 +43,8 @@ namespace Neith.Crawler
         /// <returns></returns>
         public static IObservable<CrawlerResponse> RxGetCrowlAny(this string url)
         {
-            return RxExtensions
-                .ReturnPool(url)
+            return Observable
+                .Return(url, Scheduler.ThreadPool)
                 .TpCrowlAny()
                 ;
         }
@@ -75,8 +75,8 @@ namespace Neith.Crawler
         /// <returns></returns>
         public static IObservable<CrawlerResponse> RxGetCrowlUpdate(this string url)
         {
-            return RxExtensions
-                .ReturnPool(url)
+            return Observable
+                .Return(url, Scheduler.ThreadPool)
                 .ToCrowlUpdate()
                 ;
         }
@@ -90,25 +90,43 @@ namespace Neith.Crawler
             , Func<XElement, string> getNextUrl
             , Func<IObservable<XElement>, IObservable<Unit>> rxParse)
         {
-            var subject = new Subject<string>(Scheduler.ThreadPool);
-            // 処理パイプ
-            var pipe1 = subject
-                .ToCrowlUpdate()
-                .ToResponseStream()
-                .ToXHtmlElement()
-                .Do(doc => {
-                    // 次のデータがあれば実行を予約
-                    var nextURL = getNextUrl(doc);
-                    if (nextURL != null) subject.OnNext(nextURL);
-                    else subject.OnCompleted();
-                })
+            var pipe = startUrl
+                .EnPageCrowl(getNextUrl)
+                .ToObservable(Scheduler.TaskPool)
                 ;
-            var pipe2 = rxParse(pipe1);
-
-            // １つ目の要素を設定して実行
-            subject.OnNext(startUrl);
-            return pipe2;
+            return rxParse(pipe);
         }
+
+        /// <summary>
+        /// ページ要素を列挙するクローラを定義します。
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="getNextUrl"></param>
+        /// <returns></returns>
+        public static IEnumerable<XElement> EnPageCrowl(this string url
+            , Func<XElement, string> getNextUrl)
+        {
+            return url
+                .EnPageCrowlImpl(getNextUrl)
+                .AsParallel()
+                ;
+        }
+        private static IEnumerable<XElement> EnPageCrowlImpl(this string url
+            , Func<XElement, string> getNextUrl)
+        {
+            while (!string.IsNullOrEmpty(url)) {
+                var pipe = Observable.Return(url, Scheduler.ThreadPool)
+                    .ToCrowlUpdate()
+                    .ToResponseStream()
+                    .ToXHtmlElement()
+                    ;
+                var doc = pipe.FirstOrDefault();
+                if (doc == null) yield break;
+                yield return doc;
+                url = getNextUrl(doc);
+            }
+        }
+
 
                 /// <summary>
         /// ページを読み込むクローラを定義します。
@@ -154,8 +172,10 @@ namespace Neith.Crawler
         private static IObservable<CrawlerResponse> RxCrowlImpl(this IObservable<CrawlerRequest> rxReq)
         {
             return rxReq
+                // 既に処理済なら止める
+                .Where(cReq => !cReq.CheckTouch())
                 // リクエストの作成
-                .Select(cReq => {
+                .Do(cReq => {
                     var req = WebRequest.Create(cReq.URL) as HttpWebRequest;
                     cReq.Request = req;
                     req.Method = "GET";
@@ -163,14 +183,18 @@ namespace Neith.Crawler
                     if (!string.IsNullOrEmpty(etag)) {
                         req.Headers[HttpRequestHeader.IfNoneMatch] = etag;
                     }
-                    return cReq;
+                    var date = cReq.Date;
+                    if (date > DateTime.MinValue) {
+                        req.IfModifiedSince = date;
+                    }
+
                 })
-                // レスポンスの処理
+                // レスポンスの処理、処理済なら止める
                 .GetResponse()
-                .Select(cRes => {
+                .Where(cRes => {
                     var res = cRes.Response;
                     switch (res.StatusCode) {
-                        case HttpStatusCode.PreconditionFailed: return null;
+                        case HttpStatusCode.PreconditionFailed: return false;
                         case HttpStatusCode.OK: break;
                         default:
                             throw new IOException(string.Format(
@@ -179,13 +203,30 @@ namespace Neith.Crawler
                     }
                     var etag = res.Headers[HttpResponseHeader.ETag];
                     if (etag != null) {
-                        if (etag == cRes.Request.ETag) return null;
+                        if (etag == cRes.Request.ETag) return false;
                         cRes.Request.ETag = etag;
                     }
-                    return cRes;
+                    var date = res.LastModified;
+                    if (date <= cRes.Request.Date) return false;
+                    if (date != DateTime.MaxValue) cRes.Request.Date = date;
+
+                    return true;
                 })
                 ;
         }
+
+        private static DateTime ToDateExact(this string text)
+        {
+            var date = DateTime.MaxValue;
+             System.DateTime.TryParseExact(text,
+                         expectedFormats,
+                         System.Globalization.DateTimeFormatInfo.InvariantInfo,
+                         System.Globalization.DateTimeStyles.None,
+                         out date);
+             return date;
+        }
+        private static readonly string[] expectedFormats = { "ddd, d MMM yyyy HH':'mm':'ss zzz", "r" };
+
 
         /// <summary>
         /// CrawlerResponseを取得する。
@@ -205,7 +246,7 @@ namespace Neith.Crawler
                         cReq.Request.BeginGetResponse,
                         async => {
                             var res = cReq.Request.EndGetResponse(async);
-                            return new CrawlerResponse(cReq, res); ;
+                            return new CrawlerResponse(cReq, res);
                         })())
                 ;
         }

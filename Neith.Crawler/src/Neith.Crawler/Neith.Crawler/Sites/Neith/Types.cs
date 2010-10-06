@@ -18,7 +18,6 @@ namespace Neith.Crawler.Sites.Neith
                 .RxGetCrowlUpdate()
                 .ToResponseStream()
                 .SelectMany(st => { return Analysis(st).ToObservable(); })
-                .AsParallel()
                 .Select(el => {
                     // 合成
                     var path = el.GetPath(Const.NeithXFNTypesDir);

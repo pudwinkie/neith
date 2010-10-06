@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Concurrency;
 using System.Linq;
 using System.Text;
 using System.Net;
@@ -57,8 +58,8 @@ namespace System.Net
         /// <returns></returns>
         public static IObservable<string> RxGetWebContents(this string url)
         {
-            return RxExtensions
-                .ReturnPool(WebRequest.Create(url) as HttpWebRequest)
+            return Observable
+                .Return(WebRequest.Create(url) as HttpWebRequest, Scheduler.ThreadPool)
                 .ToGetContents();
         }
 
@@ -91,8 +92,8 @@ namespace System.Net
         /// <returns></returns>
         public static IObservable<string> RxGetResponseHeaderItem(this string url, string headerName)
         {
-            return RxExtensions
-                .ReturnPool(WebRequest.Create(url) as HttpWebRequest)
+            return Observable
+                .Return(WebRequest.Create(url) as HttpWebRequest, Scheduler.ThreadPool)
                 .GetHeaderItem(headerName);
         }
 
