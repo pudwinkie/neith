@@ -32,9 +32,12 @@ namespace System.Security.Cryptography
         }
         public static byte[] ToSHA1(this byte[] data)
         {
+            if(hashEngine==null) hashEngine = HashAlgorithm.Create("SHA1");
             return hashEngine.ComputeHash(data);
         }
-        private static readonly HashAlgorithm hashEngine = HashAlgorithm.Create("SHA1");
+        [ThreadStatic]
+        private static HashAlgorithm hashEngine;
+
         public static string ToBase64Urlsafe(this byte[] data)
         {
             var str = Convert.ToBase64String(data);

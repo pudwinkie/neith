@@ -10,5 +10,14 @@ namespace System.Linq
 {
     public static class RxExtensions
     {
+        public static IObservable<T> DelayTimestamped<T>(this IObservable<Timestamped<T>> rx)
+        {
+            return rx
+                .RemoveTimestamp()
+                ;
+
+        }
+
+
     }
 }

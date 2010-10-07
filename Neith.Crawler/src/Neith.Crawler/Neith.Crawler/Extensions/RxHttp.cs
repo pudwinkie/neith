@@ -6,6 +6,7 @@ using System.Text;
 using System.Net;
 using System.IO;
 using System.Xml.Linq;
+using System.Diagnostics;
 
 namespace System.Net
 {
@@ -19,6 +20,9 @@ namespace System.Net
         public static IObservable<HttpWebResponse> GetResponse(this IObservable<HttpWebRequest> rxReq)
         {
             return rxReq
+                .Do(req=>{
+                    Debug.WriteLine("[RxHttp::GetResponse] uri=" + req.RequestUri.AbsoluteUri);
+                })
                 .SelectMany(req => Observable.FromAsyncPattern<WebResponse>(
                     req.BeginGetResponse,
                     req.EndGetResponse)())
