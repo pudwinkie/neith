@@ -57,6 +57,19 @@ namespace System.Xml.Linq
         }
 
         /// <summary>
+        /// 指定されたクラス名を持つaタグを列挙します。
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <param name="className"></param>
+        /// <returns></returns>
+        public static IEnumerable<string> EnLinkUrlByClassName(this IEnumerable<XElement> doc, string className)
+        {
+            return doc
+                .SelectMany(d => d.EnLinkUrlByClassName(className))
+                ;
+        }
+
+        /// <summary>
         /// 指定されたクラス名を持つaタグを検索します。
         /// </summary>
         /// <param name="doc"></param>
@@ -81,6 +94,20 @@ namespace System.Xml.Linq
             var uri = new Uri(src);
             var newUri = new Uri(uri, relative);
             return newUri.AbsoluteUri;
+        }
+
+        /// <summary>
+        /// target Uriをsrc Uriからの相対パスと解釈し、絶対Uriを合成します。
+        /// </summary>
+        /// <param name="relative"></param>
+        /// <param name="src"></param>
+        /// <returns></returns>
+        public static IEnumerable<string> MargeUri(
+           this IEnumerable<string> relative, string src)
+        {
+            return relative
+                .Select(r => r.MargeUri(src))
+                ;
         }
 
 

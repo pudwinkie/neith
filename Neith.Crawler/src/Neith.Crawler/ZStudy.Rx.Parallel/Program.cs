@@ -48,22 +48,43 @@ namespace ZStudy.Rx.Parallel
             //      それぞれのタスクは直列に実行されています。
 
 
-            // ■１つのパイプに２つの処理を続けて実行
+            // ■２つのパイプをZip
             Console.WriteLine("#### TEST 3 ####");
+            stopwatch.Restart();
+            Observable.Zip(
+                pipe.ConsoleWrite("1 "),
+                pipe.ConsoleWrite(" 2"),
+                (a, b) => Tuple.Create(a, b))
+                .Run(pair => {
+                    var text = string.Format("({0:0})[--] :                         ZIP({1:00}) [{2:00},{3:00}]",
+                        pair.Item1, Thread.CurrentThread.ManagedThreadId,
+                        pair.Item1, pair.Item2);
+                    Console.WriteLine("({1:HH:mm:ss.fff}) {0}", text, DateTimeOffset.Now);
+                })
+                ;
+            stopwatch.Stop();
+            Console.WriteLine("#### TEST 2 ==> time {0:00000}ms\n\n"
+                , stopwatch.ElapsedMilliseconds);
+            // ---> ２つのタスクは並列実行されます。
+            //      それぞれのタスクは直列に実行されています。
+
+
+            // ■１つのパイプに２つの処理を続けて実行
+            Console.WriteLine("#### TEST 4 ####");
             stopwatch.Restart();
             pipe
                 .ConsoleWrite("1 ")
                 .ConsoleWrite(" 2")
                 .Run();
             stopwatch.Stop();
-            Console.WriteLine("#### TEST 3 ==> time {0:00000}ms\n\n"
+            Console.WriteLine("#### TEST 4 ==> time {0:00000}ms\n\n"
                 , stopwatch.ElapsedMilliseconds);
             // ---> ２つの処理は直列実行されます。
             //      ２つの処理が終わるまで次のタスクはスケジュールされません。
 
 
             // ■１つのパイプに２つの処理をスケジューラ切り替えをはさんで実行
-            Console.WriteLine("#### TEST 4 ####");
+            Console.WriteLine("#### TEST 5 ####");
             stopwatch.Restart();
             pipe
                 .ObserveOn(Scheduler.ThreadPool)
@@ -72,7 +93,7 @@ namespace ZStudy.Rx.Parallel
                 .ConsoleWrite(" 2")
                 .Run();
             stopwatch.Stop();
-            Console.WriteLine("#### TEST 4 ==> time {0:00000}ms\n\n"
+            Console.WriteLine("#### TEST 5 ==> time {0:00000}ms\n\n"
                 , stopwatch.ElapsedMilliseconds);
             // ---> ２つの処理は並列実行されます。
             //      パイプ内で処理が追い抜かれることはありません。

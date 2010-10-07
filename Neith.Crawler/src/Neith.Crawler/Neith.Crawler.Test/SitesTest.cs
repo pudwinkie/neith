@@ -13,12 +13,12 @@ namespace Neith.Crawler.Test
         [Test]
         public void NeithXFNTest()
         {
-            SITES.Neith.Types.Task().Run();
+            SITES.Neith.Types.Task();
         }
         //[Test]
         public void ZamAbilityListTest()
         {
-            SITES.Zam.AbilityList.Task().Run();
+            SITES.Zam.AbilityList.Task();
         }
     }
 }

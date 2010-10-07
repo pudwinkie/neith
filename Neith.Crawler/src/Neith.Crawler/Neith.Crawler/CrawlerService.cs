@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Concurrency;
+using System.Threading;
 using System.Linq;
 using System.Text;
 using System.Net;
@@ -83,21 +84,6 @@ namespace Neith.Crawler
 
 
         /// <summary>
-        /// ページを読み込むクローラを定義します。
-        /// </summary>
-        /// <returns></returns>
-        public static IObservable<Unit> RxPageCrowl(this string startUrl
-            , Func<XElement, string> getNextUrl
-            , Func<IObservable<XElement>, IObservable<Unit>> rxParse)
-        {
-            var pipe = startUrl
-                .EnPageCrowl(getNextUrl)
-                .ToObservable(Scheduler.TaskPool)
-                ;
-            return rxParse(pipe);
-        }
-
-        /// <summary>
         /// ページ要素を列挙するクローラを定義します。
         /// </summary>
         /// <param name="url"></param>
@@ -106,43 +92,24 @@ namespace Neith.Crawler
         public static IEnumerable<XElement> EnPageCrowl(this string url
             , Func<XElement, string> getNextUrl)
         {
-            return url
-                .EnPageCrowlImpl(getNextUrl)
-                .AsParallel()
-                ;
-        }
-        private static IEnumerable<XElement> EnPageCrowlImpl(this string url
-            , Func<XElement, string> getNextUrl)
-        {
             while (!string.IsNullOrEmpty(url)) {
-                var pipe = Observable.Return(url, Scheduler.ThreadPool)
-                    .ToCrowlUpdate()
-                    .ToResponseStream()
-                    .ToXHtmlElement()
-                    ;
-                var doc = pipe.FirstOrDefault();
+                var doc = url.ToXHtmlElement();
                 if (doc == null) yield break;
                 yield return doc;
                 url = getNextUrl(doc);
             }
         }
 
-
-                /// <summary>
-        /// ページを読み込むクローラを定義します。
-        /// </summary>
-        /// <returns></returns>
-        public static IObservable<Unit> RxPageCrowl(this string startUrl
-            , Func<XElement, string> getNextUrl
-            , Func<XElement, Unit> parse)
+        public static XElement ToXHtmlElement(this string url)
         {
-            return startUrl
-                .RxPageCrowl(getNextUrl, rxDoc => {
-                    return rxDoc
-                        .Select(parse)
-                        ;
-                });
+            return Observable.Return(url, Scheduler.ThreadPool)
+                .ToCrowlUpdate()
+                .ToResponseStream()
+                .ToXHtmlElement()
+                .FirstOrDefault()
+                ;
         }
+
 
 
         #endregion
@@ -157,6 +124,7 @@ namespace Neith.Crawler
         public static IObservable<CrawlerRequest> ToCrawlerRequest(this IObservable<string> rxUrl)
         {
             return rxUrl
+                .Where(url => !string.IsNullOrEmpty(url))
                 .Select(url => { return new CrawlerRequest(url); })
                 ;
         }
@@ -236,11 +204,7 @@ namespace Neith.Crawler
         private static IObservable<CrawlerResponse> GetResponse(this IObservable<CrawlerRequest> rxReq)
         {
             return rxReq
-                .Select(cReq => {
-                    var req = cReq.Request;
-
-                    return cReq;
-                })
+                .Do(WaitSiteAccess)
                 .SelectMany(cReq => Observable
                     .FromAsyncPattern<CrawlerResponse>(
                         cReq.Request.BeginGetResponse,
@@ -250,6 +214,37 @@ namespace Neith.Crawler
                         })())
                 ;
         }
+
+        /// <summary>
+        /// サイトへの最終アクセス日時を監視し、アクセス間隔を制約する
+        /// </summary>
+        /// <param name="cReq"></param>
+        private static void WaitSiteAccess(CrawlerRequest cReq)
+        {
+            var key = cReq.Request.RequestUri.Host;
+            if (string.IsNullOrEmpty(key)) return;
+            SiteAccessBlock site;
+            lock (DicSiteAccessBlock) {
+                if (!DicSiteAccessBlock.TryGetValue(key, out site)) {
+                    site = new SiteAccessBlock();
+                    DicSiteAccessBlock.Add(key, site);
+                }
+            }
+            lock (site) {
+                var wait = site.PassTime - DateTimeOffset.Now;
+                if (wait > TimeSpan.Zero) Thread.Sleep(wait);
+                site.PassTime = DateTimeOffset.Now + PassSpan;
+            }
+        }
+
+        private class SiteAccessBlock
+        {
+            public DateTimeOffset PassTime = DateTimeOffset.Now;
+        }
+        private static readonly Dictionary<string, SiteAccessBlock> DicSiteAccessBlock =
+            new Dictionary<string, SiteAccessBlock>();
+        private static readonly TimeSpan PassSpan = TimeSpan.FromSeconds(1.0);
+
 
 
 
