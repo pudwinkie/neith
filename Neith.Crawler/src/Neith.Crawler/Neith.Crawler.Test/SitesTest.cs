@@ -15,7 +15,7 @@ namespace Neith.Crawler.Test
         {
             SITES.Neith.Types.Task();
         }
-        //[Test]
+        [Test]
         public void ZamAbilityListTest()
         {
             SITES.Zam.AbilityList.Task();

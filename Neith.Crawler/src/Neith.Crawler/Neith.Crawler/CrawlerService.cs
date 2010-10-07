@@ -204,19 +204,46 @@ namespace Neith.Crawler
         private static IObservable<CrawlerResponse> GetResponse(this IObservable<CrawlerRequest> rxReq)
         {
             return rxReq
-                .Do(WaitSiteAccess)
+                .Do(cReq =>
+                {
+                    Debug.WriteLine("[GetResponse] uri=" + cReq.Request.RequestUri.AbsoluteUri);
+                })
                 .SelectMany(cReq => Observable
                     .FromAsyncPattern<CrawlerResponse>(
                         cReq.Request.BeginGetResponse,
-                        async => {
+                        async =>
+                        {
                             var res = cReq.Request.EndGetResponse(async);
                             return new CrawlerResponse(cReq, res);
                         })())
                 ;
         }
 
+        private static IObservable<CrawlerRequest> WaitSiteAccess(this IObservable<CrawlerRequest> rxReq)
+        {
+            return rxReq
+                .Select(cReq =>
+                {
+                    var key = cReq.Request.RequestUri.Host;
+                    SiteAccessBlock site;
+                    lock (DicSiteAccessBlock) {
+                        if (!DicSiteAccessBlock.TryGetValue(key, out site)) {
+                            site = new SiteAccessBlock();
+                            DicSiteAccessBlock.Add(key, site);
+                        }
+                    }
+                    lock (site) {
+                        var passTime = site.PassTime;
+                        site.PassTime += PassSpan;
+                        return new Timestamped<CrawlerRequest>(cReq, passTime);
+                    }
+                })
+                .DelayTimestamped()
+                ;
+        }
+
         /// <summary>
-        /// サイトへの最終アクセス日時を監視し、アクセス間隔を制約する
+        /// アクセスのペースを調整するために許可時間のタイムスタンプを設定する
         /// </summary>
         /// <param name="cReq"></param>
         private static void WaitSiteAccess(CrawlerRequest cReq)
