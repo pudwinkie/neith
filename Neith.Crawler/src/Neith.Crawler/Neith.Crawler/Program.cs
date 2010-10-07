@@ -16,12 +16,12 @@ namespace Neith.Crawler
 
         public static void Run()
         {
-            Observable
-                .Merge(EnCrawlTask(), Scheduler.ThreadPool)
-                .Run();
+            EnCrawlTask()
+                .AsParallel()
+                .ForAll(a=>{});
         }
 
-        private static IEnumerable<IObservable<Unit>> EnCrawlTask()
+        private static IEnumerable<Unit> EnCrawlTask()
         {
             yield return SITES.Neith.Types.Task();
             yield return SITES.Zam.AbilityList.Task();

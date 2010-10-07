@@ -12,34 +12,43 @@ namespace Neith.Crawler.Sites.Neith
 {
     public static class Types
     {
-        public static IObservable<Unit> Task()
+        public static Unit Task()
         {
-            return @"http://spreadsheets.google.com/pub?key=0AlnLTLNQTaTJdGFZb1c2RTFuV01fUnBxbThNaGpWUXc&single=true&gid=0&output=csv"
-                .RxGetCrowlUpdate()
-                .ToResponseStream()
-                .SelectMany(st => { return Analysis(st).ToObservable(); })
-                .Select(el => {
+            @"http://spreadsheets.google.com/pub?key=0AlnLTLNQTaTJdGFZb1c2RTFuV01fUnBxbThNaGpWUXc&single=true&gid=0&output=csv"
+                .EnCrowlCsvItem()
+                .Analysis()
+                .AsParallel()
+                .ForAll(el => {
                     // 合成
                     var path = el.GetPath(Const.NeithXFNTypesDir);
                     Directory.CreateDirectory(path.ToDirectoryName());
                     File.WriteAllText(path, el.ToHTML());
-                    return new Unit();
                 })
-                ;
+               ;
+            return new Unit();
         }
 
-
-        private static IEnumerable<TypeElement> Analysis(Stream st)
+        private static IEnumerable<string[]> EnCrowlCsvItem(this string url)
         {
-            if (st == null) {
-                Debug.WriteLine("[NeithXFN::ReadTypes] False!");
-                return new TypeElement[0];
+            var pipe = url
+                .RxGetCrowlUpdate()
+                .ToResponseStream()
+                ;
+            using (var st = pipe.FirstOrDefault()) {
+                if (st == null) yield break;
+                foreach (var csv in CsvUtil.ReadCsv(st, Encoding.UTF8)) {
+                    yield return csv;
+                }
             }
-            var qType = from a in CsvUtil.ReadCsv(st, Encoding.UTF8).FitCsv()
+        }
+
+        private static IEnumerable<TypeElement> Analysis(this IEnumerable<string[]> csv)
+        {
+            var qType = from a in csv.FitCsv()
                         let el = new TypeElement(a)
                         select el;
             // ここで読み切る
-            using (st) qType = qType.ToArray();
+            qType = qType.ToArray();
 
             // ツリー構造の解析
             var qKeys = from a in qType group a by a.ParentKey;

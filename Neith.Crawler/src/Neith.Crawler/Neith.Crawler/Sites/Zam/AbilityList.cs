@@ -11,23 +11,31 @@ namespace Neith.Crawler.Sites.Zam
     public static class AbilityList
     {
         private const string startURL = @"http://ffxiv.zam.com/ja/abilitylist.html";
+        private static readonly XNamespace ns = "http://www.w3.org/1999/xhtml";
 
         /// <summary>
         /// 実行タスクを定義します。
         /// </summary>
         /// <returns></returns>
-        public static IObservable<Unit> Task()
+        public static Unit Task()
         {
-            return startURL
-                .RxPageCrowl(GetNextPage, ParseTable);
+            startURL
+                .EnPageCrowl(GetNextUrl)
+                .AsParallel()
+                .SelectMany(ParseList).NotNull()
+                .Distinct()
+                .Select(url => url.ToXHtmlElement()).NotNull()
+                .ForAll(ParseItem)
+                ;
+            return new Unit();
         }
 
         /// <summary>
-        /// 次ページへのリンクを探し、URLを返します。
+        /// 要素から次ページへのリンクを抽出して返します。
         /// </summary>
         /// <param name="doc"></param>
         /// <returns></returns>
-        private static string GetNextPage(XElement doc)
+        private static string GetNextUrl(this XElement doc)
         {
             return doc
                 .GetLinkUrlByClassName("non-box next")
@@ -35,24 +43,31 @@ namespace Neith.Crawler.Sites.Zam
                 ;
         }
 
-        private static IObservable<Unit> ParseTable(IObservable<XElement> rxDoc)
+        /// <summary>
+        /// 一覧ページより詳細ページへのリンクを抽出して返します。
+        /// </summary>
+        /// <param name="doc"></param>
+        /// <returns></returns>
+        private static IEnumerable<string> ParseList(this XElement doc)
         {
-            return rxDoc
-                .Select(doc => {
-                    // データテーブルの抽出処理
-                    var data = from a in doc.Descendants(ns + "table")
-                               where (string)a.Attribute("class") == "datatable sortable"
-                               select a;
-                    Debug.WriteLine("################################ AbilityList START");
-                    Debug.WriteLine("データテーブル抽出数：" + data.Count().ToString());
-                    Debug.WriteLine("################################ AbilityList END");
-                    return new Unit();
-                })
+            // リンクタグ
+            return doc
+                .EnLinkUrlByClassName("icon-link")
+                .MargeUri(startURL)
                 ;
         }
 
+        /// <summary>
+        /// 詳細ページを解析します。
+        /// </summary>
+        /// <param name="doc"></param>
+        private static void ParseItem(this XElement doc)
+        {
+            // アイテム情報の抽出処理
 
-        private static readonly XNamespace ns = "http://www.w3.org/1999/xhtml";
+            
+        }
+
     }
 
 }
