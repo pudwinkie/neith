@@ -204,8 +204,8 @@ namespace Neith.Crawler
         private static IObservable<CrawlerResponse> GetResponse(this IObservable<CrawlerRequest> rxReq)
         {
             return rxReq
-                .Do(cReq =>
-                {
+                .WaitSiteAccess()
+                .Do(cReq => {
                     Debug.WriteLine("[GetResponse] uri=" + cReq.Request.RequestUri.AbsoluteUri);
                 })
                 .SelectMany(cReq => Observable
@@ -224,6 +224,7 @@ namespace Neith.Crawler
             return rxReq
                 .Select(cReq =>
                 {
+                    //待機時間を決定する
                     var key = cReq.Request.RequestUri.Host;
                     SiteAccessBlock site;
                     lock (DicSiteAccessBlock) {
