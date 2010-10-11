@@ -81,6 +81,7 @@
     <Compile Include="CrawlerResponse.cs" />
     <Compile Include="CrawlerService.cs" />
     <Compile Include="Extensions\LINQExtensions.cs" />
+    <Compile Include="Extensions\LINQXElementExtensions.cs" />
     <Compile Include="Extensions\RxExtensions.cs" />
     <Compile Include="Extensions\RxHttp.cs" />
     <Compile Include="Extensions\IOExtensions.cs" />

@@ -21,10 +21,12 @@ namespace Neith.Crawler.Sites.Zam
         {
             startURL
                 .EnPageCrowl(GetNextUrl)
+                .Take(1)// 試験用に１つで止める
                 .AsParallel()
                 .SelectMany(ParseList).NotNull()
                 .Distinct()
                 .Select(url => url.ToXHtmlElement()).NotNull()
+                .Take(1)// 試験用に１つで止める
                 .ForAll(ParseItem)
                 ;
             return new Unit();
@@ -64,6 +66,18 @@ namespace Neith.Crawler.Sites.Zam
         private static void ParseItem(this XElement doc)
         {
             // アイテム情報の抽出処理
+            Debug.WriteLine(doc.ToString());
+
+            var q1 = from a in doc.Descendants(ns + "div")
+                     where (string)a.Attribute("class") == "xivtt xivtt-abil"
+                     select a;
+
+            var qName = q1.Descendants(ns + "h2");
+
+
+
+            // アイテム情報の抽出処理
+            Debug.WriteLine(q1.FirstOrDefault().ToString());
 
             
         }
