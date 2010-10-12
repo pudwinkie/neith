@@ -93,19 +93,25 @@ namespace Neith.Crawler
             , Func<XElement, string> getNextUrl)
         {
             while (!string.IsNullOrEmpty(url)) {
-                var doc = url.ToXHtmlElement();
+                var doc = url.ToXElementHtml();
                 if (doc == null) yield break;
                 yield return doc;
                 url = getNextUrl(doc);
             }
         }
 
-        public static XElement ToXHtmlElement(this string url)
+        /// <summary>
+        /// 指定URLのHTMLを読み込み、XElementに変換します。
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public static XElement ToXElementHtml(this string url)
         {
             return Observable.Return(url, Scheduler.ThreadPool)
                 .ToCrowlUpdate()
                 .ToResponseStream()
-                .ToXHtmlElement()
+                .ObserveOn(Scheduler.ThreadPool)
+                .ToXElementHtml()
                 .FirstOrDefault()
                 ;
         }
