@@ -4,6 +4,7 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Text;
 using System.IO;
+using System.Diagnostics;
 using Neith.Crawler.Sites.Zam.AbilityList;
 
 namespace Neith.Crawler.Test.Zam.AbilityList
@@ -42,6 +43,14 @@ namespace Neith.Crawler.Test.Zam.AbilityList
                 .AreEqual(@"http://ffxiv.zam.com/ja/ability.html?ffxivability=28930");
 
         }
+
+        [Test]
+        public void ItemTest()
+        {
+            var doc = ToXHtmlElement(Properties.Resources.Zam_AbilityList_Item28930);
+
+        }
+
 
     }
 }

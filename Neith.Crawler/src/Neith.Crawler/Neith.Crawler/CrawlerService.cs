@@ -246,6 +246,13 @@ namespace Neith.Crawler
                         return new Timestamped<CrawlerRequest>(cReq, passTime);
                     }
                 })
+                .Do(pass=>{
+                    string.Format(
+                        "[wait=>{0:HH:mm:ss.fff}] uri={1}"
+                        , pass.Timestamp
+                        , pass.Value.Request.RequestUri.AbsoluteUri)
+                        .TraceInfo();
+                })
                 .DelayTimestamped()
                 ;
         }

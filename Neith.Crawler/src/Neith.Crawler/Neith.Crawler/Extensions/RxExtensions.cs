@@ -19,14 +19,10 @@ namespace System.Linq
         public static IObservable<T> DelayTimestamped<T>(this IObservable<Timestamped<T>> rx)
         {
             return rx
-                .SelectMany(timed => Observable
+                .SelectMany(pass => Observable
                     .FromAsyncPattern<T>(
-                        (callback, state) => {
-                            return BeginDelay(timed.Timestamp, callback);
-                        },
-                        async => {
-                            return timed.Value;
-                        })())
+                        (c, s) => { return BeginDelay(pass.Timestamp, c); },
+                        result => { return pass.Value; })())
                 ;
         }
 
