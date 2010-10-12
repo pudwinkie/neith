@@ -23,8 +23,8 @@ namespace Neith.Crawler
 
         private static IEnumerable<Unit> EnCrawlTask()
         {
-            yield return SITES.Neith.Types.Task();
-            yield return SITES.Zam.AbilityList.Task();
+            yield return SITES.Neith.Types.CrawlerTask.Run();
+            yield return SITES.Zam.AbilityList.CrawlerTask.Run();
         }
     }
 }

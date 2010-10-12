@@ -7,18 +7,13 @@ using SITES = Neith.Crawler.Sites;
 namespace Neith.Crawler.Test
 {
     using NUnit.Framework;
-    [TestFixture]
+    //[TestFixture]
     public class SitesTest
     {
         [Test]
         public void NeithXFNTest()
         {
-            SITES.Neith.Types.Task();
-        }
-        [Test]
-        public void ZamAbilityListTest()
-        {
-            SITES.Zam.AbilityList.Task();
+            SITES.Neith.Types.CrawlerTask.Run();
         }
     }
 }

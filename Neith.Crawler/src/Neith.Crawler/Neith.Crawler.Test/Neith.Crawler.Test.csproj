@@ -60,8 +60,14 @@
   <ItemGroup>
     <Compile Include="CacheTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="SitesTest.cs" />
     <Compile Include="WebAccessTest.cs" />
+    <Compile Include="Zam\AbilityList\Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\UnitTestUtil\src\UnitTestExtensions\UnitTestExtensions.csproj">
@@ -72,6 +78,15 @@
       <Project>{4BA61FEF-2EF8-4CA9-98BC-105A65F79896}</Project>
       <Name>Neith.Crawler</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Zam_AbilityList_Test.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

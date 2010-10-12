@@ -6,9 +6,9 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Text;
 
-namespace Neith.Crawler.Sites.Zam
+namespace Neith.Crawler.Sites.Zam.AbilityList
 {
-    public static class AbilityList
+    public static class CrawlerTask
     {
         private const string startURL = @"http://ffxiv.zam.com/ja/abilitylist.html";
         private static readonly XNamespace ns = "http://www.w3.org/1999/xhtml";
@@ -17,7 +17,7 @@ namespace Neith.Crawler.Sites.Zam
         /// 実行タスクを定義します。
         /// </summary>
         /// <returns></returns>
-        public static Unit Task()
+        public static Unit Run()
         {
             startURL
                 .EnPageCrowl(GetNextUrl)
@@ -37,7 +37,7 @@ namespace Neith.Crawler.Sites.Zam
         /// </summary>
         /// <param name="doc"></param>
         /// <returns></returns>
-        private static string GetNextUrl(this XElement doc)
+        public static string GetNextUrl(this XElement doc)
         {
             return doc
                 .GetLinkUrlByClassName("non-box next")
@@ -50,7 +50,7 @@ namespace Neith.Crawler.Sites.Zam
         /// </summary>
         /// <param name="doc"></param>
         /// <returns></returns>
-        private static IEnumerable<string> ParseList(this XElement doc)
+        public static IEnumerable<string> ParseList(this XElement doc)
         {
             // リンクタグ
             return doc
@@ -63,10 +63,12 @@ namespace Neith.Crawler.Sites.Zam
         /// 詳細ページを解析します。
         /// </summary>
         /// <param name="doc"></param>
-        private static void ParseItem(this XElement doc)
+        public static void ParseItem(this XElement doc)
         {
             // アイテム情報の抽出処理
-            Debug.WriteLine(doc.ToString());
+            doc
+                .ToString()
+                .TraceInfo();
 
             var q1 = from a in doc.Descendants(ns + "div")
                      where (string)a.Attribute("class") == "xivtt xivtt-abil"
@@ -77,8 +79,10 @@ namespace Neith.Crawler.Sites.Zam
 
 
             // アイテム情報の抽出処理
-            Debug.WriteLine(q1.FirstOrDefault().ToString());
-
+            q1
+                .FirstOrDefault()
+                .ToString()
+                .TraceInfo();
             
         }
 

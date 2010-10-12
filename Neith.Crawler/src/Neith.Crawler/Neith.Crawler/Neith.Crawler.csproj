@@ -80,6 +80,7 @@
     <Compile Include="CrawlerRequest.cs" />
     <Compile Include="CrawlerResponse.cs" />
     <Compile Include="CrawlerService.cs" />
+    <Compile Include="CrawlerTraceExtensions.cs" />
     <Compile Include="Extensions\LINQExtensions.cs" />
     <Compile Include="Extensions\LINQXElementExtensions.cs" />
     <Compile Include="Extensions\RxExtensions.cs" />
