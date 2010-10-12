@@ -10,9 +10,9 @@ namespace System.Xml.Linq
     public static class RxXElement
     {
 
-        public static IObservable<XElement> ToXHtmlElement(this IObservable<Stream> rxSt)
+        public static IObservable<XElement> ToXElementHtml(this IObservable<Stream> rxSt)
         {
-            return rxSt.Select(LINQXElementExtensions.ToXHtmlElement);
+            return rxSt.Select(LINQXElementExtensions.ToXElementHtml);
         }
 
     }

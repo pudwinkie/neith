@@ -21,10 +21,17 @@ namespace System.Xml.Linq
         private static readonly XNamespace ns = "http://www.w3.org/1999/xhtml";
 
 
-        public static XElement ToXHtmlElement(this Stream st)
+        public static XElement ToXElementHtml(this Stream st)
         {
-            using (st)
-            using (var reader = new StreamReader(st, Encoding.UTF8))
+            using (st) {
+                var reader = new StreamReader(st, Encoding.UTF8);
+                return reader.ToXElementHtml();
+            }
+        }
+
+        public static XElement ToXElementHtml(this TextReader reader)
+        {
+            using (reader)
             using (var sgml = new SgmlReader()) {
                 sgml.DocType = "HTML";
                 sgml.CaseFolding = CaseFolding.ToLower;
@@ -32,6 +39,7 @@ namespace System.Xml.Linq
                 return XDocument.Load(sgml).Root;
             }
         }
+
 
         /// <summary>
         /// 指定されたクラス名を持つaタグを列挙します。

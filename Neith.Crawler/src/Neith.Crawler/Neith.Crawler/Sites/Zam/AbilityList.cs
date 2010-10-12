@@ -25,7 +25,7 @@ namespace Neith.Crawler.Sites.Zam.AbilityList
                 .AsParallel()
                 .SelectMany(ParseList).NotNull()
                 .Distinct()
-                .Select(url => url.ToXHtmlElement()).NotNull()
+                .Select(url => url.ToXElementHtml()).NotNull()
                 .Take(1)// 試験用に１つで止める
                 .ForAll(ParseItem)
                 ;

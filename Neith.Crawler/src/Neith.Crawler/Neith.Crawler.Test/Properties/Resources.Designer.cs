@@ -61,6 +61,23 @@ namespace Neith.Crawler.Test.Properties {
         }
         
         /// <summary>
+        ///   &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
+        ///&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot; xml:lang=&quot;en&quot;&gt;
+        ///&lt;head&gt;
+        ///  &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html;charset=utf-8&quot;/&gt;
+        ///  &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=8,chrome=1&quot;/&gt;
+        ///  &lt;title&gt;アクション :: Final Fantasy XIV (FFXIV, FF14) :: ZAM&lt;/title&gt;
+        ///  &lt;link rel=&quot;icon&quot; href=&quot;/favicon.ico&quot;/&gt;
+        ///  &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css [残りの文字列は切り詰められました]&quot;; に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string Zam_AbilityList_List {
+            get {
+                return ResourceManager.GetString("Zam_AbilityList_List", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   漢字読み込み試験 に類似しているローカライズされた文字列を検索します。
         /// </summary>
         internal static string Zam_AbilityList_Test {

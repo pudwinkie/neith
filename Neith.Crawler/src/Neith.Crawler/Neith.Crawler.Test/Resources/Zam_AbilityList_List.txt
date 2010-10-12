@@ -1,0 +1,731 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=8,chrome=1"/>
+  <title>アクション :: Final Fantasy XIV (FFXIV, FF14) :: ZAM</title>
+  <link rel="icon" href="/favicon.ico"/>
+  <link rel="stylesheet" type="text/css" href="http://common.zam.com/c/global.css?21"/>
+  <link rel="stylesheet" type="text/css" href="/c/site.css?69" id="css"/>
+  <script type="text/javascript">isIE=false;isIE6=false</script>
+  <!--[if IE 6]><link rel="stylesheet" type="text/css" href="/c/ie6.css?69"/><script type="text/javascript">isIE6=true</script><![endif]-->
+  <!--[if IE]><script type="text/javascript">isIE=true</script><![endif]-->
+  <script type="text/javascript" src="http://common.zam.com/j/global.js?10"></script>
+  <script type="text/javascript" src="http://common.zam.com/jquery.js?1"></script>
+  <script type="text/javascript" src="/j/site.js?2"></script>
+
+<script type="text/javascript" src="http://partner.googleadservices.com/gampad/google_service.js">
+</script>
+<script type="text/javascript">
+ GS_googleAddAdSenseService("ca-pub-9112220576733598");
+ GS_googleEnableAllServices();
+</script>
+<script type="text/javascript">
+ GA_googleAddSlot("ca-pub-9112220576733598", "AKZ_popunders");
+ GA_googleAddSlot("ca-pub-9112220576733598", "AnchorAd_AKZ_1x1");
+</script>
+<script type="text/javascript">
+ GA_googleFetchAds();
+</script>
+
+</head>
+<body class=" non-premium no-tower standard2">
+  <div id="tmpItemFrm"></div>
+  <div id="bg-wrapper">
+  <div id="header"><div id="livesearch"></div><!--[if IE 6]><script>warnIE()</script><![endif]-->
+    <div id="logo"><a href="/"></a></div>
+    <form action="/ja/search.html" name="search"><input name="q" type="text" onfocus="this.select()" value=""/><a href="javascript:document.search.submit();"></a></form><script type="text/javascript">enableLiveSearch()</script>
+    <div id="user-login"><a href="https://secure.zam.com/login.html?action=login">Login</a><a href="https://secure.zam.com/login.html?action=new">Create Account</a><a href="http://www.zam.com/premium.html">Premium Services</a></div>
+    <div id="nav">
+      <ul id="menu_horiz"><li class="has-sub first-child  nc-home"><a href="/">Home</a><div><em></em><var></var><strong></strong><ul><li class="first-child  nc-news"><a href="/news_archives.html">ニュース</a></li><li class="nc-contact-us"><a href="http://www.zam.com/contact.html">連絡先</a></li><li class="last-child  nc-zam-tools"><a href="/enhancements.html">ZAM Tools</a></li></ul></div></li><li class="has-sub  cur nc-database"><a class="no-href">データベース</a><div><em></em><var></var><strong></strong><ul><li class="has-sub first-child  nc-abilities-code"><a href="/ja/abilitylist.html">アクション</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/ja/abilitylist.html?class=3">剣術士</a></li><li><a href="/ja/abilitylist.html?class=22">呪術士</a></li><li><a href="/ja/abilitylist.html?class=40">園芸師</a></li><li><a href="/ja/abilitylist.html?class=23">幻術士</a></li><li><a href="/ja/abilitylist.html?class=7">弓術士</a></li><li><a href="/ja/abilitylist.html?class=32">彫金師</a></li><li><a href="/ja/abilitylist.html?class=39">採掘師</a></li><li><a href="/ja/abilitylist.html?class=4">斧術士</a></li><li><a href="/ja/abilitylist.html?class=29">木工師</a></li><li><a href="/ja/abilitylist.html?class=2">格闘士</a></li><li><a href="/ja/abilitylist.html?class=8">槍術士</a></li><li><a href="/ja/abilitylist.html?class=41">漁師</a></li><li><a href="/ja/abilitylist.html?class=31">甲冑師</a></li><li><a href="/ja/abilitylist.html?class=10">盾術士</a></li><li><a href="/ja/abilitylist.html?class=34">裁縫師</a></li><li><a href="/ja/abilitylist.html?class=36">調理師</a></li><li><a href="/ja/abilitylist.html?class=35">錬金術師</a></li><li><a href="/ja/abilitylist.html?class=30">鍛冶師</a></li><li class=" last-child"><a href="/ja/abilitylist.html?class=33">革細工師</a></li></ul></div></li><li class="has-sub  nc-leves-code"><a href="/ja/levelist.html">リーヴ</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/ja/levelist.html?class=0">戦闘用</a></li><li class="has-sub"><a href="/ja/levelist.html?class=40">園芸師</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/ja/levelist.html?class=40&amp;rank_low=1&amp;rank_high=10">1 - 10</a></li><li><a href="/ja/levelist.html?class=40&amp;rank_low=11&amp;rank_high=20">11 - 20</a></li><li><a href="/ja/levelist.html?class=40&amp;rank_low=21&amp;rank_high=30">21 - 30</a></li><li><a href="/ja/levelist.html?class=40&amp;rank_low=31&amp;rank_high=40">31 - 40</a></li><li class=" last-child"><a href="/ja/levelist.html?class=40&amp;rank_low=41&amp;rank_high=50">41 - 50</a></li></ul></div></li><li class="has-sub"><a href="/ja/levelist.html?class=32">彫金師</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/ja/levelist.html?class=32&amp;rank_low=1&amp;rank_high=10">1 - 10</a></li><li><a href="/ja/levelist.html?class=32&amp;rank_low=11&amp;rank_high=20">11 - 20</a></li><li><a href="/ja/levelist.html?class=32&amp;rank_low=21&amp;rank_high=30">21 - 30</a></li><li><a href="/ja/levelist.html?class=32&amp;rank_low=31&amp;rank_high=40">31 - 40</a></li><li class=" last-child"><a href="/ja/levelist.html?class=32&amp;rank_low=41&amp;rank_high=50">41 - 50</a></li></ul></div></li><li class="has-sub"><a href="/ja/levelist.html?class=39">採掘師</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/ja/levelist.html?class=39&amp;rank_low=1&amp;rank_high=10">1 - 10</a></li><li><a href="/ja/levelist.html?class=39&amp;rank_low=11&amp;rank_high=20">11 - 20</a></li><li><a href="/ja/levelist.html?class=39&amp;rank_low=21&amp;rank_high=30">21 - 30</a></li><li><a href="/ja/levelist.html?class=39&amp;rank_low=31&amp;rank_high=40">31 - 40</a></li><li class=" last-child"><a href="/ja/levelist.html?class=39&amp;rank_low=41&amp;rank_high=50">41 - 50</a></li></ul></div></li><li class="has-sub"><a href="/ja/levelist.html?class=29">木工師</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/ja/levelist.html?class=29&amp;rank_low=1&amp;rank_high=10">1 - 10</a></li><li><a href="/ja/levelist.html?class=29&amp;rank_low=11&amp;rank_high=20">11 - 20</a></li><li><a href="/ja/levelist.html?class=29&amp;rank_low=21&amp;rank_high=30">21 - 30</a></li><li><a href="/ja/levelist.html?class=29&amp;rank_low=31&amp;rank_high=40">31 - 40</a></li><li class=" last-child"><a href="/ja/levelist.html?class=29&amp;rank_low=41&amp;rank_high=50">41 - 50</a></li></ul></div></li><li class="has-sub"><a href="/ja/levelist.html?class=41">漁師</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/ja/levelist.html?class=41&amp;rank_low=1&amp;rank_high=10">1 - 10</a></li><li><a href="/ja/levelist.html?class=41&amp;rank_low=11&amp;rank_high=20">11 - 20</a></li><li><a href="/ja/levelist.html?class=41&amp;rank_low=21&amp;rank_high=30">21 - 30</a></li><li><a href="/ja/levelist.html?class=41&amp;rank_low=31&amp;rank_high=40">31 - 40</a></li><li class=" last-child"><a href="/ja/levelist.html?class=41&amp;rank_low=41&amp;rank_high=50">41 - 50</a></li></ul></div></li><li class="has-sub"><a href="/ja/levelist.html?class=31">甲冑師</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/ja/levelist.html?class=31&amp;rank_low=1&amp;rank_high=10">1 - 10</a></li><li><a href="/ja/levelist.html?class=31&amp;rank_low=11&amp;rank_high=20">11 - 20</a></li><li><a href="/ja/levelist.html?class=31&amp;rank_low=21&amp;rank_high=30">21 - 30</a></li><li><a href="/ja/levelist.html?class=31&amp;rank_low=31&amp;rank_high=40">31 - 40</a></li><li class=" last-child"><a href="/ja/levelist.html?class=31&amp;rank_low=41&amp;rank_high=50">41 - 50</a></li></ul></div></li><li class="has-sub"><a href="/ja/levelist.html?class=34">裁縫師</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/ja/levelist.html?class=34&amp;rank_low=1&amp;rank_high=10">1 - 10</a></li><li><a href="/ja/levelist.html?class=34&amp;rank_low=11&amp;rank_high=20">11 - 20</a></li><li><a href="/ja/levelist.html?class=34&amp;rank_low=21&amp;rank_high=30">21 - 30</a></li><li><a href="/ja/levelist.html?class=34&amp;rank_low=31&amp;rank_high=40">31 - 40</a></li><li class=" last-child"><a href="/ja/levelist.html?class=34&amp;rank_low=41&amp;rank_high=50">41 - 50</a></li></ul></div></li><li class="has-sub"><a href="/ja/levelist.html?class=36">調理師</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/ja/levelist.html?class=36&amp;rank_low=1&amp;rank_high=10">1 - 10</a></li><li><a href="/ja/levelist.html?class=36&amp;rank_low=11&amp;rank_high=20">11 - 20</a></li><li><a href="/ja/levelist.html?class=36&amp;rank_low=21&amp;rank_high=30">21 - 30</a></li><li><a href="/ja/levelist.html?class=36&amp;rank_low=31&amp;rank_high=40">31 - 40</a></li><li class=" last-child"><a href="/ja/levelist.html?class=36&amp;rank_low=41&amp;rank_high=50">41 - 50</a></li></ul></div></li><li class="has-sub"><a href="/ja/levelist.html?class=35">錬金術師</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/ja/levelist.html?class=35&amp;rank_low=1&amp;rank_high=10">1 - 10</a></li><li><a href="/ja/levelist.html?class=35&amp;rank_low=11&amp;rank_high=20">11 - 20</a></li><li><a href="/ja/levelist.html?class=35&amp;rank_low=21&amp;rank_high=30">21 - 30</a></li><li><a href="/ja/levelist.html?class=35&amp;rank_low=31&amp;rank_high=40">31 - 40</a></li><li class=" last-child"><a href="/ja/levelist.html?class=35&amp;rank_low=41&amp;rank_high=50">41 - 50</a></li></ul></div></li><li class="has-sub"><a href="/ja/levelist.html?class=30">鍛冶師</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/ja/levelist.html?class=30&amp;rank_low=1&amp;rank_high=10">1 - 10</a></li><li><a href="/ja/levelist.html?class=30&amp;rank_low=11&amp;rank_high=20">11 - 20</a></li><li><a href="/ja/levelist.html?class=30&amp;rank_low=21&amp;rank_high=30">21 - 30</a></li><li><a href="/ja/levelist.html?class=30&amp;rank_low=31&amp;rank_high=40">31 - 40</a></li><li class=" last-child"><a href="/ja/levelist.html?class=30&amp;rank_low=41&amp;rank_high=50">41 - 50</a></li></ul></div></li><li class="has-sub last-child"><a href="/ja/levelist.html?class=33">革細工師</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/ja/levelist.html?class=33&amp;rank_low=1&amp;rank_high=10">1 - 10</a></li><li><a href="/ja/levelist.html?class=33&amp;rank_low=11&amp;rank_high=20">11 - 20</a></li><li><a href="/ja/levelist.html?class=33&amp;rank_low=21&amp;rank_high=30">21 - 30</a></li><li><a href="/ja/levelist.html?class=33&amp;rank_low=31&amp;rank_high=40">31 - 40</a></li><li class=" last-child"><a href="/ja/levelist.html?class=33&amp;rank_low=41&amp;rank_high=50">41 - 50</a></li></ul></div></li></ul></div></li><li class="has-sub  nc-items-code"><a href="/ja/itemlist.html">アイテム</a><div><em></em><var></var><strong></strong><ul><li class="has-sub first-child"><a href="/ja/itemlist.html?type=armor">防具</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/ja/itemlist.html?slot=42">カウル</a></li><li><a href="/ja/itemlist.html?slot=16">帯</a></li><li><a href="/ja/itemlist.html?slot=14">手</a></li><li><a href="/ja/itemlist.html?slot=43">手首</a></li><li><a href="/ja/itemlist.html?slot=47">指</a></li><li><a href="/ja/itemlist.html?slot=45">耳</a></li><li><a href="/ja/itemlist.html?slot=11">胴</a></li><li><a href="/ja/itemlist.html?slot=10">胴（インナー） </a></li><li><a href="/ja/itemlist.html?slot=13">脚</a></li><li><a href="/ja/itemlist.html?slot=12">脚（インナー） </a></li><li><a href="/ja/itemlist.html?slot=15">足</a></li><li><a href="/ja/itemlist.html?slot=9">頭</a></li><li class=" last-child"><a href="/ja/itemlist.html?slot=17">首</a></li></ul></div></li><li class="has-sub"><a href="/ja/itemlist.html?type=weapon">武器</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/ja/itemlist.html?type=weapon&amp;class=3">剣術士</a></li><li><a href="/ja/itemlist.html?type=weapon&amp;class=22">呪術士</a></li><li><a href="/ja/itemlist.html?type=weapon&amp;class=23">幻術士</a></li><li><a href="/ja/itemlist.html?type=weapon&amp;class=7">弓術士</a></li><li><a href="/ja/itemlist.html?type=weapon&amp;class=4">斧術士</a></li><li><a href="/ja/itemlist.html?type=weapon&amp;class=2">格闘士</a></li><li><a href="/ja/itemlist.html?type=weapon&amp;class=8">槍術士</a></li><li class=" last-child"><a href="/ja/itemlist.html?slot=2">盾</a></li></ul></div></li><li class="has-sub"><a href="/ja/itemlist.html?type=tool">道具</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/ja/itemlist.html?type=tool&amp;class=40">園芸師</a></li><li><a href="/ja/itemlist.html?type=tool&amp;class=32">彫金師</a></li><li><a href="/ja/itemlist.html?type=tool&amp;class=39">採掘師</a></li><li><a href="/ja/itemlist.html?type=tool&amp;class=29">木工師</a></li><li><a href="/ja/itemlist.html?type=tool&amp;class=41">漁師</a></li><li><a href="/ja/itemlist.html?type=tool&amp;class=31">甲冑師</a></li><li><a href="/ja/itemlist.html?type=tool&amp;class=34">裁縫師</a></li><li><a href="/ja/itemlist.html?type=tool&amp;class=36">調理師</a></li><li><a href="/ja/itemlist.html?type=tool&amp;class=35">錬金術師</a></li><li><a href="/ja/itemlist.html?type=tool&amp;class=30">鍛冶師</a></li><li class=" last-child"><a href="/ja/itemlist.html?type=tool&amp;class=33">革細工師</a></li></ul></div></li><li class="has-sub last-child"><a href="/ja/itemlist.html?slot=0">他</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/ja/itemlist.html?type=food">食品</a></li><li><a href="/ja/itemlist.html?type=potion">ポーション</a></li><li><a href="/ja/itemlist.html?type=ing">素材</a></li><li><a href="/ja/itemlist.html?type=training">手引</a></li><li class=" last-child"><a href="/ja/itemlist.html?itemkind=1019">トークン</a></li></ul></div></li></ul></div></li><li class="has-sub  nc-harvesting-code"><a href="/ja/harvestlist.html">採集</a><div><em></em><var></var><strong></strong><ul><li class="has-sub first-child"><a href="/ja/harvestlist.html?class=39">採掘師</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/ja/harvestlist.html?command=22006">採掘２</a></li><li class=" last-child"><a href="/ja/harvestlist.html?command=22002">採掘</a></li></ul></div></li><li class="has-sub"><a href="/ja/harvestlist.html?class=40">園芸師</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/ja/harvestlist.html?command=22003">採取</a></li><li class=" last-child"><a href="/ja/harvestlist.html?command=22007">採取２</a></li></ul></div></li><li class="has-sub last-child"><a href="/ja/harvestlist.html?class=41">漁師</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/ja/harvestlist.html?command=22004">釣り</a></li><li class=" last-child"><a href="/ja/harvestlist.html?command=22008">釣り２</a></li></ul></div></li></ul></div></li><li class="has-sub  nc-mobs-code"><a href="/ja/moblist.html">NPC／モンスター</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/ja/moblist.html?zone=6">黒衣森</a></li><li><a href="/ja/moblist.html?zone=11">カッパーベル銅山</a></li><li><a href="/ja/moblist.html?zone=7">ウルダハ</a></li><li><a href="/ja/moblist.html?zone=9">クルザス</a></li><li><a href="/ja/moblist.html?zone=2">リムサ・ロミンサ</a></li><li><a href="/ja/moblist.html?zone=12">ナナワ銀山</a></li><li><a href="/ja/moblist.html?zone=15">霧髭入江</a></li><li><a href="/ja/moblist.html?zone=14">タムタラの墓所</a></li><li><a href="/ja/moblist.html?zone=8">グリダニア</a></li><li><a href="/ja/moblist.html?zone=1">ラノシア</a></li><li><a href="/ja/moblist.html?zone=16">浮海月の巌穴</a></li><li><a href="/ja/moblist.html?zone=10">モードゥナ</a></li><li><a href="/ja/moblist.html?zone=13">ムントゥイ醸造庫</a></li><li class=" last-child"><a href="/ja/moblist.html?zone=5">ザナラーン</a></li></ul></div></li><li class="nc-quests-code"><a href="/ja/questlist.html">クエスト</a></li><li class="has-sub  nc-recipes-code"><a href="/ja/recipelist.html">レシピ</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/ja/recipelist.html?class=32">彫金師</a></li><li><a href="/ja/recipelist.html?class=29">木工師</a></li><li><a href="/ja/recipelist.html?class=31">甲冑師</a></li><li><a href="/ja/recipelist.html?class=34">裁縫師</a></li><li><a href="/ja/recipelist.html?class=36">調理師</a></li><li><a href="/ja/recipelist.html?class=35">錬金術師</a></li><li><a href="/ja/recipelist.html?class=30">鍛冶師</a></li><li class=" last-child"><a href="/ja/recipelist.html?class=33">革細工師</a></li></ul></div></li><li class="has-sub last-child  nc-zones-code"><a href="/ja/zonelist.html">エリア</a><div><em></em><var></var><strong></strong><ul><li class="has-sub first-child"><a href="/ja/zonelist.html?type=City">都市</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/ja/zone.html?ffxivzone=7">ウルダハ</a></li><li><a href="/ja/zone.html?ffxivzone=8">グリダニア</a></li><li class=" last-child"><a href="/ja/zone.html?ffxivzone=2">リムサ・ロミンサ</a></li></ul></div></li><li class="has-sub"><a href="/ja/zonelist.html?type=Outdoor">フィールド</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/ja/zone.html?ffxivzone=9">クルザス</a></li><li><a href="/ja/zone.html?ffxivzone=5">ザナラーン</a></li><li><a href="/ja/zone.html?ffxivzone=10">モードゥナ</a></li><li><a href="/ja/zone.html?ffxivzone=1">ラノシア</a></li><li class=" last-child"><a href="/ja/zone.html?ffxivzone=6">黒衣森</a></li></ul></div></li><li class="has-sub last-child"><a href="/ja/zonelist.html?type=Dungeon">ダンジョン</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/ja/zone.html?ffxivzone=11">カッパーベル銅山</a></li><li><a href="/ja/zone.html?ffxivzone=14">タムタラの墓所</a></li><li><a href="/ja/zone.html?ffxivzone=12">ナナワ銀山</a></li><li><a href="/ja/zone.html?ffxivzone=13">ムントゥイ醸造庫</a></li><li><a href="/ja/zone.html?ffxivzone=16">浮海月の巌穴</a></li><li class=" last-child"><a href="/ja/zone.html?ffxivzone=15">霧髭入江</a></li></ul></div></li></ul></div></li></ul></div></li><li class="has-sub  nc-wiki"><a href="/wiki/">ウィキ</a><div><em></em><var></var><strong></strong><ul><li class="has-sub first-child  nc-classes"><a href="/wiki/Classes_(FFXIV)">クラス</a><div><em></em><var></var><strong></strong><ul><li class="has-sub first-child"><a class="no-href">Disciples of War</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/wiki/Archer_(FFXIV)">Archer</a></li><li><a href="/wiki/Gladiator_(FFXIV)">Gladiator</a></li><li><a href="/wiki/Marauder_(FFXIV)">Marauder</a></li><li><a href="/wiki/Pugilist_(FFXIV)">Pugilist</a></li><li class=" last-child"><a href="/wiki/Lancer_(FFXIV)">Lancer</a></li></ul></div></li><li class="has-sub"><a class="no-href">Disciples of Magic</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/wiki/Conjurer_(FFXIV)">Conjurer</a></li><li class=" last-child"><a href="/wiki/Thaumaturge_(FFXIV)">Thaumaturge</a></li></ul></div></li><li class="has-sub"><a class="no-href">Disciples of the Hand</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/wiki/Alchemist_(FFXIV)">Alchemist</a></li><li><a href="/wiki/Armorer_(FFXIV)">Armorer</a></li><li><a href="/wiki/Blacksmith_(FFXIV)">Blacksmith</a></li><li><a href="/wiki/Carpenter_(FFXIV)">Carpenter</a></li><li><a href="/wiki/Culinarian_(FFXIV)">Culinarian</a></li><li><a href="/wiki/Goldsmith_(FFXIV)">Goldsmith</a></li><li><a href="/wiki/Leatherworker_(FFXIV)">Leatherworker</a></li><li class=" last-child"><a href="/wiki/Weaver_(FFXIV)">Weaver</a></li></ul></div></li><li class="has-sub last-child"><a class="no-href">Disciples of the Land</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/wiki/Botanist_(FFXIV)">Botanist</a></li><li><a href="/wiki/Fisher_(FFXIV)">Fisher</a></li><li class=" last-child"><a href="/wiki/Miner_(FFXIV)">Miner</a></li></ul></div></li></ul></div></li><li class="has-sub  nc-races"><a href="/wiki/Player_Races_(FFXIV)">種族</a><div><em></em><var></var><strong></strong><ul><li class="has-sub first-child"><a href="/wiki/Player_Races_(FFXIV)#Elezen">Elezen</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/wiki/Wildwood_Elezen">Wildwood Elezen</a></li><li class=" last-child"><a href="/wiki/Duskwight_Elezen">Duskwight Elezen</a></li></ul></div></li><li class="has-sub"><a href="/wiki/Player_Races_(FFXIV)#Hyur">Hyur</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/wiki/Midland_Hyur">Midland Hyur</a></li><li class=" last-child"><a href="/wiki/Highland_Hyur">Highland Hyur</a></li></ul></div></li><li class="has-sub"><a href="/wiki/Player_Races_(FFXIV)#Lalafell">Lalafell</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/wiki/Plainsfolk">Plainsfolk</a></li><li class=" last-child"><a href="/wiki/Dunesfolk">Dunesfolk</a></li></ul></div></li><li class="has-sub"><a href="/wiki/Player_Races_(FFXIV)#Miqo'te">Miqo'te</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/wiki/Seekers_of_the_Sun">Seekers of the Sun</a></li><li class=" last-child"><a href="/wiki/Keepers_of_the_Moon">Keepers of the Moon</a></li></ul></div></li><li class="has-sub last-child"><a href="/wiki/Player_Races_(FFXIV)#Roegadyn">Roegadyn</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/wiki/Sea_Wolves">Sea Wolves</a></li><li class=" last-child"><a href="/wiki/Hellsguard">Hellsguard</a></li></ul></div></li></ul></div></li><li class="nc-armoury-system"><a href="/wiki/Armoury_System_(FFXIV)">アーマリーシステム</a></li><li class="nc-battle-system"><a href="/wiki/Battle_System_(FFXIV)">戦闘システム</a></li><li class="nc-crafting"><a href="/wiki/Crafting_in_Final_Fantasy_XIV">生産</a></li><li class="nc-guildleves"><a href="/wiki/Guildleves">ギルドリーヴ</a></li><li class="nc-editorials"><a href="/wiki/Editorials">コラム</a></li><li class="last-child  nc-recent-changes"><a href="/wiki.html?limit=50&amp;category=Final_Fantasy_XIV&amp;bot=0&amp;p=Special%3ARecent_changes">最近の更新</a></li></ul></div></li><li class="has-sub  nc-forums"><a href="/forum.html?cat=153&amp;csforums=1">フォーラム</a><div><em></em><var></var><strong></strong><ul><li class="first-child  nc-all-ffxiv"><a href="/forum.html?cat=153">All FFXIV</a></li><li class="has-sub  nc-ffxiv-general"><a href="/forum.html?game=268">FFXIV General</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/forum.html?game=268">  FFXIV General Discussion Forum</a></li><li class=" last-child"><a href="/forum.html?forum=173"> FFXIV Feedback Forum</a></li></ul></div></li><li class="has-sub  nc-class-forums"><a href="/forum.html?cat=172">Class Forums</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/forum.html?forum=180">Alchemist</a></li><li><a href="/forum.html?forum=174">Archer</a></li><li><a href="/forum.html?forum=190">Armorer</a></li><li><a href="/forum.html?forum=181">Blacksmith</a></li><li><a href="/forum.html?forum=191">Botanist</a></li><li><a href="/forum.html?forum=192">Carpenter</a></li><li><a href="/forum.html?forum=178">Conjurer</a></li><li><a href="/forum.html?forum=182">Culinarian</a></li><li><a href="/forum.html?forum=193">Fisher</a></li><li><a href="/forum.html?forum=175">Gladiator</a></li><li><a href="/forum.html?forum=194">Goldsmith</a></li><li><a href="/forum.html?forum=186">Lancer</a></li><li><a href="/forum.html?forum=195">Leatherworker</a></li><li><a href="/forum.html?forum=176">Marauder</a></li><li><a href="/forum.html?forum=185">Miner</a></li><li><a href="/forum.html?forum=177">Pugilist</a></li><li><a href="/forum.html?forum=179">Thaumaturge</a></li><li class=" last-child"><a href="/forum.html?forum=184">Weaver</a></li></ul></div></li><li class="has-sub  nc-server-forums"><a href="/forum.html?cat=189">サーバ別</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/forum.html?forum=197">Besaid</a></li><li><a href="/forum.html?forum=196">Bodhum</a></li><li><a href="/forum.html?forum=198">Cornelia</a></li><li><a href="/forum.html?forum=217">Fabul</a></li><li><a href="/forum.html?forum=199">Figaro</a></li><li><a href="/forum.html?forum=200">Gysahl</a></li><li><a href="/forum.html?forum=201">Istory</a></li><li><a href="/forum.html?forum=202">Kashuan</a></li><li><a href="/forum.html?forum=203">Lindblum</a></li><li><a href="/forum.html?forum=204">Melmond</a></li><li><a href="/forum.html?forum=205">Mysidia</a></li><li><a href="/forum.html?forum=206">Palamecia</a></li><li><a href="/forum.html?forum=207">Rabanastre</a></li><li><a href="/forum.html?forum=208">Saronia</a></li><li><a href="/forum.html?forum=209">Selbina</a></li><li><a href="/forum.html?forum=210">Trabia</a></li><li class=" last-child"><a href="/forum.html?forum=211">Wutai</a></li></ul></div></li><li class="has-sub  nc-cross-site"><a href="/forum.html?cat=9">Cross Site</a><div><em></em><var></var><strong></strong><ul><li class=" first-child"><a href="/forum.html?forum=3">Site Feedback</a></li><li><a href="/forum.html?forum=82">Wikibase Feedback</a></li><li><a href="/forum.html?forum=22">General Game Discussion</a></li><li><a href="/forum.html?forum=5">TV, Movies, Anime &amp; Books</a></li><li><a href="/forum.html?forum=25">Computer Hardware &amp; Troubleshooting</a></li><li><a href="/forum.html?forum=28">Out of Topic</a></li><li class=" last-child"><a href="/forum.html?forum=4">The Asylum</a></li></ul></div></li><li class="nc-live-forum-updates"><a href="/live.html">Live Forum Updates</a></li><li class="last-child  nc-forum-search"><a href="/fsearch.html">Forum Search</a></li></ul></div></li><li class="nc-server-status-code"><a href="/ja/serverstatus.html">サーバーステータス</a></li></ul>
+    </div>
+    <div id="header-misc"><span id="lang"><span><b><i></i>日本語</b></span><ul><li class="empty"><em></em><var></var></li>
+        <li><a href="/en/abilitylist.html?setcookie=1">English</a></li>
+        <li><a href="/de/abilitylist.html?setcookie=1">Deutsch</a></li>
+        <li><a href="/fr/abilitylist.html?setcookie=1">Fran&#231;ais</a></li>
+        <li><a href="/ja/abilitylist.html?setcookie=1" class="cur">日本語</a></li></ul></span>
+      <span id="network">
+        <span></span><ul>
+          <li class="empty"><em></em><var></var></li>
+          <li><a class="icon-generic" href="http://www.zam.com/">MMO News &amp; Info</a></li>
+          <li><a class="icon-aion" href="http://aion.zam.com/">Aion</a></li>
+          <li><a class="icon-daoc" href="http://camelot.allakhazam.com/">Dark Age of Camelot</a></li>
+          <li><a class="icon-eve" href="http://eve.allakhazam.com/">EVE Online</a></li>
+          <li><a class="icon-eq" href="http://everquest.allakhazam.com/">EverQuest</a></li>
+          <li><a class="icon-eq2" href="http://eq2.zam.com/">EverQuest II</a></li>
+          <li><a class="icon-eqoa" href="http://eqoa.allakhazam.com/">EQOA</a></li>
+          <li><a class="icon-ffxi" href="http://ffxi.allakhazam.com/">Final Fantasy XI</a></li>
+          <li><a class="icon-ffxiv" href="http://ffxiv.zam.com/">Final Fantasy XIV</a></li>
+          <li><a class="icon-fr" href="http://fr.zam.com/">FreeRealms</a></li>
+          <li><a class="icon-lotro" href="http://lotro.allakhazam.com/">Lord of the Rings Online</a></li>
+          <li><a class="icon-swg" href="http://swg.allakhazam.com/">Star Wars Galaxies</a></li>
+          <li><a class="icon-tera" href="http://tera.zam.com/">TERA</a></li>
+          <li><a class="icon-war" href="http://war.allakhazam.com/">Warhammer Online</a></li>
+          <li><a class="icon-wow" href="http://wow.allakhazam.com/">World of Warcraft</a></li>
+          <li class="divider"></li>
+          <li><a class="icon-mmoui" href="http://www.mmoui.com/">MMOUI</a></li>
+          <li><a class="icon-ts" href="http://www.tankspot.com/">TankSpot</a></li>
+          <li><a class="icon-tb" href="http://www.thottbot.com/">Thottbot</a></li>
+          <li><a class="icon-wh" href="http://www.wowhead.com/">Wowhead</a></li>
+        </ul>
+      </span>
+    <i></i></div><script type="text/javascript">standard2Nav()</script>
+  </div>
+  <div id="wrapper">
+    <div id="shadows"><div id="s-top"></div><div id="s-bot"></div><div id="s-left"></div><div id="s-right"></div></div>
+    <div id="body"><div id="buffer-top"></div>
+      <div id="row-top">
+        <div id="mini-features"><a href="http://www.zam.com/bffreport.html" style="background:url(http://common.zam.com/i/promos/bff-mini.jpg)" onclick="javascript:pageTracker._trackEvent('zam_minifeatures','clickthrough','bffreport_minifeature');" target="_blank"></a>
+
+<a href="http://ffxiv.zam.com/story.html?story=23343" style="background:url(http://common.zam.com/i/promos/xivguide-mini.jpg)" onclick="javascript:pageTracker._trackEvent('zam_minifeatures','clickthrough','xivguide_minifeature');"></a></div>
+        <div id="bannerMain"><iframe src="http://common.allakhazam.com/ads/banner-ffxiv.zam.html?j=1794265" name="bannerMain" width="728" height="90" frameborder="0" scrolling="no"></iframe></div>
+      </div>
+      <div id="cols">
+        <div id="col-right">
+
+        </div>
+        <div id="col-main">
+
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-1459431-39");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+<!-- Start Quantcast tag --> <script type="text/javascript" src="http://edge.quantserve.com/quant.js"></script> <script type="text/javascript"> _qacct="p-80xBzMhbKolFI";quantserve();</script> <noscript> <img src="http://pixel.quantserve.com/pixel/p-80xBzMhbKolFI.gif" style="display: none" height="1" width="1" alt="Quantcast"/></noscript> <!-- End Quantcast tag -->
+
+<script type="text/javascript">GA_googleFillSlot("AKZ_popunders"); GA_googleFillSlot("AnchorAd_AKZ_1x1");</script>
+<div style="float:right"><div id="cubeAd"><iframe id="ad300" src="http://common.allakhazam.com/ads/cube-ffxiv.zam.html?j=7765134" name="cubeAd" width="300" height="250" frameborder="0" scrolling="no"></iframe></div></div><h1 style="margin:0">アクション</h1>
+
+<ul class="path">
+  <li class="root"><b>Database</b></li>
+  <li class="has-sub">アクション<div style="display:none"><div><em></em><var></var><strong></strong><ul>  <li class="cur first-child"><a href="/ja/abilitylist.html?1">アクション</a></li>
+  <li class=""><a href="/ja/levelist.html?1">リーヴ</a></li>
+  <li class=""><a href="/ja/harvestlist.html?1">採集</a></li>
+  <li class=""><a href="/ja/itemlist.html?1">アイテム</a></li>
+  <li class=""><a href="/ja/moblist.html?1">NPC／モンスター</a></li>
+  <li class=""><a href="/ja/questlist.html?1">クエスト</a></li>
+  <li class=""><a href="/ja/recipelist.html?1">レシピ</a></li>
+  <li class=" last-child"><a href="/ja/zonelist.html?1">エリア</a></li>
+</ul></div></div></li>
+</ul>
+<div style="clear:left"></div>
+
+
+
+    <div id="itemfilters" class="listfilters">
+      <form id="abilitylistfilter" action="/ja/abilitylist.html">
+        <table style="float:left;margin-bottom:0">
+
+          <tr>
+            <td><label for="filter-name">名称</label></td>
+            <td><input type="text" id="filter-name" name="name" value="" /> </td>
+            <td><label for="filter-rank_low">ランク</label></td>
+            <td>
+              <input type="text" size="4" id="filter-rank_low" name="rank_low" value="" maxlength="3" />
+              <label for="filter-rank_high"> &nbsp; ～ &nbsp; </label>
+              <input type="text" size="4" id="filter-rank_high" name="rank_high" value="" maxlength="3" />
+            </td>
+          </tr>
+          <tr>
+            <td><label for="filter-class">クラス</label></td>
+            <td><select name="class" >
+<option selected="selected" value=""></option>
+<option value="3">剣術士</option>
+<option value="22">呪術士</option>
+<option value="40">園芸師</option>
+<option value="23">幻術士</option>
+<option value="7">弓術士</option>
+<option value="32">彫金師</option>
+<option value="39">採掘師</option>
+<option value="4">斧術士</option>
+<option value="29">木工師</option>
+<option value="2">格闘士</option>
+<option value="8">槍術士</option>
+<option value="41">漁師</option>
+<option value="31">甲冑師</option>
+<option value="10">盾術士</option>
+<option value="34">裁縫師</option>
+<option value="36">調理師</option>
+<option value="35">錬金術師</option>
+<option value="30">鍛冶師</option>
+<option value="33">革細工師</option>
+</select>&nbsp;&nbsp;<select name="equip" >
+<option selected="selected" value="1">Exclusive</option>
+<option value="2">All Usable</option>
+</select> </td>
+            <td><label for="filter-order_by">ソート</label></td>
+            <td><select name="order_by" >
+<option selected="selected" value=""></option>
+<option value="classname">Class</option>
+<option value="description">Description</option>
+<option value="name">Name</option>
+<option value="rank">Rank</option>
+</select> </td>
+          </tr>
+        </table>
+        <div class="clear-left">
+          <button type="submit">絞り込む</button>
+        </div>
+      </form>
+    </div>
+  <div class="pagesel"><p class="pagersummary">Viewing <b>1</b> to <b>50</b> of <b>443</b> entries. You may want to add some filters.</p><div class="pages"><span class="non-box prev">&laquo; Previous</span> <span>1</span> <a href="/ja/abilitylist.html?1&amp;page=2">2</a> <a href="/ja/abilitylist.html?1&amp;page=3">3</a> <a href="/ja/abilitylist.html?1&amp;page=4">4</a> <a href="/ja/abilitylist.html?1&amp;page=5">5</a> <a href="/ja/abilitylist.html?1&amp;page=6">6</a> <a href="/ja/abilitylist.html?1&amp;page=7">7</a> <a href="/ja/abilitylist.html?1&amp;page=8">8</a> <a href="/ja/abilitylist.html?1&amp;page=9">9</a> <a href="/ja/abilitylist.html?1&amp;page=2" class="non-box next">Next &raquo;</a><div class="clear"></div></div></div>
+    <table class="datatable sortable">
+      <thead>
+        <tr>
+
+          <th>名称</th>
+          <th>説明</th>
+          <th>ランク</th>
+          <th>クラス</th>
+
+        </tr>
+      </thead>
+      <tbody>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=28930" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C008B.png" alt=""/><b></b></span>ファイア</a></td>
+        <td valign="top">火焔の渦を巻き起こす幻術魔法。
+[目標と、その周囲の敵に火撃ダメージ]</td>
+        <td valign="top">1</td>
+        <td valign="top">幻術士</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=28936" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C008C.png" alt=""/><b></b></span>ブリザド</a></td>
+        <td valign="top">吹雪の渦を巻き起こす幻術魔法。
+[目標と、その周囲の敵に氷撃ダメージ]</td>
+        <td valign="top">1</td>
+        <td valign="top">幻術士</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=28941" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C008F.png" alt=""/><b></b></span>エアロ</a></td>
+        <td valign="top">突風の渦を巻き起こす幻術魔法。
+[目標と、その周囲の敵に風撃ダメージ]</td>
+        <td valign="top">1</td>
+        <td valign="top">幻術士</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=28946" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C0090.png" alt=""/><b></b></span>ストーン</a></td>
+        <td valign="top">石礫の渦を巻き起こす幻術魔法。
+[目標と、その周囲の敵に土撃ダメージ]</td>
+        <td valign="top">1</td>
+        <td valign="top">幻術士</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=26645" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C00D5.png" alt=""/><b></b></span>拳撃</a></td>
+        <td valign="top">ジャブを放つ。
+[目標に打撃ダメージ。物理防御＆物理回避＋]</td>
+        <td valign="top">1</td>
+        <td valign="top">格闘士</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=28951" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C008D.png" alt=""/><b></b></span>サンダー</a></td>
+        <td valign="top">雷電の渦を巻き起こす幻術魔法。
+[目標と、その周囲の敵に雷撃ダメージ]</td>
+        <td valign="top">1</td>
+        <td valign="top">幻術士</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=29720" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C01C6.png" alt=""/><b></b></span>意志堅固</a></td>
+        <td valign="top">Remainderの減少率－。</td>
+        <td valign="top">1</td>
+        <td valign="top">採掘師</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=29722" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C01C7.png" alt=""/><b></b></span>剛毅木訥</a></td>
+        <td valign="top">Remainderの減少率－。</td>
+        <td valign="top">1</td>
+        <td valign="top">園芸師</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=29723" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C01CB.png" alt=""/><b></b></span>鉄腸強胆</a></td>
+        <td valign="top">Remainderの減少率－。</td>
+        <td valign="top">1</td>
+        <td valign="top">漁師</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=28956" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C008E.png" alt=""/><b></b></span>ウォータ</a></td>
+        <td valign="top">水煙の渦を巻き起こす幻術魔法。
+[目標と、その周囲の敵に水撃ダメージ]</td>
+        <td valign="top">1</td>
+        <td valign="top">幻術士</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=29724" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C01CA.png" alt=""/><b></b></span>石理識別</a></td>
+        <td valign="top">クオリティの高いアイテムの入手確率＋。</td>
+        <td valign="top">1</td>
+        <td valign="top">採掘師</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=29725" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C01C8.png" alt=""/><b></b></span>樹相識別</a></td>
+        <td valign="top">クオリティの高いアイテムの入手確率＋。</td>
+        <td valign="top">1</td>
+        <td valign="top">園芸師</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=22302" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C00CF.png" alt=""/><b></b></span>呪弾</a></td>
+        <td valign="top">呪術で生み出した弾を放つ。
+[目標にダメージ。得物に応じて攻撃種変化]</td>
+        <td valign="top">1</td>
+        <td valign="top">呪術士</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=29726" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C01C9.png" alt=""/><b></b></span>魚影識別</a></td>
+        <td valign="top">クオリティの高いアイテムの入手確率＋。</td>
+        <td valign="top">1</td>
+        <td valign="top">漁師</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=22303" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C00D0.png" alt=""/><b></b></span>幻矢</a></td>
+        <td valign="top">幻術で生み出した弾を放つ。
+[目標にダメージ。得物に応じて攻撃種変化]</td>
+        <td valign="top">1</td>
+        <td valign="top">幻術士</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=29727" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C01C6.png" alt=""/><b></b></span>岩石学</a></td>
+        <td valign="top">Aim（アイテムをねらう）時の命中精度＋。</td>
+        <td valign="top">1</td>
+        <td valign="top">採掘師</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=22304" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C0000.png" alt=""/><b></b></span>マジックミサイル</a></td>
+        <td valign="top">巴術で攻撃する</td>
+        <td valign="top">1</td>
+        <td valign="top">All</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=29728" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C01C7.png" alt=""/><b></b></span>樹木学</a></td>
+        <td valign="top">Aim（アイテムをねらう）時の命中範囲＋。</td>
+        <td valign="top">1</td>
+        <td valign="top">園芸師</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=29729" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C01CB.png" alt=""/><b></b></span>海洋学</a></td>
+        <td valign="top">クリスタル入手確率アップ。</td>
+        <td valign="top">1</td>
+        <td valign="top">漁師</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=29730" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C01C6.png" alt=""/><b></b></span>ナルザルの加護</a></td>
+        <td valign="top">自身の炎属性が一時的に＋。</td>
+        <td valign="top">1</td>
+        <td valign="top">採掘師</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=22307" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C0000.png" alt=""/><b></b></span>巴術アイテム作成</a></td>
+        <td valign="top">巴術アイテムを生成する</td>
+        <td valign="top">1</td>
+        <td valign="top">巴術士</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=29731" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C01CA.png" alt=""/><b></b></span>メネフィナの加護</a></td>
+        <td valign="top">自身の氷属性が一時的に＋。</td>
+        <td valign="top">1</td>
+        <td valign="top">採掘師</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=29732" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C01C7.png" alt=""/><b></b></span>ノフィカの加護</a></td>
+        <td valign="top">自身の土属性が一時的に＋。</td>
+        <td valign="top">1</td>
+        <td valign="top">園芸師</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=22309" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C0000.png" alt=""/><b></b></span>巴術アイテム使用</a></td>
+        <td valign="top">巴術アイテムを設置／発動する</td>
+        <td valign="top">1</td>
+        <td valign="top">巴術士</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=29733" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C01C9.png" alt=""/><b></b></span>リムレーンの加護</a></td>
+        <td valign="top">自身の風属性が一時的に＋。</td>
+        <td valign="top">1</td>
+        <td valign="top">漁師</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=29734" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C01CB.png" alt=""/><b></b></span>サリャクの加護</a></td>
+        <td valign="top">自身の水属性が一時的に＋。</td>
+        <td valign="top">1</td>
+        <td valign="top">漁師</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=29735" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C01C8.png" alt=""/><b></b></span>ビエルゴの加護</a></td>
+        <td valign="top">自身の雷属性が一時的に＋。</td>
+        <td valign="top">1</td>
+        <td valign="top">園芸師</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=29736" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C01C6.png" alt=""/><b></b></span>彫工の力</a></td>
+        <td valign="top">自身のVITが一時的に＋。</td>
+        <td valign="top">1</td>
+        <td valign="top">採掘師</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=29737" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C01C7.png" alt=""/><b></b></span>樵の腕</a></td>
+        <td valign="top">自身のSTRが一時的に＋。</td>
+        <td valign="top">1</td>
+        <td valign="top">園芸師</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=29738" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C01CB.png" alt=""/><b></b></span>海人の敏</a></td>
+        <td valign="top">自身のDEXが一時的に＋。</td>
+        <td valign="top">1</td>
+        <td valign="top">漁師</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=29739" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C01CA.png" alt=""/><b></b></span>石工の理</a></td>
+        <td valign="top">自身のMNDが一時的に＋。</td>
+        <td valign="top">1</td>
+        <td valign="top">採掘師</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=29740" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C01C8.png" alt=""/><b></b></span>老農の知</a></td>
+        <td valign="top">自身のINTが一時的に＋。</td>
+        <td valign="top">1</td>
+        <td valign="top">園芸師</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=29741" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C01C9.png" alt=""/><b></b></span>船乗りの信</a></td>
+        <td valign="top">自身のPIEが一時的に＋。</td>
+        <td valign="top">1</td>
+        <td valign="top">漁師</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=29742" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C01B9.png" alt=""/><b></b></span>ランドサーベイ</a></td>
+        <td valign="top">周囲を調べ、グレード1以下の採掘場を探す。</td>
+        <td valign="top">1</td>
+        <td valign="top">採掘師</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=29494" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C0000.png" alt=""/><b></b></span>交渉</a></td>
+        <td valign="top">交渉する</td>
+        <td valign="top">1</td>
+        <td valign="top">All</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=29501" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C0000.png" alt=""/><b></b></span>デバッグ用コマンド</a></td>
+        <td valign="top">デバッグ用のギフトコマンド</td>
+        <td valign="top">1</td>
+        <td valign="top">All</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=28484" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C00D3.png" alt=""/><b></b></span>昂揚</a></td>
+        <td valign="top">異言を唱え、精神を高める。
+[自身のＭＰ回復]</td>
+        <td valign="top">1</td>
+        <td valign="top">呪術士</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=27724" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C00DF.png" alt=""/><b></b></span>搦槍</a></td>
+        <td valign="top">槍をからめる。
+[目標に刺突ダメージ＆バインド]</td>
+        <td valign="top">1</td>
+        <td valign="top">槍術士</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=22102" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C00C6.png" alt=""/><b></b></span>正拳</a></td>
+        <td valign="top">堅く握り込んだ拳を突き出す。
+[目標に打撃ダメージ]</td>
+        <td valign="top">1</td>
+        <td valign="top">格闘士</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=22103" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C00C7.png" alt=""/><b></b></span>斬撃</a></td>
+        <td valign="top">斬りつける。
+[目標に斬撃ダメージ]</td>
+        <td valign="top">1</td>
+        <td valign="top">剣術士</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=22104" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C00C9.png" alt=""/><b></b></span>斧撃</a></td>
+        <td valign="top">斧で斬りかかる。
+[目標に斬撃ダメージ]</td>
+        <td valign="top">1</td>
+        <td valign="top">斧術士</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=22106" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C0000.png" alt=""/><b></b></span>決闘攻撃</a></td>
+        <td valign="top">[刺突]決闘武器で突き刺す</td>
+        <td valign="top">1</td>
+        <td valign="top">決闘士</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=22107" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C0000.png" alt=""/><b></b></span>棍攻撃</a></td>
+        <td valign="top">[打撃]棍で叩く</td>
+        <td valign="top">1</td>
+        <td valign="top">棍術士</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=22108" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C00CA.png" alt=""/><b></b></span>射撃</a></td>
+        <td valign="top">矢を射かける。
+[目標に射撃ダメージ]</td>
+        <td valign="top">1</td>
+        <td valign="top">弓術士</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=22109" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C00CB.png" alt=""/><b></b></span>突槍</a></td>
+        <td valign="top">槍で突きかかる。
+[目標に刺突ダメージ]</td>
+        <td valign="top">1</td>
+        <td valign="top">槍術士</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=22110" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C0000.png" alt=""/><b></b></span>銃攻撃</a></td>
+        <td valign="top">[打撃]銃で撃つ</td>
+        <td valign="top">1</td>
+        <td valign="top">銃術士</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=22111" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C00CC.png" alt=""/><b></b></span>盾備</a></td>
+        <td valign="top">盾を構えて、攻撃に備える。
+[自身への正面からの攻撃：防盾発動＋]</td>
+        <td valign="top">1</td>
+        <td valign="top">盾術士</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=22113" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C00CD.png" alt=""/><b></b></span>投擲</a></td>
+        <td valign="top">武器を投げつける。
+[目標にダメージ]</td>
+        <td valign="top">1</td>
+        <td valign="top">All</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=22114" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C00CE.png" alt=""/><b></b></span>飛礫</a></td>
+        <td valign="top">拾った石を投げつける。
+[目標にダメージ]</td>
+        <td valign="top">1</td>
+        <td valign="top">All</td>
+
+      </tr>
+
+      <tr>
+
+        <td valign="top"><a href="/ja/ability.html?ffxivability=29811" class="icon-link"><span class="xivicon"><img src="http://ffxiv.zam.com/icons/1C5C01BA.png" alt=""/><b></b></span>アーバーコール</a></td>
+        <td valign="top">周囲を調べ、グレード1以下の良木を探す。</td>
+        <td valign="top">1</td>
+        <td valign="top">園芸師</td>
+
+      </tr>
+
+      </tbody>
+    </table>
+  <div class="pagesel bottom"><div class="pages" style="margin-bottom:0"><span class="non-box prev">&laquo; Previous</span> <span>1</span> <a href="/ja/abilitylist.html?1&amp;page=2">2</a> <a href="/ja/abilitylist.html?1&amp;page=3">3</a> <a href="/ja/abilitylist.html?1&amp;page=4">4</a> <a href="/ja/abilitylist.html?1&amp;page=5">5</a> <a href="/ja/abilitylist.html?1&amp;page=6">6</a> <a href="/ja/abilitylist.html?1&amp;page=7">7</a> <a href="/ja/abilitylist.html?1&amp;page=8">8</a> <a href="/ja/abilitylist.html?1&amp;page=9">9</a> <a href="/ja/abilitylist.html?1&amp;page=2" class="non-box next">Next &raquo;</a><div class="clear"></div></div></div><!-- Begin comScore Tag --><script type="text/javascript"><!--
+setTimeout(function(){var url = "http" + (/https:/.test(document.location.href) ? "s" : "") + "://beacon.scorecardresearch.com/scripts/beacon.dll" + "?c1=2&c2=6036197&c3=&c4=&c5=&c6=&c7=" +    escape(document.location.href) + "&c8=" + escape(document.title) + "&c9=" + escape(document.referrer) + "&c10=" + escape(screen.width+'x'+screen.height) + "&c15=" + "&rn=" + (new Date()).getTime();var i = new Image(); i.src = url;   }, 1);
+// --></script><noscript><img src="https://beacon.scorecardresearch.com/scripts/beacon.dll? c1=&amp;c2=&amp;c3=&amp;c4=&amp;c5=&amp;c6=&amp;c7=&amp;c15=&amp;x=NOJAVASCRIPT" alt=""/></noscript> <!-- End comScore Tag -->
+          <div class="clear"></div>
+        </div>
+      </div><script type="text/javascript">heightCheck();</script>
+    <div id="buffer-bottom"></div></div>
+  </div>
+
+  <div id="footer">
+    <dl id="foot-info">
+      <dt>Info</dt>
+      <dd><a href="http://www.zam.com/news.html">News</a></dd>
+      <dd><a href="http://www.zam.com/topstories.html">Top Stories</a></dd>
+      <dd><a href="http://www.zam.com/previews.html">Previews</a></dd>
+      <dd><a href="http://www.zam.com/screenshots.html">Screenshots</a></dd>
+      <dd><a href="http://www.zam.com/videos.html?latest=1">Videos</a></dd>
+      <dd><a href="http://www.zam.com/gamelist.html">Games</a></dd>
+      <dd><a href="http://www.mmoui.com/">UI Mods</a></dd>
+    </dl>
+    <dl id="foot-community">
+      <dt>Community</dt>
+      <dd><a href="http://www.zam.com/forum.html">ZAM Forums</a></dd>
+      <dd><a href="http://www.zam.com/wiki/">Wiki</a></dd>
+      <dd><a href="http://store.wowhead.com/">Store</a></dd>
+      <dd><a href="http://www.wowhead.com/?forums">Wowhead Forums</a></dd>
+      <dd><a href="http://www.wowhead.com/?blog">Wowhead Blog</a></dd>
+    </dl>
+    <dl id="foot-sites">
+      <dt>Sites</dt>
+      <dd><a href="http://www.wowhead.com/">Wowhead</a></dd>
+      <dd><a href="http://thottbot.com/">Thottbot</a></dd>
+      <dd><a href="http://www.mmoui.com/">MMOUI</a></dd>
+      <dd><a href="http://www.tankspot.com/">TankSpot</a></dd>
+      <dd><a href="http://wow.allakhazam.com/">WoW Allakhazam</a></dd>
+      <dd><a href="http://aion.zam.com/">Aion</a></dd>
+      <dd><a href="http://everquest.allakhazam.com/">EverQuest</a></dd>
+      <dd><a href="http://eq2.zam.com/">EverQuest II</a></dd>
+      <dd><a href="http://ffxi.allakhazam.com/">Final Fantasy XI</a></dd>
+      <dd><a href="http://ffxiv.zam.com/">Final Fantasy XIV</a></dd>
+    </dl>
+    <dl id="foot-zam">
+      <dt>ZAM</dt>
+      <dd><a href="http://www.zam.com/premium.html">Premium</a></dd>
+      <dd><a href="/wiki/About_Us">About ZAM</a></dd>
+      <dd><a href="http://www.zam.com/wiki/Frequently_Asked_Questions_(Support)">Site FAQ</a></dd>
+      <dd><a href="http://www.zam.com/press.html">Press</a></dd>
+      <dd><a href="http://www.zam.com/advertising.html">Advertise</a></dd>
+      <dd><a href="http://www.zam.com/privacy.html">Privacy Policy</a></dd>
+      <dd><a href="http://www.zam.com/terms.html">Terms of Service</a></dd>
+      <dd><a href="/wiki/Forum_Rules">Forum Rules</a></dd>
+      <dd><a href="http://www.zam.com/gfdl" title="Some content is licensed under the GNU Free Documentation License">GNU Licensing</a></dd>
+    </dl>
+    <dl id="foot-network">
+      <dt><a href="http://www.zam.com/"></a></dt>
+      <dd id="foot-wh"><a href="http://www.wowhead.com/"></a></dd>
+      <dd id="foot-tb"><a href="http://thottbot.com/"></a></dd>
+      <dd id="foot-mmoui"><a href="http://www.mmoui.com/"></a></dd>
+      <dd id="foot-ts"><a href="http://www.tankspot.com/"></a></dd>
+    </dl>
+    <div></div>
+  </div>
+  </div>
+
+  <script type="text/javascript" src="http://common.zam.com/shared/zampower.js"></script>
+  <script type="text/javascript" src="http://common.zam.com/j/css.js"></script>
+  <script type="text/javascript" src="http://common.zam.com/j/standardista-table-sorting.js"></script>
+</body>
+</html>
