@@ -61,6 +61,23 @@ namespace Neith.Crawler.Test.Properties {
         }
         
         /// <summary>
+        ///   &lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot; xml:lang=&quot;en&quot;&gt;
+        ///&lt;head&gt;
+        ///  &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html;charset=utf-8&quot; /&gt;
+        ///  &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=8,chrome=1&quot; /&gt;
+        ///  &lt;title&gt;ファイア :: アクション :: Final Fantasy XIV (FFXIV, FF14) :: ZAM&lt;/title&gt;
+        ///  &lt;link rel=&quot;icon&quot; href=&quot;/favicon.ico&quot; /&gt;
+        ///  &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;http://common.zam.com/c/global.css?24&quot; /&gt;
+        ///  &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;/c/site.css?70&quot; id=&quot;css&quot; /&gt;
+        ///  &lt;script type=&quot;text/java [残りの文字列は切り詰められました]&quot;; に類似しているローカライズされた文字列を検索します。
+        /// </summary>
+        internal static string Zam_AbilityList_Item28930 {
+            get {
+                return ResourceManager.GetString("Zam_AbilityList_Item28930", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
         ///&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
         ///&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot; xml:lang=&quot;en&quot;&gt;

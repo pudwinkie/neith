@@ -21,6 +21,12 @@ namespace Neith.Crawler
         /// <summary>NeithXFN Type情報格納パス</summary>
         public static string NeithXFNTypesDir { get; internal set; }
 
+        /// <summary>NeithXFNのNamespace</summary>
+        public const string NSNeith = @"http://neith.vbel.net/ns/2010/";
+
+        /// <summary>FF14のNamespace</summary>
+        public const string NS14 = @"http://ff14.vbel.net/ns/2010/";
+
 
         static Const()
         {
