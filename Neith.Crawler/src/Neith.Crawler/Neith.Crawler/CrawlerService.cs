@@ -206,7 +206,8 @@ namespace Neith.Crawler
             return rxReq
                 .WaitSiteAccess()
                 .Do(cReq => {
-                    Debug.WriteLine("[GetResponse] uri=" + cReq.Request.RequestUri.AbsoluteUri);
+                    string.Format("[GetResponse] uri={0}", cReq.Request.RequestUri.AbsoluteUri)
+                        .TraceInfo();
                 })
                 .SelectMany(cReq => Observable
                     .FromAsyncPattern<CrawlerResponse>(

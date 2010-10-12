@@ -96,7 +96,9 @@ namespace Neith.Crawler.Reflection
 
             internal Assembly CallBack(object sender, ResolveEventArgs args)
             {
-                Debug.WriteLine(string.Format("AssemblyResolve: [{0}]", args.Name));
+                string
+                    .Format("AssemblyResolve: [{0}]", args.Name)
+                    .TraceInfo();
 
                 Match m = re.Match(args.Name);
                 if (!m.Success) return null;

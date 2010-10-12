@@ -20,8 +20,10 @@ namespace System.Net
         public static IObservable<HttpWebResponse> GetResponse(this IObservable<HttpWebRequest> rxReq)
         {
             return rxReq
-                .Do(req=>{
-                    Debug.WriteLine("[RxHttp::GetResponse] uri=" + req.RequestUri.AbsoluteUri);
+                .Do(req => {
+                    string
+                        .Format("[GetResponse] uri={0}", req.RequestUri.AbsoluteUri)
+                        .TraceInfo();
                 })
                 .SelectMany(req => Observable.FromAsyncPattern<WebResponse>(
                     req.BeginGetResponse,

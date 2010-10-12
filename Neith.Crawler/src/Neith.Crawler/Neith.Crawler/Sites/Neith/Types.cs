@@ -8,11 +8,11 @@ using System.Web;
 using System.Diagnostics;
 using Neith.Crawler.Util;
 
-namespace Neith.Crawler.Sites.Neith
+namespace Neith.Crawler.Sites.Neith.Types
 {
-    public static class Types
+    public static class CrawlerTask
     {
-        public static Unit Task()
+        public static Unit Run()
         {
             @"http://spreadsheets.google.com/pub?key=0AlnLTLNQTaTJdGFZb1c2RTFuV01fUnBxbThNaGpWUXc&single=true&gid=0&output=csv"
                 .EnCrowlCsvItem()
@@ -28,7 +28,7 @@ namespace Neith.Crawler.Sites.Neith
             return new Unit();
         }
 
-        private static IEnumerable<string[]> EnCrowlCsvItem(this string url)
+        public static IEnumerable<string[]> EnCrowlCsvItem(this string url)
         {
             var pipe = url
                 .RxGetCrowlUpdate()
@@ -42,7 +42,7 @@ namespace Neith.Crawler.Sites.Neith
             }
         }
 
-        private static IEnumerable<TypeElement> Analysis(this IEnumerable<string[]> csv)
+        public static IEnumerable<TypeElement> Analysis(this IEnumerable<string[]> csv)
         {
             var qType = from a in csv.FitCsv()
                         let el = new TypeElement(a)
@@ -67,7 +67,7 @@ namespace Neith.Crawler.Sites.Neith
             return qType;
         }
 
-        private static IEnumerable<string[]> FitCsv(this IEnumerable<string[]> csv)
+        public static IEnumerable<string[]> FitCsv(this IEnumerable<string[]> csv)
         {
             var key = new string[] { "", "", "" };
             foreach (var line in csv.Skip(1)) {
@@ -87,7 +87,7 @@ namespace Neith.Crawler.Sites.Neith
             }
         }
 
-        private class TypeElement
+        public class TypeElement
         {
             public string Key { get; private set; }
             public string[] KeyArray { get; private set; }
@@ -221,12 +221,12 @@ namespace Neith.Crawler.Sites.Neith
                     .FormatText(bodyClass, name, parentBuf.ToString(), childBuf.ToString());
             }
 
-            private IEnumerable<string> EnParentHTML()
+            public IEnumerable<string> EnParentHTML()
             {
                 return EnParentHTML(1);
             }
 
-            private IEnumerable<string> EnParentHTML(int level)
+            public IEnumerable<string> EnParentHTML(int level)
             {
                 if (Parent == null) yield break;
                 var rel = "kin";
