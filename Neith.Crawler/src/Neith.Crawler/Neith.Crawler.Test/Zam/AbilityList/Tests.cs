@@ -25,7 +25,7 @@ namespace Neith.Crawler.Test.Zam.AbilityList
         }
 
         [Test]
-        public void ParseListTest()
+        public void ParseTest()
         {
             Properties.Resources.Zam_AbilityList_Test
                 .AreEqual("漢字読み込み試験");
@@ -41,9 +41,6 @@ namespace Neith.Crawler.Test.Zam.AbilityList
                 .FirstOrDefault()
                 .AreEqual(@"http://ffxiv.zam.com/ja/ability.html?ffxivability=28930");
 
-            
-
-            //CrawlerTask.ParseList();
         }
 
     }
