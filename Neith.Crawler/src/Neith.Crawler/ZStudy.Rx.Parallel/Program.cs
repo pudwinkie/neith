@@ -63,7 +63,7 @@ namespace ZStudy.Rx.Parallel
                 })
                 ;
             stopwatch.Stop();
-            Console.WriteLine("#### TEST 2 ==> time {0:00000}ms\n\n"
+            Console.WriteLine("#### TEST 3 ==> time {0:00000}ms\n\n"
                 , stopwatch.ElapsedMilliseconds);
             // ---> ２つのタスクは並列実行されます。
             //      それぞれのタスクは直列に実行されています。
