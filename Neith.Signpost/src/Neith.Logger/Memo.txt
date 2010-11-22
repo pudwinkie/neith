@@ -1,0 +1,58 @@
+﻿■ログファイルフォーマット案
+・必須要素はlogの属性に
+・個別要素はタグに追い出す
+
+■log属性
+・timestamp :時刻
+・host      :ホスト
+・pid       :プロセスID
+・app       :ログの取得アプリ
+・type      :ログの種類
+・priority  :ログの重要度
+
+■受信要素（いずれか一方を必要に応じて選択）
+・message   :ログの原文（テキスト扱い）
+・bin       :ログの原文（バイナリ扱い、Base64）
+
+■解析要素
+・tags      :tagを列挙
+
+
+
+
+
+
+<log algorithm="md5" digest="XzHLFvhlc9qp52HfEfrhag==">
+  <timestamp>1019453468044</timestamp>
+  <host>192.168.254.111</host>
+  <pid>27843</pid>
+  <facility>user</facility>
+  <priority>notice</priority>
+  <application>PAM_pwdb</application>
+  <message>PAM_pwdb[27843]: (su) session opened for user root by logst(uid=1004)</message>
+  <app_info action="セッションのオープン">
+    <user msgparam="変更後ユーザ">root</user>
+    <user msgparam="変更前ユーザ">logst</user>
+    <uid msgparam="変更前ユーザID">1004</user>
+  </app_info>
+  <tags>
+    <tag>PAM_pwdb</tag>
+    <tag>27843</tag>
+    <tag>su</tag>
+    <tag>session</tag>
+    <tag>opened</tag>
+    <tag>user</tag>
+    <tag>root</tag>
+    <tag>logst</tag>
+    <tag>uid</tag>
+    <tag>1004</tag>
+  </tags>
+</log>
+
+
+■データの流れ
+
+
+
+
+
