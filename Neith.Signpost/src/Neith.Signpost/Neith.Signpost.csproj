@@ -107,6 +107,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\neith-base\externals\CustomWindow\CustomWindow\CustomWindow.csproj">
+      <Project>{2E8EFE10-ADF4-4B4F-B324-AA79021E39BD}</Project>
+      <Name>CustomWindow</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\neith-base\Neith.Util\src\Neith.Util.Extensions\Neith.Util.Extensions.csproj">
       <Project>{BDAA1A4C-C085-49B4-969D-84E1B2428E9D}</Project>
       <Name>Neith.Util.Extensions</Name>
@@ -118,6 +122,10 @@
     <ProjectReference Include="..\..\..\..\neith-base\Neith.Util\src\Neith.Util\Neith.Util.csproj">
       <Project>{B5385976-C31F-42DF-B1DB-54EA0F98FDC3}</Project>
       <Name>Neith.Util</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Neith.Logger\Neith.Logger.csproj">
+      <Project>{A77FC188-4DAA-4AC1-9AA0-A4C60518383D}</Project>
+      <Name>Neith.Logger</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

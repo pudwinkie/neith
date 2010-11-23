@@ -2,39 +2,41 @@
 ・必須要素はlogの属性に
 ・個別要素はタグに追い出す
 
-■log属性
+■log属性（loggerが作成）
 ・timestamp :時刻
 ・host      :ホスト
 ・pid       :プロセスID
-・app       :ログの取得アプリ
+・app       :ログの取得元アプリ
+・domain    :ログの取得元ドメイン
+・user      :ログの取得元ユーザ
+・collector :ログの収集モジュール
+・analyzer  :ログの分析モジュール
 ・type      :ログの種類
 ・priority  :ログの重要度
 
-■受信要素（いずれか一方を必要に応じて選択）
-・message   :ログの原文（テキスト扱い）
-・bin       :ログの原文（バイナリ扱い、Base64）
+■受信要素（loggerが作成、バイナリの場合、解釈可能なテキストに変換）
+・message   :ログの原文
 
-■解析要素
-・tags      :tagを列挙
-
-
+■分析要素（analyzerが作成、ログには残らない、DBにのみ反映）
+・info      :システム共通要素（同じタグの場合は同じ意味）
+・tags      :tagを列挙（検索キーワード）
 
 
 
-
-<log algorithm="md5" digest="XzHLFvhlc9qp52HfEfrhag==">
-  <timestamp>1019453468044</timestamp>
+<log timestamp="2008-04-10T06:30:00.0000000+09:00"
+     host="neith"
+	 pid="1234"
+	 app="1234"
+	 domain="1234"
+	 user="1234"
+	 >
+  <timestamp>101945346804  49.1234567</timestamp>
   <host>192.168.254.111</host>
   <pid>27843</pid>
   <facility>user</facility>
   <priority>notice</priority>
   <application>PAM_pwdb</application>
   <message>PAM_pwdb[27843]: (su) session opened for user root by logst(uid=1004)</message>
-  <app_info action="セッションのオープン">
-    <user msgparam="変更後ユーザ">root</user>
-    <user msgparam="変更前ユーザ">logst</user>
-    <uid msgparam="変更前ユーザID">1004</user>
-  </app_info>
   <tags>
     <tag>PAM_pwdb</tag>
     <tag>27843</tag>
