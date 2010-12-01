@@ -2,7 +2,7 @@
 ・必須要素はlogの属性に
 ・個別要素はタグに追い出す
 
-■log属性（loggerが作成）
+■log必須属性（loggerが作成）
 ・timestamp :時刻
 ・host      :ホスト
 ・pid       :プロセスID

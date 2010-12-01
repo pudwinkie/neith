@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestExtensions", "..\..
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomWindow", "..\..\..\neith-base\externals\CustomWindow\CustomWindow\CustomWindow.csproj", "{2E8EFE10-ADF4-4B4F-B324-AA79021E39BD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neith.Logger.Model", "Neith.Logger.Model\Neith.Logger.Model.csproj", "{0E957413-DF9E-4923-90AB-B58199142CDC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -131,6 +133,16 @@ Global
 		{2E8EFE10-ADF4-4B4F-B324-AA79021E39BD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{2E8EFE10-ADF4-4B4F-B324-AA79021E39BD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{2E8EFE10-ADF4-4B4F-B324-AA79021E39BD}.Release|x86.ActiveCfg = Release|Any CPU
+		{0E957413-DF9E-4923-90AB-B58199142CDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E957413-DF9E-4923-90AB-B58199142CDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E957413-DF9E-4923-90AB-B58199142CDC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0E957413-DF9E-4923-90AB-B58199142CDC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0E957413-DF9E-4923-90AB-B58199142CDC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0E957413-DF9E-4923-90AB-B58199142CDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E957413-DF9E-4923-90AB-B58199142CDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E957413-DF9E-4923-90AB-B58199142CDC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0E957413-DF9E-4923-90AB-B58199142CDC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0E957413-DF9E-4923-90AB-B58199142CDC}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
