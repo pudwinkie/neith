@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A2F698A8-9AB0-4D07-AAC3-87B1AAB0B10C}</ProjectGuid>
+    <ProjectGuid>{0E957413-DF9E-4923-90AB-B58199142CDC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Neith.Logger.Test</RootNamespace>
-    <AssemblyName>Neith.Logger.Test</AssemblyName>
+    <RootNamespace>Neith.Logger.Model</RootNamespace>
+    <AssemblyName>Neith.Logger.Model</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -31,9 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework">
-      <HintPath>..\..\..\..\neith-base\UnitTestUtil\src\UnitTestRunner\lib\nunit.framework.dll</HintPath>
-    </Reference>
     <Reference Include="protobuf-net">
       <HintPath>..\..\..\..\neith-base\externals\protobuf-net\protobuf-net.dll</HintPath>
     </Reference>
@@ -46,18 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Log.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ProtoTest.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\neith-base\UnitTestUtil\src\UnitTestExtensions\UnitTestExtensions.csproj">
-      <Project>{D6B57990-6E54-444C-A1CF-319C76B85E65}</Project>
-      <Name>UnitTestExtensions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Neith.Logger.Model\Neith.Logger.Model.csproj">
-      <Project>{0E957413-DF9E-4923-90AB-B58199142CDC}</Project>
-      <Name>Neith.Logger.Model</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
