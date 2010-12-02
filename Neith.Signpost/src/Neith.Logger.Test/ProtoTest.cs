@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml;
 using Neith.Logger.Model;
-using System.IO;
 using ProtoBuf;
 
 namespace Neith.Logger.Test
@@ -21,7 +22,6 @@ namespace Neith.Logger.Test
             item.Host = "Host";
             item.Pid = 123;
             item.Application = "あぷりけ～しょんなのよ";
-
 
             using (var st = new MemoryStream()) {
                 Serializer.Serialize(st, item);
