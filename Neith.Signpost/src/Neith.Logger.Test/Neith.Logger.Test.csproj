@@ -31,6 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Community.CsharpSqlite">
+      <HintPath>..\..\..\..\neith-base\externals\cs_sqlite\Community.CsharpSqlite.dll</HintPath>
+    </Reference>
+    <Reference Include="Community.CsharpSqlite.SQLiteClient">
+      <HintPath>..\..\..\..\neith-base\externals\cs_sqlite\Community.CsharpSqlite.SQLiteClient.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\..\neith-base\UnitTestUtil\src\UnitTestRunner\lib\nunit.framework.dll</HintPath>
     </Reference>
@@ -39,6 +45,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,8 +56,21 @@
     <Compile Include="LogStoreTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProtoTest.cs" />
+    <Compile Include="SQLiteTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\neith-base\Neith.Util\src\Neith.Util.Extensions\Neith.Util.Extensions.csproj">
+      <Project>{BDAA1A4C-C085-49B4-969D-84E1B2428E9D}</Project>
+      <Name>Neith.Util.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\neith-base\Neith.Util\src\Neith.Util.RX\Neith.Util.RX.csproj">
+      <Project>{C8B06C95-1B5D-4811-99C4-341B7109BC30}</Project>
+      <Name>Neith.Util.RX</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\neith-base\Neith.Util\src\Neith.Util\Neith.Util.csproj">
+      <Project>{B5385976-C31F-42DF-B1DB-54EA0F98FDC3}</Project>
+      <Name>Neith.Util</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\neith-base\UnitTestUtil\src\UnitTestExtensions\UnitTestExtensions.csproj">
       <Project>{D6B57990-6E54-444C-A1CF-319C76B85E65}</Project>
       <Name>UnitTestExtensions</Name>

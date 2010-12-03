@@ -111,6 +111,10 @@
       <Project>{2E8EFE10-ADF4-4B4F-B324-AA79021E39BD}</Project>
       <Name>CustomWindow</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\neith-base\externals\wpf-notifyicon\NotifyIconWpf\NotifyIconWpf.csproj">
+      <Project>{7AC63864-7638-41C4-969C-D3197EF2BED9}</Project>
+      <Name>NotifyIconWpf</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\neith-base\Neith.Util\src\Neith.Util.Extensions\Neith.Util.Extensions.csproj">
       <Project>{BDAA1A4C-C085-49B4-969D-84E1B2428E9D}</Project>
       <Name>Neith.Util.Extensions</Name>
@@ -123,10 +127,24 @@
       <Project>{B5385976-C31F-42DF-B1DB-54EA0F98FDC3}</Project>
       <Name>Neith.Util</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Neith.Logger.Model\Neith.Logger.Model.csproj">
+      <Project>{0E957413-DF9E-4923-90AB-B58199142CDC}</Project>
+      <Name>Neith.Logger.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Neith.Logger\Neith.Logger.csproj">
       <Project>{A77FC188-4DAA-4AC1-9AA0-A4C60518383D}</Project>
       <Name>Neith.Logger</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Images\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\Bulb.ico" />
+    <Resource Include="Icons\Computers.ico" />
+    <Resource Include="Icons\Error.ico" />
+    <Resource Include="Icons\Inactive.ico" />
+    <Resource Include="Icons\NetDrives.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
