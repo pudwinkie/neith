@@ -23,5 +23,10 @@ namespace Neith.Signpost
         {
             InitializeComponent();
         }
+
+        private void MenuItemExit_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
     }
 }
