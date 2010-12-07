@@ -31,11 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Community.CsharpSqlite">
-      <HintPath>..\..\..\..\neith-base\externals\cs_sqlite\Community.CsharpSqlite.dll</HintPath>
-    </Reference>
-    <Reference Include="Community.CsharpSqlite.SQLiteClient">
-      <HintPath>..\..\..\..\neith-base\externals\cs_sqlite\Community.CsharpSqlite.SQLiteClient.dll</HintPath>
+    <Reference Include="EffiProz">
+      <HintPath>..\..\..\..\neith-base\externals\effiproz_db\EffiProz.dll</HintPath>
     </Reference>
     <Reference Include="protobuf-net, Version=1.0.0.280, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
