@@ -14,7 +14,7 @@ namespace Neith.Logger.Test
     using NUnit.Framework;
 
     [TestFixture]
-    public class SQLiteTest
+    public class SQLTest
     {
         [Test]
         public void Test1()

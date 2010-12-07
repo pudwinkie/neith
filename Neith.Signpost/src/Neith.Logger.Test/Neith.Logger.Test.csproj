@@ -53,6 +53,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProtoTest.cs" />
     <Compile Include="SQLiteTest.cs" />
+    <Compile Include="SQLTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\neith-base\Neith.Util\src\Neith.Util.Extensions\Neith.Util.Extensions.csproj">
