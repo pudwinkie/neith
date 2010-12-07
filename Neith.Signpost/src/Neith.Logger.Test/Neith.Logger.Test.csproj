@@ -31,11 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Community.CsharpSqlite">
-      <HintPath>..\..\..\..\neith-base\externals\cs_sqlite\Community.CsharpSqlite.dll</HintPath>
-    </Reference>
-    <Reference Include="Community.CsharpSqlite.SQLiteClient">
-      <HintPath>..\..\..\..\neith-base\externals\cs_sqlite\Community.CsharpSqlite.SQLiteClient.dll</HintPath>
+    <Reference Include="EffiProz">
+      <HintPath>..\..\..\..\neith-base\externals\effiproz_db\EffiProz.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\..\..\neith-base\UnitTestUtil\src\UnitTestRunner\lib\nunit.framework.dll</HintPath>
@@ -45,7 +42,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
