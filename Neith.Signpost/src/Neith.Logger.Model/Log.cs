@@ -10,8 +10,18 @@ namespace Neith.Logger.Model
     [ProtoContract]
     public class Log
     {
+        public static Log Create()
+        {
+            var log = new Log();
+            log.Timestamp = DateTimeOffset.Now;
+            log.Id = Guid.NewGuid();
+            return log;
+        }
+
+        private Log() { }
+
         /// <summary>タイムスタンプ</summary>
-        public DateTimeOffset Timestamp{get;set;}
+        public DateTimeOffset Timestamp { get; set; }
 
         /// <summary>タイムスタンプ(UTC時刻)</summary>
         public DateTime TimestampUTC { get { return Timestamp.UtcDateTime; } }
@@ -23,20 +33,19 @@ namespace Neith.Logger.Model
             set { Timestamp = new DateTimeOffset(DateTime.FromBinary(value).ToLocalTime()); }
         }
 
+        /// <summary>ログのGUID</summary>
+        [ProtoMember(2)]
+        public Guid Id { get; set; }
+
 
         /// <summary>ログの収集モジュール</summary>
-        [ProtoMember(2)]
+        [ProtoMember(3)]
         public string Collector { get; set; }
 
 
         /// <summary>ホスト</summary>
-        [ProtoMember(3)]
-        public string Host { get; set; }
-
-
-        /// <summary>プロセスID</summary>
         [ProtoMember(4)]
-        public int Pid { get; set; }
+        public string Host { get; set; }
 
 
         /// <summary>ログの取得元アプリ</summary>
@@ -69,34 +78,48 @@ namespace Neith.Logger.Model
         public LogPriority Priority { get; set; }
 
 
-        /// <summary>行為を行った者</summary>
-        [ProtoMember(11)]
-        public string Actor { get; set; }
-
-
-        /// <summary>行為の対象者</summary>
-        [ProtoMember(12)]
-        public string Target { get; set; }
-
-
         /// <summary>ログのメッセージ</summary>
-        [ProtoMember(13)]
+        [ProtoMember(11)]
         public string Message { get; set; }
 
 
         /// <summary>ログの分析モジュール</summary>
-        [ProtoMember(14)]
+        [ProtoMember(12)]
         public string Analyzer { get; set; }
+
+
+        /// <summary>行為の実行者</summary>
+        [ProtoMember(13)]
+        public string Actor { get; set; }
+
+
+        /// <summary>行為の対象</summary>
+        [ProtoMember(14)]
+        public string Target { get; set; }
 
 
         /// <summary>アイコン画像URL</summary>
         [ProtoMember(15)]
         public string Icon { get; set; }
 
+        public static bool operator ==(Log a, Log b)
+        {
+            return a.Id == b.Id;
+        }
 
-        // 14,15は現在のところ予約。かならず使うようなものがあれば追加する。
+        public static bool operator !=(Log a, Log b) { return !(a == b); }
 
+        public override bool Equals(object obj)
+        {
+            var target = obj as Log;
+            if (target == null) return false;
+            return this == target;
+        }
 
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
 
 
     }

@@ -17,16 +17,35 @@ namespace Neith.Logger.Test
         {
             var store = LogStore.Instance;
             try {
-                var item = new Log();
-                item.Timestamp = DateTimeOffset.Now;
+                var item = Log.Create();
                 item.Host = "Host";
-                item.Pid = 123;
                 item.Application = "ろぐしゅつりょくテストなのよー";
                 store.Store(item);
             }
             finally {
                 LogStore.StoreClose();
             }
+        }
+
+        [Test]
+        public void ReadWriteTest1()
+        {
+            var store = LogStore.Instance;
+            try {
+                var item = Log.Create();
+                item.Host = "ほ～すと";
+                item.Application = "出力しちゃったのですね！";
+                var pos = store.Store(item);
+                store.Flush();
+                using (var loader = new LogLoader()) {
+                    var item2 = loader.Load(pos);
+                    if (item != item2) Assert.Fail();
+                }
+            }
+            finally {
+                LogStore.StoreClose();
+            }
+
         }
 
     }
