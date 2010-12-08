@@ -17,10 +17,8 @@ namespace Neith.Logger.Test
         [Test]
         public void SerialTest1()
         {
-            var item = new Log();
-            item.Timestamp = DateTimeOffset.Now;
+            var item = Log.Create();
             item.Host = "Host";
-            item.Pid = 123;
             item.Application = "あぷりけ～しょんなのよ";
 
             using (var st = new MemoryStream()) {
@@ -30,7 +28,6 @@ namespace Neith.Logger.Test
                 var item2 = Serializer.Deserialize<Log>(st);
                 item.Timestamp.Ticks.AreEqual(item2.Timestamp.Ticks);
                 item.Host.AreEqual(item2.Host);
-                item.Pid.AreEqual(item2.Pid);
                 item.Application.AreEqual(item2.Application);
             }
         }

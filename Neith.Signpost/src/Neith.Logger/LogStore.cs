@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using Neith.Logger.Model;
-using System.Runtime.Serialization;
-using System.IO;
 using ProtoBuf;
 
 namespace Neith.Logger
@@ -29,7 +29,14 @@ namespace Neith.Logger
         /// <summary>
         /// インスタンスを取得します。
         /// </summary>
-        public static LogStore Instance { get { return instance; } }
+        public static LogStore Instance
+        {
+            get
+            {
+                if (instance == null) StoreInit();
+                return instance;
+            }
+        }
 
         /// <summary>
         /// インスタンスを開放します。
@@ -79,24 +86,27 @@ namespace Neith.Logger
             if (stream != null) return;
             // ファイルの作成
             lastDate = date;
-            var dir = Path.Combine(
-                Const.Folders.Log,
-                string.Format("{0:yyyy}", lastDate),
-                string.Format("{0:MM}", lastDate));
-            var path = Path.Combine(dir, string.Format("{0:yyyy-MM-dd}.log", lastDate));
-            Directory.CreateDirectory(dir);
-            stream = File.OpenWrite(path);
+            var path = LogUtil.GetPath(date, true);
+            stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
+            stream.Seek(0, SeekOrigin.End);
         }
 
         /// <summary>
         /// ログを書き込みます。
         /// </summary>
         /// <param name="log"></param>
-        public void Store(Log log)
+        public LogStorePosition Store(Log log)
         {
             DateCheck(log.TimestampUTC);
+            var rc = new LogStorePosition(lastDate, stream.Position);
             Serializer.Serialize(stream, log);
+            return rc;
         }
 
+        public void Flush()
+        {
+            if (stream == null) return;
+            stream.Flush();
+        }
     }
 }
