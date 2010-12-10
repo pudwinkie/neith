@@ -10,16 +10,7 @@ namespace Neith.Logger.Model
     [ProtoContract]
     public class Log
     {
-        public static Log Create()
-        {
-            var log = new Log();
-            log.Timestamp = DateTimeOffset.Now;
-            log.Id = Guid.NewGuid();
-            return log;
-        }
-
-        private Log() { }
-
+        #region ログ保存プロパティ
         /// <summary>タイムスタンプ</summary>
         public DateTimeOffset Timestamp { get; set; }
 
@@ -48,59 +39,74 @@ namespace Neith.Logger.Model
         public string Host { get; set; }
 
 
-        /// <summary>ログの取得元アプリ</summary>
+        /// <summary>プロセスID</summary>
         [ProtoMember(5)]
+        public int Pid { get; set; }
+
+
+        /// <summary>ログの取得元アプリ</summary>
+        [ProtoMember(6)]
         public string Application { get; set; }
 
 
         /// <summary>ログの取得元ドメイン</summary>
-        [ProtoMember(6)]
+        [ProtoMember(7)]
         public string Domain { get; set; }
 
 
         /// <summary>ログの取得元ユーザ</summary>
-        [ProtoMember(7)]
+        [ProtoMember(8)]
         public string User { get; set; }
 
 
-        /// <summary>ログのカテゴリ</summary>
-        [ProtoMember(8)]
-        public string Category { get; set; }
-
-
-        /// <summary>ログのタイプ</summary>
-        [ProtoMember(9)]
-        public string Type { get; set; }
-
-
-        /// <summary>ログの優先度</summary>
-        [ProtoMember(10)]
-        public LogPriority Priority { get; set; }
-
-
         /// <summary>ログのメッセージ</summary>
-        [ProtoMember(11)]
+        [ProtoMember(9)]
         public string Message { get; set; }
 
 
         /// <summary>ログの分析モジュール</summary>
-        [ProtoMember(12)]
+        [ProtoMember(10)]
         public string Analyzer { get; set; }
 
 
+        #endregion
+        #region 解析プロパティ（保存対象外）
+
+        /// <summary>ログのカテゴリ</summary>
+        public string Category { get; set; }
+
+
+        /// <summary>ログのタイプ</summary>
+        public string Type { get; set; }
+
+
+        /// <summary>ログの優先度</summary>
+        public LogPriority Priority { get; set; }
+
+
         /// <summary>行為の実行者</summary>
-        [ProtoMember(13)]
         public string Actor { get; set; }
 
 
         /// <summary>行為の対象</summary>
-        [ProtoMember(14)]
         public string Target { get; set; }
 
 
         /// <summary>アイコン画像URL</summary>
-        [ProtoMember(15)]
         public string Icon { get; set; }
+
+
+        #endregion
+        #region メソッド
+        public static Log Create()
+        {
+            var log = new Log();
+            log.Timestamp = DateTimeOffset.Now;
+            log.Id = Guid.NewGuid();
+            return log;
+        }
+
+        private Log() { }
 
         public static bool operator ==(Log a, Log b)
         {
@@ -122,5 +128,6 @@ namespace Neith.Logger.Model
         }
 
 
+        #endregion
     }
 }
