@@ -19,6 +19,7 @@ namespace Neith.Logger.Test
         public void RxWatchTest()
         {
             var dir = Path.GetFullPath("RxWatchTest");
+            if (Directory.Exists(dir)) Directory.Delete(dir, true);
             Directory.CreateDirectory(dir);
             try {
                 using (var watcher = new FileSystemWatcher(dir))
