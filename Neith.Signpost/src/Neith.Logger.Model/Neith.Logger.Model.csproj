@@ -43,10 +43,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ICollector.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="LogPriority.cs" />
     <Compile Include="LogStorePosition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\neith-base\Neith.Util\src\Neith.Util.Extensions\Neith.Util.Extensions.csproj">
+      <Project>{BDAA1A4C-C085-49B4-969D-84E1B2428E9D}</Project>
+      <Name>Neith.Util.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\neith-base\Neith.Util\src\Neith.Util\Neith.Util.csproj">
+      <Project>{B5385976-C31F-42DF-B1DB-54EA0F98FDC3}</Project>
+      <Name>Neith.Util</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
