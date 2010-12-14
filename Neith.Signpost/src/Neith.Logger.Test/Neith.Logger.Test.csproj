@@ -50,9 +50,12 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API.cs" />
     <Compile Include="FileWatcherTest.cs" />
+    <Compile Include="EtcTest.cs" />
     <Compile Include="LocalTestData.cs" />
     <Compile Include="LocalTestTest.cs" />
     <Compile Include="LogStoreTest.cs" />

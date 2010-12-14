@@ -39,7 +39,7 @@ namespace Neith.Logger.Test
                 store.Flush();
                 using (var loader = new LogLoader()) {
                     var item2 = loader.Load(pos);
-                    if (item != item2) Assert.Fail();
+                    if (item.Id != item2.Id) Assert.Fail();
                 }
             }
             finally {

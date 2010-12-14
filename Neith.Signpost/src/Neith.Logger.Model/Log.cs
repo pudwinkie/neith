@@ -8,7 +8,7 @@ using ProtoBuf;
 namespace Neith.Logger.Model
 {
     [ProtoContract]
-    public class Log : IEquatable<Log>
+    public class Log
     {
         #region ログ保存プロパティ
         /// <summary>タイムスタンプ</summary>
@@ -107,31 +107,6 @@ namespace Neith.Logger.Model
         }
 
         private Log() { }
-
-        public bool Equals(Log other)
-        {
-            if (other.IsNull()) return false;
-            return this.Id == other.Id;
-        }
-
-        public override int GetHashCode()
-        {
-            return Id.GetHashCode();
-        }
-
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as Log);
-        }
-
-
-        public static bool operator ==(Log a, Log b)
-        {
-            if (a.IsNull()) return false;
-            return a.Equals(b);
-        }
-
-        public static bool operator !=(Log a, Log b) { return !(a == b); }
 
         #endregion
 
