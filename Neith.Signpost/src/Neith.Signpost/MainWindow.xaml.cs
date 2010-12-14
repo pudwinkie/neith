@@ -28,5 +28,30 @@ namespace Neith.Signpost
         {
             Application.Current.Shutdown();
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (Environment.Is64BitProcess) this.MenuItem2.Header = "64bit Process";
+            else this.MenuItem2.Header = "32bit Process";
+        }
+
+        private void Window_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (IsVisible) MenuItem1.Header = "画面を隠す";
+            else MenuItem1.Header = "画面を表示";
+        }
+
+        private void MenuItem1_Click(object sender, RoutedEventArgs e)
+        {
+            if (!IsVisible) {
+                // 表示する
+                WindowState = System.Windows.WindowState.Normal;
+                Visibility = System.Windows.Visibility.Visible;
+            }
+            else {
+                // 隠す
+                Visibility = System.Windows.Visibility.Hidden;
+            }
+        }
     }
 }
