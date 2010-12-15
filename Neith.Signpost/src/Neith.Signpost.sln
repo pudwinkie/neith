@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual C# Express 2010
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neith.Signpost", "Neith.Signpost\Neith.Signpost.csproj", "{3C5F9F5B-547F-4FD1-90B8-56117E8BA522}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neith.Util", "..\..\..\neith-base\Neith.Util\src\Neith.Util\Neith.Util.csproj", "{B5385976-C31F-42DF-B1DB-54EA0F98FDC3}"
@@ -24,6 +24,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neith.Logger.Model", "Neith.Logger.Model\Neith.Logger.Model.csproj", "{0E957413-DF9E-4923-90AB-B58199142CDC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotifyIconWpf", "..\..\..\neith-base\externals\wpf-notifyicon\NotifyIconWpf\NotifyIconWpf.csproj", "{7AC63864-7638-41C4-969C-D3197EF2BED9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FFXIVRuby", "FFXIVRuby\FFXIVRuby.csproj", "{0B48D7FB-E505-4697-8467-000693B52D88}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,6 +81,10 @@ Global
 		{7AC63864-7638-41C4-969C-D3197EF2BED9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7AC63864-7638-41C4-969C-D3197EF2BED9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7AC63864-7638-41C4-969C-D3197EF2BED9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B48D7FB-E505-4697-8467-000693B52D88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B48D7FB-E505-4697-8467-000693B52D88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B48D7FB-E505-4697-8467-000693B52D88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B48D7FB-E505-4697-8467-000693B52D88}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
