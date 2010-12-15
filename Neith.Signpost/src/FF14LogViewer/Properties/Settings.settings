@@ -1,0 +1,21 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="FF14LogViewer.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="BGColor" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">Transparent</Value>
+    </Setting>
+    <Setting Name="ClientSize" Type="System.Drawing.Size" Scope="User">
+      <Value Profile="(Default)">544, 308</Value>
+    </Setting>
+    <Setting Name="EMOTE" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="EMOTE_COLOR" Type="System.Drawing.Color" Scope="User">
+      <Value Profile="(Default)">SlateGray</Value>
+    </Setting>
+    <Setting Name="EMOTE_FONT" Type="System.Drawing.Font" Scope="User">
+      <Value Profile="(Default)">Meiryo UI, 11.25pt, style=Bold</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

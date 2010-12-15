@@ -25,9 +25,8 @@ namespace FFXIVRuby
             this._Message = message;
         }
 
-        public static FFXIVLog[] GetLogs(byte[] LogData, Encoding enc)
+        public static IEnumerable<FFXIVLog> GetLogs(byte[] LogData, Encoding enc)
         {
-            List<FFXIVLog> list = new List<FFXIVLog>();
             MemoryStream stream = new MemoryStream();
             bool flag = false;
             for (int i = 0; i < LogData.Length; i++) {
@@ -45,9 +44,8 @@ namespace FFXIVRuby
             for (int j = 1; j < strArray.Length; j++) {
                 string[] strArray2 = strArray[j].Split(new char[] { ':' }, 2, StringSplitOptions.None);
                 FFXIVLog item = new FFXIVLog((FFXILogMessageType)int.Parse(matchs[j - 1].Value.TrimEnd(new char[] { ':' }), NumberStyles.AllowHexSpecifier), strArray2[0].Replace("\0", ""), strArray2[1].Replace("\0", ""));
-                list.Add(item);
+                yield return item;
             }
-            return list.ToArray();
         }
 
         public override string ToString()
@@ -202,5 +200,4 @@ namespace FFXIVRuby
             TELL = 3
         }
     }
-
 }

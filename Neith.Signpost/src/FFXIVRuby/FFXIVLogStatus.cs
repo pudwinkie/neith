@@ -33,12 +33,12 @@ namespace FFXIVRuby
             return this.ffxiv.ReadBytes(this.GetEntryPoint(), this.GetTerminalPoint() - this.GetEntryPoint());
         }
 
-        public FFXIVLog[] GetLogs()
+        public IEnumerable<FFXIVLog> GetLogs()
         {
             return FFXIVLog.GetLogs(this.GetLogData(), Encoding.GetEncoding("utf-8"));
         }
 
-        public FFXIVLog[] GetLogs(int from)
+        public IEnumerable<FFXIVLog> GetLogs(int from)
         {
             return FFXIVLog.GetLogs(this.GetLogData(from, this.GetTerminalPoint() - from), Encoding.GetEncoding("utf-8"));
         }
