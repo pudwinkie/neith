@@ -20,15 +20,15 @@ namespace FFXIVRuby
         // Methods
         private FFXIVLog(FFXILogMessageType logtype, string who, string message)
         {
-            this._MessageType = logtype;
-            this._Who = who;
-            this._Message = message;
+            _MessageType = logtype;
+            _Who = who;
+            _Message = message;
         }
 
         public static IEnumerable<FFXIVLog> GetLogs(byte[] LogData, Encoding enc)
         {
-            MemoryStream stream = new MemoryStream();
-            bool flag = false;
+            var stream = new MemoryStream();
+            var flag = false;
             for (int i = 0; i < LogData.Length; i++) {
                 if (flag) {
                     stream.WriteByte(LogData[i]);
@@ -38,107 +38,93 @@ namespace FFXIVRuby
                     stream.WriteByte(LogData[i]);
                 }
             }
-            string input = enc.GetString(TABConvertor.TabEscape(stream.ToArray()));
-            MatchCollection matchs = regex.Matches(input);
-            string[] strArray = regex.Split(input);
-            for (int j = 1; j < strArray.Length; j++) {
-                string[] strArray2 = strArray[j].Split(new char[] { ':' }, 2, StringSplitOptions.None);
-                FFXIVLog item = new FFXIVLog((FFXILogMessageType)int.Parse(matchs[j - 1].Value.TrimEnd(new char[] { ':' }), NumberStyles.AllowHexSpecifier), strArray2[0].Replace("\0", ""), strArray2[1].Replace("\0", ""));
+            var input = enc.GetString(TABConvertor.TabEscape(stream.ToArray()));
+            var matchs = regex.Matches(input);
+            var strArray = regex.Split(input);
+            for (var j = 1; j < strArray.Length; j++) {
+                var strArray2 = strArray[j].Split(new char[] { ':' }, 2, StringSplitOptions.None);
+                var strType = matchs[j - 1].Value.TrimEnd(new char[] { ':' });
+                var numType = int.Parse(strType, NumberStyles.AllowHexSpecifier);
+                var strWho = strArray2[0].Replace("\0", "");
+                var strMes = strArray2[1].Replace("\0", "");
+                var item = new FFXIVLog((FFXILogMessageType)numType, strWho, strMes);
                 yield return item;
             }
         }
 
         public override string ToString()
         {
-            string str = string.Format("{1}", this.Who, this.Message);
+            string str = string.Format("{1}", Who, Message);
             if (this.Who != "") {
-                str = string.Format("{0} : {1}", this.Who, this.Message);
+                str = string.Format("{0} : {1}", Who, Message);
             }
-            switch (this.MessageType) {
+            switch (MessageType) {
                 case FFXILogMessageType.TELL:
-                    return string.Format("{0} >> {1}", this.Who, this.Message);
+                    return string.Format("{0} >> {1}", Who, Message);
 
                 case FFXILogMessageType.PARTY:
-                    return string.Format("( {0} ) {1}", this.Who, this.Message);
+                    return string.Format("( {0} ) {1}", Who, Message);
 
                 case FFXILogMessageType.LINKSHELL1:
-                    return string.Format("[1]<{0}> {1}", this.Who, this.Message);
+                    return string.Format("[1]<{0}> {1}", Who, Message);
 
                 case FFXILogMessageType.LINKSHELL2:
-                    return string.Format("[2]<{0}> {1}", this.Who, this.Message);
+                    return string.Format("[2]<{0}> {1}", Who, Message);
 
                 case FFXILogMessageType.LINKSHELL3:
-                    return string.Format("[3]<{0}> {1}", this.Who, this.Message);
+                    return string.Format("[3]<{0}> {1}", Who, Message);
 
                 case FFXILogMessageType.LINKSHELL4:
-                    return string.Format("[4]<{0}> {1}", this.Who, this.Message);
+                    return string.Format("[4]<{0}> {1}", Who, Message);
 
                 case FFXILogMessageType.LINKSHELL5:
-                    return string.Format("[5]<{0}> {1}", this.Who, this.Message);
+                    return string.Format("[5]<{0}> {1}", Who, Message);
 
                 case FFXILogMessageType.LINKSHELL6:
-                    return string.Format("[6]<{0}> {1}", this.Who, this.Message);
+                    return string.Format("[6]<{0}> {1}", Who, Message);
 
                 case FFXILogMessageType.LINKSHELL7:
-                    return string.Format("[7]<{0}> {1}", this.Who, this.Message);
+                    return string.Format("[7]<{0}> {1}", Who, Message);
 
                 case FFXILogMessageType.LINKSHELL8:
-                    return string.Format("[8]<{0}> {1}", this.Who, this.Message);
+                    return string.Format("[8]<{0}> {1}", Who, Message);
 
                 case FFXILogMessageType.MY_TELL:
-                    return string.Format(">> {0} : {1}", this.Who, this.Message);
+                    return string.Format(">> {0} : {1}", Who, Message);
 
                 case FFXILogMessageType.CURRENT_LINKSHELL1:
-                    return string.Format("[1]<{0}> {1}", this.Who, this.Message);
+                    return string.Format("[1]<{0}> {1}", Who, Message);
 
                 case FFXILogMessageType.CURRENT_LINKSHELL2:
-                    return string.Format("[2]<{0}> {1}", this.Who, this.Message);
+                    return string.Format("[2]<{0}> {1}", Who, Message);
 
                 case FFXILogMessageType.CURRENT_LINKSHELL3:
-                    return string.Format("[3]<{0}> {1}", this.Who, this.Message);
+                    return string.Format("[3]<{0}> {1}", Who, Message);
 
                 case FFXILogMessageType.CURRENT_LINKSHELL4:
-                    return string.Format("[4]<{0}> {1}", this.Who, this.Message);
+                    return string.Format("[4]<{0}> {1}", Who, Message);
 
                 case FFXILogMessageType.CURRENT_LINKSHELL5:
-                    return string.Format("[5]<{0}> {1}", this.Who, this.Message);
+                    return string.Format("[5]<{0}> {1}", Who, Message);
 
                 case FFXILogMessageType.CURRENT_LINKSHELL6:
-                    return string.Format("[6]<{0}> {1}", this.Who, this.Message);
+                    return string.Format("[6]<{0}> {1}", Who, Message);
 
                 case FFXILogMessageType.CURRENT_LINKSHELL7:
-                    return string.Format("[7]<{0}> {1}", this.Who, this.Message);
+                    return string.Format("[7]<{0}> {1}", Who, Message);
 
                 case FFXILogMessageType.CURRENT_LINKSHELL8:
-                    return string.Format("[8]<{0}> {1}", this.Who, this.Message);
+                    return string.Format("[8]<{0}> {1}", Who, Message);
             }
             return str;
         }
 
         // Properties
-        public string Message
-        {
-            get
-            {
-                return this._Message;
-            }
-        }
+        public string Message { get { return _Message; } }
 
-        public FFXILogMessageType MessageType
-        {
-            get
-            {
-                return this._MessageType;
-            }
-        }
+        public FFXILogMessageType MessageType { get { return _MessageType; } }
 
-        public string Who
-        {
-            get
-            {
-                return this._Who;
-            }
-        }
+        public string Who { get { return _Who; } }
 
         // Nested Types
         public enum FFXILogMessageType

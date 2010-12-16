@@ -117,10 +117,7 @@ namespace FFXIVRuby
         // Properties
         public FFXIVLogStatus FFXIVLogStat
         {
-            get
-            {
-                return this._stat;
-            }
+            get { return this._stat; }
             set
             {
                 if (this._stat != null) {
