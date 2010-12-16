@@ -7,18 +7,18 @@ using System.Diagnostics;
 
 namespace FFXIVRuby
 {
-    class FFXIVRuby
+    public class FFXIVRuby
     {
         // Fields
         private Process _proc;
         private static string downloads_folder = "downloads";
-        private static string log_folder = "log";
         private static string login_folder = "login";
-        private static string mcro_file = "mcr0";
         private static string screenshots_folder = "screenshots";
-        private static string ui_file = "ui";
         private static string user_folder = "user";
         private static string Zero_folder = "00000000";
+        private static string log_folder = "log";
+        private static string mcro_file = "mcr0";
+        private static string ui_file = "ui";
 
         // Methods
         public static FFXIVRuby Create()

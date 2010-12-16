@@ -15,8 +15,8 @@ namespace FFXIVRuby
         // Methods
         public FFXIVProcess(Process p)
         {
-            this.proc = p;
-            this.memory = new Memory();
+            proc = p;
+            memory = new Memory();
         }
 
         public Memory.MEMORY_BASIC_INFORMATION[] GetMemoryBasicInfos()
@@ -35,7 +35,4 @@ namespace FFXIVRuby
             return (((buffer[0] + (buffer[1] * 0x100)) + (buffer[2] * 0x10000)) + (buffer[3] * 0x1000000));
         }
     }
-
- 
-
 }
