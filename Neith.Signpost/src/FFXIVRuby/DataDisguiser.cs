@@ -5,7 +5,7 @@ using System.Text;
 
 namespace FFXIVRuby
 {
-    public class DataDisguiser
+    public static class DataDisguiser
     {
         private static byte[] converttable;
 

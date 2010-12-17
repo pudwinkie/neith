@@ -27,28 +27,29 @@ namespace FFXIVRuby
 
         public static IEnumerable<FFXIVLog> GetLogs(byte[] LogData, Encoding enc)
         {
-            var stream = new MemoryStream();
-            var flag = false;
-            for (int i = 0; i < LogData.Length; i++) {
-                if (flag) {
-                    stream.WriteByte(LogData[i]);
+            using (var stream = new MemoryStream()) {
+                var flag = false;
+                for (int i = 0; i < LogData.Length; i++) {
+                    if (flag) {
+                        stream.WriteByte(LogData[i]);
+                    }
+                    else if (LogData[i] == 0x30) {
+                        flag = true;
+                        stream.WriteByte(LogData[i]);
+                    }
                 }
-                else if (LogData[i] == 0x30) {
-                    flag = true;
-                    stream.WriteByte(LogData[i]);
+                var input = enc.GetString(TABConvertor.TabEscape(stream.ToArray()));
+                var matchs = regex.Matches(input);
+                var strArray = regex.Split(input);
+                for (var j = 1; j < strArray.Length; j++) {
+                    var strArray2 = strArray[j].Split(new char[] { ':' }, 2, StringSplitOptions.None);
+                    var strType = matchs[j - 1].Value.TrimEnd(new char[] { ':' });
+                    var numType = int.Parse(strType, NumberStyles.AllowHexSpecifier);
+                    var strWho = strArray2[0].Replace("\0", "");
+                    var strMes = strArray2[1].Replace("\0", "");
+                    var item = new FFXIVLog((FFXILogMessageType)numType, strWho, strMes);
+                    yield return item;
                 }
-            }
-            var input = enc.GetString(TABConvertor.TabEscape(stream.ToArray()));
-            var matchs = regex.Matches(input);
-            var strArray = regex.Split(input);
-            for (var j = 1; j < strArray.Length; j++) {
-                var strArray2 = strArray[j].Split(new char[] { ':' }, 2, StringSplitOptions.None);
-                var strType = matchs[j - 1].Value.TrimEnd(new char[] { ':' });
-                var numType = int.Parse(strType, NumberStyles.AllowHexSpecifier);
-                var strWho = strArray2[0].Replace("\0", "");
-                var strMes = strArray2[1].Replace("\0", "");
-                var item = new FFXIVLog((FFXILogMessageType)numType, strWho, strMes);
-                yield return item;
             }
         }
 
