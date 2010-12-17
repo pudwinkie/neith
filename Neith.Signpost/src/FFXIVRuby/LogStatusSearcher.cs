@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Text;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace FFXIVRuby
 {
@@ -17,7 +18,7 @@ namespace FFXIVRuby
         private int _step = 0x1000;
         private FFXIVProcess ffxiv;
         private bool IsCompleted;
-        private Regex regex1 = new Regex(@"[0-9A-F]{4}::\w+|^[0-9A-F]{4}:[()\w\s\0]{32}:");
+        private Regex reLogEntry = new Regex(@"[0-9A-F]{4}::\w+|^[0-9A-F]{4}:[()\w\s\0]{32}:");
         private List<Thread> threadList = new List<Thread>();
 
         // Events
@@ -33,6 +34,9 @@ namespace FFXIVRuby
 
         private void OnLogStatusFound(FFXIVLogStatus stat)
         {
+            Debug.WriteLine(string.Format(
+                "LogStatusSearcher::OnLogStatusFound({0})", stat));
+
             _stat = stat;
             if (LogStatusFound != null) {
                 LogStatusFound(this, new LogStatusFoundEventArgs(stat));
@@ -117,7 +121,7 @@ namespace FFXIVRuby
                     if (((bytes[4] == 0x3a) && (bytes[0] == 0x30)) && (bytes[1] == 0x30)) {
                         bytes = this.ffxiv.ReadBytes(num3, 50);
                         string str = Encoding.GetEncoding("utf-8").GetString(bytes);
-                        if (this.regex1.IsMatch(str)) {
+                        if (this.reLogEntry.IsMatch(str)) {
                             var status = new FFXIVLogStatus(this.ffxiv, address);
                             OnLogStatusFound(status);
                         }
@@ -131,25 +135,31 @@ namespace FFXIVRuby
         /// PLINQ版メモリサーチ。
         /// </summary>
         /// <returns></returns>
-        public FFXIVLogStatus Search2()
+        public FFXIVLogStatus SearchPLINQ()
         {
             _stat = null;
             var st = EnRangePair()
                 .AsParallel()
-                .SelectMany(a => EnSearch(a.Item1, a.Item2))
+                .SelectMany(a => EnSearch(a.Entry, a.Size))
                 .FirstOrDefault();
             if (st != null) OnLogStatusFound(st);
             _stat = st;
             return st;
         }
 
+        private struct SearchRange
+        {
+            public int Entry;
+            public int Size;
+            public SearchRange(int ent, int size) { Entry = ent; Size = size; }
+        }
+
         /// <summary>
         /// 検索範囲の列挙
         /// </summary>
         /// <returns></returns>
-        private IEnumerable<Tuple<int, int>> EnRangePair()
+        private IEnumerable<SearchRange> EnRangePair()
         {
-            new Memory();
             foreach (var info in ffxiv.GetMemoryBasicInfos()) {
                 if (info.Protect == Memory.MEMORY_ALLOCATION_PROTECT.PAGE_READWRITE) {
                     for (int i = (int)((uint)info.BaseAddress); i < (((uint)info.BaseAddress) + ((int)info.RegionSize)); i += 0x10000) {
@@ -157,7 +167,7 @@ namespace FFXIVRuby
                         if ((i + num2) > (((uint)info.BaseAddress) + ((int)info.RegionSize))) {
                             num2 = (((int)((uint)info.BaseAddress)) + ((int)info.RegionSize)) - i;
                         }
-                        yield return new Tuple<int, int>(i, num2);
+                        yield return new SearchRange(i, num2);
                     }
                 }
             }
@@ -170,40 +180,41 @@ namespace FFXIVRuby
         /// <param name="size"></param>
         private IEnumerable<FFXIVLogStatus> EnSearch(int ent, int size)
         {
-            using (var input = new MemoryStream(ffxiv.ReadBytes(ent, size)))
-            using (var reader = new BinaryReader(input)) {
-                for (int i = 0; i < (size - 4); i += 4) {
-                    var address = reader.ReadInt32() + 0x40;
-                    var num3 = ffxiv.ReadInt32(address);
-                    if (num3 < 0x10000) continue;
-                    if (num3 > 0x7ffff000) continue;
+#if DEBUG
+            var tid = Thread.CurrentThread.ManagedThreadId;
+            Debug.WriteLine(string.Format(
+                "LogStatusSearcher::EnSearch[{0,2}](0x{1,8:X}, 0x{2,4:X})",
+                tid, ent, size));
+#endif
+            foreach (var ptr in ffxiv.ReadBytes(ent, size).EnReadInt32()) {
+                // offset+0x40の場所に格納されているアドレスが、
+                // 有効なアドレス値範囲にいなければ除外
+                var logEntry = ptr + 0x40;
+                var log = ffxiv.ReadInt32(logEntry);
+                if (log < 0x10000) continue;
+                if (log > 0x7ffff000) continue;
 
-                    var check1 = this.ffxiv.ReadBytes(num3, 5);
-                    if (check1[4] != 0x3a) continue;
-                    if (check1[0] != 0x30) continue;
-                    if (check1[1] != 0x30) continue;
+                // 見つけたアドレスから５バイトをチェック
+                // '00??:' 以外の場合に除外
+                var check1 = this.ffxiv.ReadBytes(log, 5);
+                if (check1[4] != 0x3a) continue;
+                if (check1[0] != 0x30) continue;
+                if (check1[1] != 0x30) continue;
 
-                    var check2 = this.ffxiv.ReadBytes(num3, 50);
-                    string str = Encoding.GetEncoding("utf-8").GetString(check2);
-                    if (this.regex1.IsMatch(str)) {
-                        yield return new FFXIVLogStatus(this.ffxiv, address);
-                        yield break;
-                    }
-                }
+                // 見つけたアドレスから50バイトをチェック
+                // 正規表現のパターンマッチで不一致なら除外
+                var check2 = this.ffxiv.ReadBytes(log, 50);
+                string str = Encoding.GetEncoding("utf-8").GetString(check2);
+                if (!reLogEntry.IsMatch(str)) continue;
+
+                // 確定
+                yield return new FFXIVLogStatus(this.ffxiv, logEntry);
+                yield break;
             }
         }
 
         // Properties
-        public FFXIVLogStatus FFXIVLogStat
-        {
-            get { return this._stat; }
-            set
-            {
-                if (this._stat != null) {
-                    this._stat = value;
-                }
-            }
-        }
+        public FFXIVLogStatus FFXIVLogStat { get { return this._stat; } }
     }
 
 }

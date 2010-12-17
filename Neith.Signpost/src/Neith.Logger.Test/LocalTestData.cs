@@ -29,7 +29,7 @@ namespace Neith.Logger.Test
 
         static LocalTestData()
         {
-            using (var st = File.OpenRead(@"..\..\..\..\..\..\local.xml")) {
+            using (var st = File.OpenRead(@"..\..\..\..\..\..\local-neith\local.xml")) {
                 var doc = XDocument.Load(st, LoadOptions.None);
                 var el = doc.Elements("localtest").First();
                 Mail.Smtp.Server = el.Attribute("mail.smtp.server").Value;

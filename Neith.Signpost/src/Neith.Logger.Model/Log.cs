@@ -64,8 +64,13 @@ namespace Neith.Logger.Model
         public string Message { get; set; }
 
 
-        /// <summary>ログの分析モジュール</summary>
+        /// <summary>ログのバイナリ情報</summary>
         [ProtoMember(10)]
+        public byte[] Data { get; set; }
+
+
+        /// <summary>ログの分析モジュール</summary>
+        [ProtoMember(11)]
         public string Analyzer { get; set; }
 
 

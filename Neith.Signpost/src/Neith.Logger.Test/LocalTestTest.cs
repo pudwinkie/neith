@@ -24,7 +24,7 @@ namespace Neith.Logger.Test
         [Test]
         public void ReadTest()
         {
-            using (var st = File.OpenRead(@"..\..\..\..\..\..\local.xml")) {
+            using (var st = File.OpenRead(@"..\..\..\..\..\..\local-neith\local.xml")) {
                 var doc = XDocument.Load(st, LoadOptions.None);
                 var el = doc.Elements(LOCALTEST).First();
                 var smtp_server = el.Attribute(mail_smtp_server).Value;

@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace FFXIVRuby
 {
@@ -11,6 +14,11 @@ namespace FFXIVRuby
         private int Entry;
         private int lastReadPoint;
         private FFXIVProcess ffxiv;
+
+        public override string ToString()
+        {
+            return string.Format("FFXIVLogStatus Entry=0x{0,8:X}", Entry);
+        }
 
         // Methods
         public FFXIVLogStatus(FFXIVProcess _ffxiv, int entry)
@@ -26,7 +34,7 @@ namespace FFXIVRuby
         /// <returns></returns>
         public IEnumerable<FFXIVLog> GetLogs()
         {
-            return FFXIVLog.GetLogs(GetLogData(), Encoding.GetEncoding("utf-8"));
+            return GetLogs(GetLogData(), Encoding.GetEncoding("utf-8"));
         }
 
         /// <summary>
@@ -36,7 +44,7 @@ namespace FFXIVRuby
         /// <returns></returns>
         public IEnumerable<FFXIVLog> GetLogs(int from)
         {
-            return FFXIVLog.GetLogs(GetLogData(from, TerminalPoint - from), Encoding.GetEncoding("utf-8"));
+            return GetLogs(GetLogData(from, TerminalPoint - from), Encoding.GetEncoding("utf-8"));
         }
 
         /// <summary>
@@ -46,9 +54,43 @@ namespace FFXIVRuby
         /// <returns></returns>
         public IEnumerable<FFXIVLog> GetLogs(int from, int to)
         {
-            return FFXIVLog.GetLogs(GetLogData(from, to - from), Encoding.GetEncoding("utf-8"));
+            return GetLogs(GetLogData(from, to - from), Encoding.GetEncoding("utf-8"));
         }
 
+        /// <summary>
+        /// バイナリデータより指定範囲のログを列挙します。
+        /// </summary>
+        /// <param name="LogData"></param>
+        /// <param name="enc"></param>
+        /// <returns></returns>
+        public static IEnumerable<FFXIVLog> GetLogs(byte[] LogData, Encoding enc)
+        {
+            var stream = new MemoryStream();
+            var flag = false;
+            for (var i = 0; i < LogData.Length; i++) {
+                if (flag) {
+                    stream.WriteByte(LogData[i]);
+                }
+                else if (LogData[i] == 0x30) {
+                    flag = true;
+                    stream.WriteByte(LogData[i]);
+                }
+            }
+            var input = enc.GetString(TABConvertor.TabEscape(stream.ToArray()));
+            var matchs = regex.Matches(input);
+            var strArray = regex.Split(input);
+            for (var j = 1; j < strArray.Length; j++) {
+                var strArray2 = strArray[j].Split(new char[] { ':' }, 2, StringSplitOptions.None);
+                var strType = matchs[j - 1].Value.TrimEnd(new char[] { ':' });
+                var numType = int.Parse(strType, NumberStyles.AllowHexSpecifier);
+                var mType = (FFXIVLog.FFXILogMessageType)numType;
+                var strWho = strArray2[0].Replace("\0", "");
+                var strMes = strArray2[1].Replace("\0", "");
+                var item = new FFXIVLog(mType, strWho, strMes);
+                yield return item;
+            }
+        }
+        private static Regex regex = new Regex("[0-9A-F]{4}:");
 
         /// <summary>
         /// 未取得のログを列挙します。
