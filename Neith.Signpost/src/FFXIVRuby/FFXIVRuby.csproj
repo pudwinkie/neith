@@ -49,6 +49,7 @@
     <Compile Include="FixedFormSentenceLibraryDataSet.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="LogStatusFoundEvent.cs" />
     <Compile Include="LogStatusSearcher.cs" />
     <Compile Include="Memory.cs" />
     <Compile Include="ProcessMemoryWalk.cs" />

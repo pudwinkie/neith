@@ -86,6 +86,10 @@
       <Project>{B5385976-C31F-42DF-B1DB-54EA0F98FDC3}</Project>
       <Name>Neith.Util</Name>
     </ProjectReference>
+    <ProjectReference Include="..\FFXIVRuby\FFXIVRuby.csproj">
+      <Project>{0B48D7FB-E505-4697-8467-000693B52D88}</Project>
+      <Name>FFXIVRuby</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Neith.Logger.Model\Neith.Logger.Model.csproj">
       <Project>{0E957413-DF9E-4923-90AB-B58199142CDC}</Project>
       <Name>Neith.Logger.Model</Name>

@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Windows.Forms;
 using System.ComponentModel;
+using System.Diagnostics;
 using FFXIVRuby;
 
 namespace FF14LogViewer
@@ -725,10 +726,10 @@ public class LogViewerForm : Form
         {
             this.backgroundWorker1.RunWorkerAsync();
         }
-        if ((this.logstat != null) && (this.logstat.GetTerminalPoint() != this.logterminal))
+        if ((this.logstat != null) && (this.logstat.TerminalPoint != this.logterminal))
         {
             this.LoadLogsFromProcess();
-            this.logterminal = this.logstat.GetTerminalPoint();
+            this.logterminal = this.logstat.TerminalPoint;
             this.UpdateLogs();
         }
     }
