@@ -167,67 +167,67 @@ public class LogViewerForm : Form
     {
         switch (log.MessageType)
         {
-            case FFXIVLog.FFXILogMessageType.SAY:
+            case FFXIVLog.FFXILogMessageType.TALK_SAY:
                 return this.fontsettingfrm.SayEnable;
 
-            case FFXIVLog.FFXILogMessageType.TELL:
+            case FFXIVLog.FFXILogMessageType.TALK_TELL:
                 return this.fontsettingfrm.TELLEnable;
 
-            case FFXIVLog.FFXILogMessageType.PARTY:
+            case FFXIVLog.FFXILogMessageType.TALK_PARTY:
                 return this.fontsettingfrm.PARTYEnable;
 
-            case FFXIVLog.FFXILogMessageType.LINKSHELL1:
+            case FFXIVLog.FFXILogMessageType.TALK_LS1:
                 return this.fontsettingfrm.LINKSHELL1Enable;
 
-            case FFXIVLog.FFXILogMessageType.LINKSHELL2:
+            case FFXIVLog.FFXILogMessageType.TALK_LS2:
                 return this.fontsettingfrm.LINKSHELL2Enable;
 
-            case FFXIVLog.FFXILogMessageType.LINKSHELL3:
+            case FFXIVLog.FFXILogMessageType.TALK_LS3:
                 return this.fontsettingfrm.LINKSHELL3Enable;
 
-            case FFXIVLog.FFXILogMessageType.LINKSHELL4:
+            case FFXIVLog.FFXILogMessageType.TALK_LS4:
                 return this.fontsettingfrm.LINKSHELL4Enable;
 
-            case FFXIVLog.FFXILogMessageType.LINKSHELL5:
+            case FFXIVLog.FFXILogMessageType.TALK_LS5:
                 return this.fontsettingfrm.LINKSHELL5Enable;
 
-            case FFXIVLog.FFXILogMessageType.LINKSHELL6:
+            case FFXIVLog.FFXILogMessageType.TALK_LS6:
                 return this.fontsettingfrm.LINKSHELL6Enable;
 
-            case FFXIVLog.FFXILogMessageType.LINKSHELL7:
+            case FFXIVLog.FFXILogMessageType.TALK_LS7:
                 return this.fontsettingfrm.LINKSHELL7Enable;
 
-            case FFXIVLog.FFXILogMessageType.LINKSHELL8:
+            case FFXIVLog.FFXILogMessageType.TALK_LS8:
                 return this.fontsettingfrm.LINKSHELL8Enable;
 
-            case FFXIVLog.FFXILogMessageType.MY_TELL:
+            case FFXIVLog.FFXILogMessageType.TALK_TELL_SELF:
                 return this.fontsettingfrm.TELLEnable;
 
-            case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL1:
+            case FFXIVLog.FFXILogMessageType.TALK_LS1_CURRENT:
                 return this.fontsettingfrm.LINKSHELL1Enable;
 
-            case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL2:
+            case FFXIVLog.FFXILogMessageType.TALK_LS2_CURRENT:
                 return this.fontsettingfrm.LINKSHELL2Enable;
 
-            case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL3:
+            case FFXIVLog.FFXILogMessageType.TALK_LS3_CURRENT:
                 return this.fontsettingfrm.LINKSHELL3Enable;
 
-            case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL4:
+            case FFXIVLog.FFXILogMessageType.TALK_LS4_CURRENT:
                 return this.fontsettingfrm.LINKSHELL4Enable;
 
-            case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL5:
+            case FFXIVLog.FFXILogMessageType.TALK_LS5_CURRENT:
                 return this.fontsettingfrm.LINKSHELL5Enable;
 
-            case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL6:
+            case FFXIVLog.FFXILogMessageType.TALK_LS6_CURRENT:
                 return this.fontsettingfrm.LINKSHELL6Enable;
 
-            case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL7:
+            case FFXIVLog.FFXILogMessageType.TALK_LS7_CURRENT:
                 return this.fontsettingfrm.LINKSHELL7Enable;
 
-            case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL8:
+            case FFXIVLog.FFXILogMessageType.TALK_LS8_CURRENT:
                 return this.fontsettingfrm.LINKSHELL8Enable;
 
-            case FFXIVLog.FFXILogMessageType.EMOTE:
+            case FFXIVLog.FFXILogMessageType.TALK_EMOTE:
                 return this.fontsettingfrm.EmoteEnable;
         }
         return false;
@@ -254,67 +254,67 @@ public class LogViewerForm : Form
     {
         switch (log.MessageType)
         {
-            case FFXIVLog.FFXILogMessageType.SAY:
+            case FFXIVLog.FFXILogMessageType.TALK_SAY:
                 return this.fontsettingfrm.FontSay;
 
-            case FFXIVLog.FFXILogMessageType.TELL:
+            case FFXIVLog.FFXILogMessageType.TALK_TELL:
                 return this.fontsettingfrm.FontTELL;
 
-            case FFXIVLog.FFXILogMessageType.PARTY:
+            case FFXIVLog.FFXILogMessageType.TALK_PARTY:
                 return this.fontsettingfrm.FontPARTY;
 
-            case FFXIVLog.FFXILogMessageType.LINKSHELL1:
+            case FFXIVLog.FFXILogMessageType.TALK_LS1:
                 return this.fontsettingfrm.FontLINKSHELL1;
 
-            case FFXIVLog.FFXILogMessageType.LINKSHELL2:
+            case FFXIVLog.FFXILogMessageType.TALK_LS2:
                 return this.fontsettingfrm.FontLINKSHELL2;
 
-            case FFXIVLog.FFXILogMessageType.LINKSHELL3:
+            case FFXIVLog.FFXILogMessageType.TALK_LS3:
                 return this.fontsettingfrm.FontLINKSHELL3;
 
-            case FFXIVLog.FFXILogMessageType.LINKSHELL4:
+            case FFXIVLog.FFXILogMessageType.TALK_LS4:
                 return this.fontsettingfrm.FontLINKSHELL4;
 
-            case FFXIVLog.FFXILogMessageType.LINKSHELL5:
+            case FFXIVLog.FFXILogMessageType.TALK_LS5:
                 return this.fontsettingfrm.FontLINKSHELL5;
 
-            case FFXIVLog.FFXILogMessageType.LINKSHELL6:
+            case FFXIVLog.FFXILogMessageType.TALK_LS6:
                 return this.fontsettingfrm.FontLINKSHELL6;
 
-            case FFXIVLog.FFXILogMessageType.LINKSHELL7:
+            case FFXIVLog.FFXILogMessageType.TALK_LS7:
                 return this.fontsettingfrm.FontLINKSHELL7;
 
-            case FFXIVLog.FFXILogMessageType.LINKSHELL8:
+            case FFXIVLog.FFXILogMessageType.TALK_LS8:
                 return this.fontsettingfrm.FontLINKSHELL8;
 
-            case FFXIVLog.FFXILogMessageType.MY_TELL:
+            case FFXIVLog.FFXILogMessageType.TALK_TELL_SELF:
                 return this.fontsettingfrm.FontTELL;
 
-            case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL1:
+            case FFXIVLog.FFXILogMessageType.TALK_LS1_CURRENT:
                 return this.fontsettingfrm.FontLINKSHELL1;
 
-            case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL2:
+            case FFXIVLog.FFXILogMessageType.TALK_LS2_CURRENT:
                 return this.fontsettingfrm.FontLINKSHELL2;
 
-            case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL3:
+            case FFXIVLog.FFXILogMessageType.TALK_LS3_CURRENT:
                 return this.fontsettingfrm.FontLINKSHELL3;
 
-            case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL4:
+            case FFXIVLog.FFXILogMessageType.TALK_LS4_CURRENT:
                 return this.fontsettingfrm.FontLINKSHELL4;
 
-            case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL5:
+            case FFXIVLog.FFXILogMessageType.TALK_LS5_CURRENT:
                 return this.fontsettingfrm.FontLINKSHELL5;
 
-            case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL6:
+            case FFXIVLog.FFXILogMessageType.TALK_LS6_CURRENT:
                 return this.fontsettingfrm.FontLINKSHELL6;
 
-            case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL7:
+            case FFXIVLog.FFXILogMessageType.TALK_LS7_CURRENT:
                 return this.fontsettingfrm.FontLINKSHELL7;
 
-            case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL8:
+            case FFXIVLog.FFXILogMessageType.TALK_LS8_CURRENT:
                 return this.fontsettingfrm.FontLINKSHELL8;
 
-            case FFXIVLog.FFXILogMessageType.EMOTE:
+            case FFXIVLog.FFXILogMessageType.TALK_EMOTE:
                 return this.fontsettingfrm.FontEmote;
         }
         return this.fontsettingfrm.FontSay;
@@ -341,67 +341,67 @@ public class LogViewerForm : Form
     {
         switch (log.MessageType)
         {
-            case FFXIVLog.FFXILogMessageType.SAY:
+            case FFXIVLog.FFXILogMessageType.TALK_SAY:
                 return this.fontsettingfrm.SayColor;
 
-            case FFXIVLog.FFXILogMessageType.TELL:
+            case FFXIVLog.FFXILogMessageType.TALK_TELL:
                 return this.fontsettingfrm.TELLColor;
 
-            case FFXIVLog.FFXILogMessageType.PARTY:
+            case FFXIVLog.FFXILogMessageType.TALK_PARTY:
                 return this.fontsettingfrm.PARTYColor;
 
-            case FFXIVLog.FFXILogMessageType.LINKSHELL1:
+            case FFXIVLog.FFXILogMessageType.TALK_LS1:
                 return this.fontsettingfrm.LINKSHELL1Color;
 
-            case FFXIVLog.FFXILogMessageType.LINKSHELL2:
+            case FFXIVLog.FFXILogMessageType.TALK_LS2:
                 return this.fontsettingfrm.LINKSHELL2Color;
 
-            case FFXIVLog.FFXILogMessageType.LINKSHELL3:
+            case FFXIVLog.FFXILogMessageType.TALK_LS3:
                 return this.fontsettingfrm.LINKSHELL3Color;
 
-            case FFXIVLog.FFXILogMessageType.LINKSHELL4:
+            case FFXIVLog.FFXILogMessageType.TALK_LS4:
                 return this.fontsettingfrm.LINKSHELL4Color;
 
-            case FFXIVLog.FFXILogMessageType.LINKSHELL5:
+            case FFXIVLog.FFXILogMessageType.TALK_LS5:
                 return this.fontsettingfrm.LINKSHELL5Color;
 
-            case FFXIVLog.FFXILogMessageType.LINKSHELL6:
+            case FFXIVLog.FFXILogMessageType.TALK_LS6:
                 return this.fontsettingfrm.LINKSHELL6Color;
 
-            case FFXIVLog.FFXILogMessageType.LINKSHELL7:
+            case FFXIVLog.FFXILogMessageType.TALK_LS7:
                 return this.fontsettingfrm.LINKSHELL7Color;
 
-            case FFXIVLog.FFXILogMessageType.LINKSHELL8:
+            case FFXIVLog.FFXILogMessageType.TALK_LS8:
                 return this.fontsettingfrm.LINKSHELL8Color;
 
-            case FFXIVLog.FFXILogMessageType.MY_TELL:
+            case FFXIVLog.FFXILogMessageType.TALK_TELL_SELF:
                 return this.fontsettingfrm.TELLColor;
 
-            case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL1:
+            case FFXIVLog.FFXILogMessageType.TALK_LS1_CURRENT:
                 return this.fontsettingfrm.LINKSHELL1Color;
 
-            case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL2:
+            case FFXIVLog.FFXILogMessageType.TALK_LS2_CURRENT:
                 return this.fontsettingfrm.LINKSHELL2Color;
 
-            case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL3:
+            case FFXIVLog.FFXILogMessageType.TALK_LS3_CURRENT:
                 return this.fontsettingfrm.LINKSHELL3Color;
 
-            case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL4:
+            case FFXIVLog.FFXILogMessageType.TALK_LS4_CURRENT:
                 return this.fontsettingfrm.LINKSHELL4Color;
 
-            case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL5:
+            case FFXIVLog.FFXILogMessageType.TALK_LS5_CURRENT:
                 return this.fontsettingfrm.LINKSHELL5Color;
 
-            case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL6:
+            case FFXIVLog.FFXILogMessageType.TALK_LS6_CURRENT:
                 return this.fontsettingfrm.LINKSHELL6Color;
 
-            case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL7:
+            case FFXIVLog.FFXILogMessageType.TALK_LS7_CURRENT:
                 return this.fontsettingfrm.LINKSHELL7Color;
 
-            case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL8:
+            case FFXIVLog.FFXILogMessageType.TALK_LS8_CURRENT:
                 return this.fontsettingfrm.LINKSHELL8Color;
 
-            case FFXIVLog.FFXILogMessageType.EMOTE:
+            case FFXIVLog.FFXILogMessageType.TALK_EMOTE:
                 return this.fontsettingfrm.EmoteColor;
         }
         return this.fontsettingfrm.SayColor;
@@ -620,87 +620,87 @@ public class LogViewerForm : Form
                 {
                     switch (list[i].MessageType)
                     {
-                        case FFXIVLog.FFXILogMessageType.SAY:
+                        case FFXIVLog.FFXILogMessageType.TALK_SAY:
                             whiteSmoke = new SolidBrush(this.fontsettingfrm.SayColor);
                             break;
 
-                        case FFXIVLog.FFXILogMessageType.TELL:
+                        case FFXIVLog.FFXILogMessageType.TALK_TELL:
                             whiteSmoke = new SolidBrush(this.fontsettingfrm.TELLColor);
                             break;
 
-                        case FFXIVLog.FFXILogMessageType.PARTY:
+                        case FFXIVLog.FFXILogMessageType.TALK_PARTY:
                             whiteSmoke = new SolidBrush(this.fontsettingfrm.PARTYColor);
                             break;
 
-                        case FFXIVLog.FFXILogMessageType.LINKSHELL1:
+                        case FFXIVLog.FFXILogMessageType.TALK_LS1:
                             whiteSmoke = new SolidBrush(this.fontsettingfrm.LINKSHELL1Color);
                             break;
 
-                        case FFXIVLog.FFXILogMessageType.LINKSHELL2:
+                        case FFXIVLog.FFXILogMessageType.TALK_LS2:
                             whiteSmoke = new SolidBrush(this.fontsettingfrm.LINKSHELL2Color);
                             break;
 
-                        case FFXIVLog.FFXILogMessageType.LINKSHELL3:
+                        case FFXIVLog.FFXILogMessageType.TALK_LS3:
                             whiteSmoke = new SolidBrush(this.fontsettingfrm.LINKSHELL3Color);
                             break;
 
-                        case FFXIVLog.FFXILogMessageType.LINKSHELL4:
+                        case FFXIVLog.FFXILogMessageType.TALK_LS4:
                             whiteSmoke = new SolidBrush(this.fontsettingfrm.LINKSHELL4Color);
                             break;
 
-                        case FFXIVLog.FFXILogMessageType.LINKSHELL5:
+                        case FFXIVLog.FFXILogMessageType.TALK_LS5:
                             whiteSmoke = new SolidBrush(this.fontsettingfrm.LINKSHELL5Color);
                             break;
 
-                        case FFXIVLog.FFXILogMessageType.LINKSHELL6:
+                        case FFXIVLog.FFXILogMessageType.TALK_LS6:
                             whiteSmoke = new SolidBrush(this.fontsettingfrm.LINKSHELL6Color);
                             break;
 
-                        case FFXIVLog.FFXILogMessageType.LINKSHELL7:
+                        case FFXIVLog.FFXILogMessageType.TALK_LS7:
                             whiteSmoke = new SolidBrush(this.fontsettingfrm.LINKSHELL7Color);
                             break;
 
-                        case FFXIVLog.FFXILogMessageType.LINKSHELL8:
+                        case FFXIVLog.FFXILogMessageType.TALK_LS8:
                             whiteSmoke = new SolidBrush(this.fontsettingfrm.LINKSHELL8Color);
                             break;
 
-                        case FFXIVLog.FFXILogMessageType.MY_TELL:
+                        case FFXIVLog.FFXILogMessageType.TALK_TELL_SELF:
                             whiteSmoke = new SolidBrush(this.fontsettingfrm.TELLColor);
                             break;
 
-                        case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL1:
+                        case FFXIVLog.FFXILogMessageType.TALK_LS1_CURRENT:
                             whiteSmoke = new SolidBrush(this.fontsettingfrm.LINKSHELL1Color);
                             break;
 
-                        case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL2:
+                        case FFXIVLog.FFXILogMessageType.TALK_LS2_CURRENT:
                             whiteSmoke = new SolidBrush(this.fontsettingfrm.LINKSHELL2Color);
                             break;
 
-                        case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL3:
+                        case FFXIVLog.FFXILogMessageType.TALK_LS3_CURRENT:
                             whiteSmoke = new SolidBrush(this.fontsettingfrm.LINKSHELL3Color);
                             break;
 
-                        case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL4:
+                        case FFXIVLog.FFXILogMessageType.TALK_LS4_CURRENT:
                             whiteSmoke = new SolidBrush(this.fontsettingfrm.LINKSHELL4Color);
                             break;
 
-                        case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL5:
+                        case FFXIVLog.FFXILogMessageType.TALK_LS5_CURRENT:
                             whiteSmoke = new SolidBrush(this.fontsettingfrm.LINKSHELL5Color);
                             break;
 
-                        case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL6:
+                        case FFXIVLog.FFXILogMessageType.TALK_LS6_CURRENT:
                             whiteSmoke = new SolidBrush(this.fontsettingfrm.LINKSHELL6Color);
                             break;
 
-                        case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL7:
+                        case FFXIVLog.FFXILogMessageType.TALK_LS7_CURRENT:
                             whiteSmoke = new SolidBrush(this.fontsettingfrm.LINKSHELL7Color);
                             break;
 
-                        case FFXIVLog.FFXILogMessageType.CURRENT_LINKSHELL8:
+                        case FFXIVLog.FFXILogMessageType.TALK_LS8_CURRENT:
                             whiteSmoke = new SolidBrush(this.fontsettingfrm.LINKSHELL8Color);
                             break;
 
-                        case FFXIVLog.FFXILogMessageType.EMOTE:
+                        case FFXIVLog.FFXILogMessageType.TALK_EMOTE:
                             whiteSmoke = new SolidBrush(this.fontsettingfrm.EmoteColor);
                             break;
                     }

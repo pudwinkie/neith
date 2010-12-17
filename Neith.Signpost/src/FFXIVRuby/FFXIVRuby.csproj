@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="protobuf-net">
+      <HintPath>..\..\..\..\neith-base\externals\protobuf-net\protobuf-net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BinaryReaderExtensions.cs" />
     <Compile Include="DataDisguiser.cs" />
     <Compile Include="FFXIVLog.cs" />
     <Compile Include="FFXIVLogStatus.cs" />

@@ -5,52 +5,98 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using ProtoBuf;
 
 namespace FFXIVRuby
 {
+    [ProtoContract]
     public class FFXIVLog
     {
         // Fields
+        [ProtoMember(1)]
         private string _Message;
+
+        [ProtoMember(2)]
         private FFXILogMessageType _MessageType;
+
+        [ProtoMember(3)]
         private string _Who;
-        public static readonly string Extension = "LOG";
-        private static Regex regex = new Regex("[0-9A-F]{4}:");
+
+        // Properties
+        public string Message { get { return _Message; } }
+
+        public FFXILogMessageType MessageType { get { return _MessageType; } }
+
+        public string Who { get { return _Who; } }
+
+
+        // Nested Types
+        public enum FFXILogMessageType
+        {
+            TALK_SAY = 0x0001,
+            TALK_SHOUT = 0x0002,
+            TALK_TELL = 0x0003,
+            TALK_PARTY = 0x0004,
+            TALK_LS1 = 0x0005,
+            TALK_LS2 = 0x0006,
+            TALK_LS3 = 0x0007,
+            TALK_LS4 = 0x0008,
+            TALK_LS5 = 0x0009,
+            TALK_LS6 = 0x000A,
+            TALK_LS7 = 0x000B,
+            TALK_LS8 = 0x000C,
+            TALK_TELL_SELF = 0x000D,
+            TALK_LS1_CURRENT = 0x000E,
+            TALK_LS2_CURRENT = 0x000F,
+            TALK_LS3_CURRENT = 0x0010,
+            TALK_LS4_CURRENT = 0x0011,
+            TALK_LS5_CURRENT = 0x0012,
+            TALK_LS6_CURRENT = 0x0013,
+            TALK_LS7_CURRENT = 0x0014,
+            TALK_LS8_CURRENT = 0x0015,
+            TALK_EMOTE = 0x001B,
+            SYSTEM_INFO = 0x001D,
+            SYSTEM_MY_ACTION = 0x0020,
+            SYSTEM_2 = 0x0021,
+            TALK_NPC1 = 0x0023,
+            TALK_NPC2 = 0x0026,
+            TALK_NPC3 = 0x0028,
+            MY_GAIN = 0x0042,
+            OTHER_GAIN = 0x0043,
+            MY_ENEMY_DOWNED = 0x0044,
+            OTHER_DOWNED = 0x0045,
+            MY_HIT = 0x0050,
+            MY_DAMAGE = 0x0051,
+            PARTY_HIT = 0x0052,
+            PARTY_DAMAGE = 0x0053,
+            OTHER_ACTION_ME = 0x0054,
+            OTHER_ACTION = 0x0055,
+            MY_MISS = 0x0056,
+            PARTY_MISS = 0x0058,
+            OTHER_HIT_PARTY_MISS = 0x0059,
+            OTHER_ACTION_MISS = 0x005B,
+            MY_ACTION = 0x005C,
+            PAETY_HEALED = 0x005E,
+            OTHER_ACTION_OTHER1 = 0x0061,
+            MY_EFFECT_REMOVED = 0x0062,
+            PARTY_EFFECT = 0x0064,
+            ENEMY_EFFECT = 0x0066,
+            OTHER_EFFECT_REMOVED = 0x0067,
+            MY_ENFEEBLE_REMOVED = 0x0068,
+            MY_ENFEEBLE = 0x0069,
+            PARTY_ENFEEBLE_REMOVED2 = 0x006A,
+            PARTY_ENFEEBLE0 = 0x006B,
+            OTHER_ENFEEBLE2 = 0x006C,
+            OTHER_ENFEEBLE1 = 0x006D,
+        }
+
 
         // Methods
-        private FFXIVLog(FFXILogMessageType logtype, string who, string message)
+        public FFXIVLog(FFXILogMessageType logtype, string who, string message)
         {
             _MessageType = logtype;
             _Who = who;
             _Message = message;
-        }
-
-        public static IEnumerable<FFXIVLog> GetLogs(byte[] LogData, Encoding enc)
-        {
-            using (var stream = new MemoryStream()) {
-                var flag = false;
-                for (int i = 0; i < LogData.Length; i++) {
-                    if (flag) {
-                        stream.WriteByte(LogData[i]);
-                    }
-                    else if (LogData[i] == 0x30) {
-                        flag = true;
-                        stream.WriteByte(LogData[i]);
-                    }
-                }
-                var input = enc.GetString(TABConvertor.TabEscape(stream.ToArray()));
-                var matchs = regex.Matches(input);
-                var strArray = regex.Split(input);
-                for (var j = 1; j < strArray.Length; j++) {
-                    var strArray2 = strArray[j].Split(new char[] { ':' }, 2, StringSplitOptions.None);
-                    var strType = matchs[j - 1].Value.TrimEnd(new char[] { ':' });
-                    var numType = int.Parse(strType, NumberStyles.AllowHexSpecifier);
-                    var strWho = strArray2[0].Replace("\0", "");
-                    var strMes = strArray2[1].Replace("\0", "");
-                    var item = new FFXIVLog((FFXILogMessageType)numType, strWho, strMes);
-                    yield return item;
-                }
-            }
         }
 
         public override string ToString()
@@ -60,131 +106,64 @@ namespace FFXIVRuby
                 str = string.Format("{0} : {1}", Who, Message);
             }
             switch (MessageType) {
-                case FFXILogMessageType.TELL:
+                case FFXILogMessageType.TALK_TELL:
                     return string.Format("{0} >> {1}", Who, Message);
 
-                case FFXILogMessageType.PARTY:
+                case FFXILogMessageType.TALK_PARTY:
                     return string.Format("( {0} ) {1}", Who, Message);
 
-                case FFXILogMessageType.LINKSHELL1:
+                case FFXILogMessageType.TALK_LS1:
                     return string.Format("[1]<{0}> {1}", Who, Message);
 
-                case FFXILogMessageType.LINKSHELL2:
+                case FFXILogMessageType.TALK_LS2:
                     return string.Format("[2]<{0}> {1}", Who, Message);
 
-                case FFXILogMessageType.LINKSHELL3:
+                case FFXILogMessageType.TALK_LS3:
                     return string.Format("[3]<{0}> {1}", Who, Message);
 
-                case FFXILogMessageType.LINKSHELL4:
+                case FFXILogMessageType.TALK_LS4:
                     return string.Format("[4]<{0}> {1}", Who, Message);
 
-                case FFXILogMessageType.LINKSHELL5:
+                case FFXILogMessageType.TALK_LS5:
                     return string.Format("[5]<{0}> {1}", Who, Message);
 
-                case FFXILogMessageType.LINKSHELL6:
+                case FFXILogMessageType.TALK_LS6:
                     return string.Format("[6]<{0}> {1}", Who, Message);
 
-                case FFXILogMessageType.LINKSHELL7:
+                case FFXILogMessageType.TALK_LS7:
                     return string.Format("[7]<{0}> {1}", Who, Message);
 
-                case FFXILogMessageType.LINKSHELL8:
+                case FFXILogMessageType.TALK_LS8:
                     return string.Format("[8]<{0}> {1}", Who, Message);
 
-                case FFXILogMessageType.MY_TELL:
+                case FFXILogMessageType.TALK_TELL_SELF:
                     return string.Format(">> {0} : {1}", Who, Message);
 
-                case FFXILogMessageType.CURRENT_LINKSHELL1:
+                case FFXILogMessageType.TALK_LS1_CURRENT:
                     return string.Format("[1]<{0}> {1}", Who, Message);
 
-                case FFXILogMessageType.CURRENT_LINKSHELL2:
+                case FFXILogMessageType.TALK_LS2_CURRENT:
                     return string.Format("[2]<{0}> {1}", Who, Message);
 
-                case FFXILogMessageType.CURRENT_LINKSHELL3:
+                case FFXILogMessageType.TALK_LS3_CURRENT:
                     return string.Format("[3]<{0}> {1}", Who, Message);
 
-                case FFXILogMessageType.CURRENT_LINKSHELL4:
+                case FFXILogMessageType.TALK_LS4_CURRENT:
                     return string.Format("[4]<{0}> {1}", Who, Message);
 
-                case FFXILogMessageType.CURRENT_LINKSHELL5:
+                case FFXILogMessageType.TALK_LS5_CURRENT:
                     return string.Format("[5]<{0}> {1}", Who, Message);
 
-                case FFXILogMessageType.CURRENT_LINKSHELL6:
+                case FFXILogMessageType.TALK_LS6_CURRENT:
                     return string.Format("[6]<{0}> {1}", Who, Message);
 
-                case FFXILogMessageType.CURRENT_LINKSHELL7:
+                case FFXILogMessageType.TALK_LS7_CURRENT:
                     return string.Format("[7]<{0}> {1}", Who, Message);
 
-                case FFXILogMessageType.CURRENT_LINKSHELL8:
+                case FFXILogMessageType.TALK_LS8_CURRENT:
                     return string.Format("[8]<{0}> {1}", Who, Message);
             }
             return str;
-        }
-
-        // Properties
-        public string Message { get { return _Message; } }
-
-        public FFXILogMessageType MessageType { get { return _MessageType; } }
-
-        public string Who { get { return _Who; } }
-
-        // Nested Types
-        public enum FFXILogMessageType
-        {
-            CURRENT_LINKSHELL1 = 14,
-            CURRENT_LINKSHELL2 = 15,
-            CURRENT_LINKSHELL3 = 0x10,
-            CURRENT_LINKSHELL4 = 0x11,
-            CURRENT_LINKSHELL5 = 0x12,
-            CURRENT_LINKSHELL6 = 0x13,
-            CURRENT_LINKSHELL7 = 20,
-            CURRENT_LINKSHELL8 = 0x15,
-            EMOTE = 0x1b,
-            ENEMY_EFFECT = 0x66,
-            LINKSHELL1 = 5,
-            LINKSHELL2 = 6,
-            LINKSHELL3 = 7,
-            LINKSHELL4 = 8,
-            LINKSHELL5 = 9,
-            LINKSHELL6 = 10,
-            LINKSHELL7 = 11,
-            LINKSHELL8 = 12,
-            MY_ACTION = 0x5c,
-            MY_DAMAGE = 0x51,
-            MY_EFFECT_REMOVED = 0x62,
-            MY_ENEMY_DOWNED = 0x44,
-            MY_ENFEEBLE = 0x69,
-            MY_ENFEEBLE_REMOVED = 0x68,
-            MY_GAIN = 0x42,
-            MY_HIT = 80,
-            MY_MISS = 0x56,
-            MY_TELL = 13,
-            NPC_SAY1 = 0x23,
-            NPC_SAY2 = 0x26,
-            NPC_SAY3 = 40,
-            OTHER_ACTION = 0x55,
-            OTHER_ACTION_ME = 0x54,
-            OTHER_ACTION_MISS = 0x5b,
-            OTHER_ACTION_OTHER1 = 0x61,
-            OTHER_DOWNED = 0x45,
-            OTHER_EFFECT_REMOVED = 0x67,
-            OTHER_ENFEEBLE1 = 0x6d,
-            OTHER_ENFEEBLE2 = 0x6c,
-            OTHER_GAIN = 0x43,
-            OTHER_HIT_PARTY_MISS = 0x59,
-            PAETY_HEALED = 0x5e,
-            PARTY = 4,
-            PARTY_DAMAGE = 0x53,
-            PARTY_EFFECT = 100,
-            PARTY_ENFEEBLE_REMOVED2 = 0x6a,
-            PARTY_ENFEEBLE0 = 0x6b,
-            PARTY_HIT = 0x52,
-            PARTY_MISS = 0x58,
-            SAY = 1,
-            SHOUT = 2,
-            SYSTEM_0 = 0x1d,
-            SYSTEM_1 = 0x20,
-            SYSTEM_2 = 0x21,
-            TELL = 3
         }
     }
 }
