@@ -19,7 +19,7 @@ namespace FFXIVRuby
             memory = new Memory();
         }
 
-        public Memory.MEMORY_BASIC_INFORMATION[] GetMemoryBasicInfos()
+        public IEnumerable<Memory.MEMORY_BASIC_INFORMATION> GetMemoryBasicInfos()
         {
             return memory.GetMemoryInfos(Proc);
         }

@@ -10,57 +10,37 @@ namespace FFXIVRuby
     public class Memory
     {
         // Fields
-        private MEMORY_BASIC_INFORMATION mbi = new MEMORY_BASIC_INFORMATION();
-        private SYSTEM_INFO system_info = new SYSTEM_INFO();
 
         // Methods
-        public MEMORY_BASIC_INFORMATION[] GetMemoryInfos(Process proc)
+        public IEnumerable<MEMORY_BASIC_INFORMATION> GetMemoryInfos(Process proc)
         {
-            GetSystemInfo(ref this.system_info);
-            uint lpMinimumApplicationAddress = this.system_info.lpMinimumApplicationAddress;
-            MEMORY_BASIC_INFORMATION lpBuffer = new MEMORY_BASIC_INFORMATION();
-            List<MEMORY_BASIC_INFORMATION> list = new List<MEMORY_BASIC_INFORMATION>();
-            while (lpMinimumApplicationAddress < this.system_info.lpMaximumApplicationAddress) {
-                VirtualQueryEx(proc.Handle, lpMinimumApplicationAddress, out lpBuffer, Marshal.SizeOf(lpBuffer));
-                list.Add(lpBuffer);
-                lpMinimumApplicationAddress = ((uint)lpBuffer.BaseAddress) + ((uint)((int)lpBuffer.RegionSize));
+            var system_info = GetSystemInfo();
+            var minAdd = system_info.lpMinimumApplicationAddress.ToInt64();
+            var maxAdd = system_info.lpMaximumApplicationAddress.ToInt64();
+            while (minAdd < maxAdd) {
+                var info = new MEMORY_BASIC_INFORMATION();
+                var ptr = new IntPtr(minAdd);
+                VirtualQueryEx(proc.Handle, ptr, out info, Marshal.SizeOf(info));
+                yield return info;
+                minAdd = info.BaseAddress.ToInt64() + info.RegionSize.ToInt64();
             }
-            return list.ToArray();
         }
 
         [DllImport("kernel32.dll")]
         private static extern void GetSystemInfo([MarshalAs(UnmanagedType.Struct)] ref SYSTEM_INFO lpSystemInfo);
-        public void ShowMemory()
+
+        private static SYSTEM_INFO GetSystemInfo()
         {
-            GetSystemInfo(ref this.system_info);
-            Console.WriteLine("dwProcessorType: {0}", this.system_info.dwProcessorType.ToString());
-            Console.WriteLine("dwPageSize: {0}", this.system_info.dwPageSize.ToString());
-            if (VirtualQuery(ref this.system_info.dwPageSize, ref this.mbi, Marshal.SizeOf(this.mbi)) != 0) {
-                Console.WriteLine("AllocationBase: {0}", this.mbi.AllocationBase);
-                Console.WriteLine("BaseAddress: {0}", this.mbi.BaseAddress);
-                Console.WriteLine("RegionSize: {0}", this.mbi.RegionSize);
-            }
-            else {
-                Console.WriteLine("ERROR: VirtualQuery() failed.");
-            }
+            var system_info = new SYSTEM_INFO();
+            GetSystemInfo(ref system_info);
+            return system_info;
         }
 
-        public void ShowMemory(Process proc)
-        {
-            GetSystemInfo(ref this.system_info);
-            uint lpMinimumApplicationAddress = this.system_info.lpMinimumApplicationAddress;
-            MEMORY_BASIC_INFORMATION lpBuffer = new MEMORY_BASIC_INFORMATION();
-            while (lpMinimumApplicationAddress < this.system_info.lpMaximumApplicationAddress) {
-                VirtualQueryEx(proc.Handle, lpMinimumApplicationAddress, out lpBuffer, Marshal.SizeOf(lpBuffer));
-                Console.WriteLine("{0} {1}", ((uint)lpBuffer.BaseAddress).ToString("X"), lpBuffer.RegionSize.ToString("X"));
-                lpMinimumApplicationAddress = ((uint)lpBuffer.BaseAddress) + ((uint)((int)lpBuffer.RegionSize));
-            }
-        }
 
         [DllImport("kernel32.dll")]
-        private static extern int VirtualQuery(ref uint lpAddress, ref MEMORY_BASIC_INFORMATION lpBuffer, int dwLength);
+        private static extern int VirtualQuery(IntPtr lpAddress, ref MEMORY_BASIC_INFORMATION lpBuffer, IntPtr dwLength);
         [DllImport("kernel32.dll")]
-        private static extern int VirtualQueryEx(IntPtr hProcess, uint lpAddress, out MEMORY_BASIC_INFORMATION lpBuffer, int dwLength);
+        private static extern int VirtualQueryEx(IntPtr hProcess, IntPtr lpAddress, out MEMORY_BASIC_INFORMATION lpBuffer, int dwLength);
 
         // Nested Types
         public enum MEMORY_ALLOCATION_PROTECT : uint
@@ -81,8 +61,8 @@ namespace FFXIVRuby
         [StructLayout(LayoutKind.Sequential)]
         public struct MEMORY_BASIC_INFORMATION
         {
-            public UIntPtr BaseAddress;
-            public UIntPtr AllocationBase;
+            public IntPtr BaseAddress;
+            public IntPtr AllocationBase;
             public Memory.MEMORY_ALLOCATION_PROTECT AllocationProtect;
             public IntPtr RegionSize;
             public Memory.MEMORY_STATE State;
@@ -121,8 +101,8 @@ namespace FFXIVRuby
         {
             internal Memory.PROCESSOR_INFO_UNION p;
             public uint dwPageSize;
-            public uint lpMinimumApplicationAddress;
-            public uint lpMaximumApplicationAddress;
+            public IntPtr lpMinimumApplicationAddress;
+            public IntPtr lpMaximumApplicationAddress;
             public uint dwActiveProcessorMask;
             public uint dwNumberOfProcessors;
             public uint dwProcessorType;

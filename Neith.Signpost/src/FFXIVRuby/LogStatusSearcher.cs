@@ -180,7 +180,7 @@ namespace FFXIVRuby
         /// <param name="size"></param>
         private IEnumerable<FFXIVLogStatus> EnSearch(int ent, int size)
         {
-#if DEBUG
+#if false
             var tid = Thread.CurrentThread.ManagedThreadId;
             Debug.WriteLine(string.Format(
                 "LogStatusSearcher::EnSearch[{0,2}](0x{1,8:X}, 0x{2,4:X})",
