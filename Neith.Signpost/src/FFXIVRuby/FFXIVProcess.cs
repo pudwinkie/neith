@@ -10,28 +10,28 @@ namespace FFXIVRuby
     {
         // Fields
         private Memory memory;
-        private Process proc;
+        public Process Proc { get; private set; }
 
         // Methods
         public FFXIVProcess(Process p)
         {
-            proc = p;
+            Proc = p;
             memory = new Memory();
         }
 
         public Memory.MEMORY_BASIC_INFORMATION[] GetMemoryBasicInfos()
         {
-            return memory.GetMemoryInfos(proc);
+            return memory.GetMemoryInfos(Proc);
         }
 
         public byte[] ReadBytes(int address, int size)
         {
-            return FFXIVMemoryProvidor.ReadProcessMemory(this.proc.Handle, address, size);
+            return FFXIVMemoryProvidor.ReadProcessMemory(this.Proc.Handle, address, size);
         }
 
         public int ReadInt32(int address)
         {
-            byte[] buffer = FFXIVMemoryProvidor.ReadProcessMemory(this.proc.Handle, address, 4);
+            byte[] buffer = FFXIVMemoryProvidor.ReadProcessMemory(this.Proc.Handle, address, 4);
             return (((buffer[0] + (buffer[1] * 0x100)) + (buffer[2] * 0x10000)) + (buffer[3] * 0x1000000));
         }
     }

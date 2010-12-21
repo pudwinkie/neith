@@ -12,8 +12,7 @@ namespace FFXIVRuby
     {
         // Fields
         private int Entry;
-        private int lastReadPoint;
-        private FFXIVProcess ffxiv;
+        public FFXIVProcess FFXIV { get; private set; }
 
         public override string ToString()
         {
@@ -23,9 +22,8 @@ namespace FFXIVRuby
         // Methods
         public FFXIVLogStatus(FFXIVProcess _ffxiv, int entry)
         {
-            ffxiv = _ffxiv;
+            FFXIV = _ffxiv;
             Entry = entry;
-            lastReadPoint = EntryPoint;
         }
 
         /// <summary>
@@ -63,7 +61,7 @@ namespace FFXIVRuby
         /// <param name="LogData"></param>
         /// <param name="enc"></param>
         /// <returns></returns>
-        public static IEnumerable<FFXIVLog> GetLogs(byte[] LogData, Encoding enc)
+        public IEnumerable<FFXIVLog> GetLogs(byte[] LogData, Encoding enc)
         {
             var stream = new MemoryStream();
             var flag = false;
@@ -83,28 +81,13 @@ namespace FFXIVRuby
                 var strArray2 = strArray[j].Split(new char[] { ':' }, 2, StringSplitOptions.None);
                 var strType = matchs[j - 1].Value.TrimEnd(new char[] { ':' });
                 var numType = int.Parse(strType, NumberStyles.AllowHexSpecifier);
-                var strWho = strArray2[0].Replace("\0", "");
+                var strWho = strArray2[0].Replace("\0", "").Trim();
                 var strMes = strArray2[1].Replace("\0", "");
-                var item = new FFXIVLog(numType, strWho, strMes);
+                var item = new FFXIVLog(FFXIV, numType, strWho, strMes);
                 yield return item;
             }
         }
         private static Regex regex = new Regex("[0-9A-F]{4}:");
-
-        /// <summary>
-        /// 未取得のログを列挙します。
-        /// </summary>
-        /// <param name="from"></param>
-        /// <returns></returns>
-        public IEnumerable<FFXIVLog> GetRemainLogs()
-        {
-            var term = TerminalPoint;
-            if (lastReadPoint == term) return Enumerable.Empty<FFXIVLog>();
-            var from = lastReadPoint;
-            var to = term;
-            lastReadPoint = term;
-            return GetLogs(from, to);
-        }
 
         private byte[] GetLogData()
         {
@@ -113,7 +96,7 @@ namespace FFXIVRuby
 
         private byte[] GetLogData(int from, int size)
         {
-            return ffxiv.ReadBytes(from, size);
+            return FFXIV.ReadBytes(from, size);
         }
 
 
@@ -129,11 +112,11 @@ namespace FFXIVRuby
 
         private int GetTerminalPoint()
         {
-            return this.ffxiv.ReadInt32(Entry + 4);
+            return this.FFXIV.ReadInt32(Entry + 4);
         }
         private int GetEntryPoint()
         {
-            return ffxiv.ReadInt32(this.Entry);
+            return FFXIV.ReadInt32(this.Entry);
         }
 
     }

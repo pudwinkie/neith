@@ -12,18 +12,16 @@ namespace FFXIVRuby
     [ProtoContract]
     public class FFXIVLog
     {
+        public FFXIVProcess FFXIV { get; private set; }
+
         [ProtoMember(1)]
-        public string Who { get; private set; }
+        public int MessageTypeID { get; private set; }
 
         [ProtoMember(2)]
-        public int MessageTypeID { get; private set; }
+        public string Who { get; private set; }
 
         [ProtoMember(3)]
         public string Message { get; private set; }
-
-
-
-
 
         public FFXILogMessageType MessageType
         {
@@ -36,8 +34,9 @@ namespace FFXIVRuby
         }
 
         // Methods
-        public FFXIVLog(int messageId, string who, string message)
+        public FFXIVLog(FFXIVProcess ffxiv, int messageId, string who, string message)
         {
+            FFXIV = ffxiv;
             MessageTypeID = messageId;
             Who = who;
             Message = message;
@@ -45,10 +44,6 @@ namespace FFXIVRuby
 
         public override string ToString()
         {
-            string str = string.Format("{1}", Who, Message);
-            if (this.Who != "") {
-                str = string.Format("{0} : {1}", Who, Message);
-            }
             switch (MessageType) {
                 case FFXILogMessageType.TALK_TELL:
                     return string.Format("{0} >> {1}", Who, Message);
@@ -106,8 +101,13 @@ namespace FFXIVRuby
 
                 case FFXILogMessageType.TALK_LS8_CURRENT:
                     return string.Format("[8]<{0}> {1}", Who, Message);
+
+                case FFXILogMessageType.UNNONE:
+                    return string.Format("[{0,4:X}]<{1}> {2}", MessageTypeID, Who, Message);
+                default:
+
+                    return string.Format("[{0}]<{1}> {2}", MessageType, Who, Message);
             }
-            return str;
         }
     }
 }
