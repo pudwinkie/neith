@@ -83,10 +83,9 @@ namespace FFXIVRuby
                 var strArray2 = strArray[j].Split(new char[] { ':' }, 2, StringSplitOptions.None);
                 var strType = matchs[j - 1].Value.TrimEnd(new char[] { ':' });
                 var numType = int.Parse(strType, NumberStyles.AllowHexSpecifier);
-                var mType = (FFXIVLog.FFXILogMessageType)numType;
                 var strWho = strArray2[0].Replace("\0", "");
                 var strMes = strArray2[1].Replace("\0", "");
-                var item = new FFXIVLog(mType, strWho, strMes);
+                var item = new FFXIVLog(numType, strWho, strMes);
                 yield return item;
             }
         }
