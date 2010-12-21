@@ -113,6 +113,11 @@ namespace Neith.Logger.Model
 
         private Log() { }
 
+        public override string ToString()
+        {
+            return string.Format("{0:O}: {1}", Timestamp, Message);
+        }
+
         #endregion
 
     }

@@ -72,6 +72,7 @@
     <Compile Include="XIV\XIVCollecter.cs" />
     <Compile Include="XIV\XIVLogFileLoader.cs" />
     <Compile Include="XIV\XIVLogger.cs" />
+    <Compile Include="XIV\XIVProcessWatch.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\neith-base\Neith.Util\src\Neith.Util.Extensions\Neith.Util.Extensions.csproj">

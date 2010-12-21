@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+# Visual C# Express 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neith.Signpost", "Neith.Signpost\Neith.Signpost.csproj", "{3C5F9F5B-547F-4FD1-90B8-56117E8BA522}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neith.Util", "..\..\..\neith-base\Neith.Util\src\Neith.Util\Neith.Util.csproj", "{B5385976-C31F-42DF-B1DB-54EA0F98FDC3}"
@@ -169,16 +169,14 @@ Global
 		{0B48D7FB-E505-4697-8467-000693B52D88}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{0B48D7FB-E505-4697-8467-000693B52D88}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{0B48D7FB-E505-4697-8467-000693B52D88}.Release|x86.ActiveCfg = Release|Any CPU
-		{A3CBA177-581F-4E5C-91BD-CF997D57D18D}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{A3CBA177-581F-4E5C-91BD-CF997D57D18D}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{A3CBA177-581F-4E5C-91BD-CF997D57D18D}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{A3CBA177-581F-4E5C-91BD-CF997D57D18D}.Debug|x86.ActiveCfg = Debug|x86
-		{A3CBA177-581F-4E5C-91BD-CF997D57D18D}.Debug|x86.Build.0 = Debug|x86
-		{A3CBA177-581F-4E5C-91BD-CF997D57D18D}.Release|Any CPU.ActiveCfg = Release|x86
-		{A3CBA177-581F-4E5C-91BD-CF997D57D18D}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{A3CBA177-581F-4E5C-91BD-CF997D57D18D}.Release|Mixed Platforms.Build.0 = Release|x86
-		{A3CBA177-581F-4E5C-91BD-CF997D57D18D}.Release|x86.ActiveCfg = Release|x86
-		{A3CBA177-581F-4E5C-91BD-CF997D57D18D}.Release|x86.Build.0 = Release|x86
+		{A3CBA177-581F-4E5C-91BD-CF997D57D18D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3CBA177-581F-4E5C-91BD-CF997D57D18D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A3CBA177-581F-4E5C-91BD-CF997D57D18D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A3CBA177-581F-4E5C-91BD-CF997D57D18D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A3CBA177-581F-4E5C-91BD-CF997D57D18D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3CBA177-581F-4E5C-91BD-CF997D57D18D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A3CBA177-581F-4E5C-91BD-CF997D57D18D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A3CBA177-581F-4E5C-91BD-CF997D57D18D}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
