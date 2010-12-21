@@ -33,6 +33,12 @@ namespace FFXIVRuby
             }
         }
 
+        public bool IsUnnone { get { return MessageType == FFXILogMessageType.UNNONE; } }
+
+
+
+
+
         // Methods
         public FFXIVLog(FFXIVProcess ffxiv, int messageId, string who, string message)
         {
@@ -40,6 +46,9 @@ namespace FFXIVRuby
             MessageTypeID = messageId;
             Who = who;
             Message = message;
+
+            if (string.IsNullOrEmpty(Who)) Who = string.Empty;
+            if (string.IsNullOrEmpty(Message)) Message = string.Empty;
         }
 
         public override string ToString()

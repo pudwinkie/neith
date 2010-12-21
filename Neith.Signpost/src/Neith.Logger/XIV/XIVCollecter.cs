@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Concurrency;
+using System.Diagnostics;
 using ProtoBuf;
 using Neith.Logger.Model;
 using FFXIVRuby;
@@ -31,13 +32,15 @@ namespace Neith.Logger.XIV
         public IObservable<Log> RxCollect()
         {
             var host = Environment.MachineName;
+            var currentProcess = Process.GetCurrentProcess();
 
             var q1 = XIVProcessWatch.EnReadMemoryLog().Select(a =>
             {
                 var log = Log.Create();
                 log.Collector = Name;
                 log.Host = host;
-                log.Pid = a.FFXIV.Proc.Id;
+                if (a.FFXIV != null) log.Pid = a.FFXIV.Proc.Id;
+                else log.Pid = currentProcess.Id;
                 log.Application = Application;
                 log.Domain = Domain;
                 log.User = User;
