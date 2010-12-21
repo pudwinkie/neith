@@ -77,7 +77,9 @@ namespace Neith.Logger.XIV
         /// <returns></returns>
         public static IEnumerable<FFXIVLog> EnReadMemoryLog()
         {
+#if DEBUG
             yield return Internal(null, FFXILogMessageType.INTERNAL_START, "## FF14 ログ監視処理開始 ##");
+#endif
             foreach (var ff14 in EnScanProcess()) {
                 if (ff14 == null) {
 #if DEBUG
@@ -86,17 +88,23 @@ namespace Neith.Logger.XIV
                     Thread.Sleep(5000);
                     continue;
                 }
+#if DEBUG
+                yield return Internal(null, FFXILogMessageType.INTERNAL_FOUND14, "## FF14 プロセス発見、ログ領域検索開始 ##");
+#endif
                 FFXIVLogStatus reader = null;
                 for (var i = 0; i < 10; i++) {
                     reader = ff14.SearchLogStatus();
                     if (reader != null) break;
 #if DEBUG
-                    Internal(ff14, FFXILogMessageType.INTERNAL_WAIT, "FF14ログ領域検索：５秒待機");
+                    yield return Internal(ff14, FFXILogMessageType.INTERNAL_WAIT, "FF14ログ領域検索：５秒待機");
 #endif
                     Thread.Sleep(5000);
                     continue;
                 }
                 if (reader == null) continue;
+#if DEBUG
+                yield return Internal(null, FFXILogMessageType.INTERNAL_FOUND_LOG, "## FF14 ログ領域発見、ログ列挙開始 ##");
+#endif
 
                 foreach (var log in reader.EnReadMemoryLog()) {
                     if (log == null) {
@@ -105,6 +113,7 @@ namespace Neith.Logger.XIV
                     }
                     yield return log;
                 }
+                yield return Internal(null, FFXILogMessageType.INTERNAL_LOST14, "## FF14 プロセスロスト ##");
             }
             yield break;
 
