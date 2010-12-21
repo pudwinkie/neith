@@ -15,12 +15,12 @@ namespace Neith.Logger.Test
         [Test]
         public void ReadTest()
         {
-            Debug.WriteLine("XIVTest.ReadTest::10秒間試行開始");
+            Debug.WriteLine("XIVTest.ReadTest::20秒間試行開始");
             using (var collecter = new XIVCollecter())
             using (var task = collecter
                 .RxCollect()
                 .Subscribe(a => Debug.WriteLine(a))) {
-                System.Threading.Thread.Sleep(10 * 1000);
+                System.Threading.Thread.Sleep(20 * 1000);
             }
             Debug.WriteLine("XIVTest.ReadTest::完了");
         }
