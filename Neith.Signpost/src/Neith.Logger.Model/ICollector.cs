@@ -14,10 +14,9 @@ namespace Neith.Logger.Model
         string Name { get; }
 
         /// <summary>
-        /// 収集タスクを返す。
+        /// 収集イベント。
         /// </summary>
-        /// <returns></returns>
-        IObservable<Log> RxCollect();
+        event LogEventHandler Collect;
     }
 
 }

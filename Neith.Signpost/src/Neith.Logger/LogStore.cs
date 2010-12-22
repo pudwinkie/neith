@@ -68,10 +68,12 @@ namespace Neith.Logger
         /// </summary>
         public void SteramClose()
         {
-            if (stream == null) return;
-            stream.Flush();
-            stream.Dispose();
-            stream = null;
+            lock (this) {
+                if (stream == null) return;
+                stream.Flush();
+                stream.Dispose();
+                stream = null;
+            }
         }
 
         /// <summary>
