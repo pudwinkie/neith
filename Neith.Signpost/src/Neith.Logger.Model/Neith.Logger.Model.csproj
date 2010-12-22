@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="ICollector.cs" />
     <Compile Include="Log.cs" />
+    <Compile Include="LogEvents.cs" />
     <Compile Include="LogPriority.cs" />
     <Compile Include="LogStorePosition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

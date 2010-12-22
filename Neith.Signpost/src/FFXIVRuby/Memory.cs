@@ -15,30 +15,34 @@ namespace FFXIVRuby
         public IEnumerable<MEMORY_BASIC_INFORMATION> GetMemoryInfos(Process proc)
         {
             var system_info = GetSystemInfo();
-            var minAdd = system_info.lpMinimumApplicationAddress.ToInt64();
-            var maxAdd = system_info.lpMaximumApplicationAddress.ToInt64();
-            while (minAdd < maxAdd) {
-                var info = new MEMORY_BASIC_INFORMATION();
-                var ptr = new IntPtr(minAdd);
-                VirtualQueryEx(proc.Handle, ptr, out info, Marshal.SizeOf(info));
+            var add = system_info.lpMinimumApplicationAddress.ToInt64();
+            var end = system_info.lpMaximumApplicationAddress.ToInt64();
+            while (add < end) {
+                var info = VirtualQueryEx(proc, add);
                 yield return info;
-                minAdd = info.BaseAddress.ToInt64() + info.RegionSize.ToInt64();
+                add = info.BaseAddress.ToInt64() + info.RegionSize.ToInt64();
             }
+        }
+
+        private static SYSTEM_INFO GetSystemInfo()
+        {
+            var info = new SYSTEM_INFO();
+            GetSystemInfo(ref info);
+            return info;
+        }
+
+        private static MEMORY_BASIC_INFORMATION VirtualQueryEx(Process proc, long address)
+        {
+            var info = new MEMORY_BASIC_INFORMATION();
+            var ptr = new IntPtr(address);
+            VirtualQueryEx(proc.Handle, ptr, out info, Marshal.SizeOf(info));
+            return info;
         }
 
         [DllImport("kernel32.dll")]
         private static extern void GetSystemInfo([MarshalAs(UnmanagedType.Struct)] ref SYSTEM_INFO lpSystemInfo);
-
-        private static SYSTEM_INFO GetSystemInfo()
-        {
-            var system_info = new SYSTEM_INFO();
-            GetSystemInfo(ref system_info);
-            return system_info;
-        }
-
-
         [DllImport("kernel32.dll")]
-        private static extern int VirtualQuery(IntPtr lpAddress, ref MEMORY_BASIC_INFORMATION lpBuffer, IntPtr dwLength);
+        private static extern int VirtualQuery(IntPtr lpAddress, ref MEMORY_BASIC_INFORMATION lpBuffer, int dwLength);
         [DllImport("kernel32.dll")]
         private static extern int VirtualQueryEx(IntPtr hProcess, IntPtr lpAddress, out MEMORY_BASIC_INFORMATION lpBuffer, int dwLength);
 

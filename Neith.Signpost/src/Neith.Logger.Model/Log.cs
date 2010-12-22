@@ -61,12 +61,12 @@ namespace Neith.Logger.Model
 
         /// <summary>ログのメッセージ</summary>
         [ProtoMember(9)]
-        public string Message { get; set; }
+        public string LogMessage { get; set; }
 
 
         /// <summary>ログのバイナリ情報</summary>
         [ProtoMember(10)]
-        public byte[] Data { get; set; }
+        public byte[] LogData { get; set; }
 
 
         /// <summary>ログの分析モジュール</summary>
@@ -76,6 +76,9 @@ namespace Neith.Logger.Model
 
         #endregion
         #region 解析プロパティ（保存対象外）
+
+        /// <summary>ログオブジェクト</summary>
+        public object LogObject { get; set; }
 
         /// <summary>ログのカテゴリ</summary>
         public string Category { get; set; }
@@ -97,6 +100,10 @@ namespace Neith.Logger.Model
         public string Target { get; set; }
 
 
+        /// <summary>解析結果メッセージ</summary>
+        public string Message { get; set; }
+        
+        
         /// <summary>アイコン画像URL</summary>
         public string Icon { get; set; }
 
