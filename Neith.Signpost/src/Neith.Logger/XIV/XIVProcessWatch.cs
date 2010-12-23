@@ -45,8 +45,9 @@ namespace Neith.Logger.XIV
         /// <returns></returns>
         private static IEnumerable<FFXIVLog> EnReadMemoryLog(this FFXIVLogStatus stat)
         {
-            int term = int.MinValue;
-            while (!stat.FFXIV.Proc.HasExited) {
+            var term = int.MinValue;
+            var proc = stat.FFXIV.Proc;
+            while (!proc.HasExited) {
                 if (term == stat.TerminalPoint) {
                     yield return null;
                     continue;
@@ -61,22 +62,20 @@ namespace Neith.Logger.XIV
             return new FFXIVLog(ff14, (int)tp, "", message);
         }
 
-
-
         /// <summary>
         /// 要求がある限りログを読み取ります。
         /// </summary>
         /// <returns></returns>
-        public static IEnumerable<FFXIVLog> EnReadMemoryLog(ManualResetEventSlim WO)
+        public static IEnumerable<FFXIVLog> EnReadMemoryLog(WaitHandle wo)
         {
-            WO.Wait(100); if (WO.IsSet) yield break;
+            if (wo.WaitOne(100)) yield break;
             yield return Internal(null, FFXILogMessageType.INTERNAL_START, "## FF14 ログ監視処理開始 ##");
             foreach (var ff14 in EnScanProcess()) {
                 if (ff14 == null) {
 #if DEBUG
                     yield return Internal(null, FFXILogMessageType.INTERNAL_WAIT, "FF14プロセス検索：５秒待機");
 #endif
-                    WO.Wait(5000); if (WO.IsSet) yield break;
+                    if (wo.WaitOne(5000)) yield break;
                     continue;
                 }
                 yield return Internal(ff14, FFXILogMessageType.INTERNAL_FOUND14, "## FF14 プロセス発見、ログ領域検索開始 ##");
@@ -87,7 +86,7 @@ namespace Neith.Logger.XIV
 #if DEBUG
                     yield return Internal(ff14, FFXILogMessageType.INTERNAL_WAIT, "FF14ログ領域検索：５秒待機");
 #endif
-                    WO.Wait(5000); if (WO.IsSet) yield break;
+                    if (wo.WaitOne(5000)) yield break;
                     continue;
                 }
                 if (reader == null) continue;
@@ -95,7 +94,7 @@ namespace Neith.Logger.XIV
 
                 foreach (var log in reader.EnReadMemoryLog()) {
                     if (log == null) {
-                        WO.Wait(10); if (WO.IsSet) yield break;
+                        if (wo.WaitOne(10)) yield break;
                         continue;
                     }
                     yield return log;
@@ -103,8 +102,6 @@ namespace Neith.Logger.XIV
                 yield return Internal(ff14, FFXILogMessageType.INTERNAL_LOST14, "## FF14 プロセスロスト ##");
             }
         }
-
-
 
     }
 }

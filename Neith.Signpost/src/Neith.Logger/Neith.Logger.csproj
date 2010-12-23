@@ -60,10 +60,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Const.cs" />
-    <Compile Include="LogCtrl.cs">
+    <Compile Include="LogLoader.cs" />
+    <Compile Include="LogService.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="LogLoader.cs" />
     <Compile Include="LogStore.cs" />
     <Compile Include="LogUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -72,6 +72,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="ProtoBuf\ProtoBufExtensions.cs" />
+    <Compile Include="XIV\XIVAnalyzer.cs" />
     <Compile Include="XIV\XIVCollecter.cs" />
     <Compile Include="XIV\XIVLogFileLoader.cs" />
     <Compile Include="XIV\XIVLogger.cs" />

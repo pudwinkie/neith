@@ -53,5 +53,11 @@ namespace Neith.Signpost
                 Visibility = System.Windows.Visibility.Hidden;
             }
         }
+
+        private void MenuItem3_Click(object sender, RoutedEventArgs e)
+        {
+            var app = Application.Current as App;
+            app.LogService.OldLogConvert();
+        }
     }
 }

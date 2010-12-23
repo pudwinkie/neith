@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Concurrency;
-using System.Text;
 using System.ComponentModel;
+using System.Concurrency;
+using System.IO;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
 using Neith.Logger.Model;
+using Neith.Util;
+using ProtoBuf;
 
 namespace Neith.Logger
 {
@@ -12,14 +16,14 @@ namespace Neith.Logger
     /// ログの取得管理、保存処理などの呼び出しを行います。
     /// 現在は簡易実装です。
     /// </summary>
-    public class LogCtrl : Component 
+    public class LogService : Component
     {
         public LogStore Store { get; private set; }
 
         private IDisposable storeTask;
         private IDisposable collectTask;
 
-        public LogCtrl()
+        public LogService()
             : base()
         {
             InitStoreTask();
@@ -40,25 +44,11 @@ namespace Neith.Logger
 
         protected override void Dispose(bool disposing)
         {
-            // ログ取得を停止
-            CheckDispose(ref collectTask);
-
-            // ログ保存を停止する。
-            CheckDispose(ref storeTask);
+            ObjectUtil.CheckDispose(ref collectTask);
+            ObjectUtil.CheckDispose(ref storeTask);
             if (disposing) Store.SteramClose();
-
-            // 上位解放処理
             base.Dispose(disposing);
         }
-
-        private static void CheckDispose<T>(ref T obj)
-            where T : IDisposable
-        {
-            if (obj == null) return;
-            obj.Dispose();
-            obj = default(T);
-        }
-
 
         /// <summary>
         /// 受信イベント。
@@ -74,6 +64,23 @@ namespace Neith.Logger
             if (Receive == null) return;
             Receive(this, new LogEventArgs(log));
         }
-        
+
+        public void OldLogConvert()
+        {
+            Directory
+                .GetFiles(Const.Folders.Log, "*.log", SearchOption.AllDirectories)
+                .AsParallel()
+                .ForAll(path =>
+                {
+                    Debug.WriteLine("CONV: " + path);
+                    using (var so = File.Create(Path.GetFileNameWithoutExtension(path) + ".new")) {
+                        foreach (var log in path.EnDeserialize<Log>()) {
+                            log.Collector = "XIV.XIVCollecter";
+                            log.Analyzer = "XIV.XIVAnalyzer";
+                            Serializer.Serialize(so, log);
+                        }
+                    }
+                });
+        }
     }
 }
