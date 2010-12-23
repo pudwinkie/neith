@@ -43,7 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IAnalyzer.cs" />
     <Compile Include="ICollector.cs" />
+    <Compile Include="ILoggerModule.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="LogEvents.cs" />
     <Compile Include="LogPriority.cs" />

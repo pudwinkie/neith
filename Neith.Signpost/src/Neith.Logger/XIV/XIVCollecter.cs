@@ -13,7 +13,7 @@ namespace Neith.Logger.XIV
 {
     public class XIVCollecter : ICollector
     {
-        public string Name { get { return "XIVCollecter"; } }
+        public string Name { get { return "XIV.XIVCollecter"; } }
 
         public string Application { get { return "FF14"; } }
 
@@ -23,11 +23,14 @@ namespace Neith.Logger.XIV
 
         private Thread CollectThread { get; set; }
 
-        private ManualResetEventSlim WO { get; set; }
+        private ManualResetEvent WO { get; set; }
+
+        private XIVAnalyzer Analyzer { get; set; }
 
         public XIVCollecter()
         {
-            WO = new ManualResetEventSlim();
+            Analyzer = new XIVAnalyzer();
+            WO = new ManualResetEvent(false);
             CollectThread = new Thread(CollectTask);
             CollectThread.IsBackground = true;
             CollectThread.Start();
@@ -61,33 +64,8 @@ namespace Neith.Logger.XIV
                 Serializer.Serialize(data, a);
                 log.LogData = data.ToArray();
                 log.LogObject = a;
-                OnCollect(SetAnalyzeData(log, a));
+                OnCollect(Analyzer.SetAnalyzeData(log, a));
             }
-        }
-
-        /// <summary>
-        /// ログ情報を解析して追加データを登録
-        /// </summary>
-        /// <param name="log"></param>
-        /// <param name="src"></param>
-        /// <returns></returns>
-        public Log SetAnalyzeData(Log log, FFXIVLog src)
-        {
-            if (src == null) {
-                var st = new MemoryStream(log.LogData);
-                src = Serializer.Deserialize<FFXIVLog>(st);
-            }
-            log.Analyzer = Name;
-            if (src.MessageType == FFXILogMessageType.UNNONE) {
-                log.Category =
-                    string.Format("{0}:0x{1:X4}", src.MessageType, src.MessageTypeID);
-            }
-            else {
-                log.Category = src.MessageType.ToString();
-            }
-            log.Actor = src.Who;
-            log.Message = src.ToString();
-            return log;
         }
 
         public event LogEventHandler Collect;

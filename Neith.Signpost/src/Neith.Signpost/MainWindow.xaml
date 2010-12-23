@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:tb="http://www.hardcodet.net/taskbar"
         Title="Neith Signpost" Height="350" Width="525"
-        WindowState="Minimized" WindowStyle="SingleBorderWindow" Loaded="Window_Loaded" IsVisibleChanged="Window_IsVisibleChanged">
+        WindowState="Minimized" WindowStyle="SingleBorderWindow" Loaded="Window_Loaded" IsVisibleChanged="Window_IsVisibleChanged" Visibility="Hidden">
     <Grid>
         <tb:TaskbarIcon x:Name="MyNotifyIcon"
                         IconSource="/Icons/Error.ico"
@@ -14,6 +14,7 @@
                 <ContextMenu>
                     <MenuItem x:Name="MenuItem1" Header="First Menu Item" Click="MenuItem1_Click" />
                     <MenuItem x:Name="MenuItem2" Header="Second Menu Item" />
+                    <MenuItem x:Name="MenuItem3" Header="コンバート" Click="MenuItem3_Click" />
                     <Separator />
                     <MenuItem x:Name="MenuItemExit" Header="終了" Click="MenuItemExit_Click" />
                 </ContextMenu>
