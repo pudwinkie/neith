@@ -5,7 +5,6 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 using System.Threading;
-using ProtoBuf;
 using Neith.Logger.Model;
 using FFXIVRuby;
 
@@ -60,11 +59,10 @@ namespace Neith.Logger.XIV
                 log.Application = Application;
                 log.Domain = Domain;
                 log.User = User;
-                var data = new MemoryStream();
-                Serializer.Serialize(data, a);
-                log.LogData = data.ToArray();
-                log.LogObject = a;
-                OnCollect(Analyzer.SetAnalyzeData(log, a));
+                log["who"] = a.Who;
+                log["message"] = a.Message;
+                log["typeID"] = a.MessageTypeID.ToString("X4");
+                OnCollect(Analyzer.SetAnalyzeData(log));
             }
         }
 

@@ -21,7 +21,7 @@ namespace Neith.Logger.Test
             using (var task = Observable
                 .FromEvent<LogEventArgs>(collecter, "Collect")
                 .Subscribe(a => Debug.WriteLine(a))) {
-                System.Threading.Thread.Sleep(60 * 1000);
+                System.Threading.Thread.Sleep(20 * 1000);
             }
             Debug.WriteLine("XIVTest.ReadTest::完了");
         }

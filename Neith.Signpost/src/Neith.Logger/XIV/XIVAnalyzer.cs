@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
-using ProtoBuf;
 using Neith.Logger.Model;
 using FFXIVRuby;
 
@@ -24,35 +23,21 @@ namespace Neith.Logger.XIV
         /// <returns></returns>
         public Log SetAnalyzeData(Log log)
         {
-            var src = log.LogObject as FFXIVLog;
-            if (src == null) {
-                var ms = new MemoryStream(log.LogData);
-                src = Serializer.Deserialize<FFXIVLog>(ms);
-                log.LogObject = src;
-            }
-            return SetAnalyzeData(log, src);
-        }
-
-        /// <summary>
-        /// ログ情報を解析して追加データを登録します。
-        /// </summary>
-        /// <param name="log"></param>
-        /// <param name="src"></param>
-        /// <returns></returns>
-        public Log SetAnalyzeData(Log log, FFXIVLog src)
-        {
             log.Analyzer = Name;
-            if (src.MessageType == FFXILogMessageType.UNNONE) {
+            log.Actor = log["who"];
+            log.Message = log["message"];
+            var typeID = log["typeID"];
+            var numType = typeID.HexToInt32();
+            var mType = numType.ToMessageType();
+
+            if (mType == FFXILogMessageType.UNNONE) {
                 log.Category =
-                    string.Format("{0}:0x{1:X4}", src.MessageType, src.MessageTypeID);
+                    string.Format("{0}:{1}", mType, typeID);
             }
             else {
-                log.Category = src.MessageType.ToString();
+                log.Category = mType.ToString();
             }
-            log.Actor = src.Who;
-            log.Message = src.ToString();
             return log;
         }
-
     }
 }

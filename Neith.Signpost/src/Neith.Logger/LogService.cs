@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text;
 using Neith.Logger.Model;
 using Neith.Util;
-using ProtoBuf;
 
 namespace Neith.Logger
 {
@@ -73,13 +72,16 @@ namespace Neith.Logger
                 .ForAll(path =>
                 {
                     Debug.WriteLine("CONV: " + path);
-                    using (var so = File.Create(Path.GetFileNameWithoutExtension(path) + ".new")) {
-                        foreach (var log in path.EnDeserialize<Log>()) {
+                    var newPath = Path.GetFileNameWithoutExtension(path) + ".new";
+                    path.EnDeserialize<Log>()
+                        .Select(log =>
+                        {
                             log.Collector = "XIV.XIVCollecter";
                             log.Analyzer = "XIV.XIVAnalyzer";
-                            Serializer.Serialize(so, log);
-                        }
-                    }
+                            return log;
+                        })
+                        .SerializeAll(newPath)
+                        ;
                 });
         }
     }
