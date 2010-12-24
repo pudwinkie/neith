@@ -8,7 +8,7 @@ using ProtoBuf;
 namespace Neith.Logger.Model
 {
     [ProtoContract]
-    public class Log
+    public class Log : IDictionary<string, string>, IEquatable<Log>
     {
         #region ログ保存プロパティ
         /// <summary>タイムスタンプ</summary>
@@ -59,26 +59,26 @@ namespace Neith.Logger.Model
         public string User { get; set; }
 
 
-        /// <summary>ログのメッセージ</summary>
+        /// <summary>ログ内容(文字列のDIC)</summary>
+        public IDictionary<string, string> Items { get; private set; }
         [ProtoMember(9)]
-        public string LogMessage { get; set; }
-
-
-        /// <summary>ログのバイナリ情報</summary>
-        [ProtoMember(10)]
-        public byte[] LogData { get; set; }
-
+        private KeyValuePair<string, string>[] ItemData
+        {
+            get { return Items.ToArray(); }
+            set
+            {
+                Items = new Dictionary<string, string>();
+                foreach (var pair in value) Items.Add(pair);
+            }
+        }
 
         /// <summary>ログの分析モジュール</summary>
-        [ProtoMember(11)]
+        [ProtoMember(10)]
         public string Analyzer { get; set; }
 
 
         #endregion
         #region 解析プロパティ（保存対象外）
-
-        /// <summary>ログオブジェクト</summary>
-        public object LogObject { get; set; }
 
         /// <summary>ログのカテゴリ</summary>
         public string Category { get; set; }
@@ -102,8 +102,8 @@ namespace Neith.Logger.Model
 
         /// <summary>解析結果メッセージ</summary>
         public string Message { get; set; }
-        
-        
+
+
         /// <summary>アイコン画像URL</summary>
         public string Icon { get; set; }
 
@@ -118,7 +118,10 @@ namespace Neith.Logger.Model
             return log;
         }
 
-        private Log() { }
+        private Log()
+        {
+            if (Items == null) Items = new Dictionary<string, string>();
+        }
 
         public override string ToString()
         {
@@ -126,6 +129,46 @@ namespace Neith.Logger.Model
         }
 
         #endregion
+
+        public bool Equals(Log other)
+        {
+            return this.Timestamp == other.Timestamp
+                && this.Id == other.Id
+                && this.Collector == other.Collector
+                && this.Host == other.Host
+                && this.Pid == other.Pid
+                && this.Application == other.Application
+                && this.Domain == other.Domain
+                && this.User == other.User
+                && this.Analyzer == other.Analyzer
+                && this.Items.SequenceEqual(other.Items)
+                ;
+        }
+
+        public ICollection<string> Keys { get { return Items.Keys; } }
+        public ICollection<string> Values { get { return Items.Values; } }
+        public int Count { get { return Items.Count; } }
+        public bool IsReadOnly { get { return Items.IsReadOnly; } }
+
+        public string this[string key]
+        {
+            get { return Items[key]; }
+            set { Items[key] = value; }
+        }
+
+        public void Clear() { Items.Clear(); }
+        public bool ContainsKey(string key) { return Items.ContainsKey(key); }
+        public bool Remove(string key) { return Items.Remove(key); }
+        public void Add(string key, string value) { Items.Add(key, value); }
+        public bool TryGetValue(string key, out string value) { return Items.TryGetValue(key, out value); }
+
+        public void Add(KeyValuePair<string, string> item) { Items.Add(item); }
+        public bool Contains(KeyValuePair<string, string> item) { return Items.Contains(item); }
+        public bool Remove(KeyValuePair<string, string> item) { return Items.Remove(item); }
+        public void CopyTo(KeyValuePair<string, string>[] array, int arrayIndex) { Items.CopyTo(array, arrayIndex); }
+
+        public IEnumerator<KeyValuePair<string, string>> GetEnumerator() { return Items.GetEnumerator(); }
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() { return Items.GetEnumerator(); }
 
     }
 }

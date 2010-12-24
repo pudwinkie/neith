@@ -5,7 +5,6 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using Neith.Logger.Model;
-using ProtoBuf;
 
 namespace Neith.Logger
 {
@@ -101,7 +100,7 @@ namespace Neith.Logger
         {
             DateCheck(log.TimestampUTC);
             var rc = new LogStorePosition(lastDate, stream.Position);
-            Serializer.Serialize(stream, log);
+            stream.Serialize(log);
             return rc;
         }
 

@@ -10,7 +10,7 @@ namespace FFXIVRuby
     /// </summary>
     public enum FFXILogMessageType
     {
-        UNNONE   = 0x01FFFF,
+        UNNONE = 0x01FFFF,
         INTERNAL_START = 0x010001,
         INTERNAL_WAIT = 0x010001,
         INTERNAL_FOUND14 = 0x010002,
@@ -76,5 +76,16 @@ namespace FFXIVRuby
         OTHER_EFFECT_REMOVED = 0x0067,
         OTHER_ENFEEBLE2 = 0x006C,
         OTHER_ENFEEBLE1 = 0x006D,
+    }
+
+    public static class FFXILogMessageTypeExtensions
+    {
+        public static FFXILogMessageType ToMessageType(this int numType)
+        {
+            try { return (FFXILogMessageType)numType; }
+            catch { return FFXILogMessageType.UNNONE; }
+        }
+
+
     }
 }

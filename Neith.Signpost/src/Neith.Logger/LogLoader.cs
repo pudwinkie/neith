@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Neith.Logger.Model;
-using ProtoBuf;
 
 namespace Neith.Logger
 {
@@ -50,7 +49,7 @@ namespace Neith.Logger
         {
             DateCheck(pos.Date);
             stream.Seek(pos.Positon, SeekOrigin.Begin);
-            var rc = Serializer.Deserialize<Log>(stream);
+            var rc = stream.Deserialize<Log>();
             return rc;
         }
 
