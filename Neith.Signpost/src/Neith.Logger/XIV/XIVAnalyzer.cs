@@ -24,8 +24,8 @@ namespace Neith.Logger.XIV
         public Log SetAnalyzeData(Log log)
         {
             log.Analyzer = Name;
-            log.Actor = log["who"];
-            log.Message = log["message"];
+            var who = log["who"];
+            var message = log["message"];
             var typeID = log["typeID"];
             var numType = typeID.HexToInt32();
             var mType = numType.ToMessageType();
@@ -37,6 +37,8 @@ namespace Neith.Logger.XIV
             else {
                 log.Category = mType.ToString();
             }
+            log.Actor = who;
+            log.Message = FFXIVLog.GetLogString(mType, numType, who, message);
             return log;
         }
     }
