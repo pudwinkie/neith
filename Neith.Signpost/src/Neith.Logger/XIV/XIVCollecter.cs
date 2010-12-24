@@ -61,7 +61,7 @@ namespace Neith.Logger.XIV
                 log.User = User;
                 log["who"] = a.Who;
                 log["message"] = a.Message;
-                log["typeID"] = a.MessageTypeID.ToString("X4");
+                log["typeID"] = a.MessageTypeID.ToString("X5");
                 OnCollect(Analyzer.SetAnalyzeData(log));
             }
         }
