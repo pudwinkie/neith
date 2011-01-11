@@ -15,6 +15,7 @@ namespace FFXIVRuby
         /// <returns></returns>
         public static IEnumerable<int> EnReadInt32(this byte[] buf)
         {
+            if (buf == null) yield break;
             for (int i = 0; i < (buf.Length - 3); i += 4) {
                 yield return BitConverter.ToInt32(buf, i);
             }

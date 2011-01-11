@@ -140,7 +140,7 @@ namespace FFXIVRuby
             _stat = null;
             var st = EnRangePair()
                 .AsParallel()
-                .SelectMany(a => EnSearch(a.Entry, a.Size))
+                .SelectMany(a => EnSearch(a.Entry, a.Size, 0x40))
                 .FirstOrDefault();
             if (st != null) OnLogStatusFound(st);
             _stat = st;
@@ -178,7 +178,7 @@ namespace FFXIVRuby
         /// </summary>
         /// <param name="ent"></param>
         /// <param name="size"></param>
-        private IEnumerable<FFXIVLogStatus> EnSearch(int ent, int size)
+        private IEnumerable<FFXIVLogStatus> EnSearch(int ent, int size,int offset)
         {
 #if false
             var tid = Thread.CurrentThread.ManagedThreadId;
@@ -186,24 +186,28 @@ namespace FFXIVRuby
                 "LogStatusSearcher::EnSearch[{0,2}](0x{1,8:X}, 0x{2,4:X})",
                 tid, ent, size));
 #endif
-            foreach (var ptr in ffxiv.ReadBytes(ent, size).EnReadInt32()) {
-                // offset+0x40の場所に格納されているアドレスが、
+            foreach (var ptr in ffxiv.ReadBytesOrNull(ent, size).EnReadInt32()) {
+                // ptr+offsetの場所に格納されているアドレスが、
                 // 有効なアドレス値範囲にいなければ除外
-                var logEntry = ptr + 0x40;
-                var log = ffxiv.ReadInt32(logEntry);
-                if (log < 0x10000) continue;
-                if (log > 0x7ffff000) continue;
+                var logEntry = ptr + offset;
+                var logAddrCheck = ffxiv.ReadInt32OrNull(logEntry);
+                if (logAddrCheck == null) continue;
+                var logAddr = logAddrCheck.Value;
+                if (logAddr < 0x10000) continue;
+                if (logAddr > 0x7ffff000) continue;
 
                 // 見つけたアドレスから５バイトをチェック
                 // '00??:' 以外の場合に除外
-                var check1 = this.ffxiv.ReadBytes(log, 5);
+                var check1 = this.ffxiv.ReadBytesOrNull(logAddr, 5);
+                if (check1 == null) continue;
                 if (check1[4] != 0x3a) continue;
                 if (check1[0] != 0x30) continue;
                 if (check1[1] != 0x30) continue;
 
                 // 見つけたアドレスから50バイトをチェック
                 // 正規表現のパターンマッチで不一致なら除外
-                var check2 = this.ffxiv.ReadBytes(log, 50);
+                var check2 = this.ffxiv.ReadBytesOrNull(logAddr, 50);
+                if (check2 == null) continue;
                 string str = Encoding.GetEncoding("utf-8").GetString(check2);
                 if (!reLogEntry.IsMatch(str)) continue;
 
@@ -212,6 +216,7 @@ namespace FFXIVRuby
                 yield break;
             }
         }
+
 
         // Properties
         public FFXIVLogStatus FFXIVLogStat { get { return this._stat; } }
