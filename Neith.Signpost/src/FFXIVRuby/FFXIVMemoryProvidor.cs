@@ -14,47 +14,30 @@ namespace FFXIVRuby
             return Process.GetProcessesByName("ffxivgame").FirstOrDefault();
         }
 
-        public static int ReadMemoryInt32(IntPtr handle, IntPtr addr)
+        public static byte[] ReadProcessMemory(IntPtr hProcess, IntPtr address, int size)
         {
-            IntPtr zero = IntPtr.Zero;
-            int num = 0;
-            zero = ReadProcessMemorySafe(handle, addr, 4);
-            try {
-                num = Marshal.ReadInt32(zero);
-            }
-            finally {
-                Marshal.FreeHGlobal(zero);
-            }
-            return num;
-        }
-
-        public static byte[] ReadProcessMemory(IntPtr hProcess, int lpBaseAddress, int size)
-        {
-            IntPtr ptr;
-            byte[] buffer = new byte[size];
-            ReadProcessMemory(hProcess, (IntPtr)lpBaseAddress, buffer, (uint)size, out ptr);
+            var buffer = new byte[size];
+            int readSize = ReadProcessMemory(hProcess, address, buffer, size);
             return buffer;
         }
 
-
-        public static IntPtr ReadProcessMemorySafe(IntPtr Handle, IntPtr Address, uint nBytesToRead)
+        public static int ReadProcessMemory(IntPtr hProcess, IntPtr address, byte[] buffer)
         {
-            IntPtr outputBuffer = Marshal.AllocHGlobal((int)nBytesToRead);
-            UIntPtr zero = UIntPtr.Zero;
-            UIntPtr nBufferSize = (UIntPtr)nBytesToRead;
-            if (!ReadProcessMemorySafe(Handle, Address, outputBuffer, nBufferSize, out zero)) {
-                return IntPtr.Zero;
-            }
-            return outputBuffer;
+            return ReadProcessMemory(hProcess, address, buffer, buffer.Length);
+        }
+
+        public static int ReadProcessMemory(IntPtr hProcess, IntPtr address, byte[] buffer, int size)
+        {
+            uint readSize;
+            ReadProcessMemory(hProcess, address, buffer, (uint)size, out readSize);
+            return (int)readSize;
         }
 
         #region API
         [DllImport("kernel32.dll")]
-        private static extern int ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, [In, Out] byte[] buffer, uint size, out IntPtr lpNumberOfBytesRead);
-        [DllImport("kernel32.dll", EntryPoint = "ReadProcessMemory")]
-        private static extern bool ReadProcessMemorySafe(IntPtr handle, IntPtr addr, IntPtr OutputBuffer, UIntPtr nBufferSize, out UIntPtr lpNumberOfBytesRead);
+        private static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, [In, Out] byte[] buffer, uint size, out uint lpNumberOfBytesRead);
         [DllImport("kernel32.dll")]
-        private static extern int WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, [In, Out] byte[] buffer, uint size, out IntPtr lpNumberOfBytesWritten);
+        private static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, [In, Out] byte[] buffer, uint size, out IntPtr lpNumberOfBytesWritten);
         #endregion
 
     }

@@ -38,12 +38,13 @@ namespace Neith.Logger.XIV
         public void Dispose()
         {
             if (CollectThread == null) return;
-            WO.Set();
-            CollectThread.Join(1000);
-            if (CollectThread.IsAlive) CollectThread.Abort();
-            CollectThread = null;
-            WO.Dispose();
-            WO = null;
+            using (var wo = WO) {
+                wo.Set();
+                CollectThread.Join(1000);
+                if (CollectThread.IsAlive) CollectThread.Abort();
+                CollectThread = null;
+                WO = null;
+            }
         }
 
         private void CollectTask()
