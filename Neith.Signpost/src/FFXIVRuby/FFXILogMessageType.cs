@@ -10,12 +10,13 @@ namespace FFXIVRuby
     /// </summary>
     public enum FFXILogMessageType
     {
-        UNNONE = 0x01FFFF,
-        INTERNAL_START = 0x010001,
-        INTERNAL_WAIT = 0x010001,
-        INTERNAL_FOUND14 = 0x010002,
-        INTERNAL_LOST14 = 0x010003,
+        UNNONE             = 0x01FFFF,
+        INTERNAL_START     = 0x010001,
+        INTERNAL_WAIT      = 0x010001,
+        INTERNAL_FOUND14   = 0x010002,
+        INTERNAL_LOST14    = 0x010003,
         INTERNAL_FOUND_LOG = 0x010004,
+        INTERNAL_ABORT     = 0x011001,
 
         TALK_SAY = 0x0001,
         TALK_SHOUT = 0x0002,

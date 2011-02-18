@@ -26,7 +26,7 @@ namespace FFXIVRuby
 
         public byte[] ReadBytes(int address, int size)
         {
-            return FFXIVMemoryProvidor.ReadProcessMemory(this.Proc.Handle, address, size);
+            return FFXIVMemoryProvidor.ReadProcessMemory(this.Proc.Handle, (IntPtr)address, size);
         }
         public byte[] ReadBytesOrNull(int address, int size)
         {
@@ -36,7 +36,7 @@ namespace FFXIVRuby
 
         public int ReadInt32(int address)
         {
-            byte[] buffer = FFXIVMemoryProvidor.ReadProcessMemory(this.Proc.Handle, address, 4);
+            byte[] buffer = FFXIVMemoryProvidor.ReadProcessMemory(this.Proc.Handle, (IntPtr)address, 4);
             return (((buffer[0] + (buffer[1] * 0x100)) + (buffer[2] * 0x10000)) + (buffer[3] * 0x1000000));
         }
         public int? ReadInt32OrNull(int address)

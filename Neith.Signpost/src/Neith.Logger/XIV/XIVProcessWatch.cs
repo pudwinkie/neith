@@ -63,14 +63,40 @@ namespace Neith.Logger.XIV
         }
 
         /// <summary>
-        /// 要求がある限りログを読み取ります。
+        /// 要求がある限りログを読み取ります。無限に列挙し続けます。
         /// </summary>
         /// <returns></returns>
         public static IEnumerable<FFXIVLog> EnReadMemoryLog(WaitHandle wo)
         {
+            while (true) {
+                var gen = EnReadMemoryLogImpl(wo).GetEnumerator();
+                var isNext = true;
+                while (isNext) {
+                    FFXIVLog log = null;
+                    try {
+                        isNext = gen.MoveNext();
+                        if (isNext) log = gen.Current;
+                    }
+                    catch (Exception ex) {
+                        log = Internal(null, FFXILogMessageType.INTERNAL_ABORT, "FF14ログ領域検索：例外 ..." + ex.Message);
+                        isNext = false;
+                    }
+                    if (log == null) continue;
+                    yield return log;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 要求がある限りログを読み取ります。無限に列挙し続けます。
+        /// </summary>
+        /// <returns></returns>
+        private static IEnumerable<FFXIVLog> EnReadMemoryLogImpl(WaitHandle wo)
+        {
             if (wo.WaitOne(100)) yield break;
             yield return Internal(null, FFXILogMessageType.INTERNAL_START, "## FF14 ログ監視処理開始 ##");
             foreach (var ff14 in EnScanProcess()) {
+                // プロセスを見つけられなかったら５秒待って再検索
                 if (ff14 == null) {
 #if DEBUG
                     yield return Internal(null, FFXILogMessageType.INTERNAL_WAIT, "FF14プロセス検索：５秒待機");
@@ -78,6 +104,9 @@ namespace Neith.Logger.XIV
                     if (wo.WaitOne(5000)) yield break;
                     continue;
                 }
+
+                // ログ領域の検索。見つけられなかったら５秒まって再検索
+                // １０回試行しても見つからなければ最初からやり直し
                 yield return Internal(ff14, FFXILogMessageType.INTERNAL_FOUND14, "## FF14 プロセス発見、ログ領域検索開始 ##");
                 FFXIVLogStatus reader = null;
                 for (var i = 0; i < 10; i++) {
@@ -90,6 +119,8 @@ namespace Neith.Logger.XIV
                     continue;
                 }
                 if (reader == null) continue;
+
+
                 yield return Internal(ff14, FFXILogMessageType.INTERNAL_FOUND_LOG, "## FF14 ログ領域発見、ログ列挙開始 ##");
 
                 foreach (var log in reader.EnReadMemoryLog()) {
