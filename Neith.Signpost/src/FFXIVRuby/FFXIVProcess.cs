@@ -44,6 +44,11 @@ namespace FFXIVRuby
             try { return ReadInt32(address); }
             catch { return null; }
         }
+        public int ReadInt32OrZero(int address)
+        {
+            try { return ReadInt32(address); }
+            catch { return 0; }
+        }
 
 
     }
