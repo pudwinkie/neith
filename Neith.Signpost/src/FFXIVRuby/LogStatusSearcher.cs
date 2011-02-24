@@ -16,6 +16,7 @@ namespace FFXIVRuby
         private FFXIVProcess ffxiv;
         private Regex reLogEntry = new Regex(@"[0-9A-F]{4}::\w+|^[0-9A-F]{4}:[()\w\s\0]{32}:");
         private List<Thread> threadList = new List<Thread>();
+        private const uint READ_BLOCK_SIZE = 0x10000;
 
         // Events
         /// <summary>
@@ -165,8 +166,8 @@ namespace FFXIVRuby
                 if (!IsValidAddress((int)start)) continue;
                 uint size = (uint)info.RegionSize;
                 uint end = start + size;
-                for (uint i = start; i < end; i += 0x10000) {
-                    uint num2 = 0x10000;
+                for (uint i = start; i < end; i += READ_BLOCK_SIZE) {
+                    uint num2 = READ_BLOCK_SIZE;
                     if ((i + num2) > end) num2 = end - i;
                     yield return new SearchRange((int)i, (int)num2);
                 }
@@ -193,9 +194,7 @@ namespace FFXIVRuby
                 // ptr+offsetの場所に格納されているアドレスが、
                 // 有効なアドレス値範囲にいなければ除外
                 var logEntry = ptr + offset;
-                var logAddrCheck = ffxiv.ReadInt32OrNull(logEntry);
-                if (logAddrCheck == null) continue;
-                var logAddr = logAddrCheck.Value; 
+                var logAddr = ffxiv.ReadInt32OrZero(logEntry);
                 if (!IsValidAddress(logAddr)) continue;
 
                 // 見つけたアドレスから５バイトをチェック
