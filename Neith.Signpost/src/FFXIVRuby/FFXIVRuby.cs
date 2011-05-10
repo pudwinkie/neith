@@ -11,14 +11,14 @@ namespace FFXIVRuby
     {
         // Fields
         private Process _proc;
-        private static string downloads_folder = "downloads";
-        private static string login_folder = "login";
-        private static string screenshots_folder = "screenshots";
-        private static string user_folder = "user";
-        private static string Zero_folder = "00000000";
-        private static string log_folder = "log";
-        private static string mcro_file = "mcr0";
-        private static string ui_file = "ui";
+        private const string downloads_folder = "downloads";
+        private const string login_folder = "login";
+        private const string screenshots_folder = "screenshots";
+        private const string user_folder = "user";
+        private const string Zero_folder = "00000000";
+        private const string log_folder = "log";
+        private const string mcro_file = "mcr0";
+        private const string ui_file = "ui";
 
         // Methods
         public static FFXIVRuby Create()
@@ -33,7 +33,7 @@ namespace FFXIVRuby
         {
             get
             {
-                return Path.Combine(MyGamesFFXIV, downloads_folder);
+                return GetFullPath(MyGamesFFXIV, downloads_folder);
             }
         }
 
@@ -41,7 +41,7 @@ namespace FFXIVRuby
         {
             get
             {
-                return Path.Combine(MyGamesFFXIV, login_folder);
+                return GetFullPath(MyGamesFFXIV, login_folder);
             }
         }
 
@@ -49,7 +49,7 @@ namespace FFXIVRuby
         {
             get
             {
-                return Path.Combine(MyGamesFFXIV, screenshots_folder);
+                return GetFullPath(MyGamesFFXIV, screenshots_folder);
             }
         }
 
@@ -57,7 +57,7 @@ namespace FFXIVRuby
         {
             get
             {
-                return Path.Combine(MyGamesFFXIV, user_folder);
+                return GetFullPath(MyGamesFFXIV, user_folder);
             }
         }
 
@@ -67,6 +67,11 @@ namespace FFXIVRuby
             {
                 return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), @"My Games\FINAL FANTASY XIV");
             }
+        }
+
+        private static string GetFullPath(params string[] args)
+        {
+            return Path.GetFullPath(Path.Combine(args));
         }
     }
 }
