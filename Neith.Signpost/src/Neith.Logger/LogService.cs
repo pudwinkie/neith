@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Concurrency;
 using System.IO;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Text;
 using Common.Logging;
 using Neith.Logger.Model;
@@ -30,7 +32,7 @@ namespace Neith.Logger
         {
             InitStoreTask();
             var col14 = new XIV.XIVCollecter();
-            collectTask = Observable.FromEvent<LogEventArgs>(col14, "Collect")
+            collectTask = Observable.FromEventPattern<LogEventArgs>(col14, "Collect")
                 .Subscribe(a => OnReceive(a.EventArgs.Log));
         }
 
@@ -39,7 +41,7 @@ namespace Neith.Logger
             // ログの保存処理
             Store = LogStore.Instance;
             storeTask = Observable
-                .FromEvent<LogEventArgs>(this, "Receive")
+                .FromEventPattern<LogEventArgs>(this, "Receive")
                 .SubscribeOn(Scheduler.ThreadPool)
                 .Subscribe(a => Store.Store(a.EventArgs.Log));
         }
