@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Windows;
+using Common.Logging;
 using Neith.Logger;
 
 namespace Neith.Signpost
@@ -13,13 +14,21 @@ namespace Neith.Signpost
     /// </summary>
     public partial class App : Application
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         public LogService LogService { get; private set; }
 
         private void InitService()
         {
             lock (this) {
-                CloseService();
-                LogService = new LogService();
+                try {
+                    Log.Info("アプリケーション初期化：開始");
+                    CloseService();
+                    LogService = new LogService();
+                }
+                finally {
+                    Log.Trace("アプリケーション初期化：完了");
+                }
             }
         }
 
@@ -27,8 +36,14 @@ namespace Neith.Signpost
         {
             lock (this) {
                 if (LogService == null) return;
-                LogService.Dispose();
-                LogService = null;
+                try {
+                    Log.Trace("アプリケーション終了処理：開始");
+                    LogService.Dispose();
+                    LogService = null;
+                }
+                finally {
+                    Log.Info("アプリケーション終了処理：完了");
+                }
             }
         }
 
