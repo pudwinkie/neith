@@ -225,7 +225,7 @@ namespace FFXIVRuby
 
         // Properties
         [GeneratedCode("System.Data.Design.TypedDataSetGenerator", "4.0.0.0"), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), DebuggerNonUserCode]
-        public DataRelationCollection Relations
+        public new DataRelationCollection Relations
         {
             get
             {
@@ -247,7 +247,7 @@ namespace FFXIVRuby
         }
 
         [DebuggerNonUserCode, DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden), GeneratedCode("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-        public DataTableCollection Tables
+        public new DataTableCollection Tables
         {
             get
             {

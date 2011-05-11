@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Concurrency;
 using System.IO;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using Common.Logging;
 using Neith.Logger.Model;
 using Neith.Util;
 
@@ -17,10 +17,13 @@ namespace Neith.Logger
     /// </summary>
     public class LogService : Component
     {
-        public LogStore Store { get; private set; }
+        private static readonly ILog log = LogManager.GetCurrentClassLogger();
 
         private IDisposable storeTask;
         private IDisposable collectTask;
+
+
+        public LogStore Store { get; private set; }
 
         public LogService()
             : base()
@@ -71,13 +74,13 @@ namespace Neith.Logger
                 .AsParallel()
                 .ForAll(path =>
                 {
-                    Debug.WriteLine("CONV: " + path);
+                    log.Trace("CONV: " + path);
                     var newPath = Path.GetFileNameWithoutExtension(path) + ".new";
                     path.EnDeserialize<Log>()
-                        .Select(log =>
+                        .Select(a =>
                         {
-                            log.Collector = "XIV.XIVCollecter";
-                            log.Analyzer = "XIV.XIVAnalyzer";
+                            a.Collector = "XIV.XIVCollecter";
+                            a.Analyzer = "XIV.XIVAnalyzer";
                             return log;
                         })
                         .SerializeAll(newPath)
