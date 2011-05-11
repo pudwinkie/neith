@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using Common.Logging;
 
 namespace FFXIVRuby
 {
     public class LogStatusSearcher
     {
         // Fields
+        private static readonly ILog log = LogManager.GetCurrentClassLogger();
         private FFXIVLogStatus _stat;
         private FFXIVProcess ffxiv;
         private Regex reLogEntry = new Regex(@"[0-9A-F]{4}::\w+|^[0-9A-F]{4}:[()\w\s\0]{32}:");
@@ -31,8 +32,7 @@ namespace FFXIVRuby
 
         private void OnLogStatusFound(FFXIVLogStatus stat)
         {
-            Debug.WriteLine(string.Format(
-                "LogStatusSearcher::OnLogStatusFound({0})", stat));
+            log.TraceFormat("OnLogStatusFound({0})", stat);
 
             _stat = stat;
             if (LogStatusFound != null) {
@@ -183,9 +183,8 @@ namespace FFXIVRuby
         {
 #if true
             var tid = Thread.CurrentThread.ManagedThreadId;
-            Debug.WriteLine(string.Format(
-                "LogStatusSearcher::EnSearch[{0,2}](0x{1,8:X}, 0x{2,6:X})",
-                tid, ent, size));
+            log.TraceFormat("EnSearch[{0,2}](0x{1,8:X}, 0x{2,6:X})",
+                tid, ent, size);
 #endif
             foreach (var ptr in ffxiv.ReadBytesOrNull(ent, size).EnReadInt32()) {
                 // ptr値が妥当なアドレスか？
