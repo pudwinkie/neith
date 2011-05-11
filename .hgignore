@@ -4,3 +4,5 @@ glob:*.suo
 glob:*.user
 glob:*/data/cache/*
 glob:*/data/xfn/*
+syntax: glob
+*.docstates
