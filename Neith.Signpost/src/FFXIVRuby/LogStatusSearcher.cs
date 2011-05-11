@@ -12,7 +12,7 @@ namespace FFXIVRuby
     public class LogStatusSearcher
     {
         // Fields
-        private static readonly ILog log = LogManager.GetCurrentClassLogger();
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
         private FFXIVLogStatus _stat;
         private FFXIVProcess ffxiv;
         private Regex reLogEntry = new Regex(@"[0-9A-F]{4}::\w+|^[0-9A-F]{4}:[()\w\s\0]{32}:");
@@ -32,7 +32,7 @@ namespace FFXIVRuby
 
         private void OnLogStatusFound(FFXIVLogStatus stat)
         {
-            log.TraceFormat("OnLogStatusFound({0})", stat);
+            Log.TraceFormat("OnLogStatusFound({0})", stat);
 
             _stat = stat;
             if (LogStatusFound != null) {
@@ -183,7 +183,7 @@ namespace FFXIVRuby
         {
 #if true
             var tid = Thread.CurrentThread.ManagedThreadId;
-            log.TraceFormat("EnSearch[{0,2}](0x{1,8:X}, 0x{2,6:X})",
+            Log.TraceFormat("EnSearch[{0,2}](0x{1,8:X}, 0x{2,6:X})",
                 tid, ent, size);
 #endif
             foreach (var ptr in ffxiv.ReadBytesOrNull(ent, size).EnReadInt32()) {

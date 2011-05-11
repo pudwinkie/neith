@@ -19,7 +19,7 @@ namespace Neith.Logger
     /// </summary>
     public class LogService : Component
     {
-        private static readonly ILog log = LogManager.GetCurrentClassLogger();
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
 
         private IDisposable storeTask;
         private IDisposable collectTask;
@@ -76,14 +76,14 @@ namespace Neith.Logger
                 .AsParallel()
                 .ForAll(path =>
                 {
-                    log.Trace("CONV: " + path);
+                    Log.Trace("CONV: " + path);
                     var newPath = Path.GetFileNameWithoutExtension(path) + ".new";
                     path.EnDeserialize<Log>()
                         .Select(a =>
                         {
                             a.Collector = "XIV.XIVCollecter";
                             a.Analyzer = "XIV.XIVAnalyzer";
-                            return log;
+                            return Log;
                         })
                         .SerializeAll(newPath)
                         ;
