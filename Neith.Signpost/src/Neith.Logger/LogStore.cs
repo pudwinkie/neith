@@ -96,10 +96,10 @@ namespace Neith.Logger
         /// ログを書き込みます。
         /// </summary>
         /// <param name="log"></param>
-        public LogStorePosition Store(Log log)
+        public NeithLogStorePosition Store(NeithLog log)
         {
             DateCheck(log.TimestampUTC);
-            var rc = new LogStorePosition(lastDate, stream.Position);
+            var rc = new NeithLogStorePosition(lastDate, stream.Position);
             stream.Serialize(log);
             return rc;
         }

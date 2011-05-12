@@ -32,7 +32,7 @@ namespace Neith.Logger
         {
             InitStoreTask();
             var col14 = new XIV.XIVCollecter();
-            collectTask = Observable.FromEventPattern<LogEventArgs>(col14, "Collect")
+            collectTask = Observable.FromEventPattern<NeithLogEventArgs>(col14, "Collect")
                 .Subscribe(a => OnReceive(a.EventArgs.Log));
         }
 
@@ -41,7 +41,7 @@ namespace Neith.Logger
             // ログの保存処理
             Store = LogStore.Instance;
             storeTask = Observable
-                .FromEventPattern<LogEventArgs>(this, "Receive")
+                .FromEventPattern<NeithLogEventArgs>(this, "Receive")
                 .SubscribeOn(Scheduler.ThreadPool)
                 .Subscribe(a => Store.Store(a.EventArgs.Log));
         }
@@ -57,16 +57,16 @@ namespace Neith.Logger
         /// <summary>
         /// 受信イベント。
         /// </summary>
-        public event LogEventHandler Receive;
+        public event NeithLogEventHandler Receive;
 
         /// <summary>
         /// 受信データを保存し、イベントを発行します。
         /// </summary>
         /// <param name="log"></param>
-        public void OnReceive(Log log)
+        public void OnReceive(NeithLog log)
         {
             if (Receive == null) return;
-            Receive(this, new LogEventArgs(log));
+            Receive(this, new NeithLogEventArgs(log));
         }
 
         public void OldLogConvert()
@@ -78,7 +78,7 @@ namespace Neith.Logger
                 {
                     Log.Trace("CONV: " + path);
                     var newPath = Path.GetFileNameWithoutExtension(path) + ".new";
-                    path.EnDeserialize<Log>()
+                    path.EnDeserialize<NeithLog>()
                         .Select(a =>
                         {
                             a.Collector = "XIV.XIVCollecter";

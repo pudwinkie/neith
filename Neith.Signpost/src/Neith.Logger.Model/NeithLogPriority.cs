@@ -7,7 +7,7 @@ using ProtoBuf;
 namespace Neith.Logger.Model
 {
     [ProtoContract]
-    public enum LogPriority
+    public enum NeithLogPriority
     {
         /// <summary>致命的なエラーまたはアプリケーションのクラッシュ。</summary>
         Critical,

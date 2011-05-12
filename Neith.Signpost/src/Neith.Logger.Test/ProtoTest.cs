@@ -17,7 +17,7 @@ namespace Neith.Logger.Test
         [Test]
         public void SerialTest1()
         {
-            var item = Log.Create();
+            var item = NeithLog.Create();
             item.Host = "Host";
             item.Application = "あぷりけ～しょんなのよ";
 
@@ -25,7 +25,7 @@ namespace Neith.Logger.Test
                 st.Serialize(item);
                 var buf = st.ToArray();
                 st.Position = 0;
-                var item2 = st.Deserialize<Log>();
+                var item2 = st.Deserialize<NeithLog>();
                 item.Timestamp.Ticks.AreEqual(item2.Timestamp.Ticks);
                 item.Host.AreEqual(item2.Host);
                 item.Application.AreEqual(item2.Application);
@@ -39,15 +39,15 @@ namespace Neith.Logger.Test
             var st = new MemoryStream();
             qIN.SerializeAll(st);
             st.Seek(0, SeekOrigin.Begin);
-            var qOUT = st.EnDeserialize<Log>().ToArray();
+            var qOUT = st.EnDeserialize<NeithLog>().ToArray();
             Assert.IsTrue(qIN.SequenceEqual(qOUT));
         }
 
-        private static IEnumerable<Log> EnRandomLog()
+        private static IEnumerable<NeithLog> EnRandomLog()
         {
             var r = new Xorshift();
             while (true) {
-                var log = Log.Create();
+                var log = NeithLog.Create();
                  log.Collector = r.NextText32();
                  log.Host = r.NextText32();
                  log.Pid = r.NextInt32();

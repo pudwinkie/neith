@@ -13,7 +13,7 @@ namespace Neith.Logger.Model
         /// <summary>
         /// 収集イベント。
         /// </summary>
-        event LogEventHandler Collect;
+        event NeithLogEventHandler Collect;
     }
 
 }

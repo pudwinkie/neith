@@ -17,7 +17,7 @@ namespace Neith.Logger.Test
         {
             var store = LogStore.Instance;
             try {
-                var item = Log.Create();
+                var item = NeithLog.Create();
                 item.Host = "Host";
                 item.Application = "ろぐしゅつりょくテストなのよー";
                 store.Store(item);
@@ -32,7 +32,7 @@ namespace Neith.Logger.Test
         {
             var store = LogStore.Instance;
             try {
-                var item = Log.Create();
+                var item = NeithLog.Create();
                 item.Host = "ほ～すと";
                 item.Application = "出力しちゃったのですね！";
                 var pos = store.Store(item);
