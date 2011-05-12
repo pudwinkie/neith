@@ -68,10 +68,11 @@
     <Compile Include="IAnalyzer.cs" />
     <Compile Include="ICollector.cs" />
     <Compile Include="ILoggerModule.cs" />
-    <Compile Include="Log.cs" />
-    <Compile Include="LogEvents.cs" />
-    <Compile Include="LogPriority.cs" />
-    <Compile Include="LogStorePosition.cs" />
+    <Compile Include="NeithLog.cs" />
+    <Compile Include="NeithLogEvents.cs" />
+    <Compile Include="NeithLogPriority.cs" />
+    <Compile Include="NeithLogStorePosition.cs" />
+    <Compile Include="NeithLogVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

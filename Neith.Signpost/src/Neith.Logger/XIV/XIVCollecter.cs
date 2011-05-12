@@ -52,7 +52,7 @@ namespace Neith.Logger.XIV
             var host = Environment.MachineName;
             var currentProcess = Process.GetCurrentProcess();
             foreach (var a in XIVProcessWatch.EnReadMemoryLog(WO)) {
-                var log = Log.Create();
+                var log = NeithLog.Create();
                 log.Collector = Name;
                 log.Host = host;
                 if (a.FFXIV != null) log.Pid = a.FFXIV.Proc.Id;
@@ -67,12 +67,12 @@ namespace Neith.Logger.XIV
             }
         }
 
-        public event LogEventHandler Collect;
+        public event NeithLogEventHandler Collect;
 
-        private void OnCollect(Log log)
+        private void OnCollect(NeithLog log)
         {
             if (Collect == null) return;
-            Collect(this, new LogEventArgs(log));
+            Collect(this, new NeithLogEventArgs(log));
         }
 
     }

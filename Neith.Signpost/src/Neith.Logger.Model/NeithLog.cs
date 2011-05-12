@@ -8,7 +8,7 @@ using ProtoBuf;
 namespace Neith.Logger.Model
 {
     [ProtoContract]
-    public class Log : IDictionary<string, string>, IEquatable<Log>
+    public class NeithLog : IDictionary<string, string>, IEquatable<NeithLog>
     {
         #region ログ保存プロパティ
         /// <summary>タイムスタンプ</summary>
@@ -89,7 +89,7 @@ namespace Neith.Logger.Model
 
 
         /// <summary>ログの優先度</summary>
-        public LogPriority Priority { get; set; }
+        public NeithLogPriority Priority { get; set; }
 
 
         /// <summary>行為の実行者</summary>
@@ -110,15 +110,15 @@ namespace Neith.Logger.Model
 
         #endregion
         #region メソッド
-        public static Log Create()
+        public static NeithLog Create()
         {
-            var log = new Log();
+            var log = new NeithLog();
             log.Timestamp = DateTimeOffset.Now;
             log.Id = Guid.NewGuid();
             return log;
         }
 
-        private Log()
+        private NeithLog()
         {
             if (Items == null) Items = new Dictionary<string, string>();
         }
@@ -130,7 +130,7 @@ namespace Neith.Logger.Model
 
         #endregion
 
-        public bool Equals(Log other)
+        public bool Equals(NeithLog other)
         {
             return this.Timestamp == other.Timestamp
                 && this.Id == other.Id

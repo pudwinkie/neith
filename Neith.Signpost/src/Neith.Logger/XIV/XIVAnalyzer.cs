@@ -21,7 +21,7 @@ namespace Neith.Logger.XIV
         /// </summary>
         /// <param name="log"></param>
         /// <returns></returns>
-        public Log SetAnalyzeData(Log log)
+        public NeithLog SetAnalyzeData(NeithLog log)
         {
             log.Analyzer = Name;
             var who = log["who"];

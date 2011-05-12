@@ -7,7 +7,7 @@ using ProtoBuf;
 namespace Neith.Logger.Model
 {
     [ProtoContract]
-    public class LogStorePosition
+    public class NeithLogStorePosition
     {
         private static readonly DateTime OFFSET_DATE = new DateTime(2014, 1, 1);
         private static readonly int OFFSET = (int)(OFFSET_DATE.Ticks / TimeSpan.TicksPerDay);
@@ -24,7 +24,7 @@ namespace Neith.Logger.Model
         private long DateTicks { get { return DateCount * TimeSpan.TicksPerDay; } }
         public DateTime Date { get { return new DateTime(DateTicks); } }
 
-        public LogStorePosition(DateTime date, long pos)
+        public NeithLogStorePosition(DateTime date, long pos)
         {
             offsetDateCount = (int)(date.Date.Ticks / TimeSpan.TicksPerDay) - OFFSET;
             position = (int)pos;

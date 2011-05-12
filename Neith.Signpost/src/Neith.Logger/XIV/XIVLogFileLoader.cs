@@ -13,7 +13,7 @@ namespace Neith.Logger.XIV
     /// </summary>
     internal class XIVLogFileLoader : IDisposable
     {
-        private IEnumerator<Log> reader;
+        private IEnumerator<NeithLog> reader;
 
         public XIVLogFileLoader(string path)
         {
@@ -31,7 +31,7 @@ namespace Neith.Logger.XIV
         /// 新しいログの存在を確認し、読み込めるだけ返します。
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<Log> Polling()
+        public IEnumerable<NeithLog> Polling()
         {
             while (reader.MoveNext()) {
                 if (reader.Current == null) yield break;
@@ -53,7 +53,7 @@ namespace Neith.Logger.XIV
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        private IEnumerable<Log> EnReadTask(string path)
+        private IEnumerable<NeithLog> EnReadTask(string path)
         {
             path = Path.GetFullPath(path);
             using (var st = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)) {

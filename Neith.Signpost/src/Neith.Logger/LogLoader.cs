@@ -45,11 +45,11 @@ namespace Neith.Logger
         /// ログを読み込みます。
         /// </summary>
         /// <param name="pos">ログの場所情報</param>
-        public Log Load(LogStorePosition pos)
+        public NeithLog Load(NeithLogStorePosition pos)
         {
             DateCheck(pos.Date);
             stream.Seek(pos.Positon, SeekOrigin.Begin);
-            var rc = stream.Deserialize<Log>();
+            var rc = stream.Deserialize<NeithLog>();
             return rc;
         }
 
