@@ -73,6 +73,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
+    <Reference Include="WPFToolkit.Extended">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.1.4.0\lib\40\WPFToolkit.Extended.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API.cs" />
@@ -84,6 +87,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProtoTest.cs" />
     <Compile Include="SQLTest.cs" />
+    <Compile Include="Study\WPF\VTreeViewTestWindow.xaml.cs">
+      <DependentUpon>VTreeViewTestWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Study\WPF\VTreeViewTestWindowTest.cs" />
     <Compile Include="XIVTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -117,6 +124,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Study\ReactiveUI\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Study\WPF\VTreeViewTestWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

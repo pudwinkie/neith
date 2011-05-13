@@ -69,7 +69,9 @@
     <Compile Include="ICollector.cs" />
     <Compile Include="ILoggerModule.cs" />
     <Compile Include="NeithLog.cs" />
+    <Compile Include="NeithLogCollection.cs" />
     <Compile Include="NeithLogEvents.cs" />
+    <Compile Include="NeithLogMixin.cs" />
     <Compile Include="NeithLogPriority.cs" />
     <Compile Include="NeithLogStorePosition.cs" />
     <Compile Include="NeithLogVM.cs" />

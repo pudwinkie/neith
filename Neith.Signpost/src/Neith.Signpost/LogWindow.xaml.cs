@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -27,9 +26,8 @@ namespace Neith.Signpost
         static LogWindow()
         {
             try {
-                // ポップアップ入力モード
-                NeithLogsProperty = DependencyProperty.Register("NeithLogs", typeof(bool), typeof(ObservableCollection<NeithLog>),
-                    new FrameworkPropertyMetadata(new ObservableCollection<NeithLogVM>()));
+                NeithLogsProperty = DependencyProperty.Register("NeithLogs", typeof(NeithLogCollection), typeof(LogWindow),
+                    new FrameworkPropertyMetadata(new NeithLogCollection()));
             }
             catch (Exception ex) {
                 throw ex;
@@ -37,7 +35,7 @@ namespace Neith.Signpost
         }
 
         /// <summary>Logコレクション</summary>
-        public ObservableCollection<NeithLogVM> NeithLogs { get { return (ObservableCollection<NeithLogVM>)GetValue(NeithLogsProperty); } }
+        public NeithLogCollection NeithLogs { get { return (NeithLogCollection)GetValue(NeithLogsProperty); } }
 
 
         #endregion

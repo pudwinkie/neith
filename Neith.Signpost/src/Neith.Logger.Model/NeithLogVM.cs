@@ -89,5 +89,16 @@ namespace Neith.Logger.Model
         }
 
         #endregion
+        #region その他
+
+        /// <summary>
+        /// 文字列表現を返します。
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return item.ToString();
+        }
+        #endregion
     }
 }
