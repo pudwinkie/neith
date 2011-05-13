@@ -1,0 +1,25 @@
+﻿<Window x:Name="window" x:Class="Neith.Logger.Test.Study.WPF.VTreeViewTestWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:model="clr-namespace:Neith.Logger.Model;assembly=Neith.Logger.Model"	
+             Title="Virtual Tree View Test" Height="350" Width="525"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300" Loaded="window_Loaded">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type model:NeithLogVM}">
+            <Label Content="{Binding Path=Message}">
+            </Label>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <TreeView ItemsSource="{Binding NeithLogs, ElementName=window}" >
+            <TreeView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel />
+                </ItemsPanelTemplate>
+            </TreeView.ItemsPanel>
+        </TreeView>            
+    </Grid>
+</Window>
