@@ -66,6 +66,7 @@
     <Reference Include="System.Reactive.Windows.Threading, Version=1.1.10425.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Rx-Xaml.1.1.10425\lib\Net4\System.Reactive.Windows.Threading.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -94,6 +95,10 @@
     <Compile Include="XIVTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\neith-base\externals\StickyWindowWinWpfLibrary\StickyWindowLibrary\StickyWindowLibrary.csproj">
+      <Project>{AF76FEA7-CD9D-4093-B617-BC9C44DE99C6}</Project>
+      <Name>StickyWindowLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\neith-base\Neith.Util\src\Neith.Util.Extensions\Neith.Util.Extensions.csproj">
       <Project>{BDAA1A4C-C085-49B4-969D-84E1B2428E9D}</Project>
       <Name>Neith.Util.Extensions</Name>

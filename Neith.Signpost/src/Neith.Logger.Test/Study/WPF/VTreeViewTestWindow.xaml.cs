@@ -54,8 +54,16 @@ namespace Neith.Logger.Test.Study.WPF
             InitializeComponent();
         }
 
+        private Blue.Windows.StickyWindow _stickyWindow;
+
         private void window_Loaded(object sender, RoutedEventArgs e)
         {
+            _stickyWindow = new Blue.Windows.StickyWindow(this);
+            _stickyWindow.StickToScreen = true;
+            _stickyWindow.StickToOther = true;
+            _stickyWindow.StickOnResize = true;
+            _stickyWindow.StickOnMove = true;
+
             var qItem = Enumerable.Range(0, 100)
                 .Select(i =>
                 {
