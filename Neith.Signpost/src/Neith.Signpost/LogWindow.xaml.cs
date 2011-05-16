@@ -39,12 +39,28 @@ namespace Neith.Signpost
 
 
         #endregion
+        #region その他のフィールド
+        private Blue.Windows.StickyWindow _stickyWindow;
+
+
+        #endregion
+
 
         public LogWindow()
         {
             this.InitializeComponent();
             
             // オブジェクト作成に必要なコードをこの下に挿入します。
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            _stickyWindow = new Blue.Windows.StickyWindow(this);
+            _stickyWindow.StickToScreen = true;
+            _stickyWindow.StickToOther = true;
+            _stickyWindow.StickOnResize = true;
+            _stickyWindow.StickOnMove = true;
+
         }
     }
 }

@@ -85,6 +85,10 @@
       <Project>{2E8EFE10-ADF4-4B4F-B324-AA79021E39BD}</Project>
       <Name>CustomWindow</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\neith-base\externals\StickyWindowWinWpfLibrary\StickyWindowLibrary\StickyWindowLibrary.csproj">
+      <Project>{AF76FEA7-CD9D-4093-B617-BC9C44DE99C6}</Project>
+      <Name>StickyWindowLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\neith-base\externals\wpf-notifyicon\NotifyIconWpf\NotifyIconWpf.csproj">
       <Project>{7AC63864-7638-41C4-969C-D3197EF2BED9}</Project>
       <Name>NotifyIconWpf</Name>
@@ -147,6 +151,7 @@
     <Reference Include="System.Reactive.Windows.Threading">
       <HintPath>..\packages\Rx-WPF.1.1.10425\lib\Net4\System.Reactive.Windows.Threading.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
