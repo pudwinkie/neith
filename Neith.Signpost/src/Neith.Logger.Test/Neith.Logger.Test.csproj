@@ -34,6 +34,27 @@
     <Reference Include="EffiProz">
       <HintPath>..\..\..\..\neith-base\externals\effiproz_db\EffiProz.dll</HintPath>
     </Reference>
+    <Reference Include="GDataDB">
+      <HintPath>..\packages\GDataDB.0.2.0.0\lib\GDataDB.dll</HintPath>
+    </Reference>
+    <Reference Include="GDataDB.Linq">
+      <HintPath>..\packages\GDataDB.Linq.0.2.0.0\lib\GDataDB.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.AccessControl">
+      <HintPath>..\packages\Google.GData.AccessControl.1.6.0.0\lib\Google.GData.AccessControl.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Client">
+      <HintPath>..\packages\Google.GData.Client.1.6.0.0\lib\Google.GData.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Documents">
+      <HintPath>..\packages\Google.GData.Documents.1.6.0.0\lib\Google.GData.Documents.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Extensions">
+      <HintPath>..\packages\Google.GData.Extensions.1.6.0.0\lib\Google.GData.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.GData.Spreadsheets">
+      <HintPath>..\packages\Google.GData.Spreadsheets.1.6.0.0\lib\Google.GData.Spreadsheets.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Reactive.Testing, Version=1.1.10425.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Rx-Testing.1.1.10425\lib\Net4-Full\Microsoft.Reactive.Testing.dll</HintPath>
     </Reference>
@@ -59,6 +80,7 @@
       <HintPath>..\packages\reactiveui-xaml.2.3.0.1\lib\Net4\ReactiveUI.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Reactive, Version=1.1.10425.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Rx-Main.1.1.10425\lib\Net4\System.Reactive.dll</HintPath>
@@ -66,7 +88,6 @@
     <Reference Include="System.Reactive.Windows.Threading, Version=1.1.10425.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Rx-Xaml.1.1.10425\lib\Net4\System.Reactive.Windows.Threading.dll</HintPath>
     </Reference>
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -135,6 +156,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

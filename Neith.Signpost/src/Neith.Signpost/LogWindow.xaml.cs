@@ -40,7 +40,7 @@ namespace Neith.Signpost
 
         #endregion
         #region その他のフィールド
-        private Blue.Windows.StickyWindow _stickyWindow;
+        private Blue.Windows.StickyWindowWPF _stickyWindow;
 
 
         #endregion
@@ -55,7 +55,7 @@ namespace Neith.Signpost
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            _stickyWindow = new Blue.Windows.StickyWindow(this);
+            _stickyWindow = new Blue.Windows.StickyWindowWPF(this);
             _stickyWindow.StickToScreen = true;
             _stickyWindow.StickToOther = true;
             _stickyWindow.StickOnResize = true;
