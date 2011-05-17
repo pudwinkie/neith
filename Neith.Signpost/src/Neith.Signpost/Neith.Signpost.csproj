@@ -151,7 +151,6 @@
     <Reference Include="System.Reactive.Windows.Threading">
       <HintPath>..\packages\Rx-WPF.1.1.10425\lib\Net4\System.Reactive.Windows.Threading.dll</HintPath>
     </Reference>
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
