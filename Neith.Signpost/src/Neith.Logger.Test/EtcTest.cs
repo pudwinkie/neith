@@ -26,6 +26,8 @@ namespace Neith.Logger.Test
                      let Name = p.ProcessName
                      let IsWindow = (p.MainWindowHandle != IntPtr.Zero)
                      let WinName = p.MainWindowTitle
+                     let HWND = p.MainWindowHandle
+                     where HWND != null
                      select new { Process = p, Name, IsWindow, WinName };
             var q2 = q1.ToArray();
 
