@@ -14,7 +14,7 @@ namespace Neith.Logger.Test.Study.WPF
 {
     using NUnit.Framework;
 
-    [TestFixture]
+    //[TestFixture]
     public class VTreeViewTestWindowTest
     {
         [Test]

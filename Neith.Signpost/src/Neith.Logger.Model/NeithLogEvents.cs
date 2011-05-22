@@ -13,6 +13,11 @@ namespace Neith.Logger.Model
         {
             Log = log;
         }
+
+        public override string ToString()
+        {
+            return Log.ToString();
+        }
     }
 
     public delegate void NeithLogEventHandler(object sender, NeithLogEventArgs args);
