@@ -45,15 +45,17 @@ namespace Neith.Logger.XIV
         /// <returns></returns>
         private static IEnumerable<FFXIVLog> EnReadMemoryLog(this FFXIVLogStatus stat)
         {
-            var term = int.MinValue;
+            var from = int.MaxValue;
             var proc = stat.FFXIV.Proc;
             while (!proc.HasExited) {
-                if (term == stat.TerminalPoint) {
+                if (from == stat.TerminalPoint) {
                     yield return null;
                     continue;
                 }
-                term = stat.TerminalPoint;
-                foreach (var log in stat.GetLogs()) yield return log;
+                var to = stat.TerminalPoint;
+                if (from > to)  from = stat.EntryPoint;
+                foreach (var log in stat.GetLogs(from, to)) yield return log;
+                from = to;
             }
         }
 

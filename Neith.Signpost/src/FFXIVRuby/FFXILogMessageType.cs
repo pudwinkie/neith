@@ -16,7 +16,8 @@ namespace FFXIVRuby
         INTERNAL_FOUND14   = 0x010002,
         INTERNAL_LOST14    = 0x010003,
         INTERNAL_FOUND_LOG = 0x010004,
-        INTERNAL_ABORT     = 0x011001,
+        INTERNAL_LOG_ADDR  = 0x010005,
+        INTERNAL_ABORT = 0x011001,
 
         TALK_SAY = 0x0001,
         TALK_SHOUT = 0x0002,

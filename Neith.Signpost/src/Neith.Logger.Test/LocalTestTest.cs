@@ -9,7 +9,7 @@ namespace Neith.Logger.Test
 {
     using NUnit.Framework;
 
-    [TestFixture]
+    //[TestFixture]
     public class LocalTestTest
     {
         static readonly XName LOCALTEST = XName.Get("localtest");

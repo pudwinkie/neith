@@ -11,7 +11,7 @@ namespace Neith.Logger.Test
 {
     using NUnit.Framework;
 
-    //[TestFixture]
+    [TestFixture]
     public class XIVTest
     {
         [Test]
@@ -21,8 +21,8 @@ namespace Neith.Logger.Test
             using (var collecter = new XIVCollecter())
             using (var task = Observable
                 .FromEventPattern<NeithLogEventArgs>(collecter, "Collect")
-                .Subscribe(a => Debug.WriteLine(a))) {
-                System.Threading.Thread.Sleep(20 * 1000);
+                .Subscribe(a => Debug.WriteLine(a.EventArgs))) {
+                System.Threading.Thread.Sleep(300 * 1000);
             }
             Debug.WriteLine("XIVTest.ReadTest::完了");
         }
