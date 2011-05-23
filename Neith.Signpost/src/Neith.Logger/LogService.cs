@@ -7,7 +7,6 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Text;
-using Common.Logging;
 using Neith.Logger.Model;
 using Neith.Util;
 
@@ -19,7 +18,7 @@ namespace Neith.Logger
     /// </summary>
     public class LogService : Component
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static NLog.Logger Log = NLog.LogManager.GetCurrentClassLogger();
 
         private IDisposable storeTask;
         private IDisposable collectTask;
