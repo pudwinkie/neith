@@ -4,7 +4,6 @@ using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Windows;
-using Common.Logging;
 using Neith.Logger;
 
 namespace Neith.Signpost
@@ -14,7 +13,7 @@ namespace Neith.Signpost
     /// </summary>
     public partial class App : Application
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static NLog.Logger Log = NLog.LogManager.GetCurrentClassLogger();
 
         public LogService LogService { get; private set; }
 
