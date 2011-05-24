@@ -55,8 +55,14 @@ namespace Neith.Logger.XIV
                 var log = NeithLog.Create();
                 log.Collector = Name;
                 log.Host = host;
-                if (a.FFXIV != null) log.Pid = a.FFXIV.Proc.Id;
-                else log.Pid = currentProcess.Id;
+                if (a.FFXIV != null) {
+                    log.Pid = a.FFXIV.Proc.Id;
+                    log.HWnd = a.FFXIV.Proc.MainWindowHandle;
+                }
+                else {
+                    log.Pid = currentProcess.Id;
+                    log.HWnd = IntPtr.Zero;
+                }
                 log.Application = Application;
                 log.Domain = Domain;
                 log.User = User;
