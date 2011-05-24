@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Windows;
+using Neith.Logger.Model;
 using Neith.Logger;
+using WPF.Themes;
 
 namespace Neith.Signpost
 {
@@ -17,6 +20,9 @@ namespace Neith.Signpost
 
         public LogService LogService { get; private set; }
 
+        
+        private IDisposable StickyUtilTask { get; set; }
+
         private void InitService()
         {
             lock (this) {
@@ -24,6 +30,9 @@ namespace Neith.Signpost
                     Log.Info("アプリケーション初期化：開始");
                     CloseService();
                     LogService = new LogService();
+                    StickyUtilTask = Observable.FromEventPattern<NeithLogEventArgs>(LogService, "Receive")
+                        .Select(a => a.EventArgs)
+                        .RxLogReceive();
                 }
                 finally {
                     Log.Trace("アプリケーション初期化：完了");
@@ -37,6 +46,7 @@ namespace Neith.Signpost
                 if (LogService == null) return;
                 try {
                     Log.Trace("アプリケーション終了処理：開始");
+                    StickyUtilTask.Dispose();
                     LogService.Dispose();
                     LogService = null;
                 }
@@ -60,7 +70,5 @@ namespace Neith.Signpost
         {
             CloseService();
         }
-
-
     }
 }

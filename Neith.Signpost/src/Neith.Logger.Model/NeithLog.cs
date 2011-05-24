@@ -80,6 +80,9 @@ namespace Neith.Logger.Model
         #endregion
         #region 解析プロパティ（保存対象外）
 
+        /// <summary>WindowHandle</summary>
+        public IntPtr HWnd { get; set; }
+
         /// <summary>ログのカテゴリ</summary>
         public string Category { get; set; }
 

@@ -54,10 +54,18 @@ namespace Neith.Signpost
             }
         }
 
+        private void MenuItem2_Click(object sender, RoutedEventArgs e)
+        {
+            var logWin = new LogWindow();
+            logWin.Show();
+        }
+
+
         private void MenuItem3_Click(object sender, RoutedEventArgs e)
         {
             var app = Application.Current as App;
             app.LogService.OldLogConvert();
         }
+
     }
 }
