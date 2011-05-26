@@ -1,0 +1,147 @@
+@charset "UTF-8";
+/**
+ * $Id: main.css 89 2010-12-19 11:36:27Z youichi $
+ */
+
+* {
+	margin: 0px;
+	padding: 0px;
+	outline-width: 0px;
+}
+
+body {
+	margin-top: 1px;
+	background-color: #333333;
+	color: #dddddd;
+	width:126px;
+	height:100px;
+	font-size: 12px;
+	line-height: 14px;
+	text-align: center;
+}
+
+div, span {
+	margin: 0px;
+	padding: 0px;
+}
+
+#title {
+	font-size: 10px;
+}
+
+#AutoTimeFlg img {
+	position: relative;
+	float: left;
+	top: 2px;
+	left: 35px;
+}
+
+#vDate {
+	font-size: 15px;
+	line-height: 16px;
+}
+
+#vTime {
+	font-size: 21px;
+	line-height: 20px;
+}
+
+#daycount {
+	font-size: 11px;
+	line-height: 12px;
+}
+
+#moonico {
+	position: relative;
+	float: left;
+	top: 5px;
+	left: 4px;
+}
+
+#guildleave {
+	font-size: 11px;
+	line-height: 12px;
+}
+
+#ship .dest {
+	font-size: 10px;
+	line-height: 11px;
+	padding-left: 4px;
+	text-align: left;
+}
+
+#ship .time {
+	position: relative;
+	top: 3px;
+	left: 0px;
+	font-size: 11px;
+	line-height: 11px;
+	text-align: left;
+}
+
+#ship span.sts {
+	position: absolute;
+	top: 0px;
+	text-align: center;
+}
+
+#ship span.sts2 {
+	left: 88px;
+}
+
+#timer div.timer {
+	color: #999999;
+	margin-top: 0px;
+	font-size: 20px;
+	line-height: 19px;
+}
+
+#timer div.timer img {
+	position: relative;
+	float: left;
+}
+
+#timer div.timer span {
+	margin-left: -50px;
+}
+
+#timer div.timer img.sound {
+	top: 1px;
+	left: 10px;
+}
+
+#timer div.timer img.start {
+	left: 73px;
+}
+
+#timer div.timer img.stop {
+	left: 76px;
+}
+
+#timer div.timer img.start,
+#timer div.timer img.stop {
+	top: 3px;
+	cursor: pointer;
+}
+
+#timer div.timer.run {
+	color: #dddddd;
+}
+
+#debug hr {
+	position: absolute;
+	font-size: 1px;
+	line-height: 1px;
+	text-align: left;
+	left: 0px;
+}
+
+#debugdata {
+	font-size: 11px;
+	line-height: 10px;
+	padding-top: 4px;
+}
+
+a:link {
+	color: #dddddd;
+}

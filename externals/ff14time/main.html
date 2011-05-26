@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 //EN">
+<!-- $Id: main.html 89 2010-12-19 11:36:27Z youichi $ -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<title>EORZEA Time</title>
+<script type="text/javascript" src="js/jquery-1.4.min.js"></script>
+<script type="text/javascript" src="js/jquery.json-2.2.min.js"></script>
+<script type="text/javascript" src="js/local.js"></script>
+<script type="text/javascript" src="js/sys_common/sys_common.js"></script>
+<script type="text/javascript" src="js/locale.js"></script>
+<script type="text/javascript" src="js/sys_common/sys_main.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+<link href="css/main.css" rel="stylesheet" type="text/css">
+<link href="css/locale.css" rel="stylesheet" type="text/css">
+</head>
+<body onload="init();">
+<div id="body">
+<div id="title">― EORZEA Time ―</div>
+<div id="body2" style="display: none;">
+<div>
+<span id="AutoTimeFlg" style="display: none;"><img src="images/autotime_err.png" width="9" height="9" alt="通信状況"></span><span id="vDate">01/01</span>
+</div>
+<div id="vTime">00:00:00</div>
+<div id="daycount" class="chg_lang">#DAY_CNT# <span id="daycount0str">00:00</span></div>
+<div id="mooninfo">
+<span><img src="images/moon0.png" id="moonico" width="32" height="32" alt="月齢"></span>
+<span id="moon0" class="chg_lang">#MOON_CNT0S# <span id="mooncount0str">00:00:00</span></span><br>
+<span id="moon1" class="chg_lang">#MOON_CNT1S# <span id="mooncount1str">00:00:00</span></span><br>
+<span id="moon2" class="chg_lang">#MOON_CNT2S# <span id="mooncount2str">00:00:00</span></span><br>
+</div>
+<div id="guildleave" class="chg_lang">#GUILDLEAVE# <span id="guildleavestr">00:00:00</span></div>
+<div id="ship">
+<!-- <div class="time">&nbsp;<span class="chg_lang sts sts2">&nbsp;#SHIPSTS2#</span></div> -->
+<div id="ship0view">
+<div class="dest"></div>
+<div class="time">&nbsp;<span id="ship0b" class="sts sts2">00:00</span></div>
+</div>
+</div>
+<div id="timer">
+<div id="timer0" class="timer">00:00</div>
+</div>
+<div id="debug" style="display: none;">
+<hr width="100%">
+<div id="debugdata"></div>
+</div>
+</div>
+</div>
+</body>
+</html>
