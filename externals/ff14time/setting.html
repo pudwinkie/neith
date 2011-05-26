@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 //EN">
+<!-- $Id: setting.html 75 2010-12-18 15:34:46Z youichi $ -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<title>EORZEA Time Config Panel</title>
+<script type="text/javascript" src="js/jquery-1.4.min.js"></script>
+<script type="text/javascript" src="js/jquery.json-2.2.min.js"></script>
+<script type="text/javascript" src="js/local.js"></script>
+<script type="text/javascript" src="js/sys_common/sys_common.js"></script>
+<script type="text/javascript" src="js/locale.js"></script>
+<script type="text/javascript" src="js/sys_common/sys_setting.js"></script>
+<script type="text/javascript" src="js/setting.js"></script>
+<link href="css/setting.css" rel="stylesheet" type="text/css">
+<link href="css/locale.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div id="tab">&nbsp;<select id="page" name="page"></select><span id="dbg"></span></div>
+<div id="setting">
+<div id="setting0">
+</div>
+<div id="setting1">
+<table cellspacing="1" cellpadding="0">
+<tr><th class="chg_lang" >#USETIMER#</th><th colspan="2" class="chg_lang">#WAVEPLAY#</th></tr>
+</table>
+</div>
+<div id="setting2">
+</div>
+<div id="setting99">
+<div><label id="AutoTimeSet" class="chg_lang" title="#AUTOTIMESET_MSG#"><input type="checkbox" name="AutoTimeSet">#AUTOTIMESET#</label></div>
+<div><label id="FileSave" class="chg_lang"><input type="checkbox" name="FileSave">#FILESAVE#</label></div>
+<div><label id="DebugFlg" class="chg_lang" style="display:none;" title="#DEBUGMODE_MSG#"><input type="checkbox" name="DebugFlg">#DEBUGMODE#</label></div>
+<hr>
+<div id="chkver" class="chg_lang">#CHKVER_ING#</div>
+<a id="homeurl"></a><br>
+<div align="right" id="version"></div>
+</div>
+</div>
+</body>
+</html>

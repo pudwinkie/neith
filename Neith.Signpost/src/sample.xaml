@@ -1,0 +1,112 @@
+<UserControl
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Height="400" Width="400">
+
+
+ <UserControl.Resources>
+    <Storyboard x:Name="clockStoryboard" x:Key="clockStoryboard" BeginTime="0:0:0">
+       <!--This animation targets the hour hand transform-->
+       <DoubleAnimation x:Name="hourAnimation"
+          Storyboard.TargetName="hourHandTransform"
+          Storyboard.TargetProperty="Angle"
+          Duration="12:0:0" RepeatBehavior="Forever" To="360" />
+
+        <!--This animation targets the minute hand transform-->
+        <DoubleAnimation x:Name="minuteAnimation"
+          Storyboard.TargetName="minuteHandTransform"
+          Storyboard.TargetProperty="Angle"
+          Duration="1:0:0" RepeatBehavior="Forever" To="360" />
+
+        <!--This animation targets the minute hand transform-->
+        <DoubleAnimation x:Name="secondAnimation"
+          Storyboard.TargetName="secondHandTransform"
+          Storyboard.TargetProperty="Angle"
+          Duration="0:1:0" RepeatBehavior="Forever" To="360" />
+    </Storyboard>
+
+  <Storyboard x:Name="gameStoryboard" x:Key="gameStoryboard" BeginTime="0:0:0">
+    <ParallelTimeline SpeedRatio="20.571428571428573">
+      <StaticResource ResourceKey="clockStoryboard" />
+    </ParallelTimeline>
+  </Storyboard>
+
+
+</UserControl.Resources>
+
+<UserControl.Triggers>
+  <EventTrigger RoutedEvent="UserControl.Loaded">
+    <BeginStoryboard Storyboard="{StaticResource gameStoryboard}" />
+  </EventTrigger>
+</UserControl.Triggers>
+
+
+    <Grid x:Name="LayoutRoot">
+
+<!-- Shadow -->
+<Ellipse Fill="#FF000000" Height="330" Margin="42,42,28,28"
+    Opacity="0.3" Width="330" />
+
+ <!-- Outer Rim -->
+<Ellipse Height="330" Margin="35,35,35,35" Stroke="#FF000000" Width="330" >
+    <Ellipse.Fill>
+        <LinearGradientBrush EndPoint="0.84,0.87" StartPoint="0.164,0.129">
+            <GradientStop Color="#FFE4E5F4" />
+            <GradientStop Color="#FFC0C0C0" Offset="0.254"/>
+        </LinearGradientBrush>
+    </Ellipse.Fill>
+</Ellipse>
+
+ <!-- Bevel -->
+<Ellipse Height="290" Margin="55,55,55,55" Width="290" Stroke="#FF000000">
+    <Ellipse.Fill>
+        <LinearGradientBrush EndPoint="0.84,0.87" StartPoint="0.164,0.129">
+            <GradientStop Color="#FF2F2F32"/>
+            <GradientStop Color="#FFE4E5F4" Offset="0.987"/>
+        </LinearGradientBrush>
+    </Ellipse.Fill>
+</Ellipse>
+
+ <!-- Face -->
+<Ellipse Fill="#FF000000" Height="270" Margin="65,65,65,65"
+  Stroke="#FF000000" Width="270" />
+
+
+ <!-- Center -->
+<Ellipse Fill="#FF000000" Height="30" Margin="185,185,185,185"
+  Stroke="#FF008000" StrokeThickness="8" VerticalAlignment="Top"
+  Width="30" />
+
+<!-- Second Hand -->
+<Rectangle x:Name="secondHand" Fill="#FFFF0000" Height="80"
+  Margin="198,90,197,0"  RenderTransformOrigin="0.45,1.34"
+  Stroke="#FF000000" VerticalAlignment="Top" Width="5" >
+    <Rectangle.RenderTransform>
+        <RotateTransform x:Name="secondHandTransform"/>
+    </Rectangle.RenderTransform>
+</Rectangle>
+
+<!-- Minute Hand -->
+<Rectangle x:Name="minuteHand" Fill="#FF008000" Height="80"
+  Margin="196,90,195,0" RenderTransformOrigin="0.45,1.34"
+  Stroke="#FF008000" VerticalAlignment="Top" Width="9" >
+    <Rectangle.RenderTransform>
+        <RotateTransform x:Name="minuteHandTransform"/>
+    </Rectangle.RenderTransform>
+</Rectangle>
+
+<!-- Hour Hand -->
+<Rectangle x:Name="hourHand" Fill="#FF008000" Height="60"
+  Margin="195,110,194,0" RenderTransformOrigin="0.45,1.45"
+  Stroke="#FF008000" VerticalAlignment="Top" Width="11" >
+    <Rectangle.RenderTransform>
+        <RotateTransform x:Name="hourHandTransform"/>
+    </Rectangle.RenderTransform>
+</Rectangle>
+
+
+    </Grid>
+</UserControl>
