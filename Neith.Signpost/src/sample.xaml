@@ -7,26 +7,86 @@
     Height="400" Width="400">
 
 
- <UserControl.Resources>
-    <Storyboard x:Name="clockStoryboard" x:Key="clockStoryboard" BeginTime="0:0:0">
-       <!--This animation targets the hour hand transform-->
-       <DoubleAnimation x:Name="hourAnimation"
-          Storyboard.TargetName="hourHandTransform"
-          Storyboard.TargetProperty="Angle"
-          Duration="12:0:0" RepeatBehavior="Forever" To="360" />
+<UserControl.Resources>
+   <Storyboard x:Name="clockStoryboard" x:Key="clockStoryboard" BeginTime="0:0:0">
+      <!--This animation targets the hour hand transform-->
+      <DoubleAnimation x:Name="hourAnimation"
+         Storyboard.TargetName="hourHandTransform"
+         Storyboard.TargetProperty="Angle"
+         Duration="12:0:0" RepeatBehavior="Forever" To="360" />
 
-        <!--This animation targets the minute hand transform-->
-        <DoubleAnimation x:Name="minuteAnimation"
-          Storyboard.TargetName="minuteHandTransform"
-          Storyboard.TargetProperty="Angle"
-          Duration="1:0:0" RepeatBehavior="Forever" To="360" />
+       <!--This animation targets the minute hand transform-->
+       <DoubleAnimation x:Name="minuteAnimation"
+         Storyboard.TargetName="minuteHandTransform"
+         Storyboard.TargetProperty="Angle"
+         Duration="1:0:0" RepeatBehavior="Forever" To="360" />
 
-        <!--This animation targets the minute hand transform-->
-        <DoubleAnimation x:Name="secondAnimation"
-          Storyboard.TargetName="secondHandTransform"
-          Storyboard.TargetProperty="Angle"
-          Duration="0:1:0" RepeatBehavior="Forever" To="360" />
-    </Storyboard>
+       <!--This animation targets the minute hand transform-->
+       <DoubleAnimation x:Name="secondAnimation"
+         Storyboard.TargetName="secondHandTransform"
+         Storyboard.TargetProperty="Angle"
+         Duration="0:1:0" RepeatBehavior="Forever" To="360" />
+
+      <!--This animation targets the hour hand transform-->
+      <StringAnimationUsingKeyFrames
+         Storyboard.TargetName="HH"
+         Storyboard.TargetProperty="Text"
+         Duration="1.0:0:0" RepeatBehavior="Forever">
+        <DiscreteStringKeyFrame Value="00" KeyTime="00:0:0" />
+        <DiscreteStringKeyFrame Value="01" KeyTime="01:0:0" />
+        <DiscreteStringKeyFrame Value="02" KeyTime="02:0:0" />
+        <DiscreteStringKeyFrame Value="03" KeyTime="03:0:0" />
+        <DiscreteStringKeyFrame Value="04" KeyTime="04:0:0" />
+        <DiscreteStringKeyFrame Value="05" KeyTime="05:0:0" />
+        <DiscreteStringKeyFrame Value="06" KeyTime="06:0:0" />
+        <DiscreteStringKeyFrame Value="07" KeyTime="07:0:0" />
+        <DiscreteStringKeyFrame Value="08" KeyTime="08:0:0" />
+        <DiscreteStringKeyFrame Value="09" KeyTime="09:0:0" />
+        <DiscreteStringKeyFrame Value="10" KeyTime="10:0:0" />
+        <DiscreteStringKeyFrame Value="11" KeyTime="11:0:0" />
+        <DiscreteStringKeyFrame Value="12" KeyTime="12:0:0" />
+        <DiscreteStringKeyFrame Value="13" KeyTime="13:0:0" />
+        <DiscreteStringKeyFrame Value="14" KeyTime="14:0:0" />
+        <DiscreteStringKeyFrame Value="15" KeyTime="15:0:0" />
+        <DiscreteStringKeyFrame Value="16" KeyTime="16:0:0" />
+        <DiscreteStringKeyFrame Value="17" KeyTime="17:0:0" />
+        <DiscreteStringKeyFrame Value="18" KeyTime="18:0:0" />
+        <DiscreteStringKeyFrame Value="19" KeyTime="19:0:0" />
+        <DiscreteStringKeyFrame Value="20" KeyTime="20:0:0" />
+        <DiscreteStringKeyFrame Value="21" KeyTime="21:0:0" />
+        <DiscreteStringKeyFrame Value="22" KeyTime="22:0:0" />
+        <DiscreteStringKeyFrame Value="23" KeyTime="23:0:0" />
+      </StringAnimationUsingKeyFrames>
+
+      <StringAnimationUsingKeyFrames
+         Storyboard.TargetName="M1"
+         Storyboard.TargetProperty="Text"
+         Duration="1:0:0" RepeatBehavior="Forever">
+        <DiscreteStringKeyFrame Value="0" KeyTime="0:00:0" />
+        <DiscreteStringKeyFrame Value="1" KeyTime="0:10:0" />
+        <DiscreteStringKeyFrame Value="2" KeyTime="0:20:0" />
+        <DiscreteStringKeyFrame Value="3" KeyTime="0:30:0" />
+        <DiscreteStringKeyFrame Value="4" KeyTime="0:40:0" />
+        <DiscreteStringKeyFrame Value="5" KeyTime="0:50:0" />
+      </StringAnimationUsingKeyFrames>
+
+      <StringAnimationUsingKeyFrames
+         Storyboard.TargetName="M2"
+         Storyboard.TargetProperty="Text"
+         Duration="0:10:0" RepeatBehavior="Forever">
+        <DiscreteStringKeyFrame Value="0" KeyTime="0:00:0" />
+        <DiscreteStringKeyFrame Value="1" KeyTime="0:01:0" />
+        <DiscreteStringKeyFrame Value="2" KeyTime="0:02:0" />
+        <DiscreteStringKeyFrame Value="3" KeyTime="0:03:0" />
+        <DiscreteStringKeyFrame Value="4" KeyTime="0:04:0" />
+        <DiscreteStringKeyFrame Value="5" KeyTime="0:05:0" />
+        <DiscreteStringKeyFrame Value="6" KeyTime="0:06:0" />
+        <DiscreteStringKeyFrame Value="7" KeyTime="0:07:0" />
+        <DiscreteStringKeyFrame Value="8" KeyTime="0:08:0" />
+        <DiscreteStringKeyFrame Value="9" KeyTime="0:09:0" />
+      </StringAnimationUsingKeyFrames>
+
+   </Storyboard>
 
   <Storyboard x:Name="gameStoryboard" x:Key="gameStoryboard" BeginTime="0:0:0">
     <ParallelTimeline SpeedRatio="20.571428571428573">
@@ -74,6 +134,14 @@
 <Ellipse Fill="#FF000000" Height="270" Margin="65,65,65,65"
   Stroke="#FF000000" Width="270" />
 
+<!-- Number -->
+<StackPanel Margin="160,220,160,160" Orientation="Horizontal" HorizontalAlignment="Center" Background="White">
+<TextBlock x:Name="HH" Text="99" />
+<TextBlock Text=":" />
+<TextBlock x:Name="M1" Text="9" />
+<TextBlock x:Name="M2" Text="9" />
+</StackPanel>
+
 
  <!-- Center -->
 <Ellipse Fill="#FF000000" Height="30" Margin="185,185,185,185"
@@ -106,6 +174,8 @@
         <RotateTransform x:Name="hourHandTransform"/>
     </Rectangle.RenderTransform>
 </Rectangle>
+
+
 
 
     </Grid>
