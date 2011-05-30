@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<gadget>
+  <name>女神のエオル時計</name>
+  <namespace>nwith.xiv</namespace>
+  <version>1.0.0.0</version>
+  <author name="Lucia Neith">
+    <info url="www.vbell.net" />
+    <logo src="images/logo.png" />
+  </author>
+  <copyright>&#169; Neith Lab.</copyright>
+  <description>エオルゼアの時計ツールです。</description>
+  <icons>
+    <icon height="48" width="48" src="images/aerologo.png" />
+  </icons>
+  <hosts>
+    <host name="sidebar">
+      <base type="HTML" apiVersion="1.0.0" src="index.html" />
+      <permissions>Full</permissions>
+      <platform minPlatformVersion="1.0" />
+      <defaultImage src="images/aerologo.png" />
+    </host>
+  </hosts>
+</gadget>
