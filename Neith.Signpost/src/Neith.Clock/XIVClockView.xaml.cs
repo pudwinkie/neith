@@ -17,9 +17,9 @@ namespace Neith.Clock
     /// <summary>
     /// UserControl1.xaml の相互作用ロジック
     /// </summary>
-    public partial class XIVClock : UserControl
+    public partial class XIVClockView : UserControl
     {
-        public XIVClock()
+        public XIVClockView()
         {
             InitializeComponent();
         }
@@ -33,17 +33,19 @@ namespace Neith.Clock
         public static readonly DependencyProperty HourProperty;
         public static readonly DependencyProperty MinuteProperty;
         public static readonly DependencyProperty SecondProperty;
+        public static readonly DependencyProperty TotalSecondProperty;
 
-        static XIVClock()
+        static XIVClockView()
         {
             try {
                 // 日時パラメータ
-                YearProperty = DependencyProperty.Register("Year", typeof(int), typeof(XIVClock), new FrameworkPropertyMetadata(0, (d, ev) => { ((XIVClock)d).UpdateYear(); }));
-                MonthProperty = DependencyProperty.Register("Month", typeof(int), typeof(XIVClock), new FrameworkPropertyMetadata(0, (d, ev) => { ((XIVClock)d).UpdateMonth(); }));
-                DayProperty = DependencyProperty.Register("Day", typeof(int), typeof(XIVClock), new FrameworkPropertyMetadata(0, (d, ev) => { ((XIVClock)d).UpdateDay(); }));
-                HourProperty = DependencyProperty.Register("Hour", typeof(int), typeof(XIVClock), new FrameworkPropertyMetadata(0, (d, ev) => { ((XIVClock)d).UpdateHour(); }));
-                MinuteProperty = DependencyProperty.Register("Minute", typeof(int), typeof(XIVClock), new FrameworkPropertyMetadata(0, (d, ev) => { ((XIVClock)d).UpdateMinute(); }));
-                SecondProperty = DependencyProperty.Register("Second", typeof(int), typeof(XIVClock), new FrameworkPropertyMetadata(0, (d, ev) => { ((XIVClock)d).UpdateSecond(); }));
+                YearProperty = DependencyProperty.Register("Year", typeof(int), typeof(XIVClockView), new FrameworkPropertyMetadata(0, (d, ev) => { ((XIVClockView)d).UpdateYear(); }));
+                MonthProperty = DependencyProperty.Register("Month", typeof(int), typeof(XIVClockView), new FrameworkPropertyMetadata(0, (d, ev) => { ((XIVClockView)d).UpdateMonth(); }));
+                DayProperty = DependencyProperty.Register("Day", typeof(int), typeof(XIVClockView), new FrameworkPropertyMetadata(0, (d, ev) => { ((XIVClockView)d).UpdateDay(); }));
+                HourProperty = DependencyProperty.Register("Hour", typeof(int), typeof(XIVClockView), new FrameworkPropertyMetadata(0, (d, ev) => { ((XIVClockView)d).UpdateHour(); }));
+                MinuteProperty = DependencyProperty.Register("Minute", typeof(int), typeof(XIVClockView), new FrameworkPropertyMetadata(0, (d, ev) => { ((XIVClockView)d).UpdateMinute(); }));
+                SecondProperty = DependencyProperty.Register("Second", typeof(int), typeof(XIVClockView), new FrameworkPropertyMetadata(0, (d, ev) => { ((XIVClockView)d).UpdateSecond(); }));
+                TotalSecondProperty = DependencyProperty.Register("TotalSecond", typeof(long), typeof(XIVClockView), new FrameworkPropertyMetadata(0, (d, ev) => { ((XIVClockView)d).UpdateTotalSecond(); }));
             }
             catch (Exception ex) {
                 throw ex;
@@ -62,6 +64,8 @@ namespace Neith.Clock
         public int Minute { get { return (int)GetValue(MinuteProperty); } set { SetValue(MinuteProperty, value); } }
         /// <summary>秒を設定・取得します。</summary>
         public int Second { get { return (int)GetValue(SecondProperty); } set { SetValue(SecondProperty, value); } }
+        /// <summary>基準時よりの経過秒を設定・取得します。</summary>
+        public long TotalSecond { get { return (long)GetValue(TotalSecondProperty); } set { SetValue(TotalSecondProperty, value); } }
 
         private void UpdateYear()
         {
@@ -84,6 +88,10 @@ namespace Neith.Clock
         }
 
         private void UpdateSecond()
+        {
+        }
+
+        private void UpdateTotalSecond()
         {
         }
 
