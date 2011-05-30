@@ -49,12 +49,13 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="XIVClock.xaml">
+    <Page Include="XIVClockView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="XIVClock.xaml.cs">
-      <DependentUpon>XIVClock.xaml</DependentUpon>
+    <Compile Include="XIVTime.cs" />
+    <Compile Include="XIVClockView.xaml.cs">
+      <DependentUpon>XIVClockView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
