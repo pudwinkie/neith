@@ -9,43 +9,29 @@ namespace Neith.Logger.Test
 {
     using NUnit.Framework;
 
-    //[TestFixture]
+    [TestFixture]
     public class LogStoreTest
     {
         [Test]
         public void WriteTest1()
         {
             var store = LogStore.Instance;
-            try {
-                var item = NeithLog.Create();
-                item.Host = "Host";
-                item.Application = "ろぐしゅつりょくテストなのよー";
-                store.Store(item);
-            }
-            finally {
-                LogStore.StoreClose();
-            }
+            var item = NeithLog.Create();
+            item.Host = "Host";
+            item.Application = "ろぐしゅつりょくテストなのよー";
+            store.Store(item);
         }
 
         [Test]
         public void ReadWriteTest1()
         {
             var store = LogStore.Instance;
-            try {
-                var item = NeithLog.Create();
-                item.Host = "ほ～すと";
-                item.Application = "出力しちゃったのですね！";
-                var pos = store.Store(item);
-                store.Flush();
-                using (var loader = new LogLoader()) {
-                    var item2 = loader.Load(pos);
-                    if (item.Id != item2.Id) Assert.Fail();
-                }
-            }
-            finally {
-                LogStore.StoreClose();
-            }
-
+            var item = NeithLog.Create();
+            item.Host = "ほ～すと";
+            item.Application = "出力しちゃったのですね！";
+            store.Store(item);
+            var item2 = store.Dic[item.UtcTime];
+            if (item.Application != item2.Application) Assert.Fail();
         }
 
     }

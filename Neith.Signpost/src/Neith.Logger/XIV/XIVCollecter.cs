@@ -10,6 +10,9 @@ using FFXIVRuby;
 
 namespace Neith.Logger.XIV
 {
+    /// <summary>
+    /// XIVログ収集タスク
+    /// </summary>
     public class XIVCollecter : ICollector
     {
         public string Name { get { return "XIV.XIVCollecter"; } }
@@ -66,9 +69,9 @@ namespace Neith.Logger.XIV
                 log.Application = Application;
                 log.Domain = Domain;
                 log.User = User;
-                log["who"] = a.Who;
-                log["message"] = a.Message;
-                log["typeID"] = a.MessageTypeID.ToString("X5");
+                log.Actor = a.Who;
+                log.LogText = a.Message;
+                log.Type = string.Format("FFXIV_LOG.{0:X5}", a.MessageTypeID);
                 OnCollect(Analyzer.SetAnalyzeData(log));
             }
         }

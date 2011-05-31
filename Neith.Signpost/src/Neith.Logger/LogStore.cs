@@ -1,57 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Text;
+using System.IO;
+using Neith.Util.Reflection;
 using Neith.Logger.Model;
+using Microsoft.Isam.Esent.Collections.Generic;
 
 namespace Neith.Logger
 {
+    /// <summary>
+    /// ログデータベースストア
+    /// </summary>
     public class LogStore : IDisposable
     {
-        private static LogStore instance;
-        static LogStore()
-        {
-            StoreInit();
-        }
+        /// <summary>インスタンス</summary>
+        public static readonly LogStore Instance = new LogStore(Const.Folders.Log);
 
-        /// <summary>
-        /// インスタンスを初期化します。
-        /// </summary>
-        public static void StoreInit()
-        {
-            StoreClose();
-            instance = new LogStore();
-        }
+        /// <summary>格納ディレクトリ</summary>
+        public string DataDir { get; private set; }
 
-        /// <summary>
-        /// インスタンスを取得します。
-        /// </summary>
-        public static LogStore Instance
-        {
-            get
-            {
-                if (instance == null) StoreInit();
-                return instance;
-            }
-        }
+        /// <summary>格納ディレクトリ</summary>
+        public string MastarDir { get { return DataDir.PathCombine("mastar").GetFullPath(); } }
 
-        /// <summary>
-        /// インスタンスを開放します。
-        /// </summary>
-        public static void StoreClose()
-        {
-            if (instance == null) return;
-            instance.Dispose();
-            instance = null;
-        }
+        /// <summary>ログデータストアの本体</summary>
+        public PersistentDictionary<DateTime, NeithLog> Dic { get; private set; }
 
-        private Stream stream = null;
-        private DateTime lastDate = DateTime.MinValue.Date;
+        /// <summary>Index: Actor</summary>
+        public LogIndex IndexActor { get; private set; }
 
-        private LogStore()
+        /// <summary>Index一覧</summary>
+        public IEnumerable<LogIndex> Indexes { get; private set; }
+
+        private LogStore(string dir)
         {
+            DataDir = dir;
+            Directory.CreateDirectory(MastarDir);
+            Dic = new PersistentDictionary<DateTime, NeithLog>(MastarDir);
+
+            // Index
+            List<LogIndex> indexes = new List<LogIndex>();
+
+            IndexActor = new LogIndex(DataDir, "actor", a => a.Actor); indexes.Add(IndexActor);
+
+            Indexes = indexes.ToArray();
         }
 
         /// <summary>
@@ -59,55 +51,37 @@ namespace Neith.Logger
         /// </summary>
         public void Dispose()
         {
-            SteramClose();
+            if (Dic == null) return;
+            Dic.Dispose();
+            Dic = null;
+            foreach (var index in Indexes) index.Dispose();
+        }
+
+
+        /// <summary>
+        /// ログの格納
+        /// </summary>
+        /// <param name="neithLog"></param>
+        public void Store(NeithLog log)
+        {
+            Dic.Add(log.UtcTime, log);
+            foreach (var index in Indexes) index.Store(log);
         }
 
         /// <summary>
-        /// ストリームをクローズする。
+        /// Indexの再構築
         /// </summary>
-        public void SteramClose()
+        /// <param name="neithLog"></param>
+        public void ReIndex()
         {
-            lock (this) {
-                if (stream == null) return;
-                stream.Flush();
-                stream.Dispose();
-                stream = null;
-            }
+            Indexes.AsParallel().ForAll(index =>
+            {
+                index.Index.Clear();
+                foreach (var log in Dic.Values) index.Store(log);
+            });
         }
 
-        /// <summary>
-        /// ログの日付を確認し、状況に応じて書込み先を切り替える。
-        /// </summary>
-        /// <param name="dateTime"></param>
-        private void DateCheck(DateTime dateTime)
-        {
-            // チェック
-            var date = dateTime.Date;
-            if (lastDate != date) SteramClose();
-            if (stream != null) return;
-            // ファイルの作成
-            lastDate = date;
-            var path = LogUtil.GetPath(date, true);
-            stream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write, FileShare.Read);
-            stream.Seek(0, SeekOrigin.End);
-        }
 
-        /// <summary>
-        /// ログを書き込みます。
-        /// </summary>
-        /// <param name="log"></param>
-        public NeithLogStorePosition Store(NeithLog log)
-        {
-            DateCheck(log.TimestampUTC);
-            var rc = new NeithLogStorePosition(lastDate, stream.Position);
-            stream.Serialize(log);
-            return rc;
-        }
 
-        public void Flush()
-        {
-            if (stream == null) return;
-            stream.Flush();
-        }
     }
 }

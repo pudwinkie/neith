@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ProtoBuf;
 
 namespace Neith.Logger.Model
 {
-    [ProtoContract]
     public enum NeithLogPriority
     {
         /// <summary>致命的なエラーまたはアプリケーションのクラッシュ。</summary>

@@ -14,7 +14,6 @@
                 <ContextMenu>
                     <MenuItem x:Name="MenuItem1" Header="First Menu Item" Click="MenuItem1_Click" />
                     <MenuItem x:Name="MenuItem2" Header="ログ画面" Click="MenuItem2_Click" />
-                    <MenuItem x:Name="MenuItem3" Header="コンバート" Click="MenuItem3_Click" />
                     <Separator />
                     <MenuItem x:Name="MenuItemExit" Header="終了" Click="MenuItemExit_Click" />
                 </ContextMenu>
