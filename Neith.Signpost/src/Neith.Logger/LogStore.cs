@@ -35,13 +35,12 @@ namespace Neith.Logger
         private LogStore(string dir)
         {
             DataDir = dir;
-            Directory.CreateDirectory(MastarDir);
             Dic = new PersistentDictionary<DateTime, NeithLog>(MastarDir);
 
             // Index
             List<LogIndex> indexes = new List<LogIndex>();
 
-            IndexActor = new LogIndex(DataDir, "actor", a => a.Actor); indexes.Add(IndexActor);
+            IndexActor = new LogIndex(this, "actor", a => a.Actor); indexes.Add(IndexActor);
 
             Indexes = indexes.ToArray();
         }

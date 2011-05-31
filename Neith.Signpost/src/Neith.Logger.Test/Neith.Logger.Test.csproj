@@ -110,7 +110,6 @@
     <Compile Include="LocalTestTest.cs" />
     <Compile Include="LogStoreTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SQLTest.cs" />
     <Compile Include="Study\WPF\VTreeViewTestWindow.xaml.cs">
       <DependentUpon>VTreeViewTestWindow.xaml</DependentUpon>
     </Compile>
