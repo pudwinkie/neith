@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Neith.Logger
+namespace Neith.Logger.Model
 {
     /// <summary>
     /// ユニーク値を保証する現在時刻を作成します。

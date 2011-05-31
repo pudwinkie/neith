@@ -5,22 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Globalization;
-using ProtoBuf;
 
 namespace FFXIVRuby
 {
-    [ProtoContract]
     public class FFXIVLog
     {
         public FFXIVProcess FFXIV { get; private set; }
 
-        [ProtoMember(1)]
         public int MessageTypeID { get; private set; }
 
-        [ProtoMember(2)]
         public string Who { get; private set; }
 
-        [ProtoMember(3)]
         public string Message { get; private set; }
 
         public FFXILogMessageType MessageType

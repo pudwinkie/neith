@@ -40,17 +40,14 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\..\..\neith-base\externals\ReactiveUI\Net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NLog">
+    <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.2.0.0.0\lib\NET40\NLog.dll</HintPath>
     </Reference>
-    <Reference Include="NLog.Extended">
+    <Reference Include="NLog.Extended, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.2.0.0.0\lib\NET40\NLog.Extended.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="protobuf-net, Version=1.0.0.280, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
-      <HintPath>..\packages\protobuf-net.1.0.0.280\lib\protobuf-net.dll</HintPath>
-    </Reference>
     <Reference Include="ReactiveUI">
       <HintPath>..\..\..\..\neith-base\externals\ReactiveUI\Net40\ReactiveUI.dll</HintPath>
     </Reference>
@@ -83,7 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Const.cs" />
-    <Compile Include="LogLoader.cs" />
+    <Compile Include="LogIndex.cs" />
     <Compile Include="LogService.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -95,11 +92,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="ProtoBuf\ProtoBufExtensions.cs" />
-    <Compile Include="UniqueTime.cs" />
     <Compile Include="XIV\XIVAnalyzer.cs" />
     <Compile Include="XIV\XIVCollecter.cs" />
-    <Compile Include="XIV\XIVLogFileLoader.cs" />
     <Compile Include="XIV\XIVLogger.cs" />
     <Compile Include="XIV\XIVProcessWatch.cs" />
   </ItemGroup>
@@ -136,7 +130,9 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Index\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

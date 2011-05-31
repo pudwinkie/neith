@@ -60,12 +60,5 @@ namespace Neith.Signpost
             logWin.Show();
         }
 
-
-        private void MenuItem3_Click(object sender, RoutedEventArgs e)
-        {
-            var app = Application.Current as App;
-            app.LogService.OldLogConvert();
-        }
-
     }
 }

@@ -24,20 +24,18 @@ namespace Neith.Logger.XIV
         public NeithLog SetAnalyzeData(NeithLog log)
         {
             log.Analyzer = Name;
-            var who = log["who"];
-            var message = log["message"];
-            var typeID = log["typeID"];
-            var numType = typeID.HexToInt32();
+            var who = log.Actor;
+            var message = log.LogText;
+            var numType = log.Type.Substring(10).HexToInt32();
             var mType = numType.ToMessageType();
 
             if (mType == FFXILogMessageType.UNNONE) {
                 log.Category =
-                    string.Format("{0}:{1}", mType, typeID);
+                    string.Format("{0}:{1}", mType, numType);
             }
             else {
                 log.Category = mType.ToString();
             }
-            log.Actor = who;
             log.Message = FFXIVLog.GetLogString(mType, numType, who, message);
             return log;
         }

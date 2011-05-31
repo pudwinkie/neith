@@ -22,9 +22,10 @@ namespace Neith.Logger
 
         private IDisposable storeTask;
         private IDisposable collectTask;
+        private LogStore store;
 
 
-        public LogStore Store { get; private set; }
+        public LogStore Store { get { return store; } }
 
         public LogService()
             : base()
@@ -38,7 +39,7 @@ namespace Neith.Logger
         private void InitStoreTask()
         {
             // ログの保存処理
-            Store = LogStore.Instance;
+            store = LogStore.Instance;
             storeTask = Observable
                 .FromEventPattern<NeithLogEventArgs>(this, "Receive")
                 .SubscribeOn(Scheduler.ThreadPool)
@@ -49,7 +50,7 @@ namespace Neith.Logger
         {
             ObjectUtil.CheckDispose(ref collectTask);
             ObjectUtil.CheckDispose(ref storeTask);
-            if (disposing) Store.SteramClose();
+            ObjectUtil.CheckDispose(ref store);
             base.Dispose(disposing);
         }
 
@@ -68,25 +69,5 @@ namespace Neith.Logger
             Receive(this, new NeithLogEventArgs(log));
         }
 
-        public void OldLogConvert()
-        {
-            Directory
-                .GetFiles(Const.Folders.Log, "*.log", SearchOption.AllDirectories)
-                .AsParallel()
-                .ForAll(path =>
-                {
-                    Log.Trace("CONV: " + path);
-                    var newPath = Path.GetFileNameWithoutExtension(path) + ".new";
-                    path.EnDeserialize<NeithLog>()
-                        .Select(a =>
-                        {
-                            a.Collector = "XIV.XIVCollecter";
-                            a.Analyzer = "XIV.XIVAnalyzer";
-                            return Log;
-                        })
-                        .SerializeAll(newPath)
-                        ;
-                });
-        }
     }
 }

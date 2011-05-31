@@ -17,16 +17,13 @@ namespace Neith.Logger.Model
 
         #region プロパティ
         /// <summary>タイムスタンプ</summary>
-        public DateTimeOffset Timestamp { get { return item.Timestamp; } }
+        public DateTimeOffset Timestamp { get { return item.UtcTime; } }
 
         /// <summary>タイムスタンプ(UTC時刻)</summary>
-        public DateTime TimestampUTC { get { return item.TimestampUTC; } }
+        public DateTime UtcTime { get { return item.UtcTime; } }
 
         /// <summary>タイムスタンプ(現地時刻)</summary>
-        public DateTime TimestampLocal { get { return item.Timestamp.ToLocalTime().DateTime; } }
-
-        /// <summary>ログのGUID</summary>
-        public Guid Id { get { return item.Id; } }
+        public DateTime LocalTime { get { return item.UtcTime.ToLocalTime(); } }
 
         /// <summary>ログの収集モジュール</summary>
         public string Collector { get { return item.Collector; } }
@@ -47,7 +44,7 @@ namespace Neith.Logger.Model
         public string User { get { return item.User; } }
 
         /// <summary>ログ内容(文字列のDIC)</summary>
-        public IDictionary<string, string> Items { get { return item.Items; } }
+        public string LogText { get { return item.LogText; } }
 
         /// <summary>ログの分析モジュール</summary>
         public string Analyzer { get { return item.Analyzer; } }
