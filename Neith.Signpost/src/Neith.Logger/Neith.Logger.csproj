@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Const.cs" />
+    <Compile Include="XIV\DummyXIVCollecter.cs" />
     <Compile Include="LogIndex.cs" />
     <Compile Include="LogIndexExtensions.cs" />
     <Compile Include="LogService.cs">
