@@ -11,10 +11,10 @@ namespace Neith.Logger.Test
 {
     using NUnit.Framework;
 
-    //[TestFixture]
+    [TestFixture]
     public class XIVTest
     {
-        [Test]
+        //[Test]
         public void ReadTest()
         {
             Debug.WriteLine("XIVTest.ReadTest::20秒間試行開始");
@@ -23,6 +23,18 @@ namespace Neith.Logger.Test
                 .FromEventPattern<NeithLogEventArgs>(collecter, "Collect")
                 .Subscribe(a => Debug.WriteLine(a.EventArgs))) {
                 System.Threading.Thread.Sleep(300 * 1000);
+            }
+            Debug.WriteLine("XIVTest.ReadTest::完了");
+        }
+        [Test]
+        public void ReadDummyTest()
+        {
+            Debug.WriteLine("XIVTest.ReadDummyTest::5秒間試行開始");
+            using (var collecter = new DummyXIVCollecter())
+            using (var task = Observable
+                .FromEventPattern<NeithLogEventArgs>(collecter, "Collect")
+                .Subscribe(a => Debug.WriteLine(a.EventArgs))) {
+                System.Threading.Thread.Sleep(5 * 1000);
             }
             Debug.WriteLine("XIVTest.ReadTest::完了");
         }

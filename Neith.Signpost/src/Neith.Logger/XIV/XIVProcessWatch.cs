@@ -80,7 +80,7 @@ namespace Neith.Logger.XIV
                         if (isNext) log = gen.Current;
                     }
                     catch (Exception ex) {
-                        log = Internal(null, FFXILogMessageType.INTERNAL_ABORT, "FF14ログ領域検索：例外 ..." + ex.Message);
+                        log = Internal(null, FFXILogMessageType.INTERNAL_FATAL, "FF14ログ領域検索：例外 ..." + ex.Message);
                         isNext = false;
                     }
                     if (log == null) continue;

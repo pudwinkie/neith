@@ -22,6 +22,7 @@ namespace Neith.Logger
 
         private IDisposable storeTask;
         private IDisposable collectTask;
+        private IDisposable dummyTask;
         private LogStore store;
 
 
@@ -34,6 +35,11 @@ namespace Neith.Logger
             var col14 = new XIV.XIVCollecter();
             collectTask = Observable.FromEventPattern<NeithLogEventArgs>(col14, "Collect")
                 .Subscribe(a => OnReceive(a.EventArgs.Log));
+#if DEBUG
+            var dummy = new XIV.DummyXIVCollecter();
+            dummyTask = Observable.FromEventPattern<NeithLogEventArgs>(dummy, "Collect")
+                .Subscribe(a => OnReceive(a.EventArgs.Log));
+#endif
         }
 
         private void InitStoreTask()
@@ -48,6 +54,7 @@ namespace Neith.Logger
 
         protected override void Dispose(bool disposing)
         {
+            ObjectUtil.CheckDispose(ref dummyTask);
             ObjectUtil.CheckDispose(ref collectTask);
             ObjectUtil.CheckDispose(ref storeTask);
             ObjectUtil.CheckDispose(ref store);
