@@ -1,0 +1,13 @@
+﻿<Window
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	x:Class="Neith.Signpost.MainWindow"
+	x:Name="Window"
+	xmlns:local="clr-namespace:Neith.Signpost" 
+	Title="MainWindow"
+	Width="640" Height="480">
+
+	<Grid x:Name="LayoutRoot" Background="White">
+	<local:MainView />
+	</Grid>
+</Window>

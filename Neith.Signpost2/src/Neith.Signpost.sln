@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neith.Signpost", "Neith.Signpost\Neith.Signpost.csproj", "{549425C9-57C5-4A10-9A8E-FEE932C6D40B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neith.Logger.Model", "Neith.Logger.Model\Neith.Logger.Model.csproj", "{1CE96F5C-03B9-451F-BFB5-F8D91449CB29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neith.Logger", "Neith.Logger\Neith.Logger.csproj", "{9B689198-1C03-4668-B107-80051CCCDEA1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{549425C9-57C5-4A10-9A8E-FEE932C6D40B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{549425C9-57C5-4A10-9A8E-FEE932C6D40B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{549425C9-57C5-4A10-9A8E-FEE932C6D40B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{549425C9-57C5-4A10-9A8E-FEE932C6D40B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CE96F5C-03B9-451F-BFB5-F8D91449CB29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CE96F5C-03B9-451F-BFB5-F8D91449CB29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CE96F5C-03B9-451F-BFB5-F8D91449CB29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CE96F5C-03B9-451F-BFB5-F8D91449CB29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B689198-1C03-4668-B107-80051CCCDEA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B689198-1C03-4668-B107-80051CCCDEA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B689198-1C03-4668-B107-80051CCCDEA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B689198-1C03-4668-B107-80051CCCDEA1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

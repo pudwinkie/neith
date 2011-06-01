@@ -31,20 +31,6 @@ namespace Neith.Logger
                 }
             }
 
-            /// <summary>Indexフォルダ</summary>
-            public static string Index
-            {
-                get
-                {
-                    var path = Properties.Settings.Default.LogFolder;
-                    if (string.IsNullOrEmpty(path)) {
-                        path = Path.Combine(Application, "data", "log");
-                    }
-                    path = Path.GetFullPath(path);
-                    return path;
-                }
-            }
-
 
         }
 
