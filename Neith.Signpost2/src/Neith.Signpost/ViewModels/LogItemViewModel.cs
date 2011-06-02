@@ -7,18 +7,18 @@ using Neith.Logger.Model;
 
 namespace Neith.Signpost
 {
-	public class LogItemViewModel : INotifyPropertyChanged
-	{
+    public class LogItemViewModel : INotifyPropertyChanged
+    {
         private readonly NeithLog item;
 
 
-		public LogItemViewModel()
-		{
+        public LogItemViewModel()
+        {
             var demo = NeithLog.Create();
             demo.Actor = "Demo Data";
             demo.Message = "デバッグ表示のメッセージ";
             item = demo;
-		}
+        }
 
         public LogItemViewModel(NeithLog item)
         {
@@ -85,16 +85,16 @@ namespace Neith.Signpost
 
 
         #endregion
-		#region INotifyPropertyChanged
-		public event PropertyChangedEventHandler PropertyChanged;
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
 
-		private void NotifyPropertyChanged(String info)
-		{
-			if (PropertyChanged != null)
-			{
-				PropertyChanged(this, new PropertyChangedEventArgs(info));
-			}
-		}
-		#endregion
-	}
+        private void NotifyPropertyChanged(String info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
+        #endregion
+    }
 }

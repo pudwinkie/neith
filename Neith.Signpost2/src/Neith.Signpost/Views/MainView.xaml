@@ -22,5 +22,6 @@
 				</i:EventTrigger>
 			</i:Interaction.Triggers>
 		</Button>
+		<local:EorzeaClock HorizontalAlignment="Left" Height="240" Margin="8,8,0,0" VerticalAlignment="Top" Width="240"/>
 	</Grid>
 </UserControl>
