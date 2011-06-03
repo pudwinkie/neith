@@ -11,13 +11,17 @@ namespace Neith.Signpost
     public class EorzeaClockModel : ReactiveValidatedObject
     {
         #region 定数
+        /// <summary>基準時刻</summary>
         public static readonly DateTimeOffset StartTime = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
-        public const long EARTH_ONE_DAY = 24 * 60 / 10;
-        public const long GAME_ONE_DAY = 70 / 10;
+
+        /// <summary>地球の１日</summary>
+        public const long RATIO_EARTH = 24 * 60 / 10;
+
+        /// <summary>現地の１日</summary>
+        public const long RATIO_GAME = 70 / 10;
 
         #endregion
         #region プロパティ
-
         /// <summary>地球時間</summary>
         [Required]
         public DateTimeOffset EarthTime
@@ -44,6 +48,7 @@ namespace Neith.Signpost
         }
         private int _Year = 0;
 
+
         /// <summary>月</summary>
         public int Month
         {
@@ -51,6 +56,7 @@ namespace Neith.Signpost
             set { this.RaiseAndSetIfChanged(a => a.Month, value); }
         }
         private int _Month = 0;
+
 
         /// <summary>日</summary>
         public int Day
@@ -60,6 +66,7 @@ namespace Neith.Signpost
         }
         private int _Day = 0;
 
+
         /// <summary>時</summary>
         public int Hour
         {
@@ -68,6 +75,7 @@ namespace Neith.Signpost
         }
         private int _Hour = 0;
 
+
         /// <summary>分</summary>
         public int Minute
         {
@@ -75,6 +83,7 @@ namespace Neith.Signpost
             set { this.RaiseAndSetIfChanged(a => a.Minute, value); }
         }
         private int _Minute = 0;
+
 
         /// <summary>秒</summary>
         public int Second
@@ -115,28 +124,38 @@ namespace Neith.Signpost
         {
             var span = earth - StartTime;
             var tick = span.Ticks;
-            TotalSecond = tick * EARTH_ONE_DAY / GAME_ONE_DAY / TimeSpan.TicksPerSecond;
+            TotalSecond = tick * RATIO_EARTH / RATIO_GAME / TimeSpan.TicksPerSecond;
         }
 
         private void UpdateTotalSecond()
         {
-            Second = (int)(TotalSecond) % 60;
-            Minute = (int)(TotalSecond / 60) % 60;
-            Hour = (int)(TotalSecond / (60 * 60)) % 24;
-            Day = (int)(TotalSecond / (60 * 60 * 24)) % 32 + 1;
-            Month = (int)(TotalSecond / (60 * 60 * 24 * 32)) % 12 + 1;
-            Year = (int)(TotalSecond / (60 * 60 * 24 * 32 * 12)) + 1;
+            Second = (int)(TotalSecond % 60);
+            Minute = (int)(TotalSecond / 60 % 60);
+            Hour = (int)(TotalSecond / (60 * 60) % 24);
+            Day = (int)(TotalSecond / (60 * 60 * 24) % 32 + 1);
+            Month = (int)(TotalSecond / (60 * 60 * 24 * 32) % 12 + 1);
+            Year = (int)(TotalSecond / (60 * 60 * 24 * 32 * 12));
         }
 
+        /// <summary>
+        /// 次に更新を行うべき時刻を返します。
+        /// </summary>
+        /// <param name="secSpan">現地時間での更新間隔（単位：秒）</param>
+        /// <returns></returns>
         public DateTimeOffset GetNextUpdateTime(int secSpan)
         {
             var nextSec = (TotalSecond / secSpan + 1) * secSpan;
             return ToDateTime(nextSec);
         }
 
+        /// <summary>
+        /// 現地時刻の累積秒を地球時刻に変換します。
+        /// </summary>
+        /// <param name="totalSec"></param>
+        /// <returns></returns>
         public static DateTimeOffset ToDateTime(long totalSec)
         {
-            var tick = totalSec * TimeSpan.TicksPerSecond * GAME_ONE_DAY / EARTH_ONE_DAY;
+            var tick = totalSec * TimeSpan.TicksPerSecond * RATIO_GAME / RATIO_EARTH;
             return StartTime + TimeSpan.FromTicks(tick);
         }
 

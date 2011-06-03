@@ -83,6 +83,18 @@
       <Project>{1CE96F5C-03B9-451F-BFB5-F8D91449CB29}</Project>
       <Name>Neith.Logger.Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Neith.Util.Extensions\Neith.Util.Extensions.csproj">
+      <Project>{1FD97B99-5AAA-4034-9A0B-5DEFB91F07C8}</Project>
+      <Name>Neith.Util.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Neith.Util.RX\Neith.Util.RX.csproj">
+      <Project>{6832EA6B-CC58-4B00-9031-5E70291ECFDE}</Project>
+      <Name>Neith.Util.RX</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Neith.Util\Neith.Util.csproj">
+      <Project>{DB0AAA38-90CF-4487-A2B4-32B7942A173A}</Project>
+      <Name>Neith.Util</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
