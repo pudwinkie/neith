@@ -103,6 +103,7 @@
     <Compile Include="Clock\Views\EorzeaClock.xaml.cs">
       <DependentUpon>EorzeaClock.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\StringFormatConverter.cs" />
     <Compile Include="LogWindow.xaml.cs">
       <DependentUpon>LogWindow.xaml</DependentUpon>
     </Compile>
@@ -168,6 +169,18 @@
     <ProjectReference Include="..\Neith.Logger\Neith.Logger.csproj">
       <Project>{9B689198-1C03-4668-B107-80051CCCDEA1}</Project>
       <Name>Neith.Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Neith.Util.Extensions\Neith.Util.Extensions.csproj">
+      <Project>{1FD97B99-5AAA-4034-9A0B-5DEFB91F07C8}</Project>
+      <Name>Neith.Util.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Neith.Util.RX\Neith.Util.RX.csproj">
+      <Project>{6832EA6B-CC58-4B00-9031-5E70291ECFDE}</Project>
+      <Name>Neith.Util.RX</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Neith.Util\Neith.Util.csproj">
+      <Project>{DB0AAA38-90CF-4487-A2B4-32B7942A173A}</Project>
+      <Name>Neith.Util</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
