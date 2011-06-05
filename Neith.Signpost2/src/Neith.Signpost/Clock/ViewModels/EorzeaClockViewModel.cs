@@ -74,16 +74,19 @@ namespace Neith.Signpost
                 .Subscribe(args =>
                 {
                     switch (args.PropertyName) {
-                        case "IsTimerUpdate": UpdateIsInDesignMode(); break;
+                        case "IsTimerUpdate": UpdateIsTimerUpdate(); break;
                         case "SpanSecond": UpdateSpanSecond(); break;
                     }
                 });
         }
 
-        private void UpdateIsInDesignMode()
+        private void UpdateIsTimerUpdate()
         {
+            // 一度タイマーを消してタイマーが有効かどうかを判断
             ObjectUtil.CheckDispose(ref TaskTimer);
             if (!IsTimerUpdate) return;
+
+            // 一定時間で更新を行うタイマーを作成。
             var nextTime = DateTimeOffset.MinValue;
             TaskTimer = Observable.Generate(
                 DateTimeOffset.Now, t => true, t => DateTimeOffset.Now,
@@ -97,11 +100,7 @@ namespace Neith.Signpost
                     nextTime = Model.GetNextUpdateTime(SpanSecond);
                     return nextTime;
                 },
-                DispatcherScheduler.Instance).Subscribe(t =>
-                {
-                    var next = Model.GetNextUpdateTime(SpanSecond);
-                    Debug.WriteLine("{0:o} total={1} s={2:00}  --> next \n\n{3:o}", t, Model.TotalSecond, Model.Second, next);
-                });
+                DispatcherScheduler.Instance).Subscribe();
         }
 
         /// <summary>
