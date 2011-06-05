@@ -5,9 +5,9 @@
 	x:Name="Window"
 	xmlns:local="clr-namespace:Neith.Signpost" 
 	Title="MainWindow"
-	Width="640" Height="480">
+	Width="640" Height="480" Background="#FF419DA4">
 
-	<Grid x:Name="LayoutRoot" Background="White">
+	<Grid x:Name="LayoutRoot">
 	<local:MainView />
 	</Grid>
 </Window>

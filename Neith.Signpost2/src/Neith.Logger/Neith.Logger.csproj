@@ -79,21 +79,21 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\neith-base\Neith.Util\src\Neith.Util.Extensions\Neith.Util.Extensions.csproj">
+      <Project>{BDAA1A4C-C085-49B4-969D-84E1B2428E9D}</Project>
+      <Name>Neith.Util.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\neith-base\Neith.Util\src\Neith.Util.RX\Neith.Util.RX.csproj">
+      <Project>{C8B06C95-1B5D-4811-99C4-341B7109BC30}</Project>
+      <Name>Neith.Util.RX</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\neith-base\Neith.Util\src\Neith.Util\Neith.Util.csproj">
+      <Project>{B5385976-C31F-42DF-B1DB-54EA0F98FDC3}</Project>
+      <Name>Neith.Util</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Neith.Logger.Model\Neith.Logger.Model.csproj">
       <Project>{1CE96F5C-03B9-451F-BFB5-F8D91449CB29}</Project>
       <Name>Neith.Logger.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Neith.Util.Extensions\Neith.Util.Extensions.csproj">
-      <Project>{1FD97B99-5AAA-4034-9A0B-5DEFB91F07C8}</Project>
-      <Name>Neith.Util.Extensions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Neith.Util.RX\Neith.Util.RX.csproj">
-      <Project>{6832EA6B-CC58-4B00-9031-5E70291ECFDE}</Project>
-      <Name>Neith.Util.RX</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Neith.Util\Neith.Util.csproj">
-      <Project>{DB0AAA38-90CF-4487-A2B4-32B7942A173A}</Project>
-      <Name>Neith.Util</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
