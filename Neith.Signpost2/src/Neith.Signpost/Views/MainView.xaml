@@ -8,20 +8,20 @@
 	xmlns:local="clr-namespace:Neith.Signpost"
 	mc:Ignorable="d"
 	x:Class="Neith.Signpost.MainView"
-	d:DesignWidth="640" d:DesignHeight="480">
+	d:DesignWidth="282" d:DesignHeight="409">
 	<UserControl.Resources>
 		<local:MainViewModel x:Key="MainViewModelDataSource" />
 	</UserControl.Resources>
 
 	<Grid x:Name="LayoutRoot" DataContext="{Binding Source={StaticResource MainViewModelDataSource}}" d:DataContext="{d:DesignData /SampleData/MainViewModelSampleData.xaml}">
-		<TextBlock Text="{Binding ViewModelProperty}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-		<Button Content="Update Value" Height="41" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,125,0,0">
+		<TextBlock Text="{Binding ViewModelProperty}" VerticalAlignment="Center" d:LayoutOverrides="Width" HorizontalAlignment="Center"/>
+		<Button Content="Update Value" Margin="99.088,217.5,99.088,0" Height="41" VerticalAlignment="Top" d:LayoutOverrides="Width" HorizontalAlignment="Center">
 			<i:Interaction.Triggers>
 				<i:EventTrigger EventName="Click">
 					<ic:CallMethodAction MethodName="ViewModelMethod" TargetObject="{Binding}"/>
 				</i:EventTrigger>
 			</i:Interaction.Triggers>
 		</Button>
-		<local:EorzeaClock HorizontalAlignment="Left" Height="240" Margin="8,8,0,0" VerticalAlignment="Top" Width="240"/>
+		<local:EorzeaClock HorizontalAlignment="Left" Height="179" Margin="8,8,0,0" VerticalAlignment="Top" Width="266" d:LayoutOverrides="VerticalAlignment"/>
 	</Grid>
 </UserControl>
