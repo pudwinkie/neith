@@ -94,6 +94,15 @@ namespace Neith.Signpost
         private int _Second = 0;
 
 
+        /// <summary>月齢</summary>
+        public int Moon
+        {
+            get { return _Moon; }
+            set { this.RaiseAndSetIfChanged(a => a.Moon, value); }
+        }
+        private int _Moon = 0;
+
+
         #endregion
         public EorzeaClockModel()
         {
@@ -135,6 +144,8 @@ namespace Neith.Signpost
             Day = (int)(TotalSecond / (60 * 60 * 24) % 32 + 1);
             Month = (int)(TotalSecond / (60 * 60 * 24 * 32) % 12 + 1);
             Year = (int)(TotalSecond / (60 * 60 * 24 * 32 * 12));
+
+            Moon = (int)(TotalSecond / (60 * 60 * 24 * 4) % 8);
         }
 
         /// <summary>
@@ -144,7 +155,11 @@ namespace Neith.Signpost
         /// <returns></returns>
         public DateTimeOffset GetNextUpdateTime(int secSpan)
         {
-            var nextSec = (TotalSecond / secSpan + 1) * secSpan;
+            return GetNextUpdateTime(secSpan, 1);
+        }
+        private DateTimeOffset GetNextUpdateTime(int secSpan, int count)
+        {
+            var nextSec = (TotalSecond / secSpan + count) * secSpan;
             return ToDateTime(nextSec);
         }
 
@@ -159,8 +174,26 @@ namespace Neith.Signpost
             return StartTime + TimeSpan.FromTicks(tick);
         }
 
+        /// <summary>
+        /// 次に月齢が変わる時刻を返します。
+        /// </summary>
+        /// <returns></returns>
+        public DateTimeOffset GetNextMoon()
+        {
+            return GetNextUpdateTime(60 * 60 * 24 * 4);
+        }
 
-
+        /// <summary>
+        /// 次の新月・満月の時刻を返します。
+        /// </summary>
+        /// <returns>次の新月・満月の時刻</returns>
+        public Tuple<DateTimeOffset,DateTimeOffset> GetNextNewFullMoon()
+        {
+            var m1 = GetNextUpdateTime(60 * 60 * 24 * 16, 1);
+            var m2 = GetNextUpdateTime(60 * 60 * 24 * 16, 2);
+            var m3 = GetNextUpdateTime(60 * 60 * 24 * 32);
+            return new Tuple<DateTimeOffset, DateTimeOffset>(m3, m1 == m3 ? m2 : m1);
+        }
 
     }
 }
