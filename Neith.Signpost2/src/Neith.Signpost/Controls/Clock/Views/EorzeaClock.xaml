@@ -11,7 +11,6 @@
     <UserControl.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Segoe UI" />
-            <Setter Property="FontFamily" Value="Segoe UI" />
             <Setter Property="Foreground" Value="White" />
         </Style>
         <Style x:Key="EarthStyle" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">

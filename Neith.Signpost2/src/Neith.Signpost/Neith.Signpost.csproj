@@ -111,7 +111,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Clock\Views\EorzeaClock.xaml">
+    <Page Include="Controls\Clock\Views\EorzeaClock.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\CountDown\Views\CountDownTimer.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -127,12 +131,16 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Clock\Models\EorzeaClockModel.cs" />
-    <Compile Include="Clock\ViewModels\EorzeaClockViewModel.cs" />
-    <Compile Include="Clock\Views\EorzeaClock.xaml.cs">
+    <Compile Include="Controls\Clock\Models\EorzeaClockModel.cs" />
+    <Compile Include="Controls\Clock\ViewModels\EorzeaClockViewModel.cs" />
+    <Compile Include="Controls\Clock\Views\EorzeaClock.xaml.cs">
       <DependentUpon>EorzeaClock.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\StringFormatConverter.cs" />
+    <Compile Include="Controls\CountDown\ViewModels\CountDownTimerViewModel.cs" />
+    <Compile Include="Controls\CountDown\Views\CountDownTimer.xaml.cs">
+      <DependentUpon>CountDownTimer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LogWindow.xaml.cs">
       <DependentUpon>LogWindow.xaml</DependentUpon>
     </Compile>
@@ -214,7 +222,84 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controls\" />
+    <Resource Include="Images\application.png" />
+    <Resource Include="Images\application_warning.png" />
+    <Resource Include="Images\calculator.png" />
+    <Resource Include="Images\calendar.png" />
+    <Resource Include="Images\camera.png" />
+    <Resource Include="Images\clock.png" />
+    <Resource Include="Images\coffee.png" />
+    <Resource Include="Images\computer.png" />
+    <Resource Include="Images\direction_down.png" />
+    <Resource Include="Images\direction_left.png" />
+    <Resource Include="Images\direction_right.png" />
+    <Resource Include="Images\direction_up.png" />
+    <Resource Include="Images\disc.png" />
+    <Resource Include="Images\diskette.png" />
+    <Resource Include="Images\document.png" />
+    <Resource Include="Images\document_add.png" />
+    <Resource Include="Images\document_delete.png" />
+    <Resource Include="Images\document_edit.png" />
+    <Resource Include="Images\document_search.png" />
+    <Resource Include="Images\document_warning.png" />
+    <Resource Include="Images\file.png" />
+    <Resource Include="Images\file_add.png" />
+    <Resource Include="Images\file_delete.png" />
+    <Resource Include="Images\file_edit.png" />
+    <Resource Include="Images\file_search.png" />
+    <Resource Include="Images\file_warning.png" />
+    <Resource Include="Images\folder.png" />
+    <Resource Include="Images\folder_add.png" />
+    <Resource Include="Images\folder_delete.png" />
+    <Resource Include="Images\folder_empty.png" />
+    <Resource Include="Images\folder_search.png" />
+    <Resource Include="Images\folder_warning.png" />
+    <Resource Include="Images\home.png" />
+    <Resource Include="Images\load_download.png" />
+    <Resource Include="Images\load_upload.png" />
+    <Resource Include="Images\mail.png" />
+    <Resource Include="Images\mail_delete.png" />
+    <Resource Include="Images\mail_receive.png" />
+    <Resource Include="Images\mail_search.png" />
+    <Resource Include="Images\mail_send.png" />
+    <Resource Include="Images\mail_warning.png" />
+    <Resource Include="Images\mail_write.png" />
+    <Resource Include="Images\message.png" />
+    <Resource Include="Images\notification_add.png" />
+    <Resource Include="Images\notification_done.png" />
+    <Resource Include="Images\notification_error.png" />
+    <Resource Include="Images\notification_remove.png" />
+    <Resource Include="Images\notification_warning.png" />
+    <Resource Include="Images\piechart.png" />
+    <Resource Include="Images\player_fastforward.png" />
+    <Resource Include="Images\player_pause.png" />
+    <Resource Include="Images\player_play.png" />
+    <Resource Include="Images\player_record.png" />
+    <Resource Include="Images\player_rewind.png" />
+    <Resource Include="Images\player_stop.png" />
+    <Resource Include="Images\rss.png" />
+    <Resource Include="Images\search.png" />
+    <Resource Include="Images\security_key.png" />
+    <Resource Include="Images\security_keyandlock.png" />
+    <Resource Include="Images\security_lock.png" />
+    <Resource Include="Images\security_unlock.png" />
+    <Resource Include="Images\shoppingcart.png" />
+    <Resource Include="Images\shoppingcart_add.png" />
+    <Resource Include="Images\shoppingcart_checkout.png" />
+    <Resource Include="Images\shoppingcart_remove.png" />
+    <Resource Include="Images\shoppingcart_warning.png" />
+    <Resource Include="Images\star_empty.png" />
+    <Resource Include="Images\star_full.png" />
+    <Resource Include="Images\star_half.png" />
+    <Resource Include="Images\user.png" />
+    <Resource Include="Images\user_add.png" />
+    <Resource Include="Images\user_delete.png" />
+    <Resource Include="Images\user_manage.png" />
+    <Resource Include="Images\user_warning.png" />
+    <Resource Include="Images\volume.png" />
+    <Resource Include="Images\volume_down.png" />
+    <Resource Include="Images\volume_mute.png" />
+    <Resource Include="Images\volume_up.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
@@ -239,14 +324,14 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Clock\Views\moon0.png" />
-    <Resource Include="Clock\Views\moon1.png" />
-    <Resource Include="Clock\Views\moon2.png" />
-    <Resource Include="Clock\Views\moon3.png" />
-    <Resource Include="Clock\Views\moon4.png" />
-    <Resource Include="Clock\Views\moon5.png" />
-    <Resource Include="Clock\Views\moon6.png" />
-    <Resource Include="Clock\Views\moon7.png" />
+    <Resource Include="Controls\Clock\Views\moon0.png" />
+    <Resource Include="Controls\Clock\Views\moon1.png" />
+    <Resource Include="Controls\Clock\Views\moon2.png" />
+    <Resource Include="Controls\Clock\Views\moon3.png" />
+    <Resource Include="Controls\Clock\Views\moon4.png" />
+    <Resource Include="Controls\Clock\Views\moon5.png" />
+    <Resource Include="Controls\Clock\Views\moon6.png" />
+    <Resource Include="Controls\Clock\Views\moon7.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
