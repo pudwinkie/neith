@@ -7,7 +7,7 @@
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" xmlns:Neith_Signpost_Converters="clr-namespace:Neith.Signpost.Converters" x:Name="userControl"
     mc:Ignorable="d"
     x:Class="Neith.Signpost.CountDownTimer"
-    d:DesignWidth="116" d:DesignHeight="36">
+    d:DesignWidth="116" d:DesignHeight="38">
     <UserControl.Resources>
     	<Neith_Signpost_Converters:StringFormatConverter x:Key="StringFormatConverter"/>
     	<Neith_Signpost_Converters:ToVisibilityConverter x:Key="ToVisibilityConverter"/>
@@ -26,10 +26,10 @@
         <i:EventTrigger EventName="MouseLeftButtonUp" SourceName="imgReset">
             <ei:GoToStateAction TargetObject="{Binding ElementName=userControl}" StateName="ResetNormal"/>
         </i:EventTrigger>
-        <i:EventTrigger EventName="MouseLeftButtonDown" SourceName="viewbox">
+        <i:EventTrigger EventName="MouseLeftButtonDown" SourceName="cntArea">
         	<ei:GoToStateAction TargetObject="{Binding ElementName=userControl}" StateName="CountRress"/>
         </i:EventTrigger>
-        <i:EventTrigger EventName="MouseLeftButtonUp" SourceName="viewbox">
+        <i:EventTrigger EventName="MouseLeftButtonUp" SourceName="cntArea">
         	<ei:GoToStateAction TargetObject="{Binding ElementName=userControl}" StateName="CountNormal"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
@@ -92,16 +92,10 @@
                 <VisualState x:Name="ResetPress">
                 	<Storyboard>
                 		<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="imgReset">
-                			<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+                			<EasingDoubleKeyFrame KeyTime="0" Value="2"/>
                 		</DoubleAnimationUsingKeyFrames>
                 		<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="imgReset">
-                			<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
-                		</DoubleAnimationUsingKeyFrames>
-                		<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.ShadowDepth)" Storyboard.TargetName="imgReset">
-                			<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
-                		</DoubleAnimationUsingKeyFrames>
-                		<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.BlurRadius)" Storyboard.TargetName="imgReset">
-                			<EasingDoubleKeyFrame KeyTime="0" Value="2"/>
+                			<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
                 		</DoubleAnimationUsingKeyFrames>
                 	</Storyboard>
                 </VisualState>
@@ -117,27 +111,18 @@
         		<VisualState x:Name="CountNormal"/>
         		<VisualState x:Name="CountRress">
         			<Storyboard>
-        				<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="viewbox">
-        					<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
-        				</DoubleAnimationUsingKeyFrames>
-        				<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="viewbox">
-        					<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
-        				</DoubleAnimationUsingKeyFrames>
-        				<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.BlurRadius)" Storyboard.TargetName="viewbox">
+        				<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="cntArea">
         					<EasingDoubleKeyFrame KeyTime="0" Value="2"/>
         				</DoubleAnimationUsingKeyFrames>
-        				<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.ShadowDepth)" Storyboard.TargetName="viewbox">
-        					<EasingDoubleKeyFrame KeyTime="0" Value="1"/>
+        				<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="cntArea">
+        					<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
         				</DoubleAnimationUsingKeyFrames>
         			</Storyboard>
         		</VisualState>
         	</VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
     <StackPanel Orientation="Horizontal">
-        <Viewbox x:Name="viewbox" HorizontalAlignment="Right" Margin="4,0" RenderTransformOrigin="0.5,0.5" MouseDown="viewbox_MouseDown">
-        	<Viewbox.Effect>
-        		<DropShadowEffect BlurRadius="3" ShadowDepth="2" Opacity="0.25"/>
-        	</Viewbox.Effect>
+        <Viewbox x:Name="cntArea" HorizontalAlignment="Right" Margin="4,0" RenderTransformOrigin="0.5,0.5" MouseDown="viewbox_MouseDown">
         	<Viewbox.RenderTransform>
         		<TransformGroup>
         			<ScaleTransform/>
@@ -153,10 +138,7 @@
                 <TextBlock x:Name="tbMark" Text="." Visibility="{Binding Mark, Converter={StaticResource ToVisibilityConverter}, Mode=OneWay}"/>
             </StackPanel>
         </Viewbox>
-        <Grid x:Name="imgReset" Width="32" Height="32" Margin="0" RenderTransformOrigin="0.5,0.5" MouseDown="imgReset_MouseDown">
-        	<Grid.Effect>
-        		<DropShadowEffect ShadowDepth="2" BlurRadius="3" Opacity="0.245"/>
-        	</Grid.Effect>
+        <Grid x:Name="imgReset" Width="26" Height="26" Margin="3,2,0,0" RenderTransformOrigin="0.5,0.5" MouseDown="imgReset_MouseDown">
         	<Grid.RenderTransform>
         		<TransformGroup>
         			<ScaleTransform/>
