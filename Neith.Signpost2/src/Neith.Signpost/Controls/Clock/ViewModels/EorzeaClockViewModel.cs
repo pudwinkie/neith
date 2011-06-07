@@ -49,7 +49,13 @@ namespace Neith.Signpost
         public EorzeaClockViewModel(EorzeaClockModel model)
         {
             Model = model;
-            TaskPropertyChanged = RxPropertyChanged(Observable.FromEventPattern<PropertyChangedEventArgs>(this, "PropertyChanged"));
+            TaskPropertyChanged = Changed.Subscribe(args =>
+            {
+                switch (args.PropertyName) {
+                    case "IsTimerUpdate": UpdateIsTimerUpdate(); break;
+                    case "SpanSecond": UpdateSpanSecond(); break;
+                }
+            });
         }
 
         public EorzeaClockViewModel()
@@ -66,20 +72,6 @@ namespace Neith.Signpost
 
         #endregion
         #region 通知処理
-        private IDisposable RxPropertyChanged(IObservable<EventPattern<PropertyChangedEventArgs>> rxEvent)
-        {
-            return rxEvent
-                .ObserveOnDispatcher()
-                .Select(a => a.EventArgs)
-                .Subscribe(args =>
-                {
-                    switch (args.PropertyName) {
-                        case "IsTimerUpdate": UpdateIsTimerUpdate(); break;
-                        case "SpanSecond": UpdateSpanSecond(); break;
-                    }
-                });
-        }
-
         private void UpdateIsTimerUpdate()
         {
             // 一度タイマーを消してタイマーが有効かどうかを判断
