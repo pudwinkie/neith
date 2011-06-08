@@ -7,7 +7,9 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Concurrency;
 using ReactiveUI;
+using ReactiveUI.Xaml;
 using Neith.Util;
+using System.Windows.Input;
 
 namespace Neith.Signpost
 {
@@ -66,11 +68,38 @@ namespace Neith.Signpost
         public bool Mark { get { return _Mark; } set { this.RaiseAndSetIfChanged(a => a.Mark, value); } }
         private bool _Mark = false;
 
+        #endregion
+        #region コマンド
+
+        public ICommand StartOrPause { get; private set; }
+
+        public ICommand Reset { get; private set; }
+
 
         #endregion
         #region コンストラクタ
         public CountDownTimerViewModel()
         {
+            StartOrPause = ReactiveCommand.Create(a => true, a =>
+            {
+                switch (Status) {
+                    case CountDownTimerStatus.Run:
+                        Status = CountDownTimerStatus.Pause;
+                        break;
+                    case CountDownTimerStatus.Fin:
+                        Status = CountDownTimerStatus.Reset;
+                        break;
+                    default:
+                        Status = CountDownTimerStatus.Run;
+                        break;
+                }
+            });
+
+            Reset = ReactiveCommand.Create(a => true, a =>
+            {
+                Status = CountDownTimerStatus.Reset;
+            });
+
             TaskPropertyChanged = this.Changed.Subscribe(args =>
             {
                 switch (args.PropertyName) {
@@ -79,7 +108,7 @@ namespace Neith.Signpost
                     case "Span": ChangeSpan(); break;
                 }
             });
-            Span = TimeSpan.FromMinutes(10);
+            Span = TimeSpan.FromSeconds(10);
         }
 
         public void Dispose()

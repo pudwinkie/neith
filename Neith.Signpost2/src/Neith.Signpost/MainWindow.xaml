@@ -5,7 +5,7 @@
 	x:Name="Window"
 	xmlns:local="clr-namespace:Neith.Signpost" 
 	Title="MainWindow"
-	Width="312" Height="417" Background="#FF419DA4">
+	Width="250" Height="220" Background="#FF419DA4">
 
 	<Grid x:Name="LayoutRoot">
 	<local:MainView />

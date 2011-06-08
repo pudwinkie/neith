@@ -14,15 +14,7 @@
 	</UserControl.Resources>
 
 	<Grid x:Name="LayoutRoot" DataContext="{Binding Source={StaticResource MainViewModelDataSource}}" d:DataContext="{d:DesignData /SampleData/MainViewModelSampleData.xaml}">
-		<TextBlock Text="{Binding ViewModelProperty}" VerticalAlignment="Center" d:LayoutOverrides="Width" HorizontalAlignment="Center"/>
-		<Button Content="Update Value" Margin="99.088,217.5,99.088,0" Height="41" VerticalAlignment="Top" d:LayoutOverrides="Width" HorizontalAlignment="Center">
-			<i:Interaction.Triggers>
-				<i:EventTrigger EventName="Click">
-					<ic:CallMethodAction MethodName="ViewModelMethod" TargetObject="{Binding}"/>
-				</i:EventTrigger>
-			</i:Interaction.Triggers>
-		</Button>
-		<local:EorzeaClock HorizontalAlignment="Left" Height="106" Margin="8,8,0,0" VerticalAlignment="Top" Width="266" d:LayoutOverrides="VerticalAlignment"/>
+		<local:EorzeaClock Height="106" Margin="0,8,0,0" VerticalAlignment="Top" d:LayoutOverrides="VerticalAlignment"/>
 		<StackPanel Height="36" Margin="0,118,0,0" VerticalAlignment="Top" Orientation="Horizontal" HorizontalAlignment="Center">
 			<local:CountDownTimer Height="36" HorizontalAlignment="Left" Width="116" d:LayoutOverrides="VerticalAlignment, Height"/>
 			<local:CountDownTimer Height="36" Width="116" d:LayoutOverrides="VerticalAlignment"/>

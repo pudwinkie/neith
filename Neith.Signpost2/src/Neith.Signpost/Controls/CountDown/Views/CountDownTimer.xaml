@@ -39,6 +39,12 @@
     		<ei:PropertyChangedTrigger Binding="{Binding StatusText, Mode=OneWay}">
     			<ei:GoToStateAction StateName="{Binding StatusText, Mode=OneWay}"/>
     		</ei:PropertyChangedTrigger>
+    		<i:EventTrigger EventName="MouseLeftButtonDown" SourceName="cntArea">
+    			<i:InvokeCommandAction Command="{Binding StartOrPause, Mode=OneWay}"/>
+    		</i:EventTrigger>
+    		<i:EventTrigger EventName="MouseLeftButtonDown" SourceName="imgReset">
+    			<i:InvokeCommandAction Command="{Binding Reset, Mode=OneWay}"/>
+    		</i:EventTrigger>
     	</i:Interaction.Triggers>
     	<VisualStateManager.CustomVisualStateManager>
     		<ei:ExtendedVisualStateManager/>
@@ -122,7 +128,7 @@
         	</VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
     <StackPanel Orientation="Horizontal">
-        <Viewbox x:Name="cntArea" HorizontalAlignment="Right" Margin="4,0" RenderTransformOrigin="0.5,0.5" MouseDown="viewbox_MouseDown">
+        <Viewbox x:Name="cntArea" HorizontalAlignment="Right" Margin="4,0" RenderTransformOrigin="0.5,0.5">
         	<Viewbox.RenderTransform>
         		<TransformGroup>
         			<ScaleTransform/>
@@ -138,7 +144,7 @@
                 <TextBlock x:Name="tbMark" Text="." Visibility="{Binding Mark, Converter={StaticResource ToVisibilityConverter}, Mode=OneWay}"/>
             </StackPanel>
         </Viewbox>
-        <Grid x:Name="imgReset" Width="26" Height="26" Margin="3,2,0,0" RenderTransformOrigin="0.5,0.5" MouseDown="imgReset_MouseDown">
+        <Grid x:Name="imgReset" Width="26" Height="26" Margin="3,2,0,0" RenderTransformOrigin="0.5,0.5">
         	<Grid.RenderTransform>
         		<TransformGroup>
         			<ScaleTransform/>
