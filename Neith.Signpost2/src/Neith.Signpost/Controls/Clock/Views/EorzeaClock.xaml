@@ -29,11 +29,8 @@
     </UserControl.Resources>
 
     <Grid x:Name="LayoutRoot" DataContext="{Binding Source={StaticResource ClockModelDataSource}}">
-        <Viewbox Height="88" VerticalAlignment="Top" Margin="8,8,8,0">
+        <Viewbox Margin="0">
             <StackPanel>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <TextBlock Style="{StaticResource EarthStyle}" x:Name="tbEarthTime" Text="{Binding Model.EarthTime, ConverterParameter=s, Converter={StaticResource StringFormatConverter}}"/>
-                </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBlock Style="{StaticResource DateStyle}" x:Name="tbMonth" Text="{Binding Model.Month, ConverterParameter=00, Converter={StaticResource StringFormatConverter}, Mode=OneWay}"/>
                     <TextBlock Style="{StaticResource DateStyle}" Text="/"/>
