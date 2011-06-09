@@ -7,7 +7,7 @@
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" xmlns:Neith_Signpost_Converters="clr-namespace:Neith.Signpost.Converters" x:Name="userControl"
     mc:Ignorable="d"
     x:Class="Neith.Signpost.CountDownTimer"
-    d:DesignWidth="116" d:DesignHeight="38">
+    d:DesignWidth="110" d:DesignHeight="38">
     <UserControl.Resources>
     	<Neith_Signpost_Converters:StringFormatConverter x:Key="StringFormatConverter"/>
     	<Neith_Signpost_Converters:ToVisibilityConverter x:Key="ToVisibilityConverter"/>
@@ -34,7 +34,7 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
-    <Grid x:Name="LayoutRoot" DataContext="{Binding Source={StaticResource CountDownTimerViewModelDataSource}}">
+    <Grid x:Name="LayoutRoot" DataContext="{Binding Source={StaticResource CountDownTimerViewModelDataSource}}" Stylus.IsPressAndHoldEnabled="False">
     	<i:Interaction.Triggers>
     		<ei:PropertyChangedTrigger Binding="{Binding StatusText, Mode=OneWay}">
     			<ei:GoToStateAction StateName="{Binding StatusText, Mode=OneWay}"/>
@@ -88,7 +88,7 @@
             </VisualStateGroup>
             <VisualStateGroup x:Name="ResetButtonStatus">
                 <VisualStateGroup.Transitions>
-                    <VisualTransition GeneratedDuration="0:0:0.15">
+                    <VisualTransition GeneratedDuration="0:0:0.1">
                 		<VisualTransition.GeneratedEasingFunction>
                 			<BackEase EasingMode="EaseOut" Amplitude="2"/>
                 		</VisualTransition.GeneratedEasingFunction>
@@ -103,6 +103,9 @@
                 		<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="imgReset">
                 			<EasingDoubleKeyFrame KeyTime="0" Value="0"/>
                 		</DoubleAnimationUsingKeyFrames>
+                		<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="ellipse">
+                			<EasingColorKeyFrame KeyTime="0" Value="Red"/>
+                		</ColorAnimationUsingKeyFrames>
                 	</Storyboard>
                 </VisualState>
             </VisualStateGroup>
@@ -144,7 +147,7 @@
                 <TextBlock x:Name="tbMark" Text="." Visibility="{Binding Mark, Converter={StaticResource ToVisibilityConverter}, Mode=OneWay}"/>
             </StackPanel>
         </Viewbox>
-        <Grid x:Name="imgReset" Width="26" Height="26" Margin="3,2,0,0" RenderTransformOrigin="0.5,0.5">
+        <Grid x:Name="imgReset" Width="24" Height="24" Margin="-4,4,0,0" RenderTransformOrigin="0.5,0.5" SnapsToDevicePixels="True">
         	<Grid.RenderTransform>
         		<TransformGroup>
         			<ScaleTransform/>
@@ -153,7 +156,8 @@
         			<TranslateTransform/>
         		</TransformGroup>
         	</Grid.RenderTransform>
-          <Image Source="/Neith.Signpost;component/Images/player_rewind.png" Stretch="Fill" />
+          <Ellipse x:Name="ellipse" Fill="#44000000" Margin="2"/>
+          <Path Stretch="Fill" Fill="#FFFFFFFF" Data="F1 M 460.682,2421.57C 460.682,2421.89 460.583,2422.2 460.428,2422.46C 459.948,2423.32 459.666,2424.31 459.666,2425.36C 459.666,2426.41 459.937,2427.39 460.405,2428.24C 460.582,2428.51 460.682,2428.83 460.682,2429.19C 460.682,2430.15 459.896,2430.94 458.927,2430.94C 458.547,2430.94 458.192,2430.82 457.906,2430.61L 451.506,2426.36C 451.428,2426.31 451.354,2426.26 451.289,2426.19C 450.808,2425.71 450.808,2424.93 451.289,2424.45C 451.35,2424.39 451.415,2424.34 451.483,2424.3L 457.838,2420.2C 458.135,2419.96 458.515,2419.81 458.927,2419.81C 459.896,2419.81 460.682,2420.6 460.682,2421.57 Z M 444.704,2425.35C 444.704,2431.72 449.859,2436.87 456.22,2436.87C 462.582,2436.87 467.734,2431.72 467.734,2425.35C 467.734,2418.99 462.582,2413.84 456.22,2413.84C 449.859,2413.84 444.704,2418.99 444.704,2425.35 Z " Margin="0"/>
         </Grid>
     
     </StackPanel>
