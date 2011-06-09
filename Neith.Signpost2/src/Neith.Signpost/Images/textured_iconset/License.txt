@@ -1,0 +1,17 @@
+/**
+ * 40+ Awesome Textured Icon set
+ *
+ * URL: http://instantshift.com/
+ *
+ * This downloadable freebie source file package includes 40 textured icons
+ *
+ * You MAY use the files in this package for commercial purposes including software, online services, templates and themes.
+ *
+ * The files MAY NOT be resold, sublicensed, rented, transferred or otherwise made available for use.
+ * The files MAY NOT be offered for free downloading from websites other than instantshift.com or productivedreams.com.
+ *
+ *
+ * Designer   Gopal Raju, Convax Solutions (convax.com)
+ * Author     InstantShift
+ * Copyright  Gopal Raju and InstantShift
+ */

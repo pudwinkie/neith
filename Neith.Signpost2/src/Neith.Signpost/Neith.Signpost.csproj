@@ -13,7 +13,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
-    <ApplicationIcon>Application.ico</ApplicationIcon>
+    <ApplicationIcon>Images\neith.ico</ApplicationIcon>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -224,86 +224,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\application.png" />
-    <Resource Include="Images\application_warning.png" />
-    <Resource Include="Images\calculator.png" />
-    <Resource Include="Images\calendar.png" />
-    <Resource Include="Images\camera.png" />
-    <Resource Include="Images\clock.png" />
-    <Resource Include="Images\coffee.png" />
-    <Resource Include="Images\computer.png" />
-    <Resource Include="Images\direction_down.png" />
-    <Resource Include="Images\direction_left.png" />
-    <Resource Include="Images\direction_right.png" />
-    <Resource Include="Images\direction_up.png" />
-    <Resource Include="Images\disc.png" />
-    <Resource Include="Images\diskette.png" />
-    <Resource Include="Images\document.png" />
-    <Resource Include="Images\document_add.png" />
-    <Resource Include="Images\document_delete.png" />
-    <Resource Include="Images\document_edit.png" />
-    <Resource Include="Images\document_search.png" />
-    <Resource Include="Images\document_warning.png" />
-    <Resource Include="Images\file.png" />
-    <Resource Include="Images\file_add.png" />
-    <Resource Include="Images\file_delete.png" />
-    <Resource Include="Images\file_edit.png" />
-    <Resource Include="Images\file_search.png" />
-    <Resource Include="Images\file_warning.png" />
-    <Resource Include="Images\folder.png" />
-    <Resource Include="Images\folder_add.png" />
-    <Resource Include="Images\folder_delete.png" />
-    <Resource Include="Images\folder_empty.png" />
-    <Resource Include="Images\folder_search.png" />
-    <Resource Include="Images\folder_warning.png" />
-    <Resource Include="Images\home.png" />
-    <Resource Include="Images\load_download.png" />
-    <Resource Include="Images\load_upload.png" />
-    <Resource Include="Images\mail.png" />
-    <Resource Include="Images\mail_delete.png" />
-    <Resource Include="Images\mail_receive.png" />
-    <Resource Include="Images\mail_search.png" />
-    <Resource Include="Images\mail_send.png" />
-    <Resource Include="Images\mail_warning.png" />
-    <Resource Include="Images\mail_write.png" />
-    <Resource Include="Images\message.png" />
-    <Resource Include="Images\notification_add.png" />
-    <Resource Include="Images\notification_done.png" />
-    <Resource Include="Images\notification_error.png" />
-    <Resource Include="Images\notification_remove.png" />
-    <Resource Include="Images\notification_warning.png" />
-    <Resource Include="Images\piechart.png" />
-    <Resource Include="Images\player_fastforward.png" />
-    <Resource Include="Images\player_pause.png" />
-    <Resource Include="Images\player_play.png" />
-    <Resource Include="Images\player_record.png" />
-    <Resource Include="Images\player_rewind.png" />
-    <Resource Include="Images\player_stop.png" />
-    <Resource Include="Images\rss.png" />
-    <Resource Include="Images\search.png" />
-    <Resource Include="Images\security_key.png" />
-    <Resource Include="Images\security_keyandlock.png" />
-    <Resource Include="Images\security_lock.png" />
-    <Resource Include="Images\security_unlock.png" />
-    <Resource Include="Images\shoppingcart.png" />
-    <Resource Include="Images\shoppingcart_add.png" />
-    <Resource Include="Images\shoppingcart_checkout.png" />
-    <Resource Include="Images\shoppingcart_remove.png" />
-    <Resource Include="Images\shoppingcart_warning.png" />
-    <Resource Include="Images\star_empty.png" />
-    <Resource Include="Images\star_full.png" />
-    <Resource Include="Images\star_half.png" />
-    <Resource Include="Images\user.png" />
-    <Resource Include="Images\user_add.png" />
-    <Resource Include="Images\user_delete.png" />
-    <Resource Include="Images\user_manage.png" />
-    <Resource Include="Images\user_warning.png" />
-    <Resource Include="Images\volume.png" />
-    <Resource Include="Images\volume_down.png" />
-    <Resource Include="Images\volume_mute.png" />
-    <Resource Include="Images\volume_up.png" />
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4 %28x86 および x64%29</ProductName>
@@ -334,6 +254,134 @@
     <Resource Include="Controls\Clock\Views\moon5.png" />
     <Resource Include="Controls\Clock\Views\moon6.png" />
     <Resource Include="Controls\Clock\Views\moon7.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\neith.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\simplicio-icon-set\application.png" />
+    <Resource Include="Images\simplicio-icon-set\application_warning.png" />
+    <Resource Include="Images\simplicio-icon-set\calculator.png" />
+    <Resource Include="Images\simplicio-icon-set\calendar.png" />
+    <Resource Include="Images\simplicio-icon-set\camera.png" />
+    <Resource Include="Images\simplicio-icon-set\clock.png" />
+    <Resource Include="Images\simplicio-icon-set\coffee.png" />
+    <Resource Include="Images\simplicio-icon-set\computer.png" />
+    <Resource Include="Images\simplicio-icon-set\direction_down.png" />
+    <Resource Include="Images\simplicio-icon-set\direction_left.png" />
+    <Resource Include="Images\simplicio-icon-set\direction_right.png" />
+    <Resource Include="Images\simplicio-icon-set\direction_up.png" />
+    <Resource Include="Images\simplicio-icon-set\disc.png" />
+    <Resource Include="Images\simplicio-icon-set\diskette.png" />
+    <Resource Include="Images\simplicio-icon-set\document.png" />
+    <Resource Include="Images\simplicio-icon-set\document_add.png" />
+    <Resource Include="Images\simplicio-icon-set\document_delete.png" />
+    <Resource Include="Images\simplicio-icon-set\document_edit.png" />
+    <Resource Include="Images\simplicio-icon-set\document_search.png" />
+    <Resource Include="Images\simplicio-icon-set\document_warning.png" />
+    <Resource Include="Images\simplicio-icon-set\file.png" />
+    <Resource Include="Images\simplicio-icon-set\file_add.png" />
+    <Resource Include="Images\simplicio-icon-set\file_delete.png" />
+    <Resource Include="Images\simplicio-icon-set\file_edit.png" />
+    <Resource Include="Images\simplicio-icon-set\file_search.png" />
+    <Resource Include="Images\simplicio-icon-set\file_warning.png" />
+    <Resource Include="Images\simplicio-icon-set\folder.png" />
+    <Resource Include="Images\simplicio-icon-set\folder_add.png" />
+    <Resource Include="Images\simplicio-icon-set\folder_delete.png" />
+    <Resource Include="Images\simplicio-icon-set\folder_empty.png" />
+    <Resource Include="Images\simplicio-icon-set\folder_search.png" />
+    <Resource Include="Images\simplicio-icon-set\folder_warning.png" />
+    <Resource Include="Images\simplicio-icon-set\home.png" />
+    <Resource Include="Images\simplicio-icon-set\load_download.png" />
+    <Resource Include="Images\simplicio-icon-set\load_upload.png" />
+    <Resource Include="Images\simplicio-icon-set\mail.png" />
+    <Resource Include="Images\simplicio-icon-set\mail_delete.png" />
+    <Resource Include="Images\simplicio-icon-set\mail_receive.png" />
+    <Resource Include="Images\simplicio-icon-set\mail_search.png" />
+    <Resource Include="Images\simplicio-icon-set\mail_send.png" />
+    <Resource Include="Images\simplicio-icon-set\mail_warning.png" />
+    <Resource Include="Images\simplicio-icon-set\mail_write.png" />
+    <Resource Include="Images\simplicio-icon-set\message.png" />
+    <Resource Include="Images\simplicio-icon-set\notification_add.png" />
+    <Resource Include="Images\simplicio-icon-set\notification_done.png" />
+    <Resource Include="Images\simplicio-icon-set\notification_error.png" />
+    <Resource Include="Images\simplicio-icon-set\notification_remove.png" />
+    <Resource Include="Images\simplicio-icon-set\notification_warning.png" />
+    <Resource Include="Images\simplicio-icon-set\piechart.png" />
+    <Resource Include="Images\simplicio-icon-set\player_fastforward.png" />
+    <Resource Include="Images\simplicio-icon-set\player_pause.png" />
+    <Resource Include="Images\simplicio-icon-set\player_play.png" />
+    <Resource Include="Images\simplicio-icon-set\player_record.png" />
+    <Resource Include="Images\simplicio-icon-set\player_rewind.png" />
+    <Resource Include="Images\simplicio-icon-set\player_stop.png" />
+    <Resource Include="Images\simplicio-icon-set\rss.png" />
+    <Resource Include="Images\simplicio-icon-set\search.png" />
+    <Resource Include="Images\simplicio-icon-set\security_key.png" />
+    <Resource Include="Images\simplicio-icon-set\security_keyandlock.png" />
+    <Resource Include="Images\simplicio-icon-set\security_lock.png" />
+    <Resource Include="Images\simplicio-icon-set\security_unlock.png" />
+    <Resource Include="Images\simplicio-icon-set\shoppingcart.png" />
+    <Resource Include="Images\simplicio-icon-set\shoppingcart_add.png" />
+    <Resource Include="Images\simplicio-icon-set\shoppingcart_checkout.png" />
+    <Resource Include="Images\simplicio-icon-set\shoppingcart_remove.png" />
+    <Resource Include="Images\simplicio-icon-set\shoppingcart_warning.png" />
+    <Resource Include="Images\simplicio-icon-set\star_empty.png" />
+    <Resource Include="Images\simplicio-icon-set\star_full.png" />
+    <Resource Include="Images\simplicio-icon-set\star_half.png" />
+    <Resource Include="Images\simplicio-icon-set\user.png" />
+    <Resource Include="Images\simplicio-icon-set\user_add.png" />
+    <Resource Include="Images\simplicio-icon-set\user_delete.png" />
+    <Resource Include="Images\simplicio-icon-set\user_manage.png" />
+    <Resource Include="Images\simplicio-icon-set\user_warning.png" />
+    <Resource Include="Images\simplicio-icon-set\volume.png" />
+    <Resource Include="Images\simplicio-icon-set\volume_down.png" />
+    <Resource Include="Images\simplicio-icon-set\volume_mute.png" />
+    <Resource Include="Images\simplicio-icon-set\volume_up.png" />
+    <Resource Include="Images\textured_iconset\bulb.png" />
+    <Resource Include="Images\textured_iconset\camera.png" />
+    <Resource Include="Images\textured_iconset\chat.png" />
+    <Resource Include="Images\textured_iconset\compass.png" />
+    <Resource Include="Images\textured_iconset\down_arrow.png" />
+    <Resource Include="Images\textured_iconset\facebook.png" />
+    <Resource Include="Images\textured_iconset\flickr.png" />
+    <Resource Include="Images\textured_iconset\home.png" />
+    <Resource Include="Images\textured_iconset\imac.png" />
+    <Resource Include="Images\textured_iconset\image.png" />
+    <Resource Include="Images\textured_iconset\iphone.png" />
+    <Resource Include="Images\textured_iconset\ipod.png" />
+    <Resource Include="Images\textured_iconset\key.png" />
+    <Resource Include="Images\textured_iconset\left_arrow.png" />
+    <None Include="Images\textured_iconset\License.txt" />
+    <Resource Include="Images\textured_iconset\like.png" />
+    <Resource Include="Images\textured_iconset\linkedin.png" />
+    <Resource Include="Images\textured_iconset\lock.png" />
+    <Resource Include="Images\textured_iconset\love.png" />
+    <Resource Include="Images\textured_iconset\magnifier.png" />
+    <Resource Include="Images\textured_iconset\mail.png" />
+    <Resource Include="Images\textured_iconset\map.png" />
+    <Resource Include="Images\textured_iconset\mic.png" />
+    <Resource Include="Images\textured_iconset\music.png" />
+    <Resource Include="Images\textured_iconset\myspace.png" />
+    <Resource Include="Images\textured_iconset\notepad.png" />
+    <Resource Include="Images\textured_iconset\person.png" />
+    <Resource Include="Images\textured_iconset\plug.png" />
+    <Resource Include="Images\textured_iconset\refresh.png" />
+    <Resource Include="Images\textured_iconset\right_arrow.png" />
+    <Resource Include="Images\textured_iconset\rss.png" />
+    <Resource Include="Images\textured_iconset\shopping_cart.png" />
+    <Resource Include="Images\textured_iconset\smiley.png" />
+    <Resource Include="Images\textured_iconset\sound.png" />
+    <Resource Include="Images\textured_iconset\star.png" />
+    <Resource Include="Images\textured_iconset\tag.png" />
+    <Resource Include="Images\textured_iconset\telephone.png" />
+    <Resource Include="Images\textured_iconset\television.png" />
+    <Resource Include="Images\textured_iconset\thumblr.png" />
+    <Resource Include="Images\textured_iconset\twitter.png" />
+    <Resource Include="Images\textured_iconset\twitter_bird.png" />
+    <Resource Include="Images\textured_iconset\up_arrow.png" />
+    <Resource Include="Images\textured_iconset\video.png" />
+    <Resource Include="Images\textured_iconset\vimeo.png" />
+    <Resource Include="Images\textured_iconset\yahoo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
