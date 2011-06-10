@@ -80,24 +80,24 @@ namespace Neith.Signpost
         public CountDownTimerViewModel()
         {
             StartOrPause = ReactiveCommand.Create(a => true, a =>
-                {
-                    switch (Status) {
-                        case CountDownTimerStatus.Run:
-                            Status = CountDownTimerStatus.Pause;
-                            break;
-                        case CountDownTimerStatus.Fin:
-                            Status = CountDownTimerStatus.Reset;
-                            break;
-                        default:
-                            Status = CountDownTimerStatus.Run;
-                            break;
-                    }
-                });
+            {
+                switch (Status) {
+                    case CountDownTimerStatus.Run:
+                        Status = CountDownTimerStatus.Pause;
+                        break;
+                    case CountDownTimerStatus.Fin:
+                        Status = CountDownTimerStatus.Reset;
+                        break;
+                    default:
+                        Status = CountDownTimerStatus.Run;
+                        break;
+                }
+            });
 
             Reset = ReactiveCommand.Create(a => true, a =>
-                {
-                    Status = CountDownTimerStatus.Reset;
-                });
+            {
+                Status = CountDownTimerStatus.Reset;
+            });
 
             TaskPropertyChanged = this.Changed.Subscribe(args =>
             {
