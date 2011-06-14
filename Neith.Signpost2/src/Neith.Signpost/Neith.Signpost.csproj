@@ -106,6 +106,9 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="Microsoft.Expression.Interactions" />
     <Reference Include="System.Windows.Interactivity" />
+    <Reference Include="WPFToolkit.Extended">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.1.4.0\lib\40\WPFToolkit.Extended.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -137,6 +140,8 @@
     <Compile Include="Controls\Clock\Views\EorzeaClock.xaml.cs">
       <DependentUpon>EorzeaClock.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\CountDown\ViewModels\CountDownOption.cs" />
+    <Compile Include="Controls\CountDown\ViewModels\ICountDownOption.cs" />
     <Compile Include="Converters\StringFormatConverter.cs" />
     <Compile Include="Controls\CountDown\ViewModels\CountDownTimerViewModel.cs" />
     <Compile Include="Controls\CountDown\Views\CountDownTimer.xaml.cs">
@@ -258,6 +263,7 @@
   <ItemGroup>
     <Resource Include="Images\neith.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
 	     Other similar extension points exist, see Microsoft.Common.targets.

@@ -102,7 +102,40 @@ namespace Neith.Signpost
         }
         private int _Moon = 0;
 
+        #region 次の時間（地球時間）
+        /// <summary>NextTime：次にNMがポップする時刻（地球時間）</summary>
+        public DateTimeOffset NMPopTime
+        {
+            get { return _NMPopTime; }
+            private set { this.RaiseAndSetIfChanged(a => a.NMPopTime, value); }
+        }
+        private DateTimeOffset _NMPopTime = DateTimeOffset.MinValue;
 
+        /// <summary>NextTime：月齢が変わる時刻（地球時間）</summary>
+        public DateTimeOffset NextChangeMoonTime
+        {
+            get { return _NextChangeMoonTime; }
+            private set { this.RaiseAndSetIfChanged(a => a.NextChangeMoonTime, value); }
+        }
+        private DateTimeOffset _NextChangeMoonTime = DateTimeOffset.MinValue;
+
+        /// <summary>NextTime：次の新月（地球時間）</summary>
+        public DateTimeOffset NextNewMoonTime
+        {
+            get { return _NextNewMoonTime; }
+            private set { this.RaiseAndSetIfChanged(a => a.NextNewMoonTime, value); }
+        }
+        private DateTimeOffset _NextNewMoonTime = DateTimeOffset.MinValue;
+
+        /// <summary>NextTime：次の満月（地球時間）</summary>
+        public DateTimeOffset NextFullMoonTime
+        {
+            get { return _NextFullMoonTime; }
+            private set { this.RaiseAndSetIfChanged(a => a.NextFullMoonTime, value); }
+        }
+        private DateTimeOffset _NextFullMoonTime = DateTimeOffset.MinValue;
+
+        #endregion
         #endregion
         public EorzeaClockModel()
         {
@@ -134,6 +167,12 @@ namespace Neith.Signpost
             var span = earth - StartTime;
             var tick = span.Ticks;
             TotalSecond = tick * RATIO_EARTH / RATIO_GAME / TimeSpan.TicksPerSecond;
+            // 次の時間設定
+            NMPopTime = GetNMPopTime();
+            NextChangeMoonTime = GetChangeMoonTime();
+            var moon = GetNextNewFullMoon();
+            NextNewMoonTime = moon.Item1;
+            NextFullMoonTime = moon.Item2;
         }
 
         private void UpdateTotalSecond()
@@ -157,7 +196,7 @@ namespace Neith.Signpost
         {
             return GetNextUpdateTime(secSpan, 1);
         }
-        private DateTimeOffset GetNextUpdateTime(int secSpan, int count)
+        public DateTimeOffset GetNextUpdateTime(int secSpan, int count)
         {
             var nextSec = (TotalSecond / secSpan + count) * secSpan;
             return ToDateTime(nextSec);
@@ -178,7 +217,7 @@ namespace Neith.Signpost
         /// 次に月齢が変わる時刻を返します。
         /// </summary>
         /// <returns></returns>
-        public DateTimeOffset GetNextMoon()
+        private DateTimeOffset GetChangeMoonTime()
         {
             return GetNextUpdateTime(60 * 60 * 24 * 4);
         }
@@ -187,12 +226,24 @@ namespace Neith.Signpost
         /// 次の新月・満月の時刻を返します。
         /// </summary>
         /// <returns>次の新月・満月の時刻</returns>
-        public Tuple<DateTimeOffset,DateTimeOffset> GetNextNewFullMoon()
+        private Tuple<DateTimeOffset, DateTimeOffset> GetNextNewFullMoon()
         {
             var m1 = GetNextUpdateTime(60 * 60 * 24 * 16, 1);
             var m2 = GetNextUpdateTime(60 * 60 * 24 * 16, 2);
             var m3 = GetNextUpdateTime(60 * 60 * 24 * 32);
             return new Tuple<DateTimeOffset, DateTimeOffset>(m3, m1 == m3 ? m2 : m1);
+        }
+
+        /// <summary>
+        /// 次にNMが沸く時刻を返します。地球時間で正５分間隔。
+        /// </summary>
+        /// <param name="earth"></param>
+        /// <returns></returns>
+        private DateTimeOffset GetNMPopTime()
+        {
+            var ratio = TimeSpan.TicksPerMinute * 5;
+            var ticks = (EarthTime.Ticks / ratio + 1) * ratio;
+            return new DateTimeOffset(ticks, TimeSpan.Zero);
         }
 
     }
