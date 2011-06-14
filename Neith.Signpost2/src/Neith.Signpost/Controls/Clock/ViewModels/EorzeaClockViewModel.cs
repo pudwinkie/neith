@@ -24,7 +24,7 @@ namespace Neith.Signpost
         #region プロパティ
         public EorzeaClockModel Model { get; protected set; }
 
-        /// <summary>秒</summary>
+        /// <summary>更新間隔（ゲーム内の秒）</summary>
         [Required]
         [Range(1,int.MaxValue)]
         public int SpanSecond

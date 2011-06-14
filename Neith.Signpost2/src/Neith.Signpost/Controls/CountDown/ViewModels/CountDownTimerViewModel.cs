@@ -29,9 +29,12 @@ namespace Neith.Signpost
 
         #endregion
         #region プロパティ
-        /// <summary>計測時間</summary>
-        public TimeSpan Span { get { return _Span; } set { this.RaiseAndSetIfChanged(a => a.Span, value); } }
-        private TimeSpan _Span = TimeSpan.Zero;
+        /// <summary>タイマー設定一覧</summary>
+        public ReactiveCollection<ICountDownOption> OptionList { get; private set; }
+
+        /// <summary>タイマー設定</summary>
+        public ICountDownOption Option { get { return _Option; } set { this.RaiseAndSetIfChanged(a => a.Option, value); } }
+        private ICountDownOption _Option = null;
 
         /// <summary>ステータス</summary>
         public CountDownTimerStatus Status { get { return _Status; } set { this.RaiseAndSetIfChanged(a => a.Status, value); } }
@@ -104,10 +107,25 @@ namespace Neith.Signpost
                 switch (args.PropertyName) {
                     case "Status": ChangeStatus(); raisePropertyChanged("StatusText"); break;
                     case "Remain": ChangeRemain(); break;
-                    case "Span": ChangeSpan(); break;
+                    case "Option": ChangeOption(); break;
                 }
             });
-            Span = TimeSpan.FromSeconds(10);
+
+            OptionList = new ReactiveCollection<ICountDownOption>(new[]{
+                CountDownOption.Create(TimeSpan.FromSeconds(10)),
+                CountDownOption.Create(TimeSpan.FromSeconds(30)),
+                CountDownOption.Create(TimeSpan.FromMinutes(1)),
+                CountDownOption.Create(TimeSpan.FromMinutes(2)),
+                CountDownOption.Create(TimeSpan.FromMinutes(3)),
+                CountDownOption.Create(TimeSpan.FromMinutes(5)),
+                CountDownOption.Create(TimeSpan.FromMinutes(10)),
+                CountDownOption.Create(TimeSpan.FromMinutes(15)),
+                CountDownOption.Create(TimeSpan.FromMinutes(20)),
+                CountDownOption.Create(TimeSpan.FromMinutes(30)),
+                CountDownOption.Create(TimeSpan.FromMinutes(60)),
+                CountDownOption.Create(TimeSpan.FromMinutes(90)),
+            });
+            Option = OptionList[0];
         }
 
         public void Dispose()
@@ -119,10 +137,10 @@ namespace Neith.Signpost
         #endregion
         #region ステータス変更処理
 
-        private void ChangeSpan()
+        private void ChangeOption()
         {
             Status = CountDownTimerStatus.Reset;
-            Remain = Span;
+            Remain = Option.Span;
         }
 
         private void ChangeStatus()
@@ -133,7 +151,7 @@ namespace Neith.Signpost
             // リセット処理
             switch (Status) {
                 case CountDownTimerStatus.Reset:
-                    Remain = Span;
+                    Remain = Option.Span;
                     return;
                 case CountDownTimerStatus.Pause:
                     var remain = FinTime - DateTimeOffset.Now;

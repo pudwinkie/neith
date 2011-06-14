@@ -4,7 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:Neith.Signpost"
-    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" xmlns:Neith_Signpost_Converters="clr-namespace:Neith.Signpost.Converters" x:Name="userControl"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" xmlns:Neith_Signpost_Converters="clr-namespace:Neith.Signpost.Converters" xmlns:extToolkit="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended" x:Name="userControl"
     mc:Ignorable="d"
     x:Class="Neith.Signpost.CountDownTimer"
     d:DesignWidth="110" d:DesignHeight="38">
@@ -35,6 +35,9 @@
     </i:Interaction.Triggers>
 
     <Grid x:Name="LayoutRoot" DataContext="{Binding Source={StaticResource CountDownTimerViewModelDataSource}}" Stylus.IsPressAndHoldEnabled="False">
+    	<Grid.ContextMenu>
+    		<ContextMenu ItemsSource="{Binding OptionList}" DisplayMemberPath="Name"/>
+    	</Grid.ContextMenu>
     	<i:Interaction.Triggers>
     		<ei:PropertyChangedTrigger Binding="{Binding StatusText, Mode=OneWay}">
     			<ei:GoToStateAction StateName="{Binding StatusText, Mode=OneWay}"/>
@@ -140,12 +143,12 @@
         			<TranslateTransform/>
         		</TransformGroup>
         	</Viewbox.RenderTransform>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock x:Name="tbMinute" Text="{Binding Minute, ConverterParameter=00, Converter={StaticResource StringFormatConverter}, Mode=OneWay}"/>
-                <TextBlock x:Name="tbSpan" Text=":"/>
-                <TextBlock x:Name="tbSecond" Text="{Binding Second, ConverterParameter=00, Converter={StaticResource StringFormatConverter}, Mode=OneWay}"/>
-                <TextBlock x:Name="tbMark" Text="." Visibility="{Binding Mark, Converter={StaticResource ToVisibilityConverter}, Mode=OneWay}"/>
-            </StackPanel>
+        	<StackPanel Orientation="Horizontal">
+        		<TextBlock x:Name="tbMinute" Text="{Binding Minute, ConverterParameter=00, Converter={StaticResource StringFormatConverter}, Mode=OneWay}"/>
+        		<TextBlock x:Name="tbSpan" Text=":"/>
+        		<TextBlock x:Name="tbSecond" Text="{Binding Second, ConverterParameter=00, Converter={StaticResource StringFormatConverter}, Mode=OneWay}"/>
+        		<TextBlock x:Name="tbMark" Text="." Visibility="{Binding Mark, Converter={StaticResource ToVisibilityConverter}, Mode=OneWay}"/>
+        	</StackPanel>
         </Viewbox>
         <Grid x:Name="imgReset" Width="24" Height="24" Margin="-4,4,0,0" RenderTransformOrigin="0.5,0.5" SnapsToDevicePixels="True">
         	<Grid.RenderTransform>
