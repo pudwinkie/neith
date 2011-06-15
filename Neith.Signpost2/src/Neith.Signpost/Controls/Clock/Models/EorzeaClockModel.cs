@@ -243,7 +243,7 @@ namespace Neith.Signpost
         {
             var ratio = TimeSpan.TicksPerMinute * 5;
             var ticks = (EarthTime.Ticks / ratio + 1) * ratio;
-            return new DateTimeOffset(ticks, TimeSpan.Zero);
+            return new DateTimeOffset(ticks, EarthTime.Offset);
         }
 
     }

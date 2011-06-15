@@ -134,7 +134,7 @@
         	</VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
     <StackPanel Orientation="Horizontal">
-        <Viewbox x:Name="cntArea" HorizontalAlignment="Right" Margin="4,0" RenderTransformOrigin="0.5,0.5">
+        <Viewbox x:Name="cntArea" HorizontalAlignment="Right" Margin="0,0,4,0" RenderTransformOrigin="0.5,0.5" Width="78">
         	<Viewbox.RenderTransform>
         		<TransformGroup>
         			<ScaleTransform/>
@@ -143,14 +143,14 @@
         			<TranslateTransform/>
         		</TransformGroup>
         	</Viewbox.RenderTransform>
-        	<StackPanel Orientation="Horizontal">
+        	<StackPanel x:Name="panelCount" Orientation="Horizontal">
         		<TextBlock x:Name="tbMinute" Text="{Binding Minute, ConverterParameter=00, Converter={StaticResource StringFormatConverter}, Mode=OneWay}"/>
         		<TextBlock x:Name="tbSpan" Text=":"/>
         		<TextBlock x:Name="tbSecond" Text="{Binding Second, ConverterParameter=00, Converter={StaticResource StringFormatConverter}, Mode=OneWay}"/>
         		<TextBlock x:Name="tbMark" Text="." Visibility="{Binding Mark, Converter={StaticResource ToVisibilityConverter}, Mode=OneWay}"/>
         	</StackPanel>
         </Viewbox>
-        <Grid x:Name="imgReset" Width="24" Height="24" Margin="-4,4,0,0" RenderTransformOrigin="0.5,0.5" SnapsToDevicePixels="True">
+        <Grid x:Name="imgReset" Width="24" Height="24" RenderTransformOrigin="-1.292,0.458" SnapsToDevicePixels="True" VerticalAlignment="Center" Margin="0,2,0,0" HorizontalAlignment="Right">
         	<Grid.RenderTransform>
         		<TransformGroup>
         			<ScaleTransform/>
