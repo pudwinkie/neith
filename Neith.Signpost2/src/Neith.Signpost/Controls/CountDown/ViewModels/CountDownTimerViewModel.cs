@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Data;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Concurrency;
@@ -13,14 +14,6 @@ using System.Windows.Input;
 
 namespace Neith.Signpost
 {
-    public enum CountDownTimerStatus
-    {
-        Reset,
-        Run,
-        Pause,
-        Fin,
-    }
-
     public class CountDownTimerViewModel : ReactiveObject, IDisposable
     {
         #region フィールド
@@ -40,8 +33,16 @@ namespace Neith.Signpost
         public CountDownTimerStatus Status { get { return _Status; } set { this.RaiseAndSetIfChanged(a => a.Status, value); } }
         private CountDownTimerStatus _Status = CountDownTimerStatus.Reset;
 
-        /// <summary>ステータステキスト</summary>
+        /// <summary>ステータス：テキスト</summary>
         public string StatusText { get { return "Timer" + Status.ToString(); } }
+
+        /// <summary>残り時間表示モード</summary>
+        public CountDownTimerRemainStatus RemainStatus { get { return _RemainStatus; } set { this.RaiseAndSetIfChanged(a => a.RemainStatus, value); } }
+        private CountDownTimerRemainStatus _RemainStatus = CountDownTimerRemainStatus.Normal;
+
+        /// <summary>残り時間表示モード：テキスト</summary>
+        public string RemainStatusText { get { return "Remain" + RemainStatus.ToString(); } }
+
 
         /// <summary>終了時刻</summary>
         public DateTimeOffset FinTime { get { return _FinTime; } set { this.RaiseAndSetIfChanged(a => a.FinTime, value); } }
@@ -91,6 +92,10 @@ namespace Neith.Signpost
                     case CountDownTimerStatus.Fin:
                         Status = CountDownTimerStatus.Reset;
                         break;
+                    case CountDownTimerStatus.Reset:
+                        Remain = Option.Span;
+                        Status = CountDownTimerStatus.Run;
+                        break;
                     default:
                         Status = CountDownTimerStatus.Run;
                         break;
@@ -106,24 +111,31 @@ namespace Neith.Signpost
             {
                 switch (args.PropertyName) {
                     case "Status": ChangeStatus(); raisePropertyChanged("StatusText"); break;
+                    case "RemainStatus": raisePropertyChanged("RemainStatusText"); break;
                     case "Remain": ChangeRemain(); break;
                     case "Option": ChangeOption(); break;
+#if DEBUG
+                    case "FinTime": Debug.WriteLine(string.Format("FinTime={0}", FinTime)); break;
+#endif
                 }
             });
 
+            var clock = AppModel.Clock.Model;
+
             OptionList = new ReactiveCollection<ICountDownOption>(new[]{
-                CountDownOption.Create(TimeSpan.FromSeconds(10)),
-                CountDownOption.Create(TimeSpan.FromSeconds(30)),
-                CountDownOption.Create(TimeSpan.FromMinutes(1)),
-                CountDownOption.Create(TimeSpan.FromMinutes(2)),
-                CountDownOption.Create(TimeSpan.FromMinutes(3)),
-                CountDownOption.Create(TimeSpan.FromMinutes(5)),
-                CountDownOption.Create(TimeSpan.FromMinutes(10)),
-                CountDownOption.Create(TimeSpan.FromMinutes(15)),
-                CountDownOption.Create(TimeSpan.FromMinutes(20)),
-                CountDownOption.Create(TimeSpan.FromMinutes(30)),
-                CountDownOption.Create(TimeSpan.FromMinutes(60)),
-                CountDownOption.Create(TimeSpan.FromMinutes(90)),
+                this.CreateOptionCommand(TimeSpan.FromMinutes(30) ,clock ,"NM Pop",a=>a.NMPopTime ),
+                this.CreateOptionCommand(TimeSpan.FromSeconds(10)),
+                this.CreateOptionCommand(TimeSpan.FromSeconds(30)),
+                this.CreateOptionCommand(TimeSpan.FromMinutes(1)),
+                this.CreateOptionCommand(TimeSpan.FromMinutes(2)),
+                this.CreateOptionCommand(TimeSpan.FromMinutes(3)),
+                this.CreateOptionCommand(TimeSpan.FromMinutes(5)),
+                this.CreateOptionCommand(TimeSpan.FromMinutes(10)),
+                this.CreateOptionCommand(TimeSpan.FromMinutes(15)),
+                this.CreateOptionCommand(TimeSpan.FromMinutes(20)),
+                this.CreateOptionCommand(TimeSpan.FromMinutes(30)),
+                this.CreateOptionCommand(TimeSpan.FromMinutes(60)),
+                this.CreateOptionCommand(TimeSpan.FromMinutes(90)),
             });
             Option = OptionList[0];
         }
@@ -139,29 +151,44 @@ namespace Neith.Signpost
 
         private void ChangeOption()
         {
-            Status = CountDownTimerStatus.Reset;
-            Remain = Option.Span;
+            Status = CountDownTimerStatus.Init;
         }
 
         private void ChangeStatus()
         {
             // どっちにせよタイマーは止める
-            ObjectUtil.CheckDispose(ref TaskTimer);
+            DeleteAllTimerTask();
 
             // リセット処理
             switch (Status) {
+                case CountDownTimerStatus.Init:
+                    Status = CountDownTimerStatus.Reset;
+                    return;
                 case CountDownTimerStatus.Reset:
-                    Remain = Option.Span;
+                    if (Option.NextTime != DateTimeOffset.MaxValue) StartResetTimerTask();
+                    else Remain = Option.Span;
                     return;
                 case CountDownTimerStatus.Pause:
                     var remain = FinTime - DateTimeOffset.Now;
                     if (remain < TimeSpan.Zero) remain = TimeSpan.Zero;
                     Remain = remain;
                     return;
-                case CountDownTimerStatus.Run: break;
-                default: return;
+                case CountDownTimerStatus.Run:
+                    StartCountDownTask();
+                    return;
             }
+        }
 
+        private void DeleteAllTimerTask()
+        {
+            ObjectUtil.CheckDispose(ref TaskTimer);
+        }
+
+        /// <summary>
+        /// カウントダウン開始。
+        /// </summary>
+        private void StartCountDownTask()
+        {
             // 計測開始
             var startTime = DateTimeOffset.Now;
             FinTime = startTime + Remain;
@@ -187,6 +214,43 @@ namespace Neith.Signpost
         }
         private const long TimerSpan = TimeSpan.TicksPerSecond / 10;
         private const long MarkSpan = TimeSpan.TicksPerSecond / 2;
+        private static readonly TimeSpan OneTick = TimeSpan.FromTicks(1);
+
+
+        /// <summary>
+        /// リセット状態で動くタイマー。
+        /// </summary>
+        private void StartResetTimerTask()
+        {
+            // 終了時間の更新タスク
+            FinTime = Option.NextTime;
+            var TaskUpdateFinTime = Option.RxNextTime
+                .Subscribe(a => { FinTime = a; });
+
+            // 計測開始
+            var nextTime = DateTimeOffset.Now;
+            TaskTimer = Observable.Generate(
+                nextTime, now => true, now => DateTimeOffset.Now,
+                now =>
+                {
+                    var remain = FinTime - now;
+                    if (remain <= TimeSpan.Zero) remain = OneTick;
+                    Remain = remain;
+                    return now;
+                },
+                now =>
+                {
+                    if (Remain <= OneTick) return now + TimeSpan.FromSeconds(0.1);
+                    var nextRemain = TimeSpan.FromTicks((Remain.Ticks / TimerSpan) * TimerSpan);
+                    return now + (Remain - nextRemain);
+                },
+                DispatcherScheduler.Instance)
+                .Finally(() =>
+                {
+                    TaskUpdateFinTime.Dispose();
+                })
+                .Subscribe();
+        }
 
 
         #endregion

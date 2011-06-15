@@ -25,10 +25,9 @@
         </Style>
 
         <Neith_Signpost_Converters:StringFormatConverter x:Key="StringFormatConverter"/>
-    	<local:EorzeaClockViewModel x:Key="ClockModelDataSource" />
     </UserControl.Resources>
 
-    <Grid x:Name="LayoutRoot" DataContext="{Binding Source={StaticResource ClockModelDataSource}}">
+    <Grid x:Name="LayoutRoot" DataContext="{Binding Source={x:Static local:AppModel.Clock}}">
         <Viewbox Margin="0">
             <StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">

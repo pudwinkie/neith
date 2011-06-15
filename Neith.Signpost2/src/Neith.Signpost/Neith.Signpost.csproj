@@ -135,12 +135,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AppModel.cs" />
     <Compile Include="Controls\Clock\Models\EorzeaClockModel.cs" />
     <Compile Include="Controls\Clock\ViewModels\EorzeaClockViewModel.cs" />
     <Compile Include="Controls\Clock\Views\EorzeaClock.xaml.cs">
       <DependentUpon>EorzeaClock.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\CountDown\ViewModels\CountDownOption.cs" />
+    <Compile Include="Controls\CountDown\ViewModels\CountDownTimerArgs.cs" />
     <Compile Include="Controls\CountDown\ViewModels\ICountDownOption.cs" />
     <Compile Include="Converters\StringFormatConverter.cs" />
     <Compile Include="Controls\CountDown\ViewModels\CountDownTimerViewModel.cs" />
@@ -263,7 +265,9 @@
   <ItemGroup>
     <Resource Include="Images\neith.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Util\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
 	     Other similar extension points exist, see Microsoft.Common.targets.
