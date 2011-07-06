@@ -31,32 +31,39 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.4.1.10331.0\lib\EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.0.0.0\lib\NET40\NLog.dll</HintPath>
     </Reference>
     <Reference Include="NLog.Extended">
       <HintPath>..\packages\NLog.2.0.0.0\lib\NET40\NLog.Extended.dll</HintPath>
     </Reference>
-    <Reference Include="ReactiveUI">
-      <HintPath>..\..\..\..\neith-base\externals\ReactiveUI\Net40\ReactiveUI.dll</HintPath>
+    <Reference Include="ReactiveUI, Version=2.3.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\reactiveui-core.2.3.2.0\lib\Net4\ReactiveUI.dll</HintPath>
     </Reference>
-    <Reference Include="ReactiveUI.Blend">
-      <HintPath>..\..\..\..\neith-base\externals\ReactiveUI\Net40\ReactiveUI.Blend.dll</HintPath>
+    <Reference Include="ReactiveUI.Blend, Version=2.3.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\reactiveui-xaml.2.3.2.0\lib\Net4\ReactiveUI.Blend.dll</HintPath>
     </Reference>
-    <Reference Include="ReactiveUI.Xaml">
-      <HintPath>..\..\..\..\neith-base\externals\ReactiveUI\Net40\ReactiveUI.Xaml.dll</HintPath>
+    <Reference Include="ReactiveUI.Xaml, Version=2.3.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\reactiveui-xaml.2.3.2.0\lib\Net4\ReactiveUI.Xaml.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Reactive, Version=1.1.10425.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Reactive, Version=1.1.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Rx-Main.1.1.10425\lib\Net4\System.Reactive.dll</HintPath>
+      <HintPath>..\packages\Rx_Experimental-Main.1.1.10621\lib\Net4\System.Reactive.dll</HintPath>
     </Reference>
-    <Reference Include="System.Reactive.Windows.Threading, Version=1.1.10425.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="System.Reactive.Windows.Threading, Version=1.1.10605.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Rx-WPF.1.1.10425\lib\Net4\System.Reactive.Windows.Threading.dll</HintPath>
+      <HintPath>..\packages\Rx_Experimental-Xaml.1.1.10605\lib\Net4\System.Reactive.Windows.Threading.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
