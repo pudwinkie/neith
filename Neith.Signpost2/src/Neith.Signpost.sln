@@ -23,11 +23,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "other", "other", "{D9750C4C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StickyWindowLibrary", "..\..\..\neith-base\externals\StickyWindowWinWpfLibrary\StickyWindowLibrary\StickyWindowLibrary.csproj", "{AF76FEA7-CD9D-4093-B617-BC9C44DE99C6}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Growl.WPF", "Growl.WPF", "{B1C523CE-EA8F-47F9-9647-D4C291499E15}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Growl", "Growl", "{B1C523CE-EA8F-47F9-9647-D4C291499E15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Growl.WPF.CoreLibrary", "..\..\..\neith-base\externals\growl-wpf-connector\Growl.WPF.CoreLibrary\Growl.WPF.CoreLibrary.csproj", "{BCFE7FCD-6055-4872-95EA-5C4C73DE342D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neith.Growl.CoreLibrary", "..\..\..\neith-base\externals\growl-wpf-connector\Neith.Growl.CoreLibrary\Neith.Growl.CoreLibrary.csproj", "{BCFE7FCD-6055-4872-95EA-5C4C73DE342D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Growl.WPF.Connector", "..\..\..\neith-base\externals\growl-wpf-connector\Growl.WPF.Connector\Growl.WPF.Connector.csproj", "{19C22138-B905-47BA-9E6E-EF9356907E53}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neith.Growl.Connector", "..\..\..\neith-base\externals\growl-wpf-connector\Neith.Growl.Connector\Neith.Growl.Connector.csproj", "{19C22138-B905-47BA-9E6E-EF9356907E53}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
