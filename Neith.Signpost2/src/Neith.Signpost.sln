@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neith.Growl.CoreLibrary", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neith.Growl.Connector", "..\..\..\neith-base\externals\growl-wpf-connector\Neith.Growl.Connector\Neith.Growl.Connector.csproj", "{19C22138-B905-47BA-9E6E-EF9356907E53}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neith.Growl.Daemon", "..\..\..\neith-base\externals\growl-wpf-connector\Neith.Growl.Daemon\Neith.Growl.Daemon.csproj", "{6112CD52-1F16-4068-8D16-CB9C5467E8C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,6 +92,12 @@ Global
 		{19C22138-B905-47BA-9E6E-EF9356907E53}.Mono|Any CPU.Build.0 = Mono|Any CPU
 		{19C22138-B905-47BA-9E6E-EF9356907E53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19C22138-B905-47BA-9E6E-EF9356907E53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6112CD52-1F16-4068-8D16-CB9C5467E8C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6112CD52-1F16-4068-8D16-CB9C5467E8C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6112CD52-1F16-4068-8D16-CB9C5467E8C3}.Mono|Any CPU.ActiveCfg = Mono|Any CPU
+		{6112CD52-1F16-4068-8D16-CB9C5467E8C3}.Mono|Any CPU.Build.0 = Mono|Any CPU
+		{6112CD52-1F16-4068-8D16-CB9C5467E8C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6112CD52-1F16-4068-8D16-CB9C5467E8C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -107,5 +115,6 @@ Global
 		{AF76FEA7-CD9D-4093-B617-BC9C44DE99C6} = {D9750C4C-6A0B-4BDD-9342-B9C334013B60}
 		{BCFE7FCD-6055-4872-95EA-5C4C73DE342D} = {B1C523CE-EA8F-47F9-9647-D4C291499E15}
 		{19C22138-B905-47BA-9E6E-EF9356907E53} = {B1C523CE-EA8F-47F9-9647-D4C291499E15}
+		{6112CD52-1F16-4068-8D16-CB9C5467E8C3} = {B1C523CE-EA8F-47F9-9647-D4C291499E15}
 	EndGlobalSection
 EndGlobal
