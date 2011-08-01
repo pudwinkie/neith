@@ -55,12 +55,10 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Reactive, Version=1.1.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Rx_Experimental-Main.1.1.10621\lib\Net4\System.Reactive.dll</HintPath>
     </Reference>
-    <Reference Include="System.Reactive.Windows.Threading, Version=1.1.10605.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Rx_Experimental-Xaml.1.1.10605\lib\Net4\System.Reactive.Windows.Threading.dll</HintPath>
+    <Reference Include="System.Reactive.Windows.Threading, Version=1.1.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx_Experimental-WPF.1.1.10621\lib\Net4\System.Reactive.Windows.Threading.dll</HintPath>
     </Reference>
     <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
@@ -77,9 +75,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\NeithLogNotify.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\neith-base\externals\growl-wpf-connector\Neith.Growl.Connector\Neith.Growl.Connector.csproj">
+      <Project>{19C22138-B905-47BA-9E6E-EF9356907E53}</Project>
+      <Name>Neith.Growl.Connector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\neith-base\externals\growl-wpf-connector\Neith.Growl.CoreLibrary\Neith.Growl.CoreLibrary.csproj">
+      <Project>{BCFE7FCD-6055-4872-95EA-5C4C73DE342D}</Project>
+      <Name>Neith.Growl.CoreLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\neith-base\externals\growl-wpf-connector\Neith.Growl.Daemon\Neith.Growl.Daemon.csproj">
+      <Project>{6112CD52-1F16-4068-8D16-CB9C5467E8C3}</Project>
+      <Name>Neith.Growl.Daemon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\neith-base\Neith.Util\src\Neith.Util.Extend\Neith.Util.Extend.csproj">
       <Project>{7CCFE4BD-A210-41E1-8589-80C3AC49DB2E}</Project>
       <Name>Neith.Util.Extend</Name>
@@ -104,6 +115,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

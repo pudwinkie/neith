@@ -11,7 +11,27 @@ namespace Neith.Logger.Model
     [Serializable]
     public class NeithLog : IEquatable<NeithLog>
     {
-        #region フィールド
+        #region フィールド(Growl互換[IExtensibleObject])
+
+        /// <summary>マシン名</summary>
+        public string MachineName;
+
+        /// <summary>プラットフォーム(OS)名</summary>
+        public string PlatformName;
+
+        /// <summary>プラットフォーム(OS)バージョン</summary>
+        public string PlatformVersion;
+
+        /// <summary>接続フレームワーク名</summary>
+        public string SoftwareName;
+
+        /// <summary>接続フレームワーク名</summary>
+        public string SoftwareVersion;
+
+
+
+        #endregion
+        #region フィールド(Signpost拡張)
         /// <summary>タイムスタンプ(UTC時刻、IDを兼ねるためUnique保証)</summary>
         [Key]
         public DateTimeOffset UtcTime;
@@ -19,14 +39,8 @@ namespace Neith.Logger.Model
         /// <summary>ログの収集モジュール</summary>
         public string Collector;
 
-        /// <summary>ホスト</summary>
-        public string Host;
-
         /// <summary>プロセスID</summary>
         public int Pid;
-
-        /// <summary>ログの取得元アプリ</summary>
-        public string Application;
 
         /// <summary>ログの取得元ドメイン</summary>
         public string Domain;
@@ -59,7 +73,7 @@ namespace Neith.Logger.Model
         public string Target;
 
         /// <summary>解析結果メッセージ</summary>
-        public string Message;
+        public string Text;
 
         /// <summary>アイコン画像URL</summary>
         public string Icon;
@@ -75,7 +89,7 @@ namespace Neith.Logger.Model
 
         public override string ToString()
         {
-            return string.Format("{0:O}: {1}", UtcTime.ToLocalTime(), Message);
+            return string.Format("{0:O}: {1}", UtcTime.ToLocalTime(), Text);
         }
 
         #endregion
@@ -84,9 +98,9 @@ namespace Neith.Logger.Model
         {
             return this.UtcTime == other.UtcTime
                 && this.Collector == other.Collector
-                && this.Host == other.Host
+                && this.MachineName == other.MachineName
                 && this.Pid == other.Pid
-                && this.Application == other.Application
+                && this.SoftwareName == other.SoftwareName
                 && this.Domain == other.Domain
                 && this.User == other.User
                 && this.LogText == other.LogText
