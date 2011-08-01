@@ -80,6 +80,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\neith-base\Neith.Util\src\Neith.Util.Extend\Neith.Util.Extend.csproj">
+      <Project>{7CCFE4BD-A210-41E1-8589-80C3AC49DB2E}</Project>
+      <Name>Neith.Util.Extend</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\neith-base\Neith.Util\src\Neith.Util.Extensions\Neith.Util.Extensions.csproj">
       <Project>{BDAA1A4C-C085-49B4-969D-84E1B2428E9D}</Project>
       <Name>Neith.Util.Extensions</Name>
