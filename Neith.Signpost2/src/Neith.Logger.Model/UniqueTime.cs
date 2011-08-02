@@ -14,11 +14,11 @@ namespace Neith.Logger.Model
         /// 最新のUtc時刻を返します。
         /// 直前の値以下になる場合、1tick加算した値を返します。
         /// </summary>
-        public static DateTimeOffset Now
+        public static DateTime UtcNow
         {
             get
             {
-                var now = DateTimeOffset.UtcNow;
+                var now = DateTime.UtcNow;
                 lock (lockObj) {
                     if (now <= lastTime) now = lastTime + OneTick;
                     lastTime = now;
@@ -29,7 +29,7 @@ namespace Neith.Logger.Model
 
         private static readonly object lockObj = new object();
         private static readonly TimeSpan OneTick = TimeSpan.FromTicks(1);
-        private static DateTimeOffset lastTime = DateTime.MinValue;
+        private static DateTime lastTime = DateTime.MinValue;
 
     }
 }

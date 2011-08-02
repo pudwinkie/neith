@@ -6,3 +6,4 @@ glob:*/data/cache/*
 glob:*/data/xfn/*
 syntax: glob
 *.docstates
+*/TestResults/*
