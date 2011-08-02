@@ -29,15 +29,42 @@ namespace Neith.Logger.Model
         public string SoftwareVersion;
 
 
+        #endregion
+        #region プロパティ(Growl互換[INotification])
+
+        /// <summary>アプリケーション名</summary>
+        public string ApplicationName;
+
+        /// <summary>通知ID</summary>
+        public string ID;
+
+        /// <summary>更新ID。値が同じ旧通知を置き換えます。</summary>
+        public string CoalescingID;
+
+        /// <summary>優先度</summary>
+        public NeithLogPriority Priority;
+
+        /// <summary>確認待ちフラグ。trueの場合、ユーザ確認が行われるまで表示し続けます。</summary>
+        public bool Sticky;
+
+        /// <summary>タイトル</summary>
+        public string Title;
+
+        /// <summary>本文</summary>
+        public string Text;
+
+
+        #endregion
+        #region フィールド(Signpost保存用)
+        /// <summary>受付時刻(UTC時刻、IDを兼ねるためUnique保証)</summary>
+        [Key]
+        public DateTime ReceptionTime;
 
         #endregion
         #region フィールド(Signpost拡張)
-        /// <summary>タイムスタンプ(UTC時刻、IDを兼ねるためUnique保証)</summary>
-        [Key]
-        public DateTimeOffset UtcTime;
 
-        /// <summary>ログの収集モジュール</summary>
-        public string Collector;
+        /// <summary>イベント発生時刻</summary>
+        public DateTimeOffset EventTime;
 
         /// <summary>プロセスID</summary>
         public int Pid;
@@ -51,9 +78,6 @@ namespace Neith.Logger.Model
         /// <summary>ログ内容</summary>
         public string LogText;
 
-        /// <summary>ログの分析モジュール</summary>
-        public string Analyzer;
-
         /// <summary>WindowHandle</summary>
         public IntPtr HWnd;
 
@@ -63,17 +87,11 @@ namespace Neith.Logger.Model
         /// <summary>ログのタイプ</summary>
         public string Type;
 
-        /// <summary>ログの優先度</summary>
-        public NeithLogPriority Priority;
-
         /// <summary>行為の実行者</summary>
         public string Actor;
 
         /// <summary>行為の対象</summary>
         public string Target;
-
-        /// <summary>解析結果メッセージ</summary>
-        public string Text;
 
         /// <summary>アイコン画像URL</summary>
         public string Icon;
@@ -83,28 +101,26 @@ namespace Neith.Logger.Model
         public static NeithLog Create()
         {
             var log = new NeithLog();
-            log.UtcTime = UniqueTime.Now;
+            log.ReceptionTime = UniqueTime.UtcNow;
             return log;
         }
 
         public override string ToString()
         {
-            return string.Format("{0:O}: {1}", UtcTime.ToLocalTime(), Text);
+            return string.Format("{0:O}: {1}", ReceptionTime.ToLocalTime(), Text);
         }
 
         #endregion
 
         public bool Equals(NeithLog other)
         {
-            return this.UtcTime == other.UtcTime
-                && this.Collector == other.Collector
+            return this.ReceptionTime == other.ReceptionTime
                 && this.MachineName == other.MachineName
                 && this.Pid == other.Pid
                 && this.SoftwareName == other.SoftwareName
                 && this.Domain == other.Domain
                 && this.User == other.User
                 && this.LogText == other.LogText
-                && this.Analyzer == other.Analyzer
                 ;
         }
     }

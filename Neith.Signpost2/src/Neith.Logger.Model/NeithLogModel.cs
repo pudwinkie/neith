@@ -67,12 +67,17 @@ namespace Neith.Logger.Model
 
 
         #endregion
-        #region プロパティ(Signpost拡張)
-        /// <summary>タイムスタンプ(UTC時刻、IDを兼ねるためUnique保証)</summary>
-        public DateTimeOffset UtcTime { get { return Rec.UtcTime; } set { this.RaiseAndSetIfChanged(a => a.UtcTime, ref Rec.UtcTime, value); } }
+        #region プロパティ(Signpost保存用)
 
-        /// <summary>ログの収集モジュール</summary>
-        public string Collector { get { return Rec.Collector; } set { this.RaiseAndSetIfChanged(a => a.Collector, ref Rec.Collector, value); } }
+        /// <summary>受付時刻(UTC時刻、IDを兼ねるためUnique保証)</summary>
+        public DateTime ReceptionTime { get { return Rec.ReceptionTime; } set { this.RaiseAndSetIfChanged(a => a.ReceptionTime, ref Rec.ReceptionTime, value); } }
+
+
+        #endregion
+        #region プロパティ(Signpost拡張)
+
+        /// <summary>イベント発生時刻</summary>
+        public DateTimeOffset EventTime { get { return Rec.EventTime; } set { this.RaiseAndSetIfChanged(a => a.EventTime, ref Rec.EventTime, value); } }
 
         /// <summary>プロセスID</summary>
         public int Pid { get { return Rec.Pid; } set { this.RaiseAndSetIfChanged(a => a.Pid, ref Rec.Pid, value); } }
@@ -85,9 +90,6 @@ namespace Neith.Logger.Model
 
         /// <summary>ログ内容</summary>
         public string LogText { get { return Rec.LogText; } set { this.RaiseAndSetIfChanged(a => a.LogText, ref Rec.LogText, value); } }
-
-        /// <summary>ログの分析モジュール</summary>
-        public string Analyzer { get { return Rec.Analyzer; } set { this.RaiseAndSetIfChanged(a => a.Analyzer, ref Rec.Analyzer, value); } }
 
         /// <summary>WindowHandle</summary>
         public IntPtr HWnd { get { return Rec.HWnd; } set { this.RaiseAndSetIfChanged(a => a.HWnd, ref Rec.HWnd, value); } }
