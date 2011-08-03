@@ -76,7 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="INeithNotification.cs" />
-    <Compile Include="NeithHeader.cs" />
+    <Compile Include="NeithHeaderKeys.cs" />
     <Compile Include="NeithNotificationRec.cs" />
     <Compile Include="NeithNotificationModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
