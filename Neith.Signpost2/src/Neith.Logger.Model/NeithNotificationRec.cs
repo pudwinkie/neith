@@ -3,14 +3,23 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
+using Neith.Growl.Connector;
+using Neith.Growl.CoreLibrary;
 using Wintellect.Sterling;
 
 namespace Neith.Logger.Model
 {
-    [Serializable]
-    public class NeithLog : IEquatable<NeithLog>
+    [Serializable, DataContract]
+    public class NeithNotificationRec : IEquatable<NeithNotificationRec>
     {
+        #region フィールド(Signpost KEY)
+        /// <summary>受付時刻(UTC時刻、IDを兼ねるためUnique保証)</summary>
+        [Key]
+        public DateTime ReceptionTime;
+
+        #endregion
         #region フィールド(Growl互換[IExtensibleObject])
 
         /// <summary>マシン名</summary>
@@ -28,9 +37,24 @@ namespace Neith.Logger.Model
         /// <summary>接続フレームワーク名</summary>
         public string SoftwareVersion;
 
+        /// <summary>カスタムバイナリ属性</summary>
+        public Dictionary<string, Resource> CustomBinaryAttributes;
+
+        /// <summary>カスタム文字列属性</summary>
+        public Dictionary<string, string> CustomTextAttributes;
+
 
         #endregion
-        #region プロパティ(Growl互換[INotification])
+        #region フィールド(Growl互換[IIcon])
+        /// <summary>アイコン</summary>
+        public Resource Icon;
+
+        /// <summary>行為の実行者</summary>
+        public string Name;
+
+
+        #endregion
+        #region フィールド(Growl互換[INotification])
 
         /// <summary>アプリケーション名</summary>
         public string ApplicationName;
@@ -42,7 +66,7 @@ namespace Neith.Logger.Model
         public string CoalescingID;
 
         /// <summary>優先度</summary>
-        public NeithLogPriority Priority;
+        public Priority Priority;
 
         /// <summary>確認待ちフラグ。trueの場合、ユーザ確認が行われるまで表示し続けます。</summary>
         public bool Sticky;
@@ -53,12 +77,6 @@ namespace Neith.Logger.Model
         /// <summary>本文</summary>
         public string Text;
 
-
-        #endregion
-        #region フィールド(Signpost保存用)
-        /// <summary>受付時刻(UTC時刻、IDを兼ねるためUnique保証)</summary>
-        [Key]
-        public DateTime ReceptionTime;
 
         #endregion
         #region フィールド(Signpost拡張)
@@ -87,22 +105,16 @@ namespace Neith.Logger.Model
         /// <summary>ログのタイプ</summary>
         public string Type;
 
-        /// <summary>行為の実行者</summary>
-        public string Actor;
-
         /// <summary>行為の対象</summary>
         public string Target;
 
-        /// <summary>アイコン画像URL</summary>
-        public string Icon;
-
         #endregion
         #region メソッド
-        public static NeithLog Create()
+        public static NeithNotificationRec Create()
         {
-            var log = new NeithLog();
-            log.ReceptionTime = UniqueTime.UtcNow;
-            return log;
+            var obj = new NeithNotificationRec();
+            obj.ReceptionTime = UniqueTime.UtcNow;
+            return obj;
         }
 
         public override string ToString()
@@ -112,7 +124,7 @@ namespace Neith.Logger.Model
 
         #endregion
 
-        public bool Equals(NeithLog other)
+        public bool Equals(NeithNotificationRec other)
         {
             return this.ReceptionTime == other.ReceptionTime
                 && this.MachineName == other.MachineName
