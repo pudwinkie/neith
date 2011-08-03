@@ -6,13 +6,13 @@ using Neith.Growl.Connector;
 
 namespace Neith.Logger.Model
 {
-    public sealed class NeithLogNotify : NeithLogModel
+    public sealed class NeithLogNotify : NeithNotificationModel
     {
         /// <summary>
         /// コンストラクタ。
         /// </summary>
         /// <param name="data"></param>
-        public NeithLogNotify(NeithLog data):base(data)
+        public NeithLogNotify(NeithNotificationRec data):base(data)
         {
         }
     }
