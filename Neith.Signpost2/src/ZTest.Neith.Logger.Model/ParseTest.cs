@@ -35,7 +35,7 @@ X-Sound-Alt: x-growl-resource://f082d4e3bdfe15f8f5f2450bff69fb17
 Identifier: cb08ca4a7bb5f9683c19133a84872ca7 
 Length: 4 
 
-ABCD 
+ABCD
 
 Identifier: f082d4e3bdfe15f8f5f2450bff69fb17 
 Length: 16
