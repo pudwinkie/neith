@@ -119,7 +119,6 @@
     <Compile Include="Smdn.Net.Imap4\ImapSortCriteria.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapStatusDataItem.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapStoreDataItem.cs" />
-    <Compile Include="Smdn.Net.Imap4\ImapUpdatedStatus.cs" />
     <Compile Include="Smdn.Net.Imap4.Client\Trace.cs" />
     <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\LanguageTransaction.cs" />
     <Compile Include="Smdn.Net.Imap4.Client.Transaction.BuiltIn\ComparatorTransaction.cs" />
@@ -155,7 +154,6 @@
     <Compile Include="Smdn.Net.Imap4.Client\ImapMessageNotFoundException.cs" />
     <Compile Include="Smdn.Net.Imap4.Client\ImapMessageInfoList.cs" />
     <Compile Include="Smdn.Net.Imap4.Client\ImapMessageInfoBase.cs" />
-    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapAppendMessageBodyStream.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapIncapableException.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapInvalidOperationException.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapProtocolViolationException.cs" />
@@ -173,6 +171,15 @@
     <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapCommandResultCode.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapAuthenticationException.cs" />
     <Compile Include="Smdn.Net.Imap4.Client\ImapClient.Operations.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapMessageInfo.OperationsFetch.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapMessageInfo.OperationsStore.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapOpenedMailboxInfo.OperationsWaiting.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapOpenedMailboxInfo.OperationsFetching.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapSession.CommandsAppend.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapAppendMessageBodyBuffer.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapSession.CommandsList.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapSpecialMailbox.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapAlertReceivedEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

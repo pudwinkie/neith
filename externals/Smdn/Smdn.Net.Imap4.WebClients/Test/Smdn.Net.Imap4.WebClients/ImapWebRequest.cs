@@ -823,7 +823,7 @@ namespace Smdn.Net.Imap4.WebClients {
 
         server.DequeueRequest(); // CAPABILITY
         server.DequeueRequest(); // LOGIN
-        StringAssert.EndsWith("SELECT \"INBOX\"\r\n", server.DequeueRequest());
+        StringAssert.EndsWith("SELECT INBOX\r\n", server.DequeueRequest());
       }
     }
 
@@ -870,7 +870,7 @@ namespace Smdn.Net.Imap4.WebClients {
 
         server.DequeueRequest(); // CAPABILITY
         server.DequeueRequest(); // LOGIN
-        StringAssert.EndsWith("SELECT \"INBOX\"\r\n", server.DequeueRequest());
+        StringAssert.EndsWith("SELECT INBOX\r\n", server.DequeueRequest());
       }
     }
 
@@ -1188,9 +1188,9 @@ namespace Smdn.Net.Imap4.WebClients {
         server.DequeueRequest(); // CAPABILITY
         StringAssert.Contains("LOGIN", server.DequeueRequest());
         if (readOnly)
-          StringAssert.Contains("EXAMINE \"INBOX\"", server.DequeueRequest());
+          StringAssert.Contains("EXAMINE INBOX", server.DequeueRequest());
         else
-          StringAssert.Contains("SELECT \"INBOX\"", server.DequeueRequest());
+          StringAssert.Contains("SELECT INBOX", server.DequeueRequest());
         StringAssert.Contains("CHECK", server.DequeueRequest());
         StringAssert.Contains("CLOSE", server.DequeueRequest());
         StringAssert.Contains("LOGOUT", server.DequeueRequest());
@@ -1247,9 +1247,9 @@ namespace Smdn.Net.Imap4.WebClients {
         server.DequeueRequest(); // CAPABILITY
         StringAssert.Contains("LOGIN", server.DequeueRequest());
         if (readOnlyFirst)
-          StringAssert.Contains("EXAMINE \"INBOX\"", server.DequeueRequest());
+          StringAssert.Contains("EXAMINE INBOX", server.DequeueRequest());
         else
-          StringAssert.Contains("SELECT \"INBOX\"", server.DequeueRequest());
+          StringAssert.Contains("SELECT INBOX", server.DequeueRequest());
         StringAssert.Contains("CHECK", server.DequeueRequest());
 
         var secondRequest = WebRequest.Create(firstRequest.RequestUri) as ImapWebRequest;
@@ -1284,9 +1284,9 @@ namespace Smdn.Net.Imap4.WebClients {
         server.DequeueRequest(); // NOOP
         StringAssert.Contains("CLOSE", server.DequeueRequest());
         if (readOnlyFirst)
-          StringAssert.Contains("SELECT \"INBOX\"", server.DequeueRequest());
+          StringAssert.Contains("SELECT INBOX", server.DequeueRequest());
         else
-          StringAssert.Contains("EXAMINE \"INBOX\"", server.DequeueRequest());
+          StringAssert.Contains("EXAMINE INBOX", server.DequeueRequest());
         StringAssert.Contains("CHECK", server.DequeueRequest());
       }
     }
@@ -1344,9 +1344,9 @@ namespace Smdn.Net.Imap4.WebClients {
         server.DequeueRequest(); // CAPABILITY
         server.DequeueRequest(); // LOGIN
         if (readOnly)
-          StringAssert.Contains("EXAMINE \"INBOX\"", server.DequeueRequest());
+          StringAssert.Contains("EXAMINE INBOX", server.DequeueRequest());
         else
-          StringAssert.Contains("SELECT \"INBOX\"", server.DequeueRequest());
+          StringAssert.Contains("SELECT INBOX", server.DequeueRequest());
       }
     }
 
@@ -1384,7 +1384,7 @@ namespace Smdn.Net.Imap4.WebClients {
 
         server.DequeueRequest(); // CAPABILITY
         server.DequeueRequest(); // LOGIN
-        StringAssert.Contains("SELECT \"INBOX\"", server.DequeueRequest()); // SELECT
+        StringAssert.Contains("SELECT INBOX", server.DequeueRequest()); // SELECT
         server.DequeueRequest(); // CHECK
 
         var request2 = WebRequest.Create(string.Format("imap://{0}@{1}/INBOX/child", credential.UserName, server.HostPort)) as ImapWebRequest;
@@ -1415,7 +1415,7 @@ namespace Smdn.Net.Imap4.WebClients {
         server.DequeueRequest(); // NOOP
 
         StringAssert.Contains("CLOSE", server.DequeueRequest());
-        StringAssert.Contains("SELECT \"INBOX/child\"", server.DequeueRequest());
+        StringAssert.Contains("SELECT INBOX/child", server.DequeueRequest());
         StringAssert.Contains("CHECK", server.DequeueRequest());
         StringAssert.Contains("CLOSE", server.DequeueRequest());
         StringAssert.Contains("LOGOUT", server.DequeueRequest());
@@ -1456,7 +1456,7 @@ namespace Smdn.Net.Imap4.WebClients {
 
         server.DequeueRequest(); // CAPABILITY
         server.DequeueRequest(); // LOGIN
-        StringAssert.Contains("SELECT \"INBOX\"", server.DequeueRequest()); // SELECT
+        StringAssert.Contains("SELECT INBOX", server.DequeueRequest()); // SELECT
         server.DequeueRequest(); // CHECK
 
         var request2 = WebRequest.Create(string.Format("imap://{0}@{1}/INBOX/child", credential.UserName, server.HostPort)) as ImapWebRequest;

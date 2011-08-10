@@ -27,7 +27,7 @@ namespace Smdn.Net.Imap4.Client {
         Assert.AreEqual(1L, mailbox.RecentMessageCount);
         Assert.IsNotNull(mailbox.ApplicableFlags);
         Assert.AreEqual(5, mailbox.ApplicableFlags.Count);
-        Assert.IsFalse(mailbox.ApplicableFlags.Has("$label1"));
+        Assert.IsFalse(mailbox.ApplicableFlags.Contains("$label1"));
 
         // NOOP
         server.EnqueueTaggedResponse("* EXPUNGE 1\r\n" +
@@ -45,7 +45,7 @@ namespace Smdn.Net.Imap4.Client {
         Assert.AreEqual(2L, mailbox.RecentMessageCount);
         Assert.IsNotNull(mailbox.ApplicableFlags);
         Assert.AreEqual(6, mailbox.ApplicableFlags.Count);
-        Assert.IsTrue(mailbox.ApplicableFlags.Has("$label1"));
+        Assert.IsTrue(mailbox.ApplicableFlags.Contains("$label1"));
       });
     }
 
@@ -122,7 +122,7 @@ namespace Smdn.Net.Imap4.Client {
 
         Assert.IsNotNull(mailbox.PermanentFlags);
         Assert.AreEqual(2, mailbox.PermanentFlags.Count);
-        Assert.IsFalse(mailbox.PermanentFlags.Has(ImapMessageFlag.AllowedCreateKeywords));
+        Assert.IsFalse(mailbox.PermanentFlags.Contains(ImapMessageFlag.AllowedCreateKeywords));
         Assert.IsFalse(mailbox.IsAllowedToCreateKeywords);
       });
     }
@@ -175,6 +175,94 @@ namespace Smdn.Net.Imap4.Client {
     [Test, Ignore("not implemented")]
     public void TestCloseAnotherMailboxOpened()
     {
+    }
+
+    [Test]
+    public void TestDispose()
+    {
+      TestUtils.TestAuthenticated(delegate(ImapPseudoServer server, ImapClient client) {
+        // LIST
+        server.EnqueueTaggedResponse("* LIST () \"\" INBOX\r\n" +
+                                     "$tag OK done\r\n");
+        // SELECT
+        server.EnqueueTaggedResponse("$tag OK [READ-WRITE] done\r\n");
+
+        var mailbox = client.OpenInbox();
+
+        Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" INBOX\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("SELECT INBOX\r\n"));
+
+        // CLOSE
+        server.EnqueueTaggedResponse("$tag OK done\r\n");
+
+        (mailbox as IDisposable).Dispose();
+
+        Assert.That(server.DequeueRequest(), Text.EndsWith("CLOSE\r\n"));
+
+        Assert.IsFalse(mailbox.IsOpen);
+        Assert.IsNull(client.OpenedMailbox);
+      });
+    }
+
+    [Test]
+    public void TestDisposeAlreadyClosed()
+    {
+      TestUtils.TestAuthenticated(delegate(ImapPseudoServer server, ImapClient client) {
+        // LIST
+        server.EnqueueTaggedResponse("* LIST () \"\" INBOX\r\n" +
+                                     "$tag OK done\r\n");
+        // SELECT
+        server.EnqueueTaggedResponse("$tag OK [READ-WRITE] done\r\n");
+
+        var mailbox = client.OpenInbox();
+
+        Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" INBOX\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("SELECT INBOX\r\n"));
+
+        // CLOSE
+        server.EnqueueTaggedResponse("$tag OK done\r\n");
+
+        client.CloseMailbox();
+
+        Assert.That(server.DequeueRequest(), Text.EndsWith("CLOSE\r\n"));
+
+        Assert.IsFalse(mailbox.IsOpen);
+        Assert.IsNull(client.OpenedMailbox);
+
+        (mailbox as IDisposable).Dispose();
+
+        Assert.IsFalse(mailbox.IsOpen);
+        Assert.IsNull(client.OpenedMailbox);
+      });
+    }
+
+    [Test]
+    public void TestDisposeAlreadyLoggedOut()
+    {
+      TestUtils.TestAuthenticated(delegate(ImapPseudoServer server, ImapClient client) {
+        // LIST
+        server.EnqueueTaggedResponse("* LIST () \"\" INBOX\r\n" +
+                                     "$tag OK done\r\n");
+        // SELECT
+        server.EnqueueTaggedResponse("$tag OK [READ-WRITE] done\r\n");
+
+        var mailbox = client.OpenInbox();
+
+        Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" INBOX\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("SELECT INBOX\r\n"));
+
+        // LOGOUT
+        server.EnqueueTaggedResponse("* BYE stopped\r\n");
+        server.EnqueueTaggedResponse("$tag OK disconnected\r\n");
+
+        server.Stop(true);
+
+        client.Logout();
+
+        Assert.IsFalse(client.IsConnected);
+
+        (mailbox as IDisposable).Dispose(); // throws no exception
+      });
     }
 
     [Test]
@@ -268,7 +356,18 @@ namespace Smdn.Net.Imap4.Client {
     }
 
     [Test]
-    public void TestGetMessages()
+    public void TestMoveMessagesTo()
+    {
+      CopyOrMoveMessagesTo(true);
+    }
+
+    [Test]
+    public void TestCopyMessagesTo()
+    {
+      CopyOrMoveMessagesTo(false);
+    }
+
+    private void CopyOrMoveMessagesTo(bool move)
     {
       var selectResp =
         "* 5 EXISTS\r\n" +
@@ -276,508 +375,171 @@ namespace Smdn.Net.Imap4.Client {
         "$tag OK [READ-WRITE] done\r\n";
 
       TestUtils.TestOpenedMailbox("INBOX", selectResp, delegate(ImapPseudoServer server, ImapOpenedMailboxInfo mailbox) {
-        var messages = mailbox.GetMessages();
+        // LIST
+        server.EnqueueTaggedResponse("* LIST () \"\" dest\r\n" +
+                                     "$tag OK done\r\n");
 
-        Assert.AreEqual(5L, mailbox.ExistMessageCount);
+        var destMailbox = mailbox.Client.GetMailbox("dest");
 
-        var enumeratedMessages = new ImapMessageInfo[4];
+        server.DequeueRequest();
 
-        using (var enumerator = messages.GetEnumerator()) {
-          // NOOP
-          server.EnqueueTaggedResponse("* 5 EXPUNGE\r\n" +
-                                       "* 4 EXISTS\r\n" + 
-                                       "$tag OK done\r\n");
-          // FETCH
-          server.EnqueueTaggedResponse("* FETCH 1 (UID 3)\r\n" +
-                                       "* FETCH 2 (UID 5)\r\n" +
-                                       "* FETCH 3 (UID 7)\r\n" +
-                                       "* FETCH 4 (UID 9)\r\n" +
-                                       "$tag OK done\r\n");
-
-          Assert.IsTrue(enumerator.MoveNext());
-
-          Assert.That(server.DequeueRequest(), Text.EndsWith("NOOP\r\n"));
-          Assert.That(server.DequeueRequest(), Text.EndsWith("FETCH 1:4 (UID)\r\n"));
-
-          Assert.AreEqual(4L, mailbox.ExistMessageCount);
-
-          Assert.IsNotNull(enumerator.Current, "#0 non-null");
-          Assert.AreEqual(3L, enumerator.Current.Uid, "#0 uid");
-          Assert.AreEqual(1L, enumerator.Current.Sequence, "#0 seq");
-
-          enumeratedMessages[0] = enumerator.Current;
-
-          Assert.IsTrue(enumerator.MoveNext());
-
-          Assert.IsNotNull(enumerator.Current, "#1 non-null");
-          Assert.AreEqual(5L, enumerator.Current.Uid, "#1 uid");
-          Assert.AreEqual(2L, enumerator.Current.Sequence, "#1 seq");
-
-          enumeratedMessages[1] = enumerator.Current;
-
-          Assert.IsTrue(enumerator.MoveNext());
-
-          Assert.IsNotNull(enumerator.Current, "#2 non-null");
-          Assert.AreEqual(7L, enumerator.Current.Uid, "#2 uid");
-          Assert.AreEqual(3L, enumerator.Current.Sequence, "#2 seq");
-
-          enumeratedMessages[2] = enumerator.Current;
-
-          Assert.IsTrue(enumerator.MoveNext());
-
-          Assert.IsNotNull(enumerator.Current, "#3 non-null");
-          Assert.AreEqual(9L, enumerator.Current.Uid, "#3 uid");
-          Assert.AreEqual(4L, enumerator.Current.Sequence, "#3 seq");
-
-          enumeratedMessages[3] = enumerator.Current;
-
-          Assert.IsFalse(enumerator.MoveNext());
-        }
-
-        /*
-         * re-enumerate
-         */
-        Assert.AreEqual(4L, mailbox.ExistMessageCount);
-
-        using (var enumerator = messages.GetEnumerator()) {
-          // NOOP
-          server.EnqueueTaggedResponse("* 2 EXPUNGE\r\n" +
-                                       "* 1 EXPUNGE\r\n" +
-                                       "$tag OK done\r\n");
-          // FETCH
-          server.EnqueueTaggedResponse("* FETCH 1 (UID 7)\r\n" +
-                                       "* FETCH 2 (UID 9)\r\n" +
-                                       "$tag OK done\r\n");
-
-          Assert.IsTrue(enumerator.MoveNext());
-
-          Assert.That(server.DequeueRequest(), Text.EndsWith("NOOP\r\n"));
-          Assert.That(server.DequeueRequest(), Text.EndsWith("FETCH 1:2 (UID)\r\n"));
-
-          Assert.AreEqual(2L, mailbox.ExistMessageCount);
-
-          Assert.IsNotNull(enumerator.Current, "#0 non-null");
-          Assert.AreEqual(7L, enumerator.Current.Uid, "#0 uid");
-          Assert.AreEqual(1L, enumerator.Current.Sequence, "#0 seq");
-
-          Assert.AreSame(enumeratedMessages[2], enumerator.Current, "returns same instance #0");
-
-          Assert.IsTrue(enumerator.MoveNext());
-
-          Assert.IsNotNull(enumerator.Current, "#1 non-null");
-          Assert.AreEqual(9L, enumerator.Current.Uid, "#1 uid");
-          Assert.AreEqual(2L, enumerator.Current.Sequence, "#1 seq");
-
-          Assert.AreSame(enumeratedMessages[3], enumerator.Current, "returns same instance #1");
-
-          Assert.IsFalse(enumerator.MoveNext());
-        }
-      });
-    }
-
-    [Test]
-    public void TestGetMessagesNoMessageExists()
-    {
-      var selectResp =
-        "* 2 EXISTS\r\n" +
-        "* OK [UIDVALIDITY 23]\r\n" +
-        "$tag OK [READ-WRITE] done\r\n";
-
-      TestUtils.TestOpenedMailbox("INBOX", selectResp, delegate(ImapPseudoServer server, ImapOpenedMailboxInfo mailbox) {
         // NOOP
-        server.EnqueueTaggedResponse("* 1 EXPUNGE\r\n" +
-                                     "* 1 EXPUNGE\r\n" +
-                                     "$tag OK done\r\n");
-
-        var messages = new List<ImapMessageInfo>(mailbox.GetMessages());
-
-        Assert.AreEqual(0L, mailbox.ExistMessageCount);
-
-        Assert.AreEqual(0, messages.Count);
-
-        Assert.That(server.DequeueRequest(), Text.EndsWith("NOOP\r\n"));
-      });
-    }
-
-    [Test]
-    public void TestGetMessageByUid()
-    {
-      GetMessageByUidOrSequence(true);
-    }
-
-    [Test]
-    public void TestGetMessageBySequence()
-    {
-      GetMessageByUidOrSequence(false);
-    }
-
-    private void GetMessageByUidOrSequence(bool uid)
-    {
-      var selectResp =
-        "* 1 EXISTS\r\n" +
-        "* OK [UIDVALIDITY 23]\r\n" +
-        "$tag OK [READ-WRITE] done\r\n";
-
-      TestUtils.TestOpenedMailbox("INBOX", selectResp, delegate(ImapPseudoServer server, ImapOpenedMailboxInfo mailbox) {
-        // FETCH
-        server.EnqueueTaggedResponse("* FETCH 1 (UID 3)\r\n" +
-                                     "$tag OK done\r\n");
-
-        var message = uid
-          ? mailbox.GetMessageByUid(3L)
-          : mailbox.GetMessageBySequence(1L);
-
-        Assert.IsNotNull(message);
-        Assert.AreEqual(3L, message.Uid);
-        Assert.AreEqual(1L, message.Sequence);
-        Assert.AreEqual(23L, message.UidValidity);
-        Assert.AreSame(mailbox, message.Mailbox);
-
-        if (uid)
-          Assert.That(server.DequeueRequest(), Text.EndsWith("UID FETCH 3 (UID)\r\n"));
-        else
-          Assert.That(server.DequeueRequest(), Text.EndsWith("FETCH 1 (UID)\r\n"));
-
-        // FETCH
-        server.EnqueueTaggedResponse("* FETCH 1 (UID 3)\r\n" +
-                                     "$tag OK done\r\n");
-
-        var messageSecond = uid
-          ? mailbox.GetMessageByUid(3L)
-          : mailbox.GetMessageBySequence(1L);
-
-        Assert.AreSame(message, messageSecond, "returns same instance");
-
-        if (uid)
-          Assert.That(server.DequeueRequest(), Text.EndsWith("UID FETCH 3 (UID)\r\n"));
-        else
-          Assert.That(server.DequeueRequest(), Text.EndsWith("FETCH 1 (UID)\r\n"));
-      });
-    }
-
-    [Test]
-    public void TestGetMessageByUidNotFound()
-    {
-      var selectResp =
-        "* 0 EXISTS\r\n" +
-        "* OK [UIDVALIDITY 23]\r\n" +
-        "$tag OK [READ-WRITE] done\r\n";
-
-      TestUtils.TestOpenedMailbox("INBOX", selectResp, delegate(ImapPseudoServer server, ImapOpenedMailboxInfo mailbox) {
-        // FETCH
         server.EnqueueTaggedResponse("$tag OK done\r\n");
 
-        try {
-          mailbox.GetMessageByUid(3L);
-          Assert.Fail("ImapMessageNotFoundException not thrown");
-        }
-        catch (ImapMessageNotFoundException ex) {
-          Assert.IsNotNull(ex.SequenceOrUidSet);
-          Assert.AreEqual("3", ex.SequenceOrUidSet.ToString());
+        // COPY
+        server.EnqueueTaggedResponse("$tag OK done\r\n");
 
-          Smdn.Net.TestUtils.SerializeBinary(ex, delegate(ImapMessageNotFoundException deserialized) {
-            Assert.IsNull(deserialized.SequenceOrUidSet);
-          });
-        }
+        if (move)
+          // STORE
+          server.EnqueueTaggedResponse("* FETCH 1 (FLAGS (\\Deleted))\r\n" +
+                                       "* FETCH 2 (FLAGS (\\Deleted))\r\n" +
+                                       "* FETCH 3 (FLAGS (\\Deleted))\r\n" +
+                                       "* FETCH 4 (FLAGS (\\Deleted))\r\n" +
+                                       "* FETCH 5 (FLAGS (\\Deleted))\r\n" +
+                                       "$tag OK done\r\n");
+
+        if (move)
+          mailbox.MoveMessagesTo(destMailbox);
+        else
+          mailbox.CopyMessagesTo(destMailbox);
+
+        Assert.That(server.DequeueRequest(), Text.EndsWith("NOOP\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("COPY 1:5 dest\r\n"));
+
+        if (move)
+          Assert.That(server.DequeueRequest(), Text.EndsWith("STORE 1:5 +FLAGS (\\Deleted)\r\n"));
       });
     }
 
-    [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
-    public void TestGetMessageBySequenceGreaterThanExistCount()
+    [Test, ExpectedException(typeof(ArgumentNullException))]
+    public void TestMoveMessagesToDestinationNull()
     {
       var selectResp =
-        "* 0 EXISTS\r\n" +
+        "* 5 EXISTS\r\n" +
         "* OK [UIDVALIDITY 23]\r\n" +
         "$tag OK [READ-WRITE] done\r\n";
 
       TestUtils.TestOpenedMailbox("INBOX", selectResp, delegate(ImapPseudoServer server, ImapOpenedMailboxInfo mailbox) {
-        mailbox.GetMessageBySequence(1L);
+        mailbox.MoveMessagesTo(null);
       });
     }
 
-    [Test, ExpectedException(typeof(ImapErrorResponseException))]
-    public void TestGetMessageBySequenceNoResponse()
+    [Test, ExpectedException(typeof(ArgumentNullException))]
+    public void TestCopyMessagesToDestinationNull()
     {
       var selectResp =
-        "* 1 EXISTS\r\n" +
+        "* 5 EXISTS\r\n" +
         "* OK [UIDVALIDITY 23]\r\n" +
         "$tag OK [READ-WRITE] done\r\n";
 
       TestUtils.TestOpenedMailbox("INBOX", selectResp, delegate(ImapPseudoServer server, ImapOpenedMailboxInfo mailbox) {
-        // FETCH
-        server.EnqueueTaggedResponse("$tag NO such message\r\n");
-
-        mailbox.GetMessageBySequence(1L);
+        mailbox.CopyMessagesTo(null);
       });
     }
 
     [Test]
-    public void TestGetMessagesByUids()
+    public void TestMoveMessagesToMailboxOfDifferentSession()
     {
-      var selectResp =
-        "* OK [UIDVALIDITY 23]\r\n" +
-        "$tag OK [READ-WRITE] done\r\n";
-
-      TestUtils.TestOpenedMailbox("INBOX", selectResp, delegate(ImapPseudoServer server, ImapOpenedMailboxInfo mailbox) {
-        var messages = mailbox.GetMessages(1L, 3L, 5L);
-
-        using (var enumerator = messages.GetEnumerator()) {
-          // FETCH
-          server.EnqueueTaggedResponse("* FETCH 1 (UID 1)\r\n" +
-                                       "* FETCH 3 (UID 3)\r\n" +
-                                       "* FETCH 5 (UID 5)\r\n" +
-                                       "$tag OK done\r\n");
-
-          Assert.IsTrue(enumerator.MoveNext());
-
-          Assert.That(server.DequeueRequest(), Text.EndsWith("FETCH 1,3,5 (UID)\r\n"));
-
-          Assert.IsNotNull(enumerator.Current, "#0 non-null");
-          Assert.AreEqual(1L, enumerator.Current.Uid, "#0 uid");
-          Assert.AreEqual(1L, enumerator.Current.Sequence, "#0 seq");
-
-          Assert.IsTrue(enumerator.MoveNext());
-
-          Assert.IsNotNull(enumerator.Current, "#1 non-null");
-          Assert.AreEqual(3L, enumerator.Current.Uid, "#1 uid");
-          Assert.AreEqual(3L, enumerator.Current.Sequence, "#1 seq");
-
-          Assert.IsTrue(enumerator.MoveNext());
-
-          Assert.IsNotNull(enumerator.Current, "#2 non-null");
-          Assert.AreEqual(5L, enumerator.Current.Uid, "#2 uid");
-          Assert.AreEqual(5L, enumerator.Current.Sequence, "#2 seq");
-
-          Assert.IsFalse(enumerator.MoveNext());
-        }
-      });
+      CopyOrMoveMessagesToMailboxOfDifferentSession(true);
     }
 
     [Test]
-    public void TestGetMessagesWithSearchCriteria()
+    public void TestCopyMessagesToMailboxOfDifferentSession()
+    {
+      CopyOrMoveMessagesToMailboxOfDifferentSession(false);
+    }
+
+    private void CopyOrMoveMessagesToMailboxOfDifferentSession(bool move)
     {
       var selectResp =
+        "* 3 EXISTS\r\n" +
         "* OK [UIDVALIDITY 23]\r\n" +
         "$tag OK [READ-WRITE] done\r\n";
 
-      TestUtils.TestOpenedMailbox("INBOX", selectResp, delegate(ImapPseudoServer server, ImapOpenedMailboxInfo mailbox) {
-        var messages = mailbox.GetMessages(ImapSearchCriteria.Recent);
+      TestUtils.TestOpenedMailbox("INBOX", selectResp, delegate(ImapPseudoServer serverSource, ImapOpenedMailboxInfo mailboxSource) {
+        TestUtils.TestAuthenticated(delegate(ImapPseudoServer serverDest, ImapClient clientDest) {
+          // LIST
+          serverDest.EnqueueTaggedResponse("* LIST () \"\" dest\r\n" +
+                                           "$tag OK done\r\n");
 
-        using (var enumerator = messages.GetEnumerator()) {
-          // SEARCH
-          server.EnqueueTaggedResponse("* SEARCH 1 2 3\r\n" +
-                                       "$tag OK done\r\n");
-          // FETCH
-          server.EnqueueTaggedResponse("* FETCH 1 (UID 3)\r\n" +
-                                       "* FETCH 2 (UID 5)\r\n" +
-                                       "* FETCH 3 (UID 7)\r\n" +
-                                       "$tag OK done\r\n");
+          var mailboxDest = clientDest.GetMailbox("dest");
 
-          Assert.IsTrue(enumerator.MoveNext());
+          serverDest.DequeueRequest();
 
-          Assert.That(server.DequeueRequest(), Text.EndsWith("SEARCH RECENT\r\n"));
-          Assert.That(server.DequeueRequest(), Text.EndsWith("FETCH 1:3 (UID)\r\n"));
+          Assert.AreNotSame(mailboxSource.Client, mailboxDest.Client);
 
-          Assert.IsNotNull(enumerator.Current, "#0 non-null");
-          Assert.AreEqual(3L, enumerator.Current.Uid, "#0 uid");
-          Assert.AreEqual(1L, enumerator.Current.Sequence, "#0 seq");
+          // NOOP (source)
+          serverSource.EnqueueTaggedResponse("$tag OK done\r\n");
+          // FETCH (source)
+          serverSource.EnqueueTaggedResponse("* FETCH 1 (UID 1)\r\n" +
+                                             "* FETCH 2 (UID 2)\r\n" +
+                                             "* FETCH 3 (UID 3)\r\n" +
+                                             "$tag OK done\r\n");
+          serverSource.EnqueueTaggedResponse("* FETCH 1 (" +
+                                             "FLAGS (\\Answered $label1) " +
+                                             "INTERNALDATE \"25-Jan-2011 15:29:06 +0900\" " +
+                                             "RFC822.SIZE 13 " +
+                                             "BODY[] {13}\r\ntest message1)\r\n" +
+                                             "$tag OK done\r\n");
+          serverSource.EnqueueTaggedResponse("* FETCH 2 (" +
+                                             "FLAGS (\\Answered $label2) " +
+                                             "INTERNALDATE \"25-Jan-2011 15:29:06 +0900\" " +
+                                             "RFC822.SIZE 13 " +
+                                             "BODY[] {13}\r\ntest message2)\r\n" +
+                                             "$tag OK done\r\n");
+          serverSource.EnqueueTaggedResponse("* FETCH 3 (" +
+                                             "FLAGS (\\Answered $label3) " +
+                                             "INTERNALDATE \"25-Jan-2011 15:29:06 +0900\" " +
+                                             "RFC822.SIZE 13 " +
+                                             "BODY[] {13}\r\ntest message3)\r\n" +
+                                             "$tag OK done\r\n");
 
-          Assert.IsTrue(enumerator.MoveNext());
+          if (move)
+            // UID STORE (source)
+            serverSource.EnqueueTaggedResponse("* FETCH 1 (FLAGS (\\Deleted))\r\n" +
+                                               "* FETCH 2 (FLAGS (\\Deleted))\r\n" +
+                                               "* FETCH 3 (FLAGS (\\Deleted))\r\n" +
+                                               "$tag OK done\r\n");
 
-          Assert.IsNotNull(enumerator.Current, "#1 non-null");
-          Assert.AreEqual(5L, enumerator.Current.Uid, "#1 uid");
-          Assert.AreEqual(2L, enumerator.Current.Sequence, "#1 seq");
+          // APPEND (dest)
+          serverDest.EnqueueResponse("+ OK continue\r\n");
+          serverDest.EnqueueResponse(string.Empty);
+          serverDest.EnqueueTaggedResponse("$tag OK [APPENDUID 38505 3955] APPEND completed\r\n");
+          serverDest.EnqueueResponse("+ OK continue\r\n");
+          serverDest.EnqueueResponse(string.Empty);
+          serverDest.EnqueueTaggedResponse("$tag OK [APPENDUID 38505 3956] APPEND completed\r\n");
+          serverDest.EnqueueResponse("+ OK continue\r\n");
+          serverDest.EnqueueResponse(string.Empty);
+          serverDest.EnqueueTaggedResponse("$tag OK [APPENDUID 38505 3957] APPEND completed\r\n");
 
-          Assert.IsTrue(enumerator.MoveNext());
+          if (move)
+            mailboxSource.MoveMessagesTo(mailboxDest);
+          else
+            mailboxSource.CopyMessagesTo(mailboxDest);
 
-          Assert.IsNotNull(enumerator.Current, "#2 non-null");
-          Assert.AreEqual(7L, enumerator.Current.Uid, "#2 uid");
-          Assert.AreEqual(3L, enumerator.Current.Sequence, "#2 seq");
+          Assert.That(serverSource.DequeueRequest(), Text.EndsWith("NOOP\r\n"));
+          Assert.That(serverSource.DequeueRequest(), Text.EndsWith("FETCH 1:3 (UID)\r\n"));
+          Assert.That(serverSource.DequeueRequest(), Text.EndsWith("UID FETCH 1 (RFC822.SIZE INTERNALDATE FLAGS BODY.PEEK[]<0.10240>)\r\n"));
+          Assert.That(serverSource.DequeueRequest(), Text.EndsWith("UID FETCH 2 (RFC822.SIZE INTERNALDATE FLAGS BODY.PEEK[]<0.10240>)\r\n"));
+          Assert.That(serverSource.DequeueRequest(), Text.EndsWith("UID FETCH 3 (RFC822.SIZE INTERNALDATE FLAGS BODY.PEEK[]<0.10240>)\r\n"));
 
-          Assert.IsFalse(enumerator.MoveNext());
-        }
+          if (move)
+            Assert.That(serverSource.DequeueRequest(), Text.EndsWith("STORE 1:3 +FLAGS (\\Deleted)\r\n"));
 
-        /*
-         * re-enumerate
-         */
-        using (var enumerator = messages.GetEnumerator()) {
-          // SEARCH
-          server.EnqueueTaggedResponse("* SEARCH 4\r\n" +
-                                       "$tag OK done\r\n");
-          // FETCH
-          server.EnqueueTaggedResponse("* FETCH 4 (UID 8)\r\n" +
-                                       "$tag OK done\r\n");
-
-          Assert.IsTrue(enumerator.MoveNext());
-
-          Assert.That(server.DequeueRequest(), Text.EndsWith("SEARCH RECENT\r\n"));
-          Assert.That(server.DequeueRequest(), Text.EndsWith("FETCH 4 (UID)\r\n"));
-
-          Assert.IsNotNull(enumerator.Current, "#0 non-null");
-          Assert.AreEqual(8L, enumerator.Current.Uid, "#0 uid");
-          Assert.AreEqual(4L, enumerator.Current.Sequence, "#0 seq");
-
-          Assert.IsFalse(enumerator.MoveNext());
-        }
+          Assert.That(serverDest.DequeueRequest(),
+                      Text.EndsWith("APPEND dest (\\Answered $label1) \"25-Jan-2011 15:29:06 +0900\" {13}\r\n"));
+          Assert.That(serverDest.DequeueRequest(),
+                      Text.StartsWith("test message1"));
+          Assert.That(serverDest.DequeueRequest(),
+                      Text.EndsWith("APPEND dest (\\Answered $label2) \"25-Jan-2011 15:29:06 +0900\" {13}\r\n"));
+          Assert.That(serverDest.DequeueRequest(),
+                      Text.StartsWith("test message2"));
+          Assert.That(serverDest.DequeueRequest(),
+                      Text.EndsWith("APPEND dest (\\Answered $label3) \"25-Jan-2011 15:29:06 +0900\" {13}\r\n"));
+          Assert.That(serverDest.DequeueRequest(),
+                      Text.StartsWith("test message3"));
+        });
       });
-    }
-
-    [Test]
-    public void TestGetMessagesWithSearchCriteriaSearchresCapable()
-    {
-      var selectResp =
-        "* OK [UIDVALIDITY 23]\r\n" +
-        "$tag OK [READ-WRITE] done\r\n";
-
-      TestUtils.TestOpenedMailbox(new[] {ImapCapability.ESearch, ImapCapability.Searchres},
-                                  "INBOX",
-                                  selectResp,
-                                  delegate(ImapPseudoServer server, ImapOpenedMailboxInfo mailbox) {
-        var messages = mailbox.GetMessages(ImapSearchCriteria.Recent);
-
-        using (var enumerator = messages.GetEnumerator()) {
-          // SEARCH
-          server.EnqueueTaggedResponse("$tag OK done\r\n");
-          // FETCH
-          server.EnqueueTaggedResponse("* FETCH 1 (UID 3)\r\n" +
-                                       "$tag OK done\r\n");
-
-          Assert.IsTrue(enumerator.MoveNext());
-
-          Assert.That(server.DequeueRequest(), Text.EndsWith("SEARCH RETURN (SAVE) RECENT\r\n"));
-          Assert.That(server.DequeueRequest(), Text.EndsWith("FETCH $ (UID)\r\n"));
-
-          Assert.IsNotNull(enumerator.Current, "#0 non-null");
-          Assert.AreEqual(3L, enumerator.Current.Uid, "#0 uid");
-          Assert.AreEqual(1L, enumerator.Current.Sequence, "#0 seq");
-
-          Assert.IsFalse(enumerator.MoveNext());
-        }
-      });
-    }
-
-    [Test]
-    public void TestGetMessagesWithSearchCriteriaNothingMatched()
-    {
-      var selectResp =
-        "* OK [UIDVALIDITY 23]\r\n" +
-        "$tag OK [READ-WRITE] done\r\n";
-
-      TestUtils.TestOpenedMailbox("INBOX", selectResp, delegate(ImapPseudoServer server, ImapOpenedMailboxInfo mailbox) {
-        var messages = mailbox.GetMessages(ImapSearchCriteria.Recent);
-
-        using (var enumerator = messages.GetEnumerator()) {
-          // SEARCH
-          server.EnqueueTaggedResponse("* SEARCH\r\n" +
-                                       "$tag OK done\r\n");
-
-          Assert.IsFalse(enumerator.MoveNext());
-
-          Assert.That(server.DequeueRequest(), Text.EndsWith("SEARCH RECENT\r\n"));
-        }
-      });
-    }
-
-    [Test]
-    public void TestGetSortedMessages()
-    {
-      var selectResp =
-        "* OK [UIDVALIDITY 23]\r\n" +
-        "$tag OK [READ-WRITE] done\r\n";
-
-      TestUtils.TestOpenedMailbox(new[] {ImapCapability.Sort},
-                                  "INBOX",
-                                  selectResp,
-                                  delegate(ImapPseudoServer server, ImapOpenedMailboxInfo mailbox) {
-        var messages = mailbox.GetSortedMessages(ImapSortCriteria.Arrival, ImapSearchCriteria.Recent);
-
-        using (var enumerator = messages.GetEnumerator()) {
-          // SORT
-          server.EnqueueTaggedResponse("* SORT 1 4 2\r\n" +
-                                       "$tag OK done\r\n");
-          // FETCH
-          server.EnqueueTaggedResponse("* FETCH 1 (UID 2)\r\n" +
-                                       "* FETCH 2 (UID 4)\r\n" +
-                                       "* FETCH 4 (UID 8)\r\n" +
-                                       "$tag OK done\r\n");
-
-          Assert.IsTrue(enumerator.MoveNext());
-
-          Assert.That(server.DequeueRequest(), Text.EndsWith("SORT (ARRIVAL) utf-8 RECENT\r\n"));
-          Assert.That(server.DequeueRequest(), Text.EndsWith("FETCH 1,4,2 (UID)\r\n"));
-
-          Assert.IsNotNull(enumerator.Current, "#0 non-null");
-          Assert.AreEqual(2L, enumerator.Current.Uid, "#0 uid");
-          Assert.AreEqual(1L, enumerator.Current.Sequence, "#0 seq");
-
-          Assert.IsTrue(enumerator.MoveNext());
-
-          Assert.IsNotNull(enumerator.Current, "#1 non-null");
-          Assert.AreEqual(4L, enumerator.Current.Uid, "#1 uid");
-          Assert.AreEqual(2L, enumerator.Current.Sequence, "#1 seq");
-
-          Assert.IsTrue(enumerator.MoveNext());
-
-          Assert.IsNotNull(enumerator.Current, "#2 non-null");
-          Assert.AreEqual(8L, enumerator.Current.Uid, "#2 uid");
-          Assert.AreEqual(4L, enumerator.Current.Sequence, "#2 seq");
-
-          Assert.IsFalse(enumerator.MoveNext());
-        }
-      });
-    }
-
-    [Test, ExpectedException(typeof(ImapIncapableException))]
-    public void TestGetSortedMessagesSortIncapable()
-    {
-      var selectResp =
-        "* OK [UIDVALIDITY 23]\r\n" +
-        "$tag OK [READ-WRITE] done\r\n";
-
-      TestUtils.TestOpenedMailbox("INBOX", selectResp, delegate(ImapPseudoServer server, ImapOpenedMailboxInfo mailbox) {
-        mailbox.GetSortedMessages(ImapSortCriteria.Subject, ImapSearchCriteria.Recent);
-      });
-    }
-
-
-    [Test]
-    public void TestGetSortedMessagesNothingMatched()
-    {
-      var selectResp =
-        "* OK [UIDVALIDITY 23]\r\n" +
-        "$tag OK [READ-WRITE] done\r\n";
-
-      TestUtils.TestOpenedMailbox(new[] {ImapCapability.Sort},
-                                  "INBOX",
-                                  selectResp,
-                                  delegate(ImapPseudoServer server, ImapOpenedMailboxInfo mailbox) {
-        var messages = mailbox.GetSortedMessages(ImapSortCriteria.Arrival, ImapSearchCriteria.Recent);
-
-        using (var enumerator = messages.GetEnumerator()) {
-          // SORT
-          server.EnqueueTaggedResponse("* SORT\r\n" +
-                                       "$tag OK done\r\n");
-
-          Assert.IsFalse(enumerator.MoveNext());
-
-          Assert.That(server.DequeueRequest(), Text.EndsWith("SORT (ARRIVAL) utf-8 RECENT\r\n"));
-        }
-      });
-    }
-
-    [Test, Ignore("to be added")]
-    public void TestWaitForMessageArrival()
-    {
-    }
-
-    [Test, Ignore("to be added")]
-    public void TestBeginWaitForMessageArrival()
-    {
-    }
-
-    [Test, Ignore("to be added")]
-    public void TestEndWaitForMessageArrival()
-    {
     }
   }
 }

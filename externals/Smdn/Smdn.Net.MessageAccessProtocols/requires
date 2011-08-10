@@ -1,3 +1,4 @@
+Smdn/Smdn.Collections/ISet.cs
 Smdn/Smdn.Formats/Octets.cs
 Smdn/System.Runtime.CompilerServices/ExtensionAttribute.cs
 Smdn.Core.Standards/Smdn.IO/LineOrientedStream.cs

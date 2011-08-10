@@ -45,13 +45,12 @@
     <Folder Include="Smdn.Net\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Smdn.Net.MessageAccessProtocols\StringEnumList.cs" />
     <Compile Include="Smdn.Net.MessageAccessProtocols\StringEnumUtils.cs" />
     <Compile Include="Smdn.Net\ICredentialsByHostExtensions.cs" />
     <Compile Include="Smdn.Net\InterruptStream.cs" />
     <Compile Include="Smdn.Net\NetworkTransferEncoding.cs" />
-    <Compile Include="Smdn.Net\ConnectionException.cs" />
     <Compile Include="Smdn.Net\TestUtils.cs" />
+    <Compile Include="Smdn.Net.MessageAccessProtocols\StringEnumSet.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Smdn.Net.MessageAccessProtocols-netfx4.0.csproj">

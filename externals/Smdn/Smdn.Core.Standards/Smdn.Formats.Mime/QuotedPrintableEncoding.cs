@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -45,8 +45,18 @@ namespace Smdn.Formats.Mime {
 
     public static string GetEncodedString(byte[] bytes)
     {
+      if (bytes == null)
+        throw new ArgumentNullException("bytes");
+
+      return GetEncodedString(bytes, 0, bytes.Length);
+    }
+
+    public static string GetEncodedString(byte[] bytes, int offset, int count)
+    {
       return Encoding.ASCII.GetString(ICryptoTransformExtensions.TransformBytes(new ToQuotedPrintableTransform(),
-                                                                                bytes));
+                                                                                bytes,
+                                                                                offset,
+                                                                                count));
     }
 
     public static byte[] Encode(string str)
@@ -59,8 +69,12 @@ namespace Smdn.Formats.Mime {
       if (encoding == null)
         throw new ArgumentNullException("encoding");
 
+      var bytes = encoding.GetBytes(str);
+
       return ICryptoTransformExtensions.TransformBytes(new ToQuotedPrintableTransform(),
-                                                       encoding.GetBytes(str));
+                                                       bytes,
+                                                       0,
+                                                       bytes.Length);
     }
 
     public static string GetDecodedString(string str)
@@ -77,8 +91,12 @@ namespace Smdn.Formats.Mime {
 
     public static byte[] Decode(string str)
     {
+      var bytes = Encoding.ASCII.GetBytes(str);
+
       return ICryptoTransformExtensions.TransformBytes(new FromQuotedPrintableTransform(),
-                                                       Encoding.ASCII.GetBytes(str));
+                                                       bytes,
+                                                       0,
+                                                       bytes.Length);
     }
 
     public static Stream CreateEncodingStream(Stream stream)

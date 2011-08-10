@@ -35,17 +35,17 @@ namespace Smdn.Net.MessageAccessProtocols {
     [Test]
     public void TestGetDefinedConstants()
     {
-      var expected = new StringEnumList<StringEnum>(new[] {
+      var expected = new StringEnumSet<StringEnum>(new[] {
         new StringEnum("IMAP4rev1"),
         new StringEnum("UIDPLUS"),
         new StringEnum("AUTH=PLAIN"),
       });
-      var actual = new StringEnumList<StringEnum>(StringEnumUtils.GetDefinedConstants<StringEnum>());
+      var actual = new StringEnumSet<StringEnum>(StringEnumUtils.GetDefinedConstants<StringEnum>());
 
       Assert.AreEqual(expected.Count, actual.Count);
 
       foreach (var val in expected) {
-        Assert.IsTrue(actual.Has(val));
+        Assert.IsTrue(actual.Contains(val));
       }
     }
   }

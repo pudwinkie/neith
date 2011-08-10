@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -30,8 +30,8 @@ using Smdn.Net.Imap4.Protocol.Client;
 
 namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
   internal sealed class IdleTransaction : ImapTransactionBase, IImapExtension {
-    ImapCapability IImapExtension.RequiredCapability {
-      get { return ImapCapability.Idle; }
+    IEnumerable<ImapCapability> IImapExtension.RequiredCapabilities {
+      get { yield return ImapCapability.Idle; }
     }
 
     public IdleTransaction(ImapConnection connection, object keepIdleState, ImapKeepIdleCallback keepIdleCallback)
@@ -51,11 +51,6 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
       base.Dispose();
     }
 
-    protected override ProcessTransactionDelegate Reset()
-    {
-      return ProcessIdle;
-    }
-
     // 3. Specification
     //    IDLE Command
     //    Arguments:  none
@@ -65,16 +60,19 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     //                NO - failure: the server will not allow the IDLE
     //                     command at this time
     //               BAD - command unknown or arguments invalid
-    private void ProcessIdle()
+    protected override ImapCommand PrepareCommand()
     {
-      SendCommand("IDLE", ProcessReceiveResponse);
+      return Connection.CreateCommand("IDLE");
     }
 
     internal void Done()
     {
       if (Connection.IsIdling &&
           !IsFinished &&
+#pragma warning disable 420
+          // CS0420: http://msdn.microsoft.com/en-us/library/4bw5ewxy.aspx
           Interlocked.CompareExchange(ref doneSent, 1, 0) == 0) {
+#pragma warning restore 420
         Connection.ReceiveTimeout = prevReceiveTimeout;
 
         SendContinuation("DONE");
@@ -96,22 +94,26 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
       idleStateChangedEvent.Set();
     }
 
+    // 3. Specification
+    //   IDLE Command
+    //   The IDLE command remains active until the client
+    //   responds to the continuation, and as long as an IDLE command is
+    //   active, the server is now free to send untagged EXISTS, EXPUNGE, and
+    //   other messages at any time
     protected override void OnDataResponseReceived(ImapDataResponse data)
     {
-      // 3. Specification
-      //   IDLE Command
-      //   The IDLE command remains active until the client
-      //   responds to the continuation, and as long as an IDLE command is
-      //   active, the server is now free to send untagged EXISTS, EXPUNGE, and
-      //   other messages at any time
-      if (keepIdleCallback != null) {
-        var updatedStatus = ImapUpdatedStatus.CreateFrom(data);
-
-        if (updatedStatus != null && !keepIdleCallback(keepIdleState, updatedStatus))
-          Done();
-      }
+      if (keepIdleCallback != null && !keepIdleCallback(keepIdleState, data))
+        Done();
 
       base.OnDataResponseReceived(data);
+    }
+
+    protected override void OnUntaggedStatusResponseReceived(ImapUntaggedStatusResponse untagged)
+    {
+      if (keepIdleCallback != null && !keepIdleCallback(keepIdleState, untagged))
+        Done();
+
+      base.OnUntaggedStatusResponseReceived(untagged);
     }
 
     protected override void OnTaggedStatusResponseReceived(ImapTaggedStatusResponse tagged)
@@ -125,7 +127,7 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
 
     private ImapKeepIdleCallback keepIdleCallback;
     private object keepIdleState;
-    private int doneSent = 0;
+    private volatile int doneSent = 0;
     private int prevReceiveTimeout;
     private AutoResetEvent idleStateChangedEvent = new AutoResetEvent(false);
   }

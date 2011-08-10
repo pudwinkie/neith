@@ -1,0 +1,30 @@
+#「黄昏酒場 Uwabami Breakers」 製品版曲データ (contributed by Nautilus, 2009/09/17)
+#デフォルトのパスと製品名
+@呑んべぇ会\黄昏酒場\albgm.dat,黄昏酒場 Uwabami Breakers
+#原作者名
+#=ProductInfo,Creator,呑んべぇ会
+#製品略称
+#=ProductInfo,Prefix,alcostg
+#=ProductInfo,ShortName,黄昏酒場
+#=ProductInfo,AbbreviatedShortName,黄昏酒場
+#=ProductInfo,ShortestName,
+#頒布年月日
+#=ProductInfo,ReleaseDate,2007-12-31
+#thbgm.datのサイズ(バイト単位)
+#=ProductInfo,BgmSourceLength,92476188
+#thbgm.datのハッシュ値(MD5)
+#=ProductInfo,BgmSourceHash,MD5Sum,af3c83aeef135f928d438d82c6925c8e
+#thbgm.datの識別用ハッシュ値(末尾4MBのハッシュ)
+#=ProductInfo,BgmSourceIdentificationHash,MD5Sum,
+#THxxBGM製品識別用GUID
+#=ProductInfo,THxxBGMProductGuid,881949A8-B453-A741-E8CD-72D1A5741E0F
+#曲データ
+#開始位置[Bytes]、イントロ部の長さ[Bytes]、ループ部の長さ[Bytes]、曲名
+#位置・長さは16進値として記述する
+052F531C,0005F200,004DCE00,step u／b (lazy style)
+00000010,00077860,006ED168,step u／b
+02BB6218,001FDFF4,01187F90,Valse Alcholiquee
+007649D8,00073BB0,007D1BA4,chase the Twilight
+0235032C,000D7BC0,0078E32C,Festiv-al-coholically
+00FAA12C,00115800,01290A00,呑んべぇのレムリア
+03F3C19C,0036DD00,0104B480,絶対大丈夫だよ！！いくら飲んでも朝が来るよ！！。

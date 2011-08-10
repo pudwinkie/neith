@@ -1,7 +1,12 @@
 Smdn.Net.Imap4/Smdn.Net.Imap4.csproj
+Smdn/Smdn/ExceptionUtils.cs
 Smdn/Smdn/Lazy.cs
+Smdn/Smdn/StringExtensions.cs
 Smdn/Smdn/Tuple.cs
 Smdn.Core.Standards/Smdn.Formats/DateTimeConvert.cs
+Smdn.Core.Standards/Smdn.Formats/EncodingNotSupportedException.cs
+Smdn.Core.Standards/Smdn.Formats/EncodingSelectionCallback.cs
+Smdn.Core.Standards/Smdn.Formats/EncodingUtils.cs
 Smdn.Core.Standards/Smdn.Formats.Mime/FromQuotedPrintableTransform.cs
 Smdn.Core.Standards/Smdn.Formats.Mime/ContentTransferEncoding.cs
 Smdn.Core.Standards/Smdn.Formats.Mime/ContentTransferEncodingMethod.cs

@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,7 @@ using System;
 using Smdn.Net.Pop3.Protocol;
 
 namespace Smdn.Net.Pop3.Protocol.Client {
+  [Serializable]
   public sealed class PopResponseText {
     public PopResponseCode Code {
       get; private set;

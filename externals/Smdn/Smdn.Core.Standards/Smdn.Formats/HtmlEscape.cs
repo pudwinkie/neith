@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,7 @@
 
 using System;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Smdn.Formats {
   public static class HtmlEscape {
@@ -95,7 +96,31 @@ namespace Smdn.Formats {
 
     private static string FromXhtmlEscapedString(string str, bool xhtml)
     {
-      throw new NotImplementedException();
+      var sb = new StringBuilder(str);
+
+      sb.Replace("&lt;", "<");
+      sb.Replace("&gt;", ">");
+      sb.Replace("&quot;", "\"");
+
+      if (xhtml)
+        sb.Replace("&apos;", "'");
+
+      sb.Replace("&amp;", "&");
+
+      return sb.ToString();
+    }
+
+    public static string FromNumericCharacterReference(string str)
+    {
+      if (str == null)
+        throw new ArgumentNullException("str");
+
+      return Regex.Replace(str, @"&#(?<hex>x?)(?<number>[0-9a-fA-F]+);", delegate(Match m) {
+        if (m.Groups["hex"].Length == 0)
+          return ((char)Convert.ToUInt16(m.Groups["number"].Value, 10)).ToString();
+        else
+          return ((char)Convert.ToUInt16(m.Groups["number"].Value, 16)).ToString();
+      });
     }
   }
 }

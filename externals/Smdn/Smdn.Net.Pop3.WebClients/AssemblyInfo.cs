@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,7 @@ using System.Runtime.CompilerServices;
 
 [assembly: AssemblyTitle("Smdn.Net.Pop3.WebClients")]
 [assembly: AssemblyDescription("Smdn.Net.Pop3.WebClients.dll")]
-[assembly: AssemblyCopyright("Copyright(c) 2010 smdn")]
+[assembly: AssemblyCopyright("Copyright(c) 2010-2011 smdn")]
 [assembly: AssemblyCompany("smdn:総武ソフトウェア推進所")]
 [assembly: AssemblyConfiguration("")]
 
@@ -41,7 +41,7 @@ using System.Runtime.CompilerServices;
 // The form "{Major}.{Minor}.*" will automatically update the build and revision,
 // and "{Major}.{Minor}.{Build}.*" will update just the revision.
 
-[assembly: AssemblyVersion("1.00.0.0")]
+[assembly: AssemblyVersion("1.10.0.0")]
 
 // The following attributes are used to specify the signing key for the assembly,
 // if desired. See the Mono documentation for more information about signing.

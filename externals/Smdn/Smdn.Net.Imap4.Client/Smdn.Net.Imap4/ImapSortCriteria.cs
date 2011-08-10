@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -43,12 +43,12 @@ namespace Smdn.Net.Imap4 {
 
   // http://tools.ietf.org/html/rfc5256
   // BASE.6.4.SORT. SORT Command
-  public sealed class ImapSortCriteria : ImapCombinableDataItem, IImapMultipleExtension {
-    ImapCapability[] IImapMultipleExtension.RequiredCapabilities {
-      get { return requiredCapabilities.ToArray(); }
+  public sealed class ImapSortCriteria : ImapCombinableDataItem, IImapExtension {
+    IEnumerable<ImapCapability> IImapExtension.RequiredCapabilities {
+      get { return this.requiredCapabilities; }
     }
 
-    internal List<ImapCapability> RequiredCapabilities {
+    internal ImapCapabilitySet RequiredCapabilities {
       get { return this.requiredCapabilities; }
     }
 
@@ -89,8 +89,8 @@ namespace Smdn.Net.Imap4 {
     public static readonly ImapSortCriteria ToReverse = CreateReversed("TO");
 
     /*
-     * RFC 4551 - Display-based Address Sorting for the IMAP4 SORT Extension
-     * http://tools.ietf.org/html/draft-ietf-morg-sortdisplay-03
+     * RFC 5957 - Display-Based Address Sorting for the IMAP4 SORT Extension
+     * http://tools.ietf.org/html/rfc5957
      */
     public static readonly ImapSortCriteria DisplayFrom = new ImapSortCriteria(new[] {ImapCapability.Sort, ImapCapability.SortDisplay}, "DISPLAYFROM");
     public static readonly ImapSortCriteria DisplayTo   = new ImapSortCriteria(new[] {ImapCapability.Sort, ImapCapability.SortDisplay}, "DISPLAYTO");
@@ -112,12 +112,9 @@ namespace Smdn.Net.Imap4 {
       if (y == null)
         throw new ArgumentNullException("y");
 
-      var requiredCapabilities = new List<ImapCapability>(x.requiredCapabilities);
+      var requiredCapabilities = new ImapCapabilitySet(x.requiredCapabilities);
 
-      foreach (var cap in y.requiredCapabilities) {
-        if (!requiredCapabilities.Contains(cap))
-          requiredCapabilities.Add(cap);
-      }
+      requiredCapabilities.UnionWith(y.requiredCapabilities);
 
       return new ImapSortCriteria(requiredCapabilities, GetCombinedItems(x.Items, y.Items));
     }
@@ -144,10 +141,15 @@ namespace Smdn.Net.Imap4 {
       return new ImapSortCriteria(new[] {ImapCapability.Sort}, "REVERSE", criteria);
     }
 
-    private ImapSortCriteria(IEnumerable<ImapCapability> requiredCapabilities, params ImapString[] items)
+    private ImapSortCriteria(ImapCapability[] requiredCapabilities, params ImapString[] items)
+      : this(new ImapCapabilitySet(requiredCapabilities), items)
+    {
+    }
+
+    private ImapSortCriteria(ImapCapabilitySet requiredCapabilities, params ImapString[] items)
       : base(items)
     {
-      this.requiredCapabilities = new List<ImapCapability>(requiredCapabilities);
+      this.requiredCapabilities = requiredCapabilities;
     }
 
     protected override ImapStringList GetCombined()
@@ -155,6 +157,6 @@ namespace Smdn.Net.Imap4 {
       return ToParenthesizedString();
     }
 
-    private List<ImapCapability> requiredCapabilities;
+    private readonly ImapCapabilitySet requiredCapabilities;
   }
 }

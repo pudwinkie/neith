@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -32,39 +32,47 @@ namespace Smdn.Net.MessageAccessProtocols.Diagnostics {
     [Conditional("TRACE")]
     public static void Log(ConnectionBase connection, Exception ex)
     {
+#if TRACE
       connection.traceSource.TraceData(TraceEventType.Error,
                                        connection.Id,
                                        new ExceptionTraceData(ex, connection.Id));
+#endif
     }
 
     [Conditional("TRACE")]
     public static void Log(ConnectionBase connection, string format, params object[] args)
     {
+#if TRACE
       connection.traceSource.TraceData(TraceEventType.Information,
                                        connection.Id,
                                        new MessageTraceData(string.Format(format, args), connection.Id));
+#endif
     }
 
     [Conditional("TRACE")]
     private static void LogReceived(ConnectionBase connection, byte[] received, int start, int count)
     {
+#if TRACE
       connection.traceSource.TraceData(TraceEventType.Verbose,
                                        connection.Id,
                                        new ReceiveTraceData(new ArraySegment<byte>(received, start, count),
                                                             connection.RemoteEndPoint,
                                                             connection.LocalEndPoint,
                                                             connection.Id));
+#endif
     }
 
     [Conditional("TRACE")]
     private static void LogSent(ConnectionBase connection, byte[] sent, int start, int count)
     {
+#if TRACE
       connection.traceSource.TraceData(TraceEventType.Verbose,
                                        connection.Id,
                                        new SendTraceData(new ArraySegment<byte>(sent, start, count),
                                                          connection.RemoteEndPoint,
                                                          connection.LocalEndPoint,
                                                          connection.Id));
+#endif
     }
 
     internal static Stream CreateTracingStream(ConnectionBase connection, Stream stream)

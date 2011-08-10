@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -46,8 +46,10 @@ namespace Smdn.Security.Authentication.Sasl.Client {
 
     public static SaslClientMechanism Create(string mechanismName)
     {
-      if (string.IsNullOrEmpty(mechanismName))
-        throw new ArgumentException("invalid mechanism name", "mechanismName");
+      if (mechanismName == null)
+        throw new ArgumentNullException("mechanismName");
+      if (mechanismName.Length == 0)
+        throw ExceptionUtils.CreateArgumentMustBeNonEmptyString("mechanismName");
 
       try {
         Type mechanismType;
@@ -67,8 +69,10 @@ namespace Smdn.Security.Authentication.Sasl.Client {
 
     public static bool IsMechanismPlainText(string mechanismName)
     {
-      if (string.IsNullOrEmpty(mechanismName))
-        throw new ArgumentException("invalid mechanism name", "mechanismName");
+      if (mechanismName == null)
+        throw new ArgumentNullException("mechanismName");
+      if (mechanismName.Length == 0)
+        throw ExceptionUtils.CreateArgumentMustBeNonEmptyString("mechanismName");
 
       Type mechanismType;
 
@@ -192,9 +196,9 @@ namespace Smdn.Security.Authentication.Sasl.Client {
 
       ByteString resp;
 
-      exchangeStatus = Exchange((serverChallenge == null) ? ByteString.CreateEmpty() : new ByteString(serverChallenge), out resp);
+      exchangeStatus = Exchange((serverChallenge == null) ? ByteString.CreateEmpty() : ByteString.CreateImmutable(serverChallenge), out resp);
 
-      clientResponse = (resp == null) ? null : resp.ByteArray;
+      clientResponse = (resp == null) ? null : resp.ToArray();
 
       return exchangeStatus;
     }

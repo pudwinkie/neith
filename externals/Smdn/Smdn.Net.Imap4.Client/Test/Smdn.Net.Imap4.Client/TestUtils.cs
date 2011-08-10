@@ -23,7 +23,7 @@ namespace Smdn.Net.Imap4.Client {
 
     public static void TestAuthenticated(ImapCapability[] serverCapabilities, Action<ImapPseudoServer, ImapClient> testAction)
     {
-      var capas = new ImapCapabilityList(serverCapabilities ?? new ImapCapability[0]);
+      var capas = new ImapCapabilitySet(serverCapabilities ?? new ImapCapability[0]);
 
       try {
         capas.Add(ImapCapability.Imap4Rev1);

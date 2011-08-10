@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Formats.Diff.Tests-netfx4.0", "Smdn.Formats.Diff.Tests-netfx4.0.csproj", "{1681E5D3-070D-48AC-BD1F-4BD4D27BDC61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn-netfx4.0", "..\..\Smdn\Smdn-netfx4.0.csproj", "{3FDF8CFA-B168-466F-B303-AEDDBED87BB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Formats.Diff-netfx4.0", "..\Smdn.Formats.Diff-netfx4.0.csproj", "{E3008D94-1634-4202-AFA8-C37CB98DE261}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1681E5D3-070D-48AC-BD1F-4BD4D27BDC61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1681E5D3-070D-48AC-BD1F-4BD4D27BDC61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1681E5D3-070D-48AC-BD1F-4BD4D27BDC61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1681E5D3-070D-48AC-BD1F-4BD4D27BDC61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FDF8CFA-B168-466F-B303-AEDDBED87BB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FDF8CFA-B168-466F-B303-AEDDBED87BB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FDF8CFA-B168-466F-B303-AEDDBED87BB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FDF8CFA-B168-466F-B303-AEDDBED87BB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3008D94-1634-4202-AFA8-C37CB98DE261}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3008D94-1634-4202-AFA8-C37CB98DE261}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3008D94-1634-4202-AFA8-C37CB98DE261}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3008D94-1634-4202-AFA8-C37CB98DE261}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Smdn.Formats.Diff.Tests-netfx4.0.csproj
+	EndGlobalSection
+EndGlobal

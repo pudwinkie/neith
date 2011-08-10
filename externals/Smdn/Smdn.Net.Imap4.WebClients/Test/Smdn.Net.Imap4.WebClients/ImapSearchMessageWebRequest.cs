@@ -234,7 +234,7 @@ namespace Smdn.Net.Imap4.WebClients {
         server.DequeueRequest(); // CAPABILITY
         server.DequeueRequest(); // LOGIN
 
-        StringAssert.Contains("SELECT \"INBOX\"", server.DequeueRequest());
+        StringAssert.Contains("SELECT INBOX", server.DequeueRequest());
       }
     }
 
@@ -1114,11 +1114,11 @@ namespace Smdn.Net.Imap4.WebClients {
 
         if (searchresCapable) {
           StringAssert.EndsWith("UID SEARCH RETURN (SAVE) UNSEEN\r\n", server.DequeueRequest());
-          StringAssert.EndsWith("UID COPY $ \"INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\"\r\n", server.DequeueRequest());
+          StringAssert.EndsWith("UID COPY $ INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\r\n", server.DequeueRequest());
         }
         else {
           StringAssert.EndsWith("UID SEARCH UNSEEN\r\n", server.DequeueRequest());
-          StringAssert.EndsWith("UID COPY 3,4,5 \"INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\"\r\n", server.DequeueRequest());
+          StringAssert.EndsWith("UID COPY 3,4,5 INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\r\n", server.DequeueRequest());
         }
       }
     }
@@ -1170,11 +1170,11 @@ namespace Smdn.Net.Imap4.WebClients {
 
         if (searchresCapable) {
           StringAssert.EndsWith("UID SEARCH RETURN (SAVE) UNSEEN\r\n", server.DequeueRequest());
-          StringAssert.EndsWith("UID COPY $ \"INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\"\r\n", server.DequeueRequest());
+          StringAssert.EndsWith("UID COPY $ INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\r\n", server.DequeueRequest());
         }
         else {
           StringAssert.EndsWith("UID SEARCH UNSEEN\r\n", server.DequeueRequest());
-          StringAssert.EndsWith("UID COPY 3,4,5 \"INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\"\r\n", server.DequeueRequest());
+          StringAssert.EndsWith("UID COPY 3,4,5 INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\r\n", server.DequeueRequest());
         }
       }
     }
@@ -1209,7 +1209,7 @@ namespace Smdn.Net.Imap4.WebClients {
         });
 
         StringAssert.EndsWith("UID SEARCH UNSEEN\r\n", server.DequeueRequest());
-        StringAssert.EndsWith("UID COPY 3,4,5 \"INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\"\r\n", server.DequeueRequest());
+        StringAssert.EndsWith("UID COPY 3,4,5 INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\r\n", server.DequeueRequest());
       }
     }
 
@@ -1280,16 +1280,16 @@ namespace Smdn.Net.Imap4.WebClients {
         });
 
         StringAssert.EndsWith("UID SEARCH UNSEEN\r\n", server.DequeueRequest());
-        StringAssert.EndsWith("UID COPY 3,4,5 \"INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\"\r\n", server.DequeueRequest());
-        StringAssert.EndsWith("CREATE \"INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\"\r\n", server.DequeueRequest());
-        StringAssert.EndsWith("UID COPY 3,4,5 \"INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\"\r\n", server.DequeueRequest());
+        StringAssert.EndsWith("UID COPY 3,4,5 INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\r\n", server.DequeueRequest());
+        StringAssert.EndsWith("CREATE INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\r\n", server.DequeueRequest());
+        StringAssert.EndsWith("UID COPY 3,4,5 INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\r\n", server.DequeueRequest());
 
         if (subscription) {
-          StringAssert.EndsWith("SUBSCRIBE \"INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\"\r\n", server.DequeueRequest());
-          StringAssert.EndsWith("LSUB \"\" \"INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\"\r\n", server.DequeueRequest());
+          StringAssert.EndsWith("SUBSCRIBE INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\r\n", server.DequeueRequest());
+          StringAssert.EndsWith("LSUB \"\" INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\r\n", server.DequeueRequest());
         }
         else {
-          StringAssert.EndsWith("LIST \"\" \"INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\"\r\n", server.DequeueRequest());
+          StringAssert.EndsWith("LIST \"\" INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\r\n", server.DequeueRequest());
         }
       }
     }
@@ -1322,8 +1322,8 @@ namespace Smdn.Net.Imap4.WebClients {
         });
 
         StringAssert.EndsWith("UID SEARCH UNSEEN\r\n", server.DequeueRequest());
-        StringAssert.EndsWith("UID COPY 3,4,5 \"INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\"\r\n", server.DequeueRequest());
-        StringAssert.EndsWith("CREATE \"INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\"\r\n", server.DequeueRequest());
+        StringAssert.EndsWith("UID COPY 3,4,5 INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\r\n", server.DequeueRequest());
+        StringAssert.EndsWith("CREATE INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\r\n", server.DequeueRequest());
       }
     }
 

@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -46,8 +46,9 @@ namespace Smdn.Net.Imap4.Protocol.Client {
   //   * Protocol.ImapDataResponseType
   //       => handles server response types
 
+  [Serializable]
   public sealed class ImapDataResponseType : ImapStringEnum {
-    public static readonly ImapStringEnumList<ImapDataResponseType> AllTypes;
+    public static readonly ImapStringEnumSet<ImapDataResponseType> AllTypes;
 
     public static readonly ImapDataResponseType InvalidOrUnknown = new ImapDataResponseType("\r\n"); // XXX
 
@@ -81,8 +82,8 @@ namespace Smdn.Net.Imap4.Protocol.Client {
     // 7.4.2. FETCH Response
     public static readonly ImapDataResponseType Fetch       = new ImapDataResponseType("FETCH");
 
-    internal static readonly ImapStringEnumList<ImapDataResponseType> SizeStatusTypes
-      = new ImapStringEnumList<ImapDataResponseType>(new[] {
+    internal static readonly ImapStringEnumSet<ImapDataResponseType> SizeStatusTypes
+      = new ImapStringEnumSet<ImapDataResponseType>(new[] {
         ImapDataResponseType.Exists,
         ImapDataResponseType.Recent,
         ImapDataResponseType.Expunge,
@@ -159,7 +160,7 @@ namespace Smdn.Net.Imap4.Protocol.Client {
 
     static ImapDataResponseType()
     {
-      AllTypes = CreateDefinedConstantsList<ImapDataResponseType>();
+      AllTypes = CreateDefinedConstantsSet<ImapDataResponseType>();
     }
 
     internal ImapDataResponseType(string type)

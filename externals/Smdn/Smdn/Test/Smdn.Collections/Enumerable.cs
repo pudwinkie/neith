@@ -139,6 +139,15 @@ bool hasMango = fruits.Contains(fruit);
     }
 
     [Test]
+    public void TestEmpty()
+    {
+      Assert.AreEqual(0, Enumerable.Empty<int>().Count());
+      CollectionAssert.AreEquivalent(new int[0], Enumerable.Empty<int>());
+      CollectionAssert.AreEquivalent(GetEmptyEnumerator(), Enumerable.Empty<int>());
+      CollectionAssert.AreEquivalent(new int[0], Enumerable.Empty<int>().ToArray());
+    }
+
+    [Test]
     public void TestFirst()
     {
       Assert.AreEqual(0, ((IEnumerable<int>)new[] {0, 1, 2, 3, 4}).First());
@@ -306,6 +315,18 @@ IEnumerable<string> query = fruits.Where(fruit => fruit.Length < 6);
     }
 
     [Test]
+    public void TestToList()
+    {
+      var expected = new List<int>(new[] {0, 1, 2, 3, 4});
+
+      CollectionAssert.AreEqual(expected, ((IEnumerable<int>)new[] {0, 1, 2, 3, 4}).ToList());
+      CollectionAssert.AreEqual(expected, GetEnumerator().ToList());
+
+      Assert.AreNotSame(expected, ((IEnumerable<int>)expected).ToList());
+      CollectionAssert.AreEqual(expected, ((IEnumerable<int>)expected).ToList());
+    }
+
+    [Test]
     public void TestAll()
     {
       Assert.IsTrue (((IEnumerable<int>)new int[] {0, 1, 2, 3, 4}).All(delegate(int i){ return 0 <= i; }));
@@ -332,6 +353,41 @@ IEnumerable<string> query = fruits.Where(fruit => fruit.Length < 6);
                                       pet.Name.StartsWith("B"));
 
       Assert.IsFalse(allStartWithB);
+    }
+
+    [Test]
+    public void TestRange()
+    {
+      Assert.AreEqual(int.MaxValue, Enumerable.Range(int.MaxValue, 1).First());
+      Assert.AreEqual(1, Enumerable.Range(1, int.MaxValue).First());
+
+      CollectionAssert.AreEqual(new int[] {1, 4, 9, 16, 25, 36, 49, 64, 81, 100},
+                                Enumerable.Range(1, 10).Select(x => x * x).ToArray());
+    }
+
+    [Test]
+    public void TestRangeArgumentOutOfRange()
+    {
+      try {
+        Enumerable.Range(0, -1).First();
+        Assert.Fail("ArgumentOutOfRangeException not thrown");
+      }
+      catch (ArgumentOutOfRangeException) {
+      }
+
+      try {
+        Enumerable.Range(int.MaxValue, 2).First();
+        Assert.Fail("ArgumentOutOfRangeException not thrown");
+      }
+      catch (ArgumentOutOfRangeException) {
+      }
+
+      try {
+        Enumerable.Range(2, int.MaxValue).First();
+        Assert.Fail("ArgumentOutOfRangeException not thrown");
+      }
+      catch (ArgumentOutOfRangeException) {
+      }
     }
   }
 }

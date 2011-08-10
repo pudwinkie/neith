@@ -14,12 +14,12 @@ namespace Smdn.Net.Imap4.Protocol {
 
       Assert.IsTrue(ImapResponseCode.MetadataTooMany.Equals(ImapResponseCode.MetadataTooMany));
       Assert.IsTrue(ImapResponseCode.MetadataTooMany.Equals(ImapResponseCode.GetKnownOrCreate("METADATA",
-                                                                                              ImapData.CreateTextData(new ByteString("TOOMANY")))));
+                                                                                              ImapData.CreateTextData(ByteString.CreateImmutable("TOOMANY")))));
       Assert.IsFalse(ImapResponseCode.MetadataTooMany.Equals(ImapResponseCode.Metadata));
       Assert.IsFalse(ImapResponseCode.MetadataTooMany.Equals(ImapResponseCode.MetadataNoPrivate));
 
       Assert.IsTrue(ImapResponseCode.UidValidity.Equals(ImapResponseCode.GetKnownOrCreate("UIDVALIDITY",
-                                                                                          ImapData.CreateTextData(new ByteString("1")))));
+                                                                                          ImapData.CreateTextData(ByteString.CreateImmutable("1")))));
     }
 
     [Test]
@@ -30,11 +30,11 @@ namespace Smdn.Net.Imap4.Protocol {
 
       Assert.AreSame(ImapResponseCode.MetadataTooMany,
                      ImapResponseCode.GetKnownOrCreate("METADATA",
-                                                       ImapData.CreateTextData(new ByteString("TOOMANY"))));
+                                                       ImapData.CreateTextData(ByteString.CreateImmutable("TOOMANY"))));
 
       Assert.AreSame(ImapResponseCode.UidValidity,
                      ImapResponseCode.GetKnownOrCreate("UIDVALIDITY",
-                                                       ImapData.CreateTextData(new ByteString("1"))));
+                                                       ImapData.CreateTextData(ByteString.CreateImmutable("1"))));
     }
 
     [Test]
@@ -47,14 +47,44 @@ namespace Smdn.Net.Imap4.Protocol {
       Assert.IsTrue(ImapResponseCode.Alert == respCode);
 
       respCode = ImapResponseCode.GetKnownOrCreate("METADATA",
-                                                   ImapData.CreateTextData(new ByteString("TOOMANY")));
+                                                   ImapData.CreateTextData(ByteString.CreateImmutable("TOOMANY")));
 
       Assert.IsTrue(ImapResponseCode.MetadataTooMany == respCode);
 
       respCode = ImapResponseCode.GetKnownOrCreate("UIDVALIDITY",
-                                                   ImapData.CreateTextData(new ByteString("1")));
+                                                   ImapData.CreateTextData(ByteString.CreateImmutable("1")));
 
       Assert.IsTrue(ImapResponseCode.UidValidity == respCode);
+    }
+
+    [Test]
+    public void TestSerializeBinary1()
+    {
+      TestUtils.SerializeBinary(ImapResponseCode.Alert, delegate(ImapResponseCode deserialized) {
+        Assert.AreEqual(ImapResponseCode.Alert, deserialized);
+        Assert.AreEqual(ImapResponseCode.Alert.HasArguments, deserialized.HasArguments);
+      });
+    }
+
+    [Test]
+    public void TestSerializeBinary2()
+    {
+      TestUtils.SerializeBinary(ImapResponseCode.MetadataTooMany, delegate(ImapResponseCode deserialized) {
+        Assert.AreEqual(ImapResponseCode.MetadataTooMany, deserialized);
+        Assert.AreEqual(ImapResponseCode.MetadataTooMany.HasArguments, deserialized.HasArguments);
+      });
+    }
+
+    [Test]
+    public void TestSerializeBinary3()
+    {
+      var respCode = ImapResponseCode.GetKnownOrCreate("UIDVALIDITY",
+                                                       ImapData.CreateTextData(ByteString.CreateImmutable("1")));
+
+      TestUtils.SerializeBinary(respCode, delegate(ImapResponseCode deserialized) {
+        Assert.AreEqual(ImapResponseCode.UidValidity, deserialized);
+        Assert.AreEqual(ImapResponseCode.UidValidity.HasArguments, deserialized.HasArguments);
+      });
     }
   }
 }

@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,12 @@
 using System;
 using System.IO;
 
+#if NET_3_5
+using System.Linq;
+#else
+using Smdn.Collections;
+#endif
+
 using Smdn.Net.Imap4.Protocol;
 
 namespace Smdn.Net.Imap4.Protocol.Client {
@@ -42,24 +48,26 @@ namespace Smdn.Net.Imap4.Protocol.Client {
     {
       ClearUnsent();
 
-      var argCount = command.Arguments.Length + (command.CommandString == null ? 0 : 2);
-      var argIndex = 0;
-      var args = new ImapString[argCount];
+      var argCount = (command.CommandString == null ? 0 : 2) + command.Arguments.Length;
 
-      if (command.CommandString != null) {
-        args[argIndex++] = command.Tag;
-        args[argIndex++] = command.CommandString;
+      if (argFragments.Length < argCount)
+        argFragments = new ImapString[argCount];
+
+      if (command.CommandString == null) {
+        Array.Copy(command.Arguments, 0, argFragments, 0, command.Arguments.Length);
+      }
+      else {
+        argFragments[0] = command.Tag;
+        argFragments[1] = command.CommandString;
+
+        Array.Copy(command.Arguments, 0, argFragments, 2, command.Arguments.Length);
       }
 
-      for (var i = 0; i < command.Arguments.Length; i++, argIndex++) {
-        args[argIndex] = command.Arguments[i];
-      }
-
-      Enqueue(args);
-
-      Enqueue(Smdn.Formats.Octets.CRLF);
+      Enqueue(true, argFragments.Take(argCount));
 
       Send();
     }
+
+    private ImapString[] argFragments = new ImapString[8];
   }
 }

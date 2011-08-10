@@ -1,0 +1,6 @@
+Name: Smdn.Formats.Notations.Hatena
+Description: Smdn.Formats.Notations.Hatena
+Version: 0.1
+
+Requires: 
+Libs: -r:@expanded_libdir@/@PACKAGE@/Smdn.Formats.Notations.Hatena.dll

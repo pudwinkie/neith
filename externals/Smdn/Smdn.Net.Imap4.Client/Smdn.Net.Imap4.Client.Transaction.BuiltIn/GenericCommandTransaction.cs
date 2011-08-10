@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -36,19 +36,14 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
       this.command = command;
     }
 
-    protected override ProcessTransactionDelegate Reset()
-    {
-      return ProcessGenericCommand;
-    }
-
-    private void ProcessGenericCommand()
+    protected override ImapCommand PrepareCommand()
     {
       ImapString arguments;
 
       if (RequestArguments.TryGetValue("arguments", out arguments))
-        SendCommand(command, ProcessReceiveResponse, arguments);
+        return Connection.CreateCommand(command, arguments);
       else
-        SendCommand(command, ProcessReceiveResponse);
+        return Connection.CreateCommand(command);
     }
 
     protected override void OnDataResponseReceived(ImapDataResponse data)

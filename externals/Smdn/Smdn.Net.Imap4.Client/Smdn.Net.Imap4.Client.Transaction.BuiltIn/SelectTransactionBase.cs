@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -30,8 +30,12 @@ using Smdn.Net.Imap4.Protocol.Client;
 
 namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
   internal abstract class SelectTransactionBase : ImapTransactionBase, IImapExtension {
-    ImapCapability IImapExtension.RequiredCapability {
-      get { return selectParametersCapabilityRequirement; }
+    IEnumerable<ImapCapability> IImapExtension.RequiredCapabilities {
+      get
+      {
+        if (selectParametersCapabilityRequirement != null)
+          yield return selectParametersCapabilityRequirement;
+      }
     }
 
     protected SelectTransactionBase(ImapConnection connection, ImapMailbox selectingMailbox, ImapCapability selectParametersCapabilityRequirement)
@@ -40,23 +44,6 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
       this.selectingMailbox = selectingMailbox;
       this.selectParametersCapabilityRequirement = selectParametersCapabilityRequirement;
     }
-
-    protected override ProcessTransactionDelegate Reset()
-    {
-#if DEBUG
-      if (!RequestArguments.ContainsKey("mailbox name"))
-        return ProcessArgumentNotSetted;
-      else
-#endif
-        return ProcessSelect;
-    }
-
-#if DEBUG
-    private void ProcessArgumentNotSetted()
-    {
-      FinishError(ImapCommandResultCode.RequestError, "arguments 'mailbox name' must be setted");
-    }
-#endif
 
     // 6.3.1. SELECT Command
     //    Arguments:  mailbox name
@@ -77,19 +64,24 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     //                NO - examine failure, now in authenticated state: no
     //                     such mailbox, can't access mailbox
     //                BAD - command unknown or arguments invalid
-    private void ProcessSelect()
+    protected override ImapCommand PrepareCommand()
     {
+#if DEBUG
+      if (!RequestArguments.ContainsKey("mailbox name")) {
+        FinishError(ImapCommandResultCode.RequestError, "arguments 'mailbox name' must be setted");
+        return null;
+      }
+#endif
+
       ImapString selectParameters;
 
       if (RequestArguments.TryGetValue("select parameters", out selectParameters))
-        SendCommand((this is SelectTransaction) ? "SELECT" : "EXAMINE",
-                    ProcessReceiveResponse,
-                    RequestArguments["mailbox name"],
-                    selectParameters);
+        return Connection.CreateCommand((this is SelectTransaction) ? "SELECT" : "EXAMINE",
+                                        RequestArguments["mailbox name"],
+                                        selectParameters);
       else
-        SendCommand((this is SelectTransaction) ? "SELECT" : "EXAMINE",
-                    ProcessReceiveResponse,
-                    RequestArguments["mailbox name"]);
+        return Connection.CreateCommand((this is SelectTransaction) ? "SELECT" : "EXAMINE",
+                                        RequestArguments["mailbox name"]);
     }
 
     protected override void OnDataResponseReceived(ImapDataResponse data)

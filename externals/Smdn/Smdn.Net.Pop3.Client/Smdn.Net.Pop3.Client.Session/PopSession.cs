@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -72,7 +72,7 @@ namespace Smdn.Net.Pop3.Client.Session {
       {
         CheckDisposed();
         if (value < -1)
-          throw new ArgumentOutOfRangeException("TransactionTimeout", value, "must be greater than or equals to -1");
+          throw ExceptionUtils.CreateArgumentMustBeGreaterThanOrEqualTo(-1, "TransactionTimeout", value);
         transactionTimeout = value;
       }
     }
@@ -94,33 +94,81 @@ namespace Smdn.Net.Pop3.Client.Session {
      * construction / destruction
      */
     public PopSession(string host)
-      : this(host, PopDefaultPorts.Pop, DefaultTransactionTimeout, null)
+      : this(host,
+             PopDefaultPorts.Pop,
+             DefaultTransactionTimeout,
+             DefaultSendTimeout,
+             DefaultReceiveTimeout,
+             null)
     {
     }
 
-    public PopSession(string host, int port)
-      : this(host, port, DefaultTransactionTimeout, null)
+    public PopSession(string host,
+                      int port)
+      : this(host,
+             port,
+             DefaultTransactionTimeout,
+             DefaultSendTimeout,
+             DefaultReceiveTimeout,
+             null)
     {
     }
 
-    public PopSession(string host, int port, int transactionTimeout)
-      : this(host, port, transactionTimeout, null)
+    public PopSession(string host,
+                      int port,
+                      int transactionTimeout)
+      : this(host,
+             port,
+             transactionTimeout,
+             DefaultSendTimeout,
+             DefaultReceiveTimeout,
+             null)
     {
     }
 
-    public PopSession(string host, int port, UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
-      : this(host, port, DefaultTransactionTimeout, createAuthenticatedStreamCallback)
+    public PopSession(string host,
+                      int port,
+                      UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
+      : this(host,
+             port,
+             DefaultTransactionTimeout,
+             DefaultSendTimeout,
+             DefaultReceiveTimeout,
+             createAuthenticatedStreamCallback)
     {
     }
 
-    public PopSession(string host, int port, int transactionTimeout, UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
+    public PopSession(string host,
+                      int port,
+                      int transactionTimeout,
+                      UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
+      : this(host,
+             port,
+             transactionTimeout,
+             DefaultSendTimeout,
+             DefaultReceiveTimeout,
+             createAuthenticatedStreamCallback)
+    {
+    }
+
+    public PopSession(string host,
+                      int port,
+                      int transactionTimeout,
+                      int sendTimeout,
+                      int receiveTimeout,
+                      UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
     {
       if (transactionTimeout < -1)
-        throw new ArgumentOutOfRangeException("transactionTimeout", transactionTimeout, "must be greater than or equals to -1");
+        throw ExceptionUtils.CreateArgumentMustBeGreaterThanOrEqualTo(-1, "transactionTimeout", transactionTimeout);
 
       this.transactionTimeout = transactionTimeout;
 
-      Connect(host, port, createAuthenticatedStreamCallback);
+      Connect(host,
+              port,
+              transactionTimeout,
+              sendTimeout,
+              receiveTimeout,
+              createAuthenticatedStreamCallback);
     }
 
     public override string ToString()
@@ -133,6 +181,8 @@ namespace Smdn.Net.Pop3.Client.Session {
     }
 
     private const int DefaultTransactionTimeout = Timeout.Infinite;
+    private const int DefaultSendTimeout = Timeout.Infinite;
+    private const int DefaultReceiveTimeout = Timeout.Infinite;
 
     private bool disposed = false;
     private int transactionTimeout = DefaultTransactionTimeout;
@@ -154,7 +204,7 @@ namespace Smdn.Net.Pop3.Client.Session {
       get { CheckDisposed(); return authority == null ? null : authority.Uri; }
     }
 
-    public PopCapabilityList ServerCapabilities {
+    public PopCapabilitySet ServerCapabilities {
       get { CheckDisposed(); return serverCapabilities; }
     }
 
@@ -170,17 +220,28 @@ namespace Smdn.Net.Pop3.Client.Session {
     private PopConnection connection = null;
     private PopSessionState state = PopSessionState.NotConnected;
     private PopUriBuilder authority = new PopUriBuilder();
-    private PopCapabilityList serverCapabilities = new PopCapabilityList(true, new PopCapability[0]);
+    private PopCapabilitySet serverCapabilities = PopCapabilitySet.CreateReadOnlyEmpty();
     private string timestamp = null;
 
     /*
      * transaction methods : connect/disconnect
      */
-    private void Connect(string host, int port, UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
+    private void Connect(string host,
+                         int port,
+                         int connectTimeout,
+                         int sendTimeout,
+                         int receiveTimeout,
+                         UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
     {
       TraceInfo("connecting");
 
-      this.connection = new PopConnection(host, port, createAuthenticatedStreamCallback);
+      this.connection = new PopConnection(host,
+                                          port,
+                                          connectTimeout,
+                                          createAuthenticatedStreamCallback);
+
+      this.connection.SendTimeout = sendTimeout;
+      this.connection.ReceiveTimeout = receiveTimeout;
 
       TraceInfo("connected");
 
@@ -199,7 +260,7 @@ namespace Smdn.Net.Pop3.Client.Session {
       }
 
       if (ApopAvailable)
-        TraceInfo("APOP is available, timestamp is {0}", timestamp);
+        TraceInfo(string.Concat("APOP is available, timestamp is ", timestamp));
     }
 
     /// <summary>disconnects session</summary>
@@ -292,14 +353,14 @@ namespace Smdn.Net.Pop3.Client.Session {
     /// <remarks>valid in any state</remarks>
     public PopCommandResult Capa()
     {
-      PopCapabilityList discard;
+      PopCapabilitySet discard;
 
       return Capa(out discard);
     }
 
     /// <summary>sends CAPA command</summary>
     /// <remarks>valid in any state</remarks>
-    public PopCommandResult Capa(out PopCapabilityList capabilities)
+    public PopCommandResult Capa(out PopCapabilitySet capabilities)
     {
       RejectNonConnectedState();
 
@@ -360,9 +421,12 @@ namespace Smdn.Net.Pop3.Client.Session {
     /*
      * methods for internal state management
      */
-    internal void SetServerCapabilities(PopCapabilityList newCapabilities)
+    internal void SetServerCapabilities(PopCapabilitySet newCapabilities)
     {
-      serverCapabilities = new PopCapabilityList(true, newCapabilities);
+      if (newCapabilities == null)
+        serverCapabilities = PopCapabilitySet.CreateReadOnlyEmpty();
+      else
+        serverCapabilities = new PopCapabilitySet(true, newCapabilities);
     }
 
     private void TransitStateTo(PopSessionState newState)
@@ -450,6 +514,12 @@ namespace Smdn.Net.Pop3.Client.Session {
     /*
      * tracing
      */
+    [System.Diagnostics.Conditional("TRACE")]
+    private void TraceInfo(string message)
+    {
+      Trace.Log(this, message);
+    }
+
     [System.Diagnostics.Conditional("TRACE")]
     private void TraceInfo(string format, params object[] arguments)
     {

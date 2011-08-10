@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@
 // THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 
 using Smdn.Net.Imap4.Protocol;
 using Smdn.Net.Imap4.Protocol.Client;
@@ -36,18 +37,13 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     ImapTransactionBase<ImapCommandResult<Tuple<ImapCollationAlgorithm, ImapCollationAlgorithm[]>>>,
     IImapExtension
   {
-    ImapCapability IImapExtension.RequiredCapability {
-      get { return ImapCapability.I18NLevel2; }
+    IEnumerable<ImapCapability> IImapExtension.RequiredCapabilities {
+      get { yield return ImapCapability.I18NLevel2; }
     }
 
     public ComparatorTransaction(ImapConnection connection)
       : base(connection)
     {
-    }
-
-    protected override ProcessTransactionDelegate Reset()
-    {
-      return ProcessComparator;
     }
 
     /*
@@ -58,15 +54,16 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
      *               NO - No matching comparator found
      *               BAD - Arguments invalid
      */
-    private void ProcessComparator()
+    protected override ImapCommand PrepareCommand()
     {
       ImapString comparatorOrder;
 
       // COMPARATOR
       if (RequestArguments.TryGetValue("comparator order arguments", out comparatorOrder))
-        SendCommand("COMPARATOR", ProcessReceiveResponse, comparatorOrder);
+        return Connection.CreateCommand("COMPARATOR",
+                                        comparatorOrder);
       else
-        SendCommand("COMPARATOR", ProcessReceiveResponse);
+        return Connection.CreateCommand("COMPARATOR");
     }
 
     protected override void OnDataResponseReceived(ImapDataResponse data)

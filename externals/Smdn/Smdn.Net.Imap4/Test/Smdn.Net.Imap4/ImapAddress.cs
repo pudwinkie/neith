@@ -23,10 +23,10 @@ namespace Smdn.Net.Imap4 {
     [Test]
     public void TestToMailAddressWithoutDisplayName()
     {
-      var address = (new ImapAddress(null, null, "santamarta", "mail.invisiblefulmoon.net")).ToMailAddress();
+      var address = (new ImapAddress(null, null, "santamarta", "smdn.jp")).ToMailAddress();
 
       Assert.AreEqual("santamarta", address.User);
-      Assert.AreEqual("mail.invisiblefulmoon.net", address.Host);
+      Assert.AreEqual("smdn.jp", address.Host);
     }
 
     [Test]

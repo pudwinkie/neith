@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -31,11 +31,6 @@ namespace Smdn.Net.Pop3.Client.Transaction.BuiltIn {
     public SendCommandTransactionBase(PopConnection connection)
       : base(connection)
     {
-    }
-
-    protected override ProcessTransactionDelegate Reset()
-    {
-      return ProcessCommand;
     }
 
     // 4. The AUTHORIZATION State
@@ -67,14 +62,14 @@ namespace Smdn.Net.Pop3.Client.Transaction.BuiltIn {
     //        +OK
     //        -ERR some deleted messages not removed
 
-    private void ProcessCommand()
+    protected override PopCommand PrepareCommand()
     {
       if (this is NoOpTransaction)
-        SendCommand("NOOP", ProcessReceiveResponse);
-      else if (this is RsetTransaction)
-        SendCommand("RSET", ProcessReceiveResponse);
+        return new PopCommand("NOOP");
       else if (this is QuitTransaction)
-        SendCommand("QUIT", ProcessReceiveResponse);
+        return new PopCommand("QUIT");
+      else /*if (this is RsetTransaction)*/
+        return new PopCommand("RSET");
     }
   }
 }

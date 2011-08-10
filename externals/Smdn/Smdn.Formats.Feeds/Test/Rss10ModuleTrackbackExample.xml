@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?> 
+
+<rdf:RDF 
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+  xmlns:co="http://purl.org/rss/1.0/modules/company/"
+  xmlns:ti="http://purl.org/rss/1.0/modules/textinput/"
+  xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/"
+  xmlns="http://purl.org/rss/1.0/"
+> 
+
+  <channel rdf:about="http://meerkat.oreillynet.com/?_fl=rss1.0">
+    <title>Meerkat</title>
+    <link>http://meerkat.oreillynet.com</link>
+    <description>Meerkat: An Open Wire Service</description>
+    <dc:publisher>The O'Reilly Network</dc:publisher>
+    <dc:creator>Rael Dornfest (mailto:rael@oreilly.com)</dc:creator>
+    <dc:rights>Copyright &#169; 2000 O'Reilly &amp; Associates, Inc.</dc:rights>
+    <dc:date>2000-01-01T12:00+00:00</dc:date>
+    <sy:updatePeriod>hourly</sy:updatePeriod>
+    <sy:updateFrequency>2</sy:updateFrequency>
+    <sy:updateBase>2000-01-01T12:00+00:00</sy:updateBase>
+
+    <items>
+      <rdf:Seq>
+        <rdf:li resource="http://bar.com/weblog/rss_plus_trackback.html" />
+      </rdf:Seq>
+    </items>
+
+  </channel>
+
+	<!-- beginning of RSS document omitted for brevity -->
+	<item rdf:about="http://bar.com/weblog/rss_plus_trackback.html">
+		<title>RSS + TrackBack = Fun!</title>
+		<link>http://bar.com/weblog/rss_plus_trackback.html</link>
+		<description>I just found out that I can put TrackBack data in my RSS feed. How cool is that!?</description>
+		<trackback:ping rdf:resource="http://bar.com/tb.cgi?tb_id=rssplustrackback"/>
+		<trackback:about rdf:resource="http://foo.com/trackback/tb.cgi?tb_id=20020923"/>
+	</item>
+	<!-- the rest of the RSS document continues below -->
+
+</rdf:RDF>

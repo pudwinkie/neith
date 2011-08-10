@@ -1,0 +1,9 @@
+﻿<CustomWindow:StandardWindow x:Class="CustomWindowDemo.DemoWindow2"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:CustomWindow="clr-namespace:CustomWindow;assembly=CustomWindow"
+    Caption="Window Header" Title="Taskbar text"
+    MinimizeButtonState="None" MaximizeButtonState="Disabled"
+    Height="100" Width="300">
+  <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center">Window buttons hidden or disabled</TextBlock>
+</CustomWindow:StandardWindow>

@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -33,23 +33,6 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     {
     }
 
-    protected override ProcessTransactionDelegate Reset()
-    {
-#if DEBUG
-      if (!RequestArguments.ContainsKey("mailbox name"))
-        return ProcessArgumentNotSetted;
-#endif
-
-      return ProcessSubscribe;
-    }
-
-#if DEBUG
-    private void ProcessArgumentNotSetted()
-    {
-      FinishError(ImapCommandResultCode.RequestError, "arguments 'mailbox name' must be setted");
-    }
-#endif
-
     // 6.3.6. SUBSCRIBE Command
     //    Arguments:  mailbox
     //    Responses:  no specific responses for this command
@@ -63,16 +46,21 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     //    Result:     OK - unsubscribe completed
     //                NO - unsubscribe failure: can't unsubscribe that name
     //                BAD - command unknown or arguments invalid
-    private void ProcessSubscribe()
+    protected override ImapCommand PrepareCommand()
     {
+ #if DEBUG
+      if (!RequestArguments.ContainsKey("mailbox name")) {
+        FinishError(ImapCommandResultCode.RequestError, "arguments 'mailbox name' must be setted");
+        return null;
+      }
+#endif
+
       if (this is SubscribeTransaction)
-        SendCommand("SUBSCRIBE",
-                    ProcessReceiveResponse,
-                    RequestArguments["mailbox name"]);
-      else if (this is UnsubscribeTransaction)
-        SendCommand("UNSUBSCRIBE",
-                    ProcessReceiveResponse,
-                    RequestArguments["mailbox name"]);
+        return Connection.CreateCommand("SUBSCRIBE",
+                                        RequestArguments["mailbox name"]);
+      else /*if (this is UnsubscribeTransaction)*/
+        return Connection.CreateCommand("UNSUBSCRIBE",
+                                        RequestArguments["mailbox name"]);
     }
   }
 }

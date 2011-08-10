@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Formats.Thbgm.Tests-netfx4.0", "Smdn.Formats.Thbgm.Tests-netfx4.0.csproj", "{3DB11281-D0CA-4DEA-9123-E8645DC1AC42}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn-netfx4.0", "..\..\Smdn\Smdn-netfx4.0.csproj", "{3FDF8CFA-B168-466F-B303-AEDDBED87BB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Core.Standards-netfx4.0", "..\..\Smdn.Core.Standards\Smdn.Core.Standards-netfx4.0.csproj", "{B5EDEF88-678E-427E-9281-325417D7EAC9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Core.BinaryFormats-netfx4.0", "..\..\Smdn.Core.BinaryFormats\Smdn.Core.BinaryFormats-netfx4.0.csproj", "{E59F49F4-E677-42AD-A04F-226AB8F62637}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Formats.Riff-netfx4.0", "..\..\Smdn.Formats.Riff\Smdn.Formats.Riff-netfx4.0.csproj", "{919D5542-D9C9-426D-A24D-ED5E86CD68E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Formats.Thbgm-netfx4.0", "..\Smdn.Formats.Thbgm-netfx4.0.csproj", "{3BE4A703-06FB-4F24-A047-4685AD541D09}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3BE4A703-06FB-4F24-A047-4685AD541D09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BE4A703-06FB-4F24-A047-4685AD541D09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BE4A703-06FB-4F24-A047-4685AD541D09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BE4A703-06FB-4F24-A047-4685AD541D09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DB11281-D0CA-4DEA-9123-E8645DC1AC42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DB11281-D0CA-4DEA-9123-E8645DC1AC42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DB11281-D0CA-4DEA-9123-E8645DC1AC42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DB11281-D0CA-4DEA-9123-E8645DC1AC42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FDF8CFA-B168-466F-B303-AEDDBED87BB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FDF8CFA-B168-466F-B303-AEDDBED87BB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FDF8CFA-B168-466F-B303-AEDDBED87BB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FDF8CFA-B168-466F-B303-AEDDBED87BB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{919D5542-D9C9-426D-A24D-ED5E86CD68E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{919D5542-D9C9-426D-A24D-ED5E86CD68E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{919D5542-D9C9-426D-A24D-ED5E86CD68E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{919D5542-D9C9-426D-A24D-ED5E86CD68E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5EDEF88-678E-427E-9281-325417D7EAC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5EDEF88-678E-427E-9281-325417D7EAC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5EDEF88-678E-427E-9281-325417D7EAC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5EDEF88-678E-427E-9281-325417D7EAC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E59F49F4-E677-42AD-A04F-226AB8F62637}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E59F49F4-E677-42AD-A04F-226AB8F62637}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E59F49F4-E677-42AD-A04F-226AB8F62637}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E59F49F4-E677-42AD-A04F-226AB8F62637}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Smdn.Formats.Thbgm.Tests-netfx4.0.csproj
+	EndGlobalSection
+EndGlobal

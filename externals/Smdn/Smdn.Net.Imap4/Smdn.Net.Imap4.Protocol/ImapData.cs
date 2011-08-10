@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,12 +24,14 @@
 
 using System;
 using System.IO;
+using System.Runtime.Serialization;
 
 using Smdn.IO;
 
 namespace Smdn.Net.Imap4.Protocol {
   // handles '4. Data Formats'
-  public sealed class ImapData {
+  [Serializable]
+  public sealed class ImapData : ISerializable {
     public ImapDataFormat Format {
       get { return format; }
     }
@@ -42,6 +44,47 @@ namespace Smdn.Net.Imap4.Protocol {
     private ImapData(ImapDataFormat format)
     {
       this.format = format;
+    }
+
+    private ImapData(SerializationInfo info, StreamingContext context)
+    {
+      this.format = (ImapDataFormat)info.GetValue("format", typeof(ImapDataFormat));
+
+      switch (this.format) {
+        case ImapDataFormat.List:
+          this.list = (ImapData[])info.GetValue("list", typeof(ImapData[]));
+          break;
+
+        case ImapDataFormat.Text:
+          var t = (byte[])info.GetValue("text", typeof(byte[]));
+          this.text = ByteString.CreateImmutable(t); // TODO: chunked
+          break;
+
+        case ImapDataFormat.Nil:
+        case ImapDataFormat.None:
+        default:
+          break;
+      }
+    }
+
+    public void GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+      info.AddValue("format", format);
+
+      switch (format) {
+        case ImapDataFormat.List:
+          info.AddValue("list", list);
+          break;
+
+        case ImapDataFormat.Text:
+          info.AddValue("text", GetTextAsByteArray());
+          break;
+
+        case ImapDataFormat.Nil:
+        case ImapDataFormat.None:
+        default:
+          break;
+      }
     }
 
     public static ImapData CreateTextData(ByteString text)
@@ -103,7 +146,7 @@ namespace Smdn.Net.Imap4.Protocol {
       if (textStream == null)
         return text.ToString();
       else
-        return new ByteString(InternalGetTextAsByteArray()).ToString();
+        return ByteString.CreateImmutable(InternalGetTextAsByteArray()).ToString();
     }
 
     public ByteString GetTextAsByteString()
@@ -113,7 +156,7 @@ namespace Smdn.Net.Imap4.Protocol {
       if (textStream == null)
         return text;
       else
-        return new ByteString(InternalGetTextAsByteArray());
+        return ByteString.CreateImmutable(InternalGetTextAsByteArray());
     }
 
     [CLSCompliant(false)]
@@ -139,7 +182,7 @@ namespace Smdn.Net.Imap4.Protocol {
       CheckIsText();
 
       if (textStream == null)
-        return text.ByteArray;
+        return text.ToArray();
       else
         return InternalGetTextAsByteArray();
     }
@@ -166,7 +209,10 @@ namespace Smdn.Net.Imap4.Protocol {
       CheckIsText();
 
       if (textStream == null)
-        return new MemoryStream(text.ByteArray);
+        return new MemoryStream(text.Segment.Array,
+                                text.Segment.Offset,
+                                text.Segment.Count,
+                                false);
       else
         return textStream;
     }
@@ -186,7 +232,8 @@ namespace Smdn.Net.Imap4.Protocol {
       CheckIsText();
 
       if (textStream == null) {
-        Buffer.BlockCopy(text.ByteArray, 0, buffer, offset, count);
+        Buffer.BlockCopy(text.Segment.Array, text.Segment.Offset,
+                         buffer, offset, count);
       }
       else {
         try {
@@ -204,7 +251,11 @@ namespace Smdn.Net.Imap4.Protocol {
       CheckIsText();
 
       if (textStream == null) {
-        buffer = text.ByteArray;
+        if (buffer == null || buffer.Length < text.Length)
+          buffer = new byte[text.Length];
+
+        Buffer.BlockCopy(text.Segment.Array, text.Segment.Offset,
+                         buffer, 0, text.Length);
 
         return text.Length;
       }

@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,8 @@
 
 using System;
 using System.Collections.Generic;
+
+using Smdn.Net.Imap4.Protocol;
 
 namespace Smdn.Net.Imap4 {
   // enum types:
@@ -47,10 +49,11 @@ namespace Smdn.Net.Imap4 {
   //       => handles server response types
 
   public sealed class ImapMessageFlag : ImapStringEnum, IImapExtension {
-    public static readonly ImapMessageFlagList AllFlags;
+    public static readonly ImapMessageFlagSet AllFlags;
 
-    internal static readonly ImapMessageFlagList FetchFlags;
-    internal static readonly ImapMessageFlagList PermittedFlags;
+    internal static readonly ImapMessageFlagSet FetchFlags;
+    internal static readonly ImapMessageFlagSet PermittedFlags;
+    internal static readonly ImapMessageFlagSet NonApplicableFlags;
 
     /*
      * RFC 3501 INTERNET MESSAGE ACCESS PROTOCOL - VERSION 4rev1
@@ -67,9 +70,9 @@ namespace Smdn.Net.Imap4 {
 
     static ImapMessageFlag()
     {
-      AllFlags = new ImapMessageFlagList(true, GetDefinedConstants<ImapMessageFlag>());
+      AllFlags = new ImapMessageFlagSet(true, GetDefinedConstants<ImapMessageFlag>());
 
-      FetchFlags = new ImapMessageFlagList(true, new[] {
+      FetchFlags = new ImapMessageFlagSet(true, new[] {
         ImapMessageFlag.Answered,
         ImapMessageFlag.Flagged,
         ImapMessageFlag.Deleted,
@@ -78,7 +81,7 @@ namespace Smdn.Net.Imap4 {
         ImapMessageFlag.Recent,
       });
 
-      PermittedFlags = new ImapMessageFlagList(true, new[] {
+      PermittedFlags = new ImapMessageFlagSet(true, new[] {
         ImapMessageFlag.Answered,
         ImapMessageFlag.Flagged,
         ImapMessageFlag.Deleted,
@@ -86,12 +89,19 @@ namespace Smdn.Net.Imap4 {
         ImapMessageFlag.Draft,
         ImapMessageFlag.AllowedCreateKeywords,
       });
+
+      NonApplicableFlags = new ImapMessageFlagSet(true, new[] {
+        ImapMessageFlag.Recent,
+        ImapMessageFlag.AllowedCreateKeywords,
+      });
     }
 
     internal static ImapMessageFlag GetKnownOrCreate(string flag)
     {
-      if (AllFlags.Has(flag))
-        return AllFlags[flag];
+      ImapMessageFlag f;
+
+      if (AllFlags.TryGet(flag, out f))
+        return f;
 
       /*
       if (flag.StartsWith(@"\"))
@@ -100,23 +110,6 @@ namespace Smdn.Net.Imap4 {
 
       return new ImapMessageFlag(flag);
     }
-
-    // atom            = 1*ATOM-CHAR
-    // ATOM-CHAR       = <any CHAR except atom-specials>
-    // atom-specials   = "(" / ")" / "{" / SP / CTL / list-wildcards /
-    //                   quoted-specials / resp-specials
-    // flag-keyword    = atom
-    // list-wildcards  = "%" / "*"
-    // quoted-specials = DQUOTE / "\"
-    // resp-specials   = "]"
-    // CTL ::= <any ASCII control character and DEL,
-    //          0x00 - 0x1f, 0x7f>
-    internal static readonly char[] InvalidKeywordChars = new[] {
-      '(', ')', '{', ' ', '%', '*', '"', '\\', ']',
-      '\x00', '\x01', '\x02', '\x03', '\x04', '\x05', '\x06', '\x07', '\x08', '\x09', '\x0a', '\x0b', '\x0c', '\x0d', '\x0e', '\x0f',
-      '\x10', '\x11', '\x12', '\x13', '\x14', '\x15', '\x16', '\x17', '\x18', '\x19', '\x1a', '\x1b', '\x1c', '\x1d', '\x1e', '\x1f',
-      '\x7f',
-    };
 
     public static bool IsValidKeyword(string keyword)
     {
@@ -144,6 +137,12 @@ namespace Smdn.Net.Imap4 {
 
     private static bool IsValidKeyword(string keyword, out string errorReason)
     {
+      /*
+       * flag            = "\Answered" / "\Flagged" / "\Deleted" /
+       *                   "\Seen" / "\Draft" / flag-keyword / flag-extension
+       * flag-extension  = "\" atom
+       * flag-keyword    = atom
+       */
       errorReason = null;
 
       if (keyword.Length == 0) {
@@ -151,7 +150,7 @@ namespace Smdn.Net.Imap4 {
         return false;
       }
 
-      var index = keyword.IndexOfAny(InvalidKeywordChars);
+      var index = ImapOctets.IndexOfNonAtomChar(keyword);
 
       if (0 <= index) {
         errorReason = string.Format("keyword '{0}' contains invalid charactor at {1}", keyword, index);
@@ -161,8 +160,12 @@ namespace Smdn.Net.Imap4 {
       return true;
     }
 
-    ImapCapability IImapExtension.RequiredCapability {
-      get { return requiredCapability; }
+    IEnumerable<ImapCapability> IImapExtension.RequiredCapabilities {
+      get
+      {
+        if (requiredCapability != null)
+          yield return requiredCapability;
+      }
     }
 
     public bool IsSystemFlag {
@@ -190,6 +193,6 @@ namespace Smdn.Net.Imap4 {
       this.requiredCapability = requiredCapability;
     }
 
-    private /*readonly*/ ImapCapability requiredCapability;
+    private readonly ImapCapability requiredCapability;
   }
 }

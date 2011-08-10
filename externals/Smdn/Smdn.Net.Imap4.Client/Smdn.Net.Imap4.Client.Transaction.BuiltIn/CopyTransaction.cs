@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -35,25 +35,6 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
       this.uid = uid;
     }
 
-    protected override ProcessTransactionDelegate Reset()
-    {
-#if DEBUG
-      if (!RequestArguments.ContainsKey("mailbox name"))
-        return ProcessArgumentNotSetted;
-      else if (!RequestArguments.ContainsKey("sequence set"))
-        return ProcessArgumentNotSetted;
-      else
-#endif
-        return ProcessCopy;
-    }
-
-#if DEBUG
-    private void ProcessArgumentNotSetted()
-    {
-      FinishError(ImapCommandResultCode.RequestError, "arguments 'mailbox name' and 'sequence set' must be setted");
-    }
-#endif
-
     // 6.4.7. COPY Command
     //    Arguments:  sequence set
     //                mailbox name
@@ -62,13 +43,20 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     //                NO - copy error: can't copy those messages or to that
     //                     name
     //                BAD - command unknown or arguments invalid
-    private void ProcessCopy()
+    protected override ImapCommand PrepareCommand()
     {
+#if DEBUG
+      if (!RequestArguments.ContainsKey("mailbox name") ||
+          !RequestArguments.ContainsKey("sequence set")) {
+        FinishError(ImapCommandResultCode.RequestError, "arguments 'mailbox name' and 'sequence set' must be setted");
+        return null;
+      }
+#endif
+
       // COPY / UID COPY
-      SendCommand(uid ? "UID COPY" : "COPY",
-                  ProcessReceiveResponse,
-                  RequestArguments["sequence set"],
-                  RequestArguments["mailbox name"]);
+      return Connection.CreateCommand(uid ? "UID COPY" : "COPY",
+                                      RequestArguments["sequence set"],
+                                      RequestArguments["mailbox name"]);
     }
 
     protected override void OnTaggedStatusResponseReceived(ImapTaggedStatusResponse tagged)

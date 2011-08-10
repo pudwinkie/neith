@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2009-2010 smdn
+// Copyright (c) 2009-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -33,19 +33,23 @@ namespace Smdn.IO {
     }
 
     public override bool CanSeek {
-      get { CheckDisposed(); return true; }
+      get { return !IsClosed /*&& true*/; }
     }
 
     public override bool CanRead {
-      get { CheckDisposed(); return true; }
+      get { return !IsClosed /*&& true*/; }
     }
 
     public override bool CanWrite {
-      get { CheckDisposed(); return false; }
+      get { return /*!IsClosed &&*/ false; }
     }
 
     public override bool CanTimeout {
-      get { CheckDisposed(); return false; }
+      get { return false; }
+    }
+
+    private bool IsClosed {
+      get { return stream == null; }
     }
 
     public override long Length {
@@ -59,7 +63,7 @@ namespace Smdn.IO {
         CheckDisposed();
 
         if (value < 0)
-          throw new ArgumentOutOfRangeException("Position", value, "must be zero or positive number");
+          throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("Position", value);
 
         position = value;
       }
@@ -78,12 +82,12 @@ namespace Smdn.IO {
       if (innerStream == null)
         throw new ArgumentNullException("innerStream");
       else if (!innerStream.CanSeek)
-        throw new ArgumentException("stream must be seekable", "innerStream");
+        throw ExceptionUtils.CreateArgumentMustBeSeekableStream("innerStream");
       else if (!innerStream.CanRead)
-        throw new ArgumentException("stream must be readable", "innerStream");
+        throw ExceptionUtils.CreateArgumentMustBeReadableStream("innerStream");
 
       if (blockSize <= 0)
-        throw new ArgumentOutOfRangeException("blockSize", blockSize, "must be non-zero positive number");
+        throw ExceptionUtils.CreateArgumentMustBeNonZeroPositive("blockSize", blockSize);
 
       this.stream = innerStream;
       this.blockSize = blockSize;
@@ -105,7 +109,7 @@ namespace Smdn.IO {
     {
       CheckDisposed();
 
-      throw WriteNotSupportedException();
+      throw ExceptionUtils.CreateNotSupportedSettingStreamLength();
     }
 
     public override long Seek(long offset, SeekOrigin origin)
@@ -124,12 +128,12 @@ namespace Smdn.IO {
 
         case SeekOrigin.Begin:
           if (offset < 0L)
-            throw new IOException("Attempted to seek before start of stream.");
+            throw ExceptionUtils.CreateIOAttemptToSeekBeforeStartOfStream();
           position = offset;
           return position;
 
         default:
-          throw new ArgumentException(string.Format("unsupported seek origin {0}", origin), "origin");
+          throw ExceptionUtils.CreateArgumentMustBeValidEnumValue("origin", origin);
       }
     }
 
@@ -156,11 +160,11 @@ namespace Smdn.IO {
       if (buffer == null)
         throw new ArgumentNullException("buffer");
       if (offset < 0)
-        throw new ArgumentOutOfRangeException("offset", offset, "must be zero or positive number");
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("offset", offset);
       if (count < 0)
-        throw new ArgumentOutOfRangeException("count", count, "must be zero or positive number");
-      if (buffer.Length < offset + count)
-        throw new ArgumentException("invalid range");
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("count", count);
+      if (buffer.Length - count < offset)
+        throw ExceptionUtils.CreateArgumentAttemptToAccessBeyondEndOfArray("offset", buffer, offset, count);
 
       var ret = 0;
 
@@ -215,32 +219,27 @@ namespace Smdn.IO {
     {
       CheckDisposed();
 
-      throw WriteNotSupportedException();
+      throw ExceptionUtils.CreateNotSupportedWritingStream();
     }
 
     public override void Write(byte[] buffer, int offset, int count)
     {
       CheckDisposed();
 
-      throw WriteNotSupportedException();
+      throw ExceptionUtils.CreateNotSupportedWritingStream();
     }
 
     public override void Flush()
     {
       CheckDisposed();
 
-      throw WriteNotSupportedException();
+      throw ExceptionUtils.CreateNotSupportedWritingStream();
     }
 
     private void CheckDisposed()
     {
-      if (stream == null)
+      if (IsClosed)
         throw new ObjectDisposedException(GetType().FullName);
-    }
-
-    private Exception WriteNotSupportedException()
-    {
-      return new NotSupportedException("stream is read only");
     }
 
     private Stream stream;

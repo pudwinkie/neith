@@ -5,22 +5,27 @@ namespace Smdn.Net.Pop3 {
   [TestFixture]
   public class PopIncapableExceptionTests {
     [Test]
-    public void TestSerializeBinary()
+    public void TestSerializeBinary1()
     {
-      var ex1 = new PopIncapableException();
+      var ex = new PopIncapableException();
 
-      Assert.IsNull(ex1.RequiredCapability);
+      Assert.IsNull(ex.RequiredCapability);
 
-      TestUtils.SerializeBinary(ex1, delegate(PopIncapableException deserialized) {
+      TestUtils.SerializeBinary(ex, delegate(PopIncapableException deserialized) {
         Assert.IsNull(deserialized.RequiredCapability);
       });
+    }
 
-      var ex2 = new PopIncapableException(PopCapability.Utf8);
+    [Test]
+    public void TestSerializeBinary2()
+    {
+      var ex = new PopIncapableException(PopCapability.Utf8);
 
-      Assert.IsNotNull(ex2.RequiredCapability);
+      Assert.IsNotNull(ex.RequiredCapability);
 
-      TestUtils.SerializeBinary(ex2, delegate(PopIncapableException deserialized) {
-        Assert.IsNull(deserialized.RequiredCapability);
+      TestUtils.SerializeBinary(ex, delegate(PopIncapableException deserialized) {
+        Assert.IsNotNull(deserialized.RequiredCapability);
+        Assert.AreEqual(PopCapability.Utf8, deserialized.RequiredCapability);
       });
     }
   }

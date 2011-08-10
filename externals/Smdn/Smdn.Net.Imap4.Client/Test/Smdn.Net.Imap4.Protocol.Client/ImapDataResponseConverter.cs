@@ -11,9 +11,7 @@ namespace Smdn.Net.Imap4.Protocol.Client {
     [SetUp]
     public void Setup()
     {
-      baseStream = new MemoryStream();
-      stream = new LineOrientedBufferedStream(baseStream);
-      receiver = new ImapResponseReceiver(stream);
+      receiver = new ImapPseudoResponseReceiver();
     }
 
     [TearDown]
@@ -24,11 +22,7 @@ namespace Smdn.Net.Imap4.Protocol.Client {
 
     private ImapDataResponse GetSingleDataResponse(string response)
     {
-      var resp = Encoding.ASCII.GetBytes(response);
-
-      baseStream.Seek(0, SeekOrigin.Begin);
-      baseStream.Write(resp, 0, resp.Length);
-      baseStream.Seek(0, SeekOrigin.Begin);
+      receiver.SetResponse(response);
 
       for (;;) {
         var r = receiver.ReceiveResponse();
@@ -51,12 +45,12 @@ namespace Smdn.Net.Imap4.Protocol.Client {
       var caps = ImapDataResponseConverter.FromCapability(response);
 
       Assert.AreEqual(4, caps.Count, "capability count");
-      Assert.IsTrue(caps.Has(ImapCapability.Imap4Rev1));
-      Assert.IsTrue(caps.Has(ImapCapability.StartTls));
-      Assert.IsTrue(caps.Has("IMAP4rev1"));
-      Assert.IsTrue(caps.Has("STARTTLS"));
-      Assert.IsTrue(caps.Has("AUTH=GSSAPI"));
-      Assert.IsTrue(caps.Has("XPIG-LATIN"));
+      Assert.IsTrue(caps.Contains(ImapCapability.Imap4Rev1));
+      Assert.IsTrue(caps.Contains(ImapCapability.StartTls));
+      Assert.IsTrue(caps.Contains("IMAP4rev1"));
+      Assert.IsTrue(caps.Contains("STARTTLS"));
+      Assert.IsTrue(caps.Contains("AUTH=GSSAPI"));
+      Assert.IsTrue(caps.Contains("XPIG-LATIN"));
     }
 
     [Test]
@@ -68,8 +62,8 @@ namespace Smdn.Net.Imap4.Protocol.Client {
       var caps = ImapDataResponseConverter.FromCapability(response);
 
       Assert.AreEqual(2, caps.Count, "capability count");
-      Assert.IsTrue(caps.Has(ImapCapability.Imap4Rev1));
-      Assert.IsTrue(caps.Has("XPIG-LATIN"));
+      Assert.IsTrue(caps.Contains(ImapCapability.Imap4Rev1));
+      Assert.IsTrue(caps.Contains("XPIG-LATIN"));
     }
 
     [Test]
@@ -80,8 +74,8 @@ namespace Smdn.Net.Imap4.Protocol.Client {
 
       var mailboxList = ImapDataResponseConverter.FromList(response);
 
-      Assert.IsTrue(mailboxList.NameAttributes.Has(ImapMailboxFlag.NoSelect));
-      Assert.IsTrue(mailboxList.NameAttributes.Has(@"\Noselect"));
+      Assert.IsTrue(mailboxList.NameAttributes.Contains(ImapMailboxFlag.NoSelect));
+      Assert.IsTrue(mailboxList.NameAttributes.Contains(@"\Noselect"));
       Assert.AreEqual("/", mailboxList.HierarchyDelimiter);
       Assert.AreEqual("~/Mail/foo", mailboxList.Name);
 
@@ -107,7 +101,7 @@ namespace Smdn.Net.Imap4.Protocol.Client {
       var mailboxList = ImapDataResponseConverter.FromList(response);
 
       Assert.AreEqual(1, mailboxList.NameAttributes.Count);
-      Assert.IsTrue(mailboxList.NameAttributes.Has(ImapMailboxFlag.NoSelect));
+      Assert.IsTrue(mailboxList.NameAttributes.Contains(ImapMailboxFlag.NoSelect));
 
       Assert.IsNull(mailboxList.ChildInfo);
     }
@@ -121,7 +115,7 @@ namespace Smdn.Net.Imap4.Protocol.Client {
       var mailboxList = ImapDataResponseConverter.FromList(response);
 
       Assert.AreEqual(1, mailboxList.NameAttributes.Count);
-      Assert.IsTrue(mailboxList.NameAttributes.Has(ImapMailboxFlag.NonExistent));
+      Assert.IsTrue(mailboxList.NameAttributes.Contains(ImapMailboxFlag.NonExistent));
       Assert.AreEqual("/", mailboxList.HierarchyDelimiter);
       Assert.AreEqual("Foo", mailboxList.Name);
 
@@ -137,7 +131,7 @@ namespace Smdn.Net.Imap4.Protocol.Client {
       var mailboxList = ImapDataResponseConverter.FromList(response);
 
       Assert.AreEqual(1, mailboxList.NameAttributes.Count);
-      Assert.IsTrue(mailboxList.NameAttributes.Has(ImapMailboxFlag.NonExistent));
+      Assert.IsTrue(mailboxList.NameAttributes.Contains(ImapMailboxFlag.NonExistent));
       Assert.AreEqual("/", mailboxList.HierarchyDelimiter);
       Assert.AreEqual("Foo", mailboxList.Name);
 
@@ -153,7 +147,7 @@ namespace Smdn.Net.Imap4.Protocol.Client {
       var mailboxList = ImapDataResponseConverter.FromList(response);
 
       Assert.AreEqual(1, mailboxList.NameAttributes.Count);
-      Assert.IsTrue(mailboxList.NameAttributes.Has(ImapMailboxFlag.NonExistent));
+      Assert.IsTrue(mailboxList.NameAttributes.Contains(ImapMailboxFlag.NonExistent));
       Assert.AreEqual("/", mailboxList.HierarchyDelimiter);
       Assert.AreEqual("Foo", mailboxList.Name);
 
@@ -170,7 +164,7 @@ namespace Smdn.Net.Imap4.Protocol.Client {
       var mailboxList = ImapDataResponseConverter.FromList(response);
 
       Assert.AreEqual(1, mailboxList.NameAttributes.Count);
-      Assert.IsTrue(mailboxList.NameAttributes.Has(ImapMailboxFlag.NonExistent));
+      Assert.IsTrue(mailboxList.NameAttributes.Contains(ImapMailboxFlag.NonExistent));
       Assert.AreEqual("/", mailboxList.HierarchyDelimiter);
       Assert.AreEqual("Foo", mailboxList.Name);
 
@@ -374,11 +368,11 @@ namespace Smdn.Net.Imap4.Protocol.Client {
       var flags = ImapDataResponseConverter.FromFlags(response);
 
       Assert.AreEqual(5, flags.Count);
-      Assert.IsTrue(flags.Has(ImapMessageFlag.Answered));
-      Assert.IsTrue(flags.Has(ImapMessageFlag.Flagged));
-      Assert.IsTrue(flags.Has(ImapMessageFlag.Deleted));
-      Assert.IsTrue(flags.Has(ImapMessageFlag.Seen));
-      Assert.IsTrue(flags.Has(ImapMessageFlag.Draft));
+      Assert.IsTrue(flags.Contains(ImapMessageFlag.Answered));
+      Assert.IsTrue(flags.Contains(ImapMessageFlag.Flagged));
+      Assert.IsTrue(flags.Contains(ImapMessageFlag.Deleted));
+      Assert.IsTrue(flags.Contains(ImapMessageFlag.Seen));
+      Assert.IsTrue(flags.Contains(ImapMessageFlag.Draft));
 
       try {
         var collection = flags as System.Collections.Generic.ICollection<ImapMessageFlag>;
@@ -400,8 +394,8 @@ namespace Smdn.Net.Imap4.Protocol.Client {
       var flags = ImapDataResponseConverter.FromFlags(response);
 
       Assert.AreEqual(2, flags.Count);
-      Assert.IsTrue(flags.Has(ImapMessageFlag.Answered));
-      Assert.IsTrue(flags.Has("$label2"));
+      Assert.IsTrue(flags.Contains(ImapMessageFlag.Answered));
+      Assert.IsTrue(flags.Contains("$label2"));
     }
 
     [Test]
@@ -441,7 +435,7 @@ namespace Smdn.Net.Imap4.Protocol.Client {
 
       Assert.AreEqual(23, message.Sequence);
       Assert.AreEqual(1, message.Flags.Count);
-      Assert.IsTrue(message.Flags.Has(ImapMessageFlag.Seen));
+      Assert.IsTrue(message.Flags.Contains(ImapMessageFlag.Seen));
       Assert.AreEqual(44827, message.Rfc822Size);
 
       Assert.IsNull(message.BodyStructure);
@@ -908,8 +902,8 @@ namespace Smdn.Net.Imap4.Protocol.Client {
       var caps = ImapDataResponseConverter.FromEnabled(response);
 
       Assert.AreEqual(2, caps.Count, "capability count");
-      Assert.IsTrue(caps.Has("CONDSTORE"));
-      Assert.IsTrue(caps.Has("X-GOOD-IDEA"));
+      Assert.IsTrue(caps.Contains("CONDSTORE"));
+      Assert.IsTrue(caps.Contains("X-GOOD-IDEA"));
     }
 
     [Test]
@@ -1126,8 +1120,8 @@ namespace Smdn.Net.Imap4.Protocol.Client {
       var mailboxList = ImapDataResponseConverter.FromXList(response);
 
       Assert.AreEqual(2, mailboxList.NameAttributes.Count);
-      Assert.IsTrue(mailboxList.NameAttributes.Has(ImapMailboxFlag.HasNoChildren));
-      Assert.IsTrue(mailboxList.NameAttributes.Has(ImapMailboxFlag.GimapAllMail));
+      Assert.IsTrue(mailboxList.NameAttributes.Contains(ImapMailboxFlag.HasNoChildren));
+      Assert.IsTrue(mailboxList.NameAttributes.Contains(ImapMailboxFlag.GimapAllMail));
       Assert.AreEqual("/", mailboxList.HierarchyDelimiter);
       Assert.AreEqual("[Gmail]/すべてのメール", mailboxList.Name);
 
@@ -1147,7 +1141,8 @@ namespace Smdn.Net.Imap4.Protocol.Client {
       Assert.AreEqual(1, metadata.Length);
       Assert.IsTrue(metadata[0].IsShared);
       Assert.AreEqual("/shared/comment", metadata[0].EntryName);
-      Assert.AreEqual("My comment", (string)metadata[0].Value);
+      //Assert.AreEqual("My comment", metadata[0].Value);
+      Assert.IsTrue(metadata[0].Value.Equals("My comment"));
     }
 
     [Test]
@@ -1165,11 +1160,13 @@ namespace Smdn.Net.Imap4.Protocol.Client {
 
       Assert.IsTrue(metadata[0].IsPrivate);
       Assert.AreEqual("/private/comment", metadata[0].EntryName);
-      Assert.AreEqual("My comment", (string)metadata[0].Value);
+      //Assert.AreEqual("My comment", metadata[0].Value);
+      Assert.IsTrue(metadata[0].Value.Equals("My comment"));
 
       Assert.IsTrue(metadata[1].IsShared);
       Assert.AreEqual("/shared/comment", metadata[1].EntryName);
-      Assert.AreEqual("Its sunny outside!", (string)metadata[1].Value);
+      //Assert.AreEqual("Its sunny outside!", metadata[1].Value);
+      Assert.IsTrue(metadata[1].Value.Equals("Its sunny outside!"));
     }
 
     [Test]
@@ -1203,8 +1200,6 @@ namespace Smdn.Net.Imap4.Protocol.Client {
       Assert.AreEqual("/private/comment", list[1]);
     }
 
-    private ImapResponseReceiver receiver;
-    private MemoryStream baseStream;
-    private LineOrientedBufferedStream stream;
+    private ImapPseudoResponseReceiver receiver;
   }
 }

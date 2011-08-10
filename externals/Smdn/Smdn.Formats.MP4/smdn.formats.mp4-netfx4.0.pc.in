@@ -1,0 +1,6 @@
+Name: Smdn.Formats.MP4-netfx4.0
+Description: Smdn.Formats.MP4-netfx4.0
+Version: 0.1
+
+Requires: 
+Libs: -r:@expanded_libdir@/@PACKAGE@/Smdn.Formats.MP4.dll

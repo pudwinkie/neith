@@ -5,22 +5,27 @@ namespace Smdn.Net.Imap4.Protocol {
   [TestFixture]
   public class ImapMalformedDataExceptionTests {
     [Test]
-    public void TestSerializeBinary()
+    public void TestSerializeBinaryCausedDataNull()
     {
-      var ex1 = new ImapMalformedDataException();
+      var ex = new ImapMalformedDataException();
 
-      Assert.IsNull(ex1.CausedData);
+      Assert.IsNull(ex.CausedData);
 
-      TestUtils.SerializeBinary(ex1, delegate(ImapMalformedDataException deserialized) {
+      TestUtils.SerializeBinary(ex, delegate(ImapMalformedDataException deserialized) {
         Assert.IsNull(deserialized.CausedData);
       });
+    }
 
-      var ex2 = new ImapMalformedDataException(ImapData.CreateNilData());
+    [Test]
+    public void TestSerializeBinaryCausedDataNotNull()
+    {
+      var ex = new ImapMalformedDataException(ImapData.CreateTextData(ByteString.CreateImmutable("exception")));
 
-      Assert.IsNotNull(ex2.CausedData);
+      Assert.IsNotNull(ex.CausedData);
 
-      TestUtils.SerializeBinary(ex2, delegate(ImapMalformedDataException deserialized) {
-        Assert.IsNull(deserialized.CausedData);
+      TestUtils.SerializeBinary(ex, delegate(ImapMalformedDataException deserialized) {
+        Assert.IsNotNull(deserialized.CausedData);
+        Assert.AreEqual("exception", deserialized.CausedData.GetTextAsString());
       });
     }
   }

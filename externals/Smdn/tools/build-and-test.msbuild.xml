@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5" DefaultTargets="Test">
+  <PropertyGroup>
+    <NUnitExec Condition="Exists('/usr/local/lib/mono/4.0/nunit-console.exe')">/usr/local/bin/mono /usr/local/lib/mono/4.0/nunit-console.exe</NUnitExec>
+    <NUnitExec Condition="Exists('C:\Program Files\NUnit 2.4.8\')">&quot;C:\Program Files\NUnit 2.4.8\bin\nunit-console.exe&quot;</NUnitExec>
+    <TargetFramework Condition="$(TargetFramework) == ''">all</TargetFramework>
+    <Configuration Condition="$(Configuration) == ''">Release</Configuration>
+  </PropertyGroup>
+  <ItemGroup>
+    <TestProjectFiles Include="$(MSBuildStartupDirectory)\**\Test\*Tests*2.0*.csproj" Condition="$(TargetFramework) == 'all' Or $(TargetFramework) == '2.0'"/>
+    <TestProjectFiles Include="$(MSBuildStartupDirectory)\**\Test\*Tests*3.5*.csproj" Condition="$(TargetFramework) == 'all' Or $(TargetFramework) == '3.5'"/>
+    <TestProjectFiles Include="$(MSBuildStartupDirectory)\**\Test\*Tests*4.0*.csproj" Condition="$(TargetFramework) == 'all' Or $(TargetFramework) == '4.0'"/>
+  </ItemGroup>
+  <Target Name="Clean">
+    <MSBuild Projects="@(TestProjectFiles)" Properties="Configuration=$(Configuration)" Targets="Clean">
+      <Output TaskParameter="TargetOutputs" ItemName="AssembliesBuiltByChildProjects" />
+    </MSBuild>
+  </Target>
+  <Target Name="Build">
+    <Message Text="Test Target: $(TargetFramework)"/>
+    <MSBuild Projects="@(TestProjectFiles)" Properties="Configuration=$(Configuration)" Targets="Build">
+      <Output TaskParameter="TargetOutputs" ItemName="AssembliesBuiltByChildProjects" />
+    </MSBuild>
+  </Target>
+  <Target Name="Test" DependsOnTargets="Build">
+    <Exec
+      IgnoreExitCode="true"
+      Condition="@(AssembliesBuiltByChildProjects) != ''"
+      Command="$(NUnitExec) @(AssembliesBuiltByChildProjects, ' ') -labels -out $(MSBuildStartupDirectory)\test-output.txt -xml $(MSBuildStartupDirectory)\test-result.xml"/>
+  </Target>
+</Project>

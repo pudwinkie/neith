@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,14 +23,15 @@
 // THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 
 using Smdn.Net.Imap4.Protocol;
 using Smdn.Net.Imap4.Protocol.Client;
 
 namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
-  internal sealed class EnableTransaction : ImapTransactionBase<ImapCommandResult<ImapCapabilityList>>, IImapExtension {
-    ImapCapability IImapExtension.RequiredCapability {
-      get { return ImapCapability.Enable; }
+  internal sealed class EnableTransaction : ImapTransactionBase<ImapCommandResult<ImapCapabilitySet>>, IImapExtension {
+    IEnumerable<ImapCapability> IImapExtension.RequiredCapabilities {
+      get { yield return ImapCapability.Enable; }
     }
 
     public EnableTransaction(ImapConnection connection)
@@ -38,31 +39,22 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     {
     }
 
-    protected override ProcessTransactionDelegate Reset()
-    {
-#if DEBUG
-      if (!RequestArguments.ContainsKey("capability names"))
-        return ProcessArgumentNotSetted;
-      else
-#endif
-        return ProcessEnable;
-    }
-
-#if DEBUG
-    private void ProcessArgumentNotSetted()
-    {
-      FinishError(ImapCommandResultCode.RequestError, "arguments 'capability names' must be setted");
-    }
-#endif
-
     // 3.1. The ENABLE Command
     //    Arguments: capability names
     //    Result:    OK: Relevant capabilities enabled
     //               BAD: No arguments, or syntax error in an argument
-    private void ProcessEnable()
+    protected override ImapCommand PrepareCommand()
     {
+#if DEBUG
+      if (!RequestArguments.ContainsKey("capability names")) {
+        FinishError(ImapCommandResultCode.RequestError, "arguments 'capability names' must be setted");
+        return null;
+      }
+#endif
+
       // ENABLE
-      SendCommand("ENABLE", ProcessReceiveResponse, RequestArguments["capability names"]);
+      return Connection.CreateCommand("ENABLE",
+                                      RequestArguments["capability names"]);
     }
 
     protected override void OnDataResponseReceived(ImapDataResponse data)
@@ -76,11 +68,11 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     protected override void OnTaggedStatusResponseReceived(ImapTaggedStatusResponse tagged)
     {
       if (tagged.Condition == ImapResponseCondition.Ok)
-        Finish(new ImapCommandResult<ImapCapabilityList>(enabledCapabilities, tagged.ResponseText));
+        Finish(new ImapCommandResult<ImapCapabilitySet>(enabledCapabilities, tagged.ResponseText));
       else
         base.OnTaggedStatusResponseReceived(tagged);
     }
 
-    private ImapCapabilityList enabledCapabilities = null;
+    private ImapCapabilitySet enabledCapabilities = null;
   }
 }

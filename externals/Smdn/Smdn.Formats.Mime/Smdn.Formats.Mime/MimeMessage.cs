@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -119,6 +119,23 @@ namespace Smdn.Formats.Mime {
 
     public static MimeMessage Load(string file)
     {
+      return Load(file, (EncodingSelectionCallback)null);
+    }
+
+    public static MimeMessage Load(string file,
+                                   Encoding fallbackCharset)
+    {
+      if (fallbackCharset == null)
+        throw new ArgumentNullException("fallbackCharset");
+
+      return Load(file, delegate(string charsetName) {
+        return fallbackCharset;
+      });
+    }
+
+    public static MimeMessage Load(string file,
+                                   EncodingSelectionCallback selectFallbackCharset)
+    {
       using (var stream = File.OpenRead(file)) {
         return Load(stream);
       }
@@ -126,12 +143,47 @@ namespace Smdn.Formats.Mime {
 
     public static MimeMessage LoadMessage(string message)
     {
-      return Load(new MemoryStream(Charsets.ISO8859_1.GetBytes(message)));
+      return LoadMessage(message, (EncodingSelectionCallback)null);
+    }
+
+    public static MimeMessage LoadMessage(string message,
+                                          Encoding fallbackCharset)
+    {
+      if (fallbackCharset == null)
+        throw new ArgumentNullException("fallbackCharset");
+
+      return LoadMessage(message, delegate(string charsetName) {
+        return fallbackCharset;
+      });
+    }
+
+    public static MimeMessage LoadMessage(string message,
+                                          EncodingSelectionCallback selectFallbackCharset)
+    {
+      return Load(new MemoryStream(Charsets.ISO8859_1.GetBytes(message)),
+                  selectFallbackCharset);
     }
 
     public static MimeMessage Load(Stream stream)
     {
-      var message = Decode.Parser.Parse(stream);
+      return Load(stream, (EncodingSelectionCallback)null);
+    }
+
+    public static MimeMessage Load(Stream stream,
+                                   Encoding fallbackCharset)
+    {
+      if (fallbackCharset == null)
+        throw new ArgumentNullException("fallbackCharset");
+
+      return Load(stream, delegate(string charsetName) {
+        return fallbackCharset;
+      });
+    }
+
+    public static MimeMessage Load(Stream stream,
+                                   EncodingSelectionCallback selectFallbackCharset)
+    {
+      var message = Decode.Parser.Parse(stream, selectFallbackCharset);
 
 #if false
       // MIME-Version

@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -104,10 +104,10 @@ namespace Smdn.Net.Imap4.WebClients {
           throw new WebException(result.ResultText, null, WebExceptionStatus.ProtocolError, new ImapWebResponse(result));
 
         // update server info
-        if (session.ServerCapabilities.Has(ImapCapability.Namespace))
+        if (session.ServerCapabilities.Contains(ImapCapability.Namespace))
           session.Namespace();
 
-        if (session.ServerCapabilities.Has(ImapCapability.ID))
+        if (session.ServerCapabilities.Contains(ImapCapability.ID))
           session.ID(ImapWebRequestDefaults.ClientID);
 
         return session;
@@ -189,7 +189,7 @@ namespace Smdn.Net.Imap4.WebClients {
       if (host == null)
         throw new ArgumentNullException("host");
       if (port < IPEndPoint.MinPort || IPEndPoint.MaxPort < port)
-        throw new ArgumentOutOfRangeException("port", port, "out of range");
+        throw ExceptionUtils.CreateArgumentMustBeInRange(IPEndPoint.MinPort, IPEndPoint.MaxPort, "port", port);
 
       var keys = new List<string>();
 

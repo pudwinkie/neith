@@ -18,7 +18,7 @@ namespace Smdn.Net.Imap4.Protocol {
 
       public void Enqueue(params ImapString[] strings)
       {
-        base.Enqueue(strings);
+        base.Enqueue(false, strings);
       }
     }
 

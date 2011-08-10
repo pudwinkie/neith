@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2009-2010 smdn
+// Copyright (c) 2009-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -28,12 +28,12 @@ using System.IO;
 namespace Smdn.IO {
   public class StrictLineOrientedStream : LineOrientedStream {
     public StrictLineOrientedStream(Stream stream)
-      : base(stream, Smdn.Formats.Octets.CRLF, true, DefaultBufferSize)
+      : base(stream, Smdn.Formats.Octets.GetCRLF(), true, DefaultBufferSize)
     {
     }
 
     public StrictLineOrientedStream(Stream stream, int bufferSize)
-      : base(stream, Smdn.Formats.Octets.CRLF, true, bufferSize)
+      : base(stream, Smdn.Formats.Octets.GetCRLF(), true, bufferSize)
     {
     }
 

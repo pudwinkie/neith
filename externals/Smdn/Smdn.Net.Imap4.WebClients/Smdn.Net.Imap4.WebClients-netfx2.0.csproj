@@ -59,7 +59,6 @@
     <Compile Include="Smdn.Net.Imap4.WebClients\ImapWebRequestDefaults.cs" />
     <Compile Include="Smdn.Net.Imap4.WebClients\ImapWebRequestMethods.cs" />
     <Compile Include="Smdn.Net.Imap4.WebClients\ImapWebResponse.cs" />
-    <Compile Include="Smdn.Net.Imap4.WebClients\ImapWebClientAppendMessageBodyStream.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

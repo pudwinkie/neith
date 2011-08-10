@@ -5,22 +5,42 @@ namespace Smdn.Net.Imap4 {
   [TestFixture]
   public class ImapIncapableExceptionTests {
     [Test]
-    public void TestSerializeBinary()
+    public void TestSerializeBinary1()
     {
-      var ex1 = new ImapIncapableException();
+      var ex = new ImapIncapableException();
 
-      Assert.IsNull(ex1.RequiredCapability);
+      Assert.IsNull(ex.RequiredCapabilities);
 
-      TestUtils.SerializeBinary(ex1, delegate(ImapIncapableException deserialized) {
-        Assert.IsNull(deserialized.RequiredCapability);
+      TestUtils.SerializeBinary(ex, delegate(ImapIncapableException deserialized) {
+        Assert.IsNull(deserialized.RequiredCapabilities);
       });
+    }
 
-      var ex2 = new ImapIncapableException(ImapCapability.Imap4Rev1);
+    [Test]
+    public void TestSerializeBinary2()
+    {
+      var ex = new ImapIncapableException(ImapCapability.Imap4Rev1);
 
-      Assert.IsNotNull(ex2.RequiredCapability);
+      Assert.IsNotNull(ex.RequiredCapabilities);
 
-      TestUtils.SerializeBinary(ex2, delegate(ImapIncapableException deserialized) {
-        Assert.IsNull(deserialized.RequiredCapability);
+      TestUtils.SerializeBinary(ex, delegate(ImapIncapableException deserialized) {
+        Assert.IsNotNull(deserialized.RequiredCapabilities);
+        CollectionAssert.AreEquivalent(new[] {ImapCapability.Imap4Rev1}, 
+                                       deserialized.RequiredCapabilities);
+      });
+    }
+
+    [Test]
+    public void TestSerializeBinary3()
+    {
+      var ex = new ImapIncapableException(new[] {ImapCapability.Imap4Rev1, ImapCapability.SaslIR});
+
+      Assert.IsNotNull(ex.RequiredCapabilities);
+
+      TestUtils.SerializeBinary(ex, delegate(ImapIncapableException deserialized) {
+        Assert.IsNotNull(deserialized.RequiredCapabilities);
+        CollectionAssert.AreEquivalent(new[] {ImapCapability.Imap4Rev1, ImapCapability.SaslIR}, 
+                                       deserialized.RequiredCapabilities);
       });
     }
   }

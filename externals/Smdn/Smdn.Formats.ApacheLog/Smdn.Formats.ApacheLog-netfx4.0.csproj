@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{8BA72A9A-6612-4397-882E-0EF18D9E803C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Smdn.Formats.ApacheLog</RootNamespace>
+    <AssemblyName>Smdn.Formats.ApacheLog</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <OutputPath>..\build\bin\</OutputPath>
+    <IntermediateOutputPath>..\build\obj\</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>NET_2_0;NET_3_5;NET_4_0;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>3</WarningLevel>
+    <OutputType>Library</OutputType>
+    <OutputPath>..\build\bin\Debug\netfx4.0\</OutputPath>
+    <IntermediateOutputPath>..\build\obj\Debug\netfx4.0\</IntermediateOutputPath>
+    <RootNamespace>Smdn.Formats.ApacheLog</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>NET_2_0;NET_3_5;NET_4_0</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>3</WarningLevel>
+    <OutputType>Library</OutputType>
+    <OutputPath>..\build\bin\Release\netfx4.0\</OutputPath>
+    <IntermediateOutputPath>..\build\obj\Release\netfx4.0\</IntermediateOutputPath>
+    <RootNamespace>Smdn.Formats.ApacheLog</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\ICanonicalServerName.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\IConnectionStatus.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\ICookie.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\IEnvironmentVariable.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\IFileName.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\ILocalIPAddress.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\INotes.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\INumberOfKeeyAlive.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\IQueryString.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\IReceivedByteCount.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\IRemoteHost.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\IRemoteIPAddress.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\IRemoteLogName.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\IRemoteUser.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\IRequestHeaders.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\IRequestLine.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\IRequestMethod.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\IRequestProtocol.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\IRequestedPath.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\IRequestedTime.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\IResponseHeaders.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\IResponseLength.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\ISentByteCount.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\IServeRequestTakenTime.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\IServerName.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\IStatusCode.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\Parser.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog\ApacheLogReader.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog\LogEntry.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog\NcsaCombinedLogEntry.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.FormatExpressions\FormatExpression.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.FormatExpressions\LiteralFormatExpression.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.FormatExpressions\EntityFormatExpression.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog.Entities\IResponseLengthCLF.cs" />
+    <Compile Include="Smdn.Formats.ApacheLog\ApacheLogFormatAttribute.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <StandardHeader Text="&#xA;Author:&#xA;      ${AuthorName} &lt;${AuthorEmail}&gt;&#xA;&#xA;Copyright (c) 2009-${Year} ${CopyrightHolder}&#xA;&#xA;Permission is hereby granted, free of charge, to any person obtaining a copy&#xA;of this software and associated documentation files (the &quot;Software&quot;), to deal&#xA;in the Software without restriction, including without limitation the rights&#xA;to use, copy, modify, merge, publish, distribute, sublicense, and/or sell&#xA;copies of the Software, and to permit persons to whom the Software is&#xA;furnished to do so, subject to the following conditions:&#xA;&#xA;The above copyright notice and this permission notice shall be included in&#xA;all copies or substantial portions of the Software.&#xA;&#xA;THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR&#xA;IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,&#xA;FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE&#xA;AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER&#xA;LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,&#xA;OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN&#xA;THE SOFTWARE." inheritsSet="MITX11License" />
+          <ChangeLogPolicy UpdateMode="None" VcsIntegration="None" inheritsSet="Mono" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
+  <ItemGroup>
+    <Folder Include="Smdn.Formats.ApacheLog.FormatExpressions\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Smdn\Smdn-netfx4.0.csproj">
+      <Project>{3FDF8CFA-B168-466F-B303-AEDDBED87BB9}</Project>
+      <Name>Smdn-netfx4.0</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

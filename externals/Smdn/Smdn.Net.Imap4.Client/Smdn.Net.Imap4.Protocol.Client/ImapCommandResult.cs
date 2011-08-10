@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+#if NET_3_5
+using System.Linq;
+#else
+using Smdn.Collections;
+#endif
 
 namespace Smdn.Net.Imap4.Protocol.Client {
+  [Serializable]
   internal sealed class ImapCommandResult<TResultValue> : ImapCommandResult where TResultValue : class {
     public TResultValue Value {
       get { return val; }
@@ -54,10 +61,17 @@ namespace Smdn.Net.Imap4.Protocol.Client {
       this.val = val;
     }
 
+    protected ImapCommandResult(SerializationInfo info, StreamingContext context)
+      : base(info, context)
+    {
+    }
+
+    [NonSerialized]
     private /*readonly*/ TResultValue val;
   }
 
-  public class ImapCommandResult {
+  [Serializable]
+  public class ImapCommandResult : ISerializable {
     public ImapCommandResultCode Code {
       get { return code; }
       internal set { code = value; }
@@ -72,9 +86,9 @@ namespace Smdn.Net.Imap4.Protocol.Client {
       get { return !Succeeded; }
     }
 
-    public Exception Exception {
+    internal Exception Exception {
       get { return exception; }
-      internal set { exception = value; }
+      set { exception = value; }
     }
 
     public string Description {
@@ -91,9 +105,9 @@ namespace Smdn.Net.Imap4.Protocol.Client {
       get
       {
         if (responseText == null)
-          return string.Format("<{0}>", description);
+          return string.Concat("<", description, ">");
         else
-          return string.Format("\"{0}\"", responseText);
+          return string.Concat("\"", responseText, "\"");
       }
     }
 
@@ -133,6 +147,25 @@ namespace Smdn.Net.Imap4.Protocol.Client {
       this.code = code;
       this.description = description;
       this.responseText = responseText;
+    }
+
+    internal protected ImapCommandResult(SerializationInfo info, StreamingContext context)
+    {
+      this.code = (ImapCommandResultCode)info.GetValue("code", typeof(ImapCommandResultCode));
+      this.description = info.GetString("description");
+      this.responseText = info.GetString("responseText");
+      this.taggedStatusResponse = (ImapTaggedStatusResponse)info.GetValue("taggedStatusResponse", typeof(ImapTaggedStatusResponse));
+      this.receivedResponses = (ImapResponse[])info.GetValue("receivedResponses", typeof(ImapResponse[]));
+    }
+
+    public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+      info.AddValue("code", code);
+      //info.AddValue("exception", exception); non serialized
+      info.AddValue("description", description);
+      info.AddValue("responseText", responseText);
+      info.AddValue("taggedStatusResponse", taggedStatusResponse);
+      info.AddValue("receivedResponses", receivedResponses.ToArray());
     }
 
     public ImapStatusResponse GetResponseCode(ImapResponseCode code)

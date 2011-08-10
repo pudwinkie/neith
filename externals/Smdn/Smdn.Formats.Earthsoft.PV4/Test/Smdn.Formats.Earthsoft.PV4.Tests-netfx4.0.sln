@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn-netfx4.0", "..\..\Smdn\Smdn-netfx4.0.csproj", "{3FDF8CFA-B168-466F-B303-AEDDBED87BB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Formats.Earthsoft.PV4.Tests-netfx4.0", "Smdn.Formats.Earthsoft.PV4.Tests-netfx4.0.csproj", "{985CF07F-E758-45E0-A413-DC792735CE64}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Core.BinaryFormats-netfx4.0", "..\..\Smdn.Core.BinaryFormats\Smdn.Core.BinaryFormats-netfx4.0.csproj", "{E59F49F4-E677-42AD-A04F-226AB8F62637}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Formats.Earthsoft.PV4-netfx4.0", "..\Smdn.Formats.Earthsoft.PV4-netfx4.0.csproj", "{6D23861E-B1EC-41E3-85B8-3A00F6EEFBEE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3FDF8CFA-B168-466F-B303-AEDDBED87BB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FDF8CFA-B168-466F-B303-AEDDBED87BB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FDF8CFA-B168-466F-B303-AEDDBED87BB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FDF8CFA-B168-466F-B303-AEDDBED87BB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D23861E-B1EC-41E3-85B8-3A00F6EEFBEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D23861E-B1EC-41E3-85B8-3A00F6EEFBEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D23861E-B1EC-41E3-85B8-3A00F6EEFBEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D23861E-B1EC-41E3-85B8-3A00F6EEFBEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{985CF07F-E758-45E0-A413-DC792735CE64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{985CF07F-E758-45E0-A413-DC792735CE64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{985CF07F-E758-45E0-A413-DC792735CE64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{985CF07F-E758-45E0-A413-DC792735CE64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E59F49F4-E677-42AD-A04F-226AB8F62637}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E59F49F4-E677-42AD-A04F-226AB8F62637}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E59F49F4-E677-42AD-A04F-226AB8F62637}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E59F49F4-E677-42AD-A04F-226AB8F62637}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BCBB077-AADD-42CE-B328-0199DB643672}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BCBB077-AADD-42CE-B328-0199DB643672}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BCBB077-AADD-42CE-B328-0199DB643672}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BCBB077-AADD-42CE-B328-0199DB643672}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Smdn.Formats.Earthsoft.PV4.Tests-netfx4.0.csproj
+	EndGlobalSection
+EndGlobal

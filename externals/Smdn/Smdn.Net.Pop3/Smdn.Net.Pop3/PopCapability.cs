@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -37,8 +37,9 @@ namespace Smdn.Net.Pop3 {
   //   * PopCapability
   //       => handles capability constants
 
+  [Serializable]
   public sealed class PopCapability : PopStringEnum {
-    public static readonly PopCapabilityList AllCapabilities;
+    public static readonly PopCapabilitySet AllCapabilities;
 
     /*
      * POP3 Extension Mechanism
@@ -87,14 +88,14 @@ namespace Smdn.Net.Pop3 {
         capabilities.Add(new PopCapability("SASL", saslMechansim));
       }
 
-      AllCapabilities = new PopCapabilityList(true, capabilities);
+      AllCapabilities = new PopCapabilitySet(true, capabilities);
     }
 
     internal static PopCapability GetKnownOrCreate(string capability, string[] arguments)
     {
-      if (AllCapabilities.Has(capability)) {
-        var knownCapability = AllCapabilities[capability];
+      PopCapability knownCapability;
 
+      if (AllCapabilities.TryGet(capability, out knownCapability)) {
         if (knownCapability.ContainsAllArguments(arguments))
           return knownCapability;
       }
@@ -120,15 +121,17 @@ namespace Smdn.Net.Pop3 {
         if (Arguments.Length == 0)
           return Tag;
         else
-          return string.Format("{0} {1}", Tag, string.Join(" ", Arguments));
+          return string.Concat(Tag, " ", string.Join(" ", Arguments));
       }
     }
 
     public PopCapability(string tag, params string[] arguments)
       : base(tag)
     {
-      if (string.IsNullOrEmpty(tag))
-        throw new ArgumentException("length of tag must be greater than 1", "tag");
+      if (tag == null)
+        throw new ArgumentNullException("tag");
+      if (tag.Length == 0)
+        throw ExceptionUtils.CreateArgumentMustBeNonEmptyString("tag");
 
       foreach (var arg in arguments) {
         if (string.IsNullOrEmpty(arg))

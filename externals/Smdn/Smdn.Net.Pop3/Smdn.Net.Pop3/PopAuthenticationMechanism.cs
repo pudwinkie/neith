@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,7 @@ using Smdn.Security.Authentication.Sasl;
 
 namespace Smdn.Net.Pop3 {
   public sealed class PopAuthenticationMechanism : PopStringEnum, IPopExtension {
-    public static readonly PopStringEnumList<PopAuthenticationMechanism> AllMechanisms;
+    public static readonly PopStringEnumSet<PopAuthenticationMechanism> AllMechanisms;
 
     /*
      * RFC 2384 POP URL Scheme
@@ -98,7 +98,7 @@ namespace Smdn.Net.Pop3 {
 
     static PopAuthenticationMechanism()
     {
-      AllMechanisms = CreateDefinedConstantsList<PopAuthenticationMechanism>();
+      AllMechanisms = CreateDefinedConstantsSet<PopAuthenticationMechanism>();
     }
 
     private static PopAuthenticationMechanism CreateSaslMechanism(string saslMechanismName)
@@ -109,8 +109,10 @@ namespace Smdn.Net.Pop3 {
 
     public static PopAuthenticationMechanism GetKnownOrCreate(string mechanismName)
     {
-      if (AllMechanisms.Has(mechanismName))
-        return AllMechanisms[mechanismName];
+      PopAuthenticationMechanism mechanism;
+
+      if (AllMechanisms.TryGet(mechanismName, out mechanism))
+        return mechanism;
       else
         //Trace.Verbose("unknown authentication mechanism: {0}", mechanism);
         return new PopAuthenticationMechanism(mechanismName);
@@ -128,9 +130,6 @@ namespace Smdn.Net.Pop3 {
     public PopAuthenticationMechanism(string mechanismName, PopCapability requiredCapability)
       : base(mechanismName)
     {
-      if (mechanismName.Length == 0)
-        throw new ArgumentException("invalid name", "mechanismName");
-
       this.RequiredCapability = requiredCapability;
     }
   }

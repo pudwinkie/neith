@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -33,24 +33,28 @@ namespace Smdn.Net.Imap4.Client.Session {
     public static readonly int DefaultFetchBlockSize = 10 * 1024;
 
     public override bool CanSeek {
-      get { RejectDisposed(); return false; }
+      get { return /*!IsClosed &&*/ false; }
     }
 
     public override bool CanRead {
-      get { RejectDisposed(); return true; }
+      get { return !IsClosed /*&& true*/; }
     }
 
     public override bool CanWrite {
-      get { RejectDisposed(); return false; }
+      get { return /*!IsClosed &&*/ false; }
     }
 
     public override bool CanTimeout {
-      get { RejectDisposed(); return true; }
+      get { return true; }
+    }
+
+    private bool IsClosed {
+      get { return session == null; }
     }
 
     public override long Position {
       get { RejectDisposed(); return position; }
-      set { throw new NotSupportedException(); }
+      set { throw ExceptionUtils.CreateNotSupportedSeekingStream(); }
     }
 
     public override long Length {
@@ -120,22 +124,22 @@ namespace Smdn.Net.Imap4.Client.Session {
 
     public override void SetLength(long value)
     {
-      throw new NotSupportedException();
+      throw ExceptionUtils.CreateNotSupportedSettingStreamLength();
     }
 
     public override long Seek(long offset, SeekOrigin origin)
     {
-      throw new NotSupportedException();
+      throw ExceptionUtils.CreateNotSupportedSeekingStream();
     }
 
     public override void Flush()
     {
-      throw new NotSupportedException();
+      throw ExceptionUtils.CreateNotSupportedWritingStream();
     }
 
     public override void Write(byte[] buffer, int offset, int count)
     {
-      throw new NotSupportedException();
+      throw ExceptionUtils.CreateNotSupportedWritingStream();
     }
 
     public override int Read(byte[] dest, int offset, int count)
@@ -145,11 +149,11 @@ namespace Smdn.Net.Imap4.Client.Session {
       if (dest == null)
         throw new ArgumentNullException("dest");
       if (offset < 0)
-        throw new ArgumentOutOfRangeException("offset", offset, "must be greater than or equals to 0");
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("offset", offset);
       if (count < 0)
-        throw new ArgumentOutOfRangeException("count", count, "must be greater than or equals to 0");
-      if (dest.Length < offset + count)
-        throw new ArgumentException("invalid range");
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("count", count);
+      if (dest.Length - count < offset)
+        throw ExceptionUtils.CreateArgumentAttemptToAccessBeyondEndOfArray("offset", dest, offset, count);
 
       var read = 0;
 
@@ -303,7 +307,7 @@ namespace Smdn.Net.Imap4.Client.Session {
 
     private void RejectDisposed()
     {
-      if (session == null)
+      if (IsClosed)
         throw new ObjectDisposedException(GetType().FullName);
     }
 

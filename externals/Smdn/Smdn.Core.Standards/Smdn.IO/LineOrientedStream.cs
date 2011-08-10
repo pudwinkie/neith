@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2009-2010 smdn
+// Copyright (c) 2009-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -32,20 +32,31 @@ namespace Smdn.IO {
     protected static readonly int DefaultBufferSize = 1024;
     protected static readonly int MinimumBufferSize = 8;
 
+    private enum EolState {
+      NotMatched = 0,
+      NewLine,
+      CR,
+      LF
+    }
+
     public override bool CanSeek {
-      get { return stream.CanSeek; }
+      get { return !IsClosed && stream.CanSeek; }
     }
 
     public override bool CanRead {
-      get { return stream.CanRead; }
+      get { return !IsClosed && stream.CanRead; }
     }
 
     public override bool CanWrite {
-      get { return stream.CanWrite; }
+      get { return !IsClosed && stream.CanWrite; }
     }
 
     public override bool CanTimeout {
-      get { return stream.CanTimeout; }
+      get { return !IsClosed && stream.CanTimeout; }
+    }
+
+    private bool IsClosed {
+      get { return stream == null; }
     }
 
     public override long Position {
@@ -58,7 +69,7 @@ namespace Smdn.IO {
     }
 
     public byte[] NewLine {
-      get { return newLine; }
+      get { return (newLine == null) ? null : (byte[])newLine.Clone(); }
     }
 
     public int BufferSize {
@@ -77,12 +88,11 @@ namespace Smdn.IO {
         if (newLine == null)
           throw new ArgumentNullException("newLine");
         if (newLine.Length == 0)
-          throw new ArgumentException("must be non-zero positive length", "newLine");
+          throw ExceptionUtils.CreateArgumentMustBeNonEmptyArray("newLine");
       }
+
       if (bufferSize < MinimumBufferSize)
-        throw new ArgumentOutOfRangeException("bufferSize",
-                                              bufferSize,
-                                              string.Format("must be greater than or equals to {0}", MinimumBufferSize));
+        throw ExceptionUtils.CreateArgumentMustBeGreaterThanOrEqualTo(MinimumBufferSize, "bufferSize", bufferSize);
 
       this.stream = stream;
       this.strictEOL = strictEOL;
@@ -154,21 +164,28 @@ namespace Smdn.IO {
 
       var newLineOffset = 0;
       var bufCopyFrom = bufOffset;
-      var eol = false;
+      var eol = EolState.NotMatched;
       var eos = false;
       var retCount = 0;
       byte[] retBuffer = null;
 
       for (;;) {
         if (strictEOL) {
-          if (buffer[bufOffset] == newLine[newLineOffset])
-            eol = (newLine.Length == ++newLineOffset);
-          else
+          if (buffer[bufOffset] == newLine[newLineOffset]) {
+            if (newLine.Length == ++newLineOffset)
+              eol = EolState.NewLine;
+          }
+          else {
             newLineOffset = 0;
+          }
         }
         else {
-          if (buffer[bufOffset] == Octets.CR || buffer[bufOffset] == Octets.LF) {
-            eol = true;
+          if (buffer[bufOffset] == Octets.CR) {
+            eol = EolState.CR;
+            newLineOffset = 1;
+          }
+          else if (buffer[bufOffset] == Octets.LF) {
+            eol = EolState.LF;
             newLineOffset = 1;
           }
         }
@@ -176,7 +193,8 @@ namespace Smdn.IO {
         bufRemain--;
         bufOffset++;
 
-        if (!eol && bufRemain == 0) {
+        if (bufRemain == 0 &&
+            (eol == EolState.NotMatched || eol == EolState.CR /* read ahead; CRLF */)) {
           var count = bufOffset - bufCopyFrom;
 
           if (retBuffer == null) {
@@ -200,29 +218,22 @@ namespace Smdn.IO {
           bufCopyFrom = bufOffset;
         }
 
-        if (eol || eos)
+        if (eol != EolState.NotMatched || eos)
           break;
       }
 
       var retLength = retCount + (bufOffset - bufCopyFrom);
 
-      if (eol && !strictEOL) {
-        var crlf = (bufOffset == 0)
-          ? retBuffer[retCount - 1] == Octets.CR && buffer[bufOffset] == Octets.LF
-          : (bufOffset == buffer.Length)
-            ? false
-            : buffer[bufOffset - 1] == Octets.CR && buffer[bufOffset] == Octets.LF;
+      if (eol == EolState.CR && buffer[bufOffset] == Octets.LF) {
+        // CRLF
+        retLength++;
+        newLineOffset++;
 
-        if (crlf) {
-          retLength++;
-          newLineOffset++;
-
-          bufOffset++;
-          bufRemain--;
-        }
+        bufOffset++;
+        bufRemain--;
       }
 
-      if (!keepEOL)
+      if (!keepEOL && eol != EolState.NotMatched)
         retLength -= newLineOffset;
 
       if (retBuffer == null || 0 < retLength - retCount) {
@@ -249,7 +260,7 @@ namespace Smdn.IO {
       CheckDisposed();
 
       if (length < 0L)
-        throw new ArgumentOutOfRangeException("length", length, "must be zero or positive number");
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("length", length);
       if (targetStream == null)
         throw new ArgumentNullException("targetStream");
 
@@ -301,11 +312,11 @@ namespace Smdn.IO {
       if (dest == null)
         throw new ArgumentNullException("dest");
       if (offset < 0)
-        throw new ArgumentOutOfRangeException("offset", offset, "must be greater than or equals to 0");
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("offset", offset);
       if (count < 0)
-        throw new ArgumentOutOfRangeException("count", count, "must be greater than or equals to 0");
-      if (dest.Length < offset + count)
-        throw new ArgumentException("invalid range");
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("count", count);
+      if (dest.Length - count < offset)
+        throw ExceptionUtils.CreateArgumentAttemptToAccessBeyondEndOfArray("offset", dest, offset, count);
 
       if (count <= bufRemain) {
         Buffer.BlockCopy(buffer, bufOffset, dest, offset, count);
@@ -362,7 +373,7 @@ namespace Smdn.IO {
 
     private void CheckDisposed()
     {
-      if (stream == null)
+      if (IsClosed)
         throw new ObjectDisposedException(GetType().FullName);
     }
 

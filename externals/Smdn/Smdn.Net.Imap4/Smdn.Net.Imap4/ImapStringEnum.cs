@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -51,6 +51,7 @@ namespace Smdn.Net.Imap4 {
   //     Protocol.ImapDataResponseType
   //       => handles server response types
 
+  [Serializable]
   public abstract class ImapStringEnum : ImapString, IStringEnum, IEquatable<ImapStringEnum> {
     string IStringEnum.Value {
       get { return base.Value; }
@@ -61,8 +62,8 @@ namespace Smdn.Net.Imap4 {
     {
       if (@value == null)
         throw new ArgumentNullException("value");
-      if (@value.Length < 1)
-        throw new ArgumentException("length of value must be longer than 1", "value");
+      if (@value.Length == 0)
+        throw ExceptionUtils.CreateArgumentMustBeNonEmptyString("value");
     }
 
 #region "defined constants"
@@ -71,9 +72,9 @@ namespace Smdn.Net.Imap4 {
       return StringEnumUtils.GetDefinedConstants<TStringEnum>();
     }
 
-    protected static ImapStringEnumList<TStringEnum> CreateDefinedConstantsList<TStringEnum>() where TStringEnum : ImapStringEnum
+    protected static ImapStringEnumSet<TStringEnum> CreateDefinedConstantsSet<TStringEnum>() where TStringEnum : ImapStringEnum
     {
-      return new ImapStringEnumList<TStringEnum>(true, GetDefinedConstants<TStringEnum>());
+      return new ImapStringEnumSet<TStringEnum>(true, GetDefinedConstants<TStringEnum>());
     }
 #endregion
 

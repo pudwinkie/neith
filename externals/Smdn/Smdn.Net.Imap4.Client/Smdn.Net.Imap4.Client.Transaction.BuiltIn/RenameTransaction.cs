@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -33,25 +33,6 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     {
     }
 
-    protected override ProcessTransactionDelegate Reset()
-    {
-#if DEBUG
-      if (!RequestArguments.ContainsKey("existing mailbox name"))
-        return ProcessArgumentNotSetted;
-      else if (!RequestArguments.ContainsKey("new mailbox name"))
-        return ProcessArgumentNotSetted;
-      else
-#endif
-        return ProcessRename;
-    }
-
-#if DEBUG
-    private void ProcessArgumentNotSetted()
-    {
-      FinishError(ImapCommandResultCode.RequestError, "arguments 'existing mailbox name' and 'new mailbox name' must be setted");
-    }
-#endif
-
     // RFC 4466 - Collected Extensions to IMAP4 ABNF
     // http://tools.ietf.org/html/rfc4466
     // 2.3. Extended RENAME Command
@@ -64,21 +45,27 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     //                     that name, cannot rename to mailbox with
     //                     that name, etc.
     //                BAD - argument(s) invalid
-    private void ProcessRename()
+    protected override ImapCommand PrepareCommand()
     {
+#if DEBUG
+      if (!RequestArguments.ContainsKey("existing mailbox name") ||
+          !RequestArguments.ContainsKey("new mailbox name")) {
+        FinishError(ImapCommandResultCode.RequestError, "arguments 'existing mailbox name' and 'new mailbox name' must be setted");
+        return null;
+      }
+#endif
+
       ImapString renameParameters;
 
       if (RequestArguments.TryGetValue("rename parameters", out renameParameters))
-        SendCommand("RENAME",
-                    ProcessReceiveResponse,
-                    RequestArguments["existing mailbox name"],
-                    RequestArguments["new mailbox name"],
-                    renameParameters);
+        return Connection.CreateCommand("RENAME",
+                                        RequestArguments["existing mailbox name"],
+                                        RequestArguments["new mailbox name"],
+                                        renameParameters);
       else
-        SendCommand("RENAME",
-                    ProcessReceiveResponse,
-                    RequestArguments["existing mailbox name"],
-                    RequestArguments["new mailbox name"]);
+        return Connection.CreateCommand("RENAME",
+                                        RequestArguments["existing mailbox name"],
+                                        RequestArguments["new mailbox name"]);
     }
   }
 }

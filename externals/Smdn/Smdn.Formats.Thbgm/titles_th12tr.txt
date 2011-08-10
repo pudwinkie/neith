@@ -1,0 +1,29 @@
+#「東方星蓮船　～ Undefined Fantastic Object.」 体験版曲データ (contributed by Nautilus, 2009/09/17)
+#デフォルトのパスと製品名
+@上海アリス幻樂団\東方星蓮船体験版\thbgm_tr.dat,東方星蓮船　～ Undefined Fantastic Object. 体験版
+#原作者名
+#=ProductInfo,Creator,上海アリス幻樂団
+#製品略称
+#=ProductInfo,Prefix,th12tr
+#=ProductInfo,ShortName,東方星蓮船
+#=ProductInfo,AbbreviatedShortName,星蓮船
+#=ProductInfo,ShortestName,星
+#頒布年月日
+#=ProductInfo,ReleaseDate,2009-03-08
+#thbgm.datのサイズ(バイト単位)
+#=ProductInfo,BgmSourceLength,138934096
+#thbgm.datのハッシュ値(MD5)
+#=ProductInfo,BgmSourceHash,MD5Sum,cf48d07d0174af50f38d5d803ffbe5a7
+#thbgm.datの識別用ハッシュ値(末尾4MBのハッシュ)
+#=ProductInfo,BgmSourceIdentificationHash,MD5Sum,
+#曲データ
+#開始位置[Bytes]、イントロ部の長さ[Bytes]、ループ部の長さ[Bytes]、曲名
+#位置・長さは16進値として記述する
+00000010,000F8040,00909FC0,青空の影
+00A02010,0024F900,00E96680,春の湊に
+01AE7F90,002B7E00,00D5C300,小さな小さな賢将
+02AFC090,00089000,01278A00,閉ざせし雲の通い路
+03DFDA90,0024F500,014F1E00,万年置き傘にご注意を
+0553ED90,0012E300,01548800,スカイルーイン
+06BB5890,0014C400,0110FE00,時代親父とハイカラ少女
+07E11A90,001CACC8,004A2FF8,プレイヤーズスコア

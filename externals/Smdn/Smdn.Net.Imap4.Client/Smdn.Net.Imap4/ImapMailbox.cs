@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -104,7 +104,7 @@ namespace Smdn.Net.Imap4 {
 
     public IImapMailboxFlagSet Flags {
       get { return flags; }
-      internal set { flags = value ?? ImapMailboxFlagList.CreateReadOnlyEmpty(); }
+      internal set { flags = value ?? ImapMailboxFlagSet.CreateReadOnlyEmpty(); }
     }
 
     /*
@@ -119,12 +119,12 @@ namespace Smdn.Net.Imap4 {
      */
     /// <remarks>returns true if the mailbox is flagged as \NoSelect or \NonExistent.</remarks>
     public bool IsUnselectable {
-      get { return flags.Has(ImapMailboxFlag.NoSelect) || flags.Has(ImapMailboxFlag.NonExistent); }
+      get { return flags.Contains(ImapMailboxFlag.NoSelect) || flags.Contains(ImapMailboxFlag.NonExistent); }
     }
 
     /// <remarks>returns true if the mailbox is flagged as \NoInferiors or \HasNoChildren.</remarks>
     public bool IsNonHierarchical {
-      get { return flags.Has(ImapMailboxFlag.NoInferiors) || flags.Has(ImapMailboxFlag.HasNoChildren); }
+      get { return flags.Contains(ImapMailboxFlag.NoInferiors) || flags.Contains(ImapMailboxFlag.HasNoChildren); }
     }
 
     public bool ReadOnly {
@@ -134,12 +134,12 @@ namespace Smdn.Net.Imap4 {
 
     public IImapMessageFlagSet ApplicableFlags {
       get { return applicableFlags; }
-      internal set { applicableFlags = value ?? ImapMessageFlagList.CreateReadOnlyEmpty(); }
+      internal set { applicableFlags = value ?? ImapMessageFlagSet.CreateReadOnlyEmpty(); }
     }
 
     public IImapMessageFlagSet PermanentFlags {
       get { return permanentFlags; }
-      internal set { permanentFlags = value ?? ImapMessageFlagList.CreateReadOnlyEmpty(); }
+      internal set { permanentFlags = value ?? ImapMessageFlagSet.CreateReadOnlyEmpty(); }
     }
 
     public long ExistsMessage {
@@ -324,9 +324,9 @@ namespace Smdn.Net.Imap4 {
     private string name;
     private string hierarchyDelimiter = null;
     private bool readOnly = false;
-    private IImapMailboxFlagSet flags = ImapMailboxFlagList.CreateReadOnlyEmpty();
-    private IImapMessageFlagSet applicableFlags = ImapMessageFlagList.CreateReadOnlyEmpty();
-    private IImapMessageFlagSet permanentFlags = ImapMessageFlagList.CreateReadOnlyEmpty();
+    private IImapMailboxFlagSet flags = ImapMailboxFlagSet.CreateReadOnlyEmpty();
+    private IImapMessageFlagSet applicableFlags = ImapMessageFlagSet.CreateReadOnlyEmpty();
+    private IImapMessageFlagSet permanentFlags = ImapMessageFlagSet.CreateReadOnlyEmpty();
     private long existsMessage = 0;
     private long recentMessage = 0;
     private long unseenMessage = 0;

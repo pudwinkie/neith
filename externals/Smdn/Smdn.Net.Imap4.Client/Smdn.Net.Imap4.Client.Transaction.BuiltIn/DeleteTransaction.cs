@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -33,34 +33,23 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     {
     }
 
-    protected override ProcessTransactionDelegate Reset()
-    {
-#if DEBUG
-      if (!RequestArguments.ContainsKey("mailbox name"))
-        return ProcessArgumentNotSetted;
-      else
-#endif
-        return ProcessDelete;
-    }
-
-#if DEBUG
-    private void ProcessArgumentNotSetted()
-    {
-      FinishError(ImapCommandResultCode.RequestError, "arguments 'mailbox name' must be setted");
-    }
-#endif
-
     // 6.3.4. DELETE Command
     //    Arguments:  mailbox name
     //    Responses:  no specific responses for this command
     //    Result:     OK - delete completed
     //                NO - delete failure: can't delete mailbox with that name
     //                BAD - command unknown or arguments invalid
-    private void ProcessDelete()
+    protected override ImapCommand PrepareCommand()
     {
-      SendCommand("DELETE",
-                  ProcessReceiveResponse,
-                  RequestArguments["mailbox name"]);
+#if DEBUG
+      if (!RequestArguments.ContainsKey("mailbox name")) {
+        FinishError(ImapCommandResultCode.RequestError, "arguments 'mailbox name' must be setted");
+        return null;
+      }
+#endif
+
+      return Connection.CreateCommand("DELETE",
+                                      RequestArguments["mailbox name"]);
     }
   }
 }

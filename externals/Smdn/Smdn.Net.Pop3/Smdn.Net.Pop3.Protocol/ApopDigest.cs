@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -31,20 +31,29 @@ namespace Smdn.Net.Pop3.Protocol {
   public static class ApopDigest {
     public static string Calculate(string timestamp, string sharedSecret)
     {
-      if (string.IsNullOrEmpty(timestamp))
-        throw new ArgumentException("null or empty", "timestamp");
-      if (string.IsNullOrEmpty(sharedSecret))
-        throw new ArgumentException("null or empty", "sharedSecret");
+      if (timestamp == null)
+        throw new ArgumentNullException("timestamp");
+      if (timestamp.Length == 0)
+        throw ExceptionUtils.CreateArgumentMustBeNonEmptyString("timestamp");
+      if (sharedSecret == null)
+        throw new ArgumentNullException("sharedSecret");
+      if (sharedSecret.Length == 0)
+        throw ExceptionUtils.CreateArgumentMustBeNonEmptyString("sharedSecret");
 
-      return Calculate(new ByteString(timestamp), new ByteString(sharedSecret));
+      return Calculate(ByteString.CreateImmutable(timestamp),
+                       ByteString.CreateImmutable(sharedSecret));
     }
 
     public static string Calculate(ByteString timestamp, ByteString sharedSecret)
     {
-      if (ByteString.IsNullOrEmpty(timestamp))
-        throw new ArgumentException("null or empty", "timestamp");
-      if (ByteString.IsNullOrEmpty(sharedSecret))
-        throw new ArgumentException("null or empty", "sharedSecret");
+      if (timestamp == null)
+        throw new ArgumentNullException("timestamp");
+      if (timestamp.Length == 0)
+        throw ExceptionUtils.CreateArgumentMustBeNonEmptyString("timestamp");
+      if (sharedSecret == null)
+        throw new ArgumentNullException("sharedSecret");
+      if (sharedSecret.Length == 0)
+        throw ExceptionUtils.CreateArgumentMustBeNonEmptyString("sharedSecret");
 
       using (var hasher = MD5.Create()) {
         /*
@@ -57,7 +66,11 @@ namespace Smdn.Net.Pop3.Protocol {
          * itself is a 16-octet value which is sent in hexadecimal
          * format, using lower-case ASCII characters.
          */
-        return Hexadecimals.ToLowerString(hasher.ComputeHash((timestamp + sharedSecret).ByteArray));
+        var str = timestamp + sharedSecret;
+
+        return Hexadecimals.ToLowerString(hasher.ComputeHash(str.Segment.Array,
+                                                             str.Segment.Offset,
+                                                             str.Segment.Count));
       }
     }
   }

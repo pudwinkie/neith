@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -33,11 +33,6 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     {
     }
 
-    protected override ProcessTransactionDelegate Reset()
-    {
-      return ProcessCommand;
-    }
-
     // 6.1.3. LOGOUT Command
     //    Arguments:  none
     //    Responses:  REQUIRED untagged response: BYE
@@ -61,14 +56,14 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     //                BAD - no mailbox selected, or argument supplied but
     //                      none permitted
 
-    private void ProcessCommand()
+    protected override ImapCommand PrepareCommand()
     {
       if (this is LogoutTransaction)
-        SendCommand("LOGOUT", ProcessReceiveResponse);
+        return Connection.CreateCommand("LOGOUT");
       else if (this is CloseTransaction)
-        SendCommand("CLOSE", ProcessReceiveResponse);
-      else if (this is UnselectTransaction)
-        SendCommand("UNSELECT", ProcessReceiveResponse);
+        return Connection.CreateCommand("CLOSE");
+      else /*if (this is UnselectTransaction)*/
+        return Connection.CreateCommand("UNSELECT");
     }
   }
 }

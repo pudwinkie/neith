@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F526DA58-ED4B-4316-8AF3-2414005712AE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Smdn.Formats.Earthsoft.PV4.Tests</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <RootNamespace>Smdn.Formats.Earthsoft.PV4.Tests</RootNamespace>
+    <OutputPath>bin\</OutputPath>
+    <IntermediateOutputPath>obj\</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\netfx3.5\</OutputPath>
+    <IntermediateOutputPath>obj\Debug\netfx3.5\</IntermediateOutputPath>
+    <DefineConstants>NET_2_0;NET_3_5;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>NET_2_0;NET_3_5</DefineConstants>
+    <OutputPath>bin\Release\netfx3.5\</OutputPath>
+    <IntermediateOutputPath>obj\Release\netfx3.5\</IntermediateOutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Smdn\Smdn-netfx3.5.csproj">
+      <Project>{94EE5515-F253-491B-8F0F-09F70D03B1B6}</Project>
+      <Name>Smdn-netfx3.5</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Smdn.Formats.Earthsoft.PV4-netfx3.5.csproj">
+      <Project>{A6334004-4CD2-42BF-ACC3-93AA32736698}</Project>
+      <Name>Smdn.Formats.Earthsoft.PV4-netfx3.5</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Smdn.Core.BinaryFormats\Smdn.Core.BinaryFormats-netfx3.5.csproj">
+      <Project>{85C40D26-DC95-447C-B746-6005B8D93C52}</Project>
+      <Name>Smdn.Core.BinaryFormats-netfx3.5</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Smdn.Formats.Earthsoft.PV4\DV.cs" />
+    <Compile Include="Smdn.Formats.Earthsoft.PV4.IO\StreamFileReader.cs" />
+    <Compile Include="Smdn.Formats.Earthsoft.PV4.IO\StreamFileWriter.cs" />
+    <Compile Include="Smdn.Formats.Earthsoft.PV4.IO\IndexFileReader.cs" />
+    <Compile Include="Smdn.Formats.Earthsoft.PV4.IO\IndexFileWriter.cs" />
+    <Compile Include="Smdn.Formats.Earthsoft.PV4.IO\StreamAndIndexWriter.cs" />
+    <Compile Include="Smdn.Formats.Earthsoft.PV4.IO\Utils.cs" />
+    <Compile Include="Smdn.Formats.Earthsoft.PV4\IndexFileEntry.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="test-1280x720p-10f.dv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="test-1280x720p-10f.dvi">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

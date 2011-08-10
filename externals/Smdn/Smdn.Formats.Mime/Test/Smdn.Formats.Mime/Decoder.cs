@@ -172,17 +172,115 @@ unsupported transfer encoding");
     }
 
     [Test]
-    public void TestDecodeTransferEncodingNotExist()
+    public void TestDecodeContentCharsetContainsLeadingWhitespaces()
     {
       var mime = MimeMessage.LoadMessage(@"MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Subject: transfer encoding not exist
+Content-Type: text/plain; charset= iso-2022-jp
+Subject: test
 
-decode as text/plain; charset=us-ascii");
+content");
 
       Assert.AreEqual(MimeType.TextPlain, mime.MimeType);
-      Assert.AreEqual(Charsets.ASCII, mime.Charset);
-      Assert.AreEqual("decode as text/plain; charset=us-ascii", mime.ReadContentAsText());
+      Assert.AreEqual(Charsets.JIS, mime.Charset);
+      Assert.AreEqual("content", mime.ReadContentAsText());
+    }
+
+    [Test]
+    public void TestDecodeContentCharsetContainsTrailingWhitespaces()
+    {
+      var mime = MimeMessage.LoadMessage(@"MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-2022-jp 
+Subject: test
+
+content");
+
+      Assert.AreEqual(MimeType.TextPlain, mime.MimeType);
+      Assert.AreEqual(Charsets.JIS, mime.Charset);
+      Assert.AreEqual("content", mime.ReadContentAsText());
+    }
+
+    [Test]
+    public void TestDecodeContentCharsetQuoted()
+    {
+      var mime = MimeMessage.LoadMessage(@"MIME-Version: 1.0
+Content-Type: text/plain; charset=""iso-2022-jp""
+Subject: test
+
+content");
+
+      Assert.AreEqual(MimeType.TextPlain, mime.MimeType);
+      Assert.AreEqual(Charsets.JIS, mime.Charset);
+      Assert.AreEqual("content", mime.ReadContentAsText());
+    }
+
+    [Test]
+    public void TestDecodeContentCharsetQuotedContainsWhitespaces1()
+    {
+      var mime = MimeMessage.LoadMessage(@"MIME-Version: 1.0
+Content-Type: text/plain; charset="" iso-2022-jp ""
+Subject: test
+
+content");
+
+      Assert.AreEqual(MimeType.TextPlain, mime.MimeType);
+      Assert.AreEqual(Charsets.JIS, mime.Charset);
+      Assert.AreEqual("content", mime.ReadContentAsText());
+    }
+
+    [Test]
+    public void TestDecodeContentCharsetQuotedContainsWhitespaces2()
+    {
+      var mime = MimeMessage.LoadMessage(@"MIME-Version: 1.0
+Content-Type: text/plain; charset=""shift jis""
+Subject: test
+
+content");
+
+      Assert.AreEqual(MimeType.TextPlain, mime.MimeType);
+      Assert.AreEqual(Charsets.ShiftJIS, mime.Charset);
+      Assert.AreEqual("content", mime.ReadContentAsText());
+    }
+
+    [Test]
+    public void TestDecodeContentCharsetIllegal1()
+    {
+      var mime = MimeMessage.LoadMessage(@"MIME-Version: 1.0
+Content-Type: text/plain; charset=shift-jis
+Subject: test
+
+content");
+
+      Assert.AreEqual(MimeType.TextPlain, mime.MimeType);
+      Assert.AreEqual(Charsets.ShiftJIS, mime.Charset);
+      Assert.AreEqual("content", mime.ReadContentAsText());
+    }
+
+    [Test]
+    public void TestDecodeContentCharsetIllegal2()
+    {
+      var mime = MimeMessage.LoadMessage(@"MIME-Version: 1.0
+Content-Type: text/plain; charset=euc_jp
+Subject: test
+
+content");
+
+      Assert.AreEqual(MimeType.TextPlain, mime.MimeType);
+      Assert.AreEqual(Encoding.GetEncoding("euc-jp"), mime.Charset);
+      Assert.AreEqual("content", mime.ReadContentAsText());
+    }
+
+    [Test]
+    public void TestDecodeContentCharsetIllegal3()
+    {
+      var mime = MimeMessage.LoadMessage(@"MIME-Version: 1.0
+Content-Type: text/plain; charset=iso_2022-jp
+Subject: test
+
+content");
+
+      Assert.AreEqual(MimeType.TextPlain, mime.MimeType);
+      Assert.AreEqual(Charsets.JIS, mime.Charset);
+      Assert.AreEqual("content", mime.ReadContentAsText());
     }
 
     private Encoding latin1Encoding = Encoding.GetEncoding("latin1");

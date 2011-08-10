@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -64,8 +64,8 @@ namespace Smdn.Net.Imap4.Protocol.Client {
       }
     }
 
-    private static ByteString continueReqMark = new ByteString("+ ");
-    private static ByteString respCondMark = new ByteString("* [");
+    private readonly static ByteString continueReqMark = ByteString.CreateImmutable("+ ");
+    private readonly static ByteString respCondMark = ByteString.CreateImmutable("* [");
 
     private ImapResponse ParseResponce(ByteString line, ref IParsingContext parsingContext)
     {
@@ -125,11 +125,11 @@ namespace Smdn.Net.Imap4.Protocol.Client {
       return ParseDataResponse(line, ref parsingContext);
     }
 
-    private static ByteString respCondOk      = new ByteString("OK");
-    private static ByteString respCondNo      = new ByteString("NO");
-    private static ByteString respCondBad     = new ByteString("BAD");
-    private static ByteString respCondBye     = new ByteString("BYE");
-    private static ByteString respCondPreAuth = new ByteString("PREAUTH");
+    private static readonly ByteString respCondOk      = ByteString.CreateImmutable("OK");
+    private static readonly ByteString respCondNo      = ByteString.CreateImmutable("NO");
+    private static readonly ByteString respCondBad     = ByteString.CreateImmutable("BAD");
+    private static readonly ByteString respCondBye     = ByteString.CreateImmutable("BYE");
+    private static readonly ByteString respCondPreAuth = ByteString.CreateImmutable("PREAUTH");
     
     private ImapResponseCondition ParseCondition(ByteString cond)
     {
@@ -200,7 +200,7 @@ namespace Smdn.Net.Imap4.Protocol.Client {
        *         ; rule from [RFC3501].
        */
       if (ReceiveResponseAsUTF8)
-        return Encoding.UTF8.GetString(text.ByteArray);
+        return text.ToString(Encoding.UTF8);
       else
         return text.ToString();
     }

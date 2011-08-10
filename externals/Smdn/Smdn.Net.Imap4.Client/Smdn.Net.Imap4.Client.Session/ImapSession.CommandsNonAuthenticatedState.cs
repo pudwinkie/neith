@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -65,7 +65,7 @@ namespace Smdn.Net.Imap4.Client.Session {
           //       Once [TLS] has been started, the client MUST discard cached
           //       information about server capabilities and SHOULD re-issue the
           //       CAPABILITY command.
-          SetServerCapabilities(new ImapCapabilityList());
+          SetServerCapabilities(null);
         else
           return result;
       }
@@ -125,7 +125,7 @@ namespace Smdn.Net.Imap4.Client.Session {
         return new ImapCommandResult(ImapCommandResultCode.RequestError,
                                      string.Format("credential not found for {0};AUTH={1}@{2}:{3}", username, authenticationMechanism, connection.Host, connection.Port));
 
-      using (var t = new AuthenticateTransaction(connection, credential, serverCapabilities.Has(ImapCapability.SaslIR))) {
+      using (var t = new AuthenticateTransaction(connection, credential, serverCapabilities.Contains(ImapCapability.SaslIR))) {
         t.RequestArguments["authentication mechanism name"] = authenticationMechanism;
 
         return AuthenticateInternal(t, credential.UserName, authenticationMechanism, reissueCapability);
@@ -152,7 +152,7 @@ namespace Smdn.Net.Imap4.Client.Session {
       if (specificAuthenticationMechanism == null)
         throw new ArgumentNullException("specificAuthenticationMechanism");
 
-      using (var t = new AuthenticateTransaction(connection, specificAuthenticationMechanism, serverCapabilities.Has(ImapCapability.SaslIR))) {
+      using (var t = new AuthenticateTransaction(connection, specificAuthenticationMechanism, serverCapabilities.Contains(ImapCapability.SaslIR))) {
         var authMechanism = ImapAuthenticationMechanism.GetKnownOrCreate(specificAuthenticationMechanism.Name);
         var username = specificAuthenticationMechanism.Credential == null
           ? null
@@ -201,7 +201,7 @@ namespace Smdn.Net.Imap4.Client.Session {
       // 3.2. IMAP LOGINDISABLED capability
       //    An IMAP client which complies with this specification MUST NOT issue
       //    the LOGIN command if this capability is present.
-      if (serverCapabilities.Has(Imap4.ImapCapability.LoginDisabled))
+      if (serverCapabilities.Contains(Imap4.ImapCapability.LoginDisabled))
         throw new ImapIncapableException("LOGIN is disabled");
 
       if (credentials == null)
@@ -251,12 +251,12 @@ namespace Smdn.Net.Imap4.Client.Session {
                                                referToUri);
         }
         else {
-          Trace.Info("login referral: '{0}'", refferalResponseCode.ResponseText.Text);
+          TraceInfo("login referral: '{0}'", refferalResponseCode.ResponseText.Text);
 
           if (result.Succeeded)
-            Trace.Info("  another server available at {0}", referToUri);
+            TraceInfo(string.Concat("  another server available at ", referToUri));
           else
-            Trace.Info("  try to connect to {0}", referToUri);
+            TraceInfo(string.Concat("  try to connect to ", referToUri));
         }
       }
 
@@ -308,7 +308,7 @@ namespace Smdn.Net.Imap4.Client.Session {
       authority.UserName  = username;
       authority.AuthType  = authType;
 
-      TraceInfo("authority: {0}", authority);
+      TraceInfo(string.Concat("authority: ", authority));
     }
   }
 }

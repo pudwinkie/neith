@@ -179,7 +179,7 @@ namespace Smdn.Net.Imap4.WebClients {
         server.DequeueRequest(); // CAPABILITY
         server.DequeueRequest(); // LOGIN
 
-        StringAssert.Contains("SELECT \"INBOX\"", server.DequeueRequest());
+        StringAssert.Contains("SELECT INBOX", server.DequeueRequest());
       }
     }
 
@@ -536,7 +536,7 @@ namespace Smdn.Net.Imap4.WebClients {
           Assert.IsTrue(response.Result.Failed);
         });
 
-        StringAssert.EndsWith("UID COPY 1 \"INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\"\r\n", server.DequeueRequest());
+        StringAssert.EndsWith("UID COPY 1 INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\r\n", server.DequeueRequest());
       }
     }
 
@@ -585,7 +585,7 @@ namespace Smdn.Net.Imap4.WebClients {
           }
         });
 
-        StringAssert.EndsWith("UID COPY 1 \"INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\"\r\n", server.DequeueRequest());
+        StringAssert.EndsWith("UID COPY 1 INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\r\n", server.DequeueRequest());
       }
     }
 
@@ -649,16 +649,16 @@ namespace Smdn.Net.Imap4.WebClients {
                           response.Mailboxes[0].Url);
         });
 
-        StringAssert.EndsWith("UID COPY 1 \"INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\"\r\n", server.DequeueRequest());
-        StringAssert.EndsWith("CREATE \"INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\"\r\n", server.DequeueRequest());
-        StringAssert.EndsWith("UID COPY 1 \"INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\"\r\n", server.DequeueRequest());
+        StringAssert.EndsWith("UID COPY 1 INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\r\n", server.DequeueRequest());
+        StringAssert.EndsWith("CREATE INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\r\n", server.DequeueRequest());
+        StringAssert.EndsWith("UID COPY 1 INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\r\n", server.DequeueRequest());
 
         if (subscription) {
-          StringAssert.EndsWith("SUBSCRIBE \"INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\"\r\n", server.DequeueRequest());
-          StringAssert.EndsWith("LSUB \"\" \"INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\"\r\n", server.DequeueRequest());
+          StringAssert.EndsWith("SUBSCRIBE INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\r\n", server.DequeueRequest());
+          StringAssert.EndsWith("LSUB \"\" INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\r\n", server.DequeueRequest());
         }
         else {
-          StringAssert.EndsWith("LIST \"\" \"INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\"\r\n", server.DequeueRequest());
+          StringAssert.EndsWith("LIST \"\" INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\r\n", server.DequeueRequest());
         }
       }
     }
@@ -687,8 +687,8 @@ namespace Smdn.Net.Imap4.WebClients {
           Assert.IsTrue(response.Result.Failed);
         });
 
-        StringAssert.EndsWith("UID COPY 1 \"INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\"\r\n", server.DequeueRequest());
-        StringAssert.EndsWith("CREATE \"INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\"\r\n", server.DequeueRequest());
+        StringAssert.EndsWith("UID COPY 1 INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\r\n", server.DequeueRequest());
+        StringAssert.EndsWith("CREATE INBOX/&MLMw1DD8UUgw4TD8MOsw3DDDMK8wuQ-\r\n", server.DequeueRequest());
       }
     }
 

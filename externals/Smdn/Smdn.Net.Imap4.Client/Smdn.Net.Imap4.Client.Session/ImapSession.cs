@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+#if NET_3_5
+using System.Linq;
+#endif
 
 using Smdn.Collections;
 using Smdn.Net.Imap4.Protocol;
@@ -83,7 +86,7 @@ namespace Smdn.Net.Imap4.Client.Session {
         RejectTransactionProceeding();
 
         if (value < -1)
-          throw new ArgumentOutOfRangeException("TransactionTimeout", value, "must be greater than or equals to -1");
+          throw ExceptionUtils.CreateArgumentMustBeGreaterThanOrEqualTo(-1, "TransactionTimeout", value);
         transactionTimeout = value;
       }
     }
@@ -105,66 +108,133 @@ namespace Smdn.Net.Imap4.Client.Session {
      * construction / destruction
      */
     public ImapSession(string host)
-      : this(host, ImapDefaultPorts.Imap, false, DefaultTransactionTimeout, null)
+      : this(host,
+             ImapDefaultPorts.Imap,
+             DefaultTransactionTimeout,
+             DefaultSendTimeout,
+             DefaultReceiveTimeout,
+             false,
+             null)
     {
     }
 
-    public ImapSession(string host, int port)
-      : this(host, port, false, DefaultTransactionTimeout, null)
+    public ImapSession(string host,
+                       int port)
+      : this(host,
+             port,
+             DefaultTransactionTimeout,
+             DefaultSendTimeout,
+             DefaultReceiveTimeout,
+             false,
+             null)
     {
     }
 
-    public ImapSession(string host, int port, int transactionTimeout)
-      : this(host, port, false, transactionTimeout, null)
+    public ImapSession(string host,
+                       int port,
+                       int transactionTimeout)
+      : this(host,
+             port,
+             transactionTimeout,
+             DefaultSendTimeout,
+             DefaultReceiveTimeout,
+             false,
+             null)
     {
     }
 
-    public ImapSession(string host, int port, UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
-      : this(host, port, false, DefaultTransactionTimeout, createAuthenticatedStreamCallback)
+    public ImapSession(string host,
+                       int port,
+                       UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
+      : this(host,
+             port,
+             DefaultTransactionTimeout,
+             DefaultSendTimeout,
+             DefaultReceiveTimeout,
+             false,
+             createAuthenticatedStreamCallback)
     {
     }
 
-    public ImapSession(string host, int port, int transactionTimeout, UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
-      : this(host, port, false, transactionTimeout, createAuthenticatedStreamCallback)
+    public ImapSession(string host,
+                       int port,
+                       int transactionTimeout,
+                       UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
+      : this(host,
+             port,
+             transactionTimeout,
+             DefaultSendTimeout,
+             DefaultReceiveTimeout,
+             false,
+             createAuthenticatedStreamCallback)
     {
     }
 
-    public ImapSession(string host, bool handlesReferralAsException)
-      : this(host, ImapDefaultPorts.Imap, handlesReferralAsException, DefaultTransactionTimeout, null)
+    public ImapSession(string host,
+                       int port,
+                       bool handlesReferralAsException)
+      : this(host,
+             port,
+             DefaultTransactionTimeout,
+             DefaultSendTimeout,
+             DefaultReceiveTimeout,
+             handlesReferralAsException,
+             null)
     {
     }
 
-    public ImapSession(string host, bool handlesReferralAsException, int transactionTimeout)
-      : this(host, ImapDefaultPorts.Imap, handlesReferralAsException, transactionTimeout, null)
+    public ImapSession(string host,
+                       int port,
+                       bool handlesReferralAsException,
+                       UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
+      : this(host,
+             port,
+             DefaultTransactionTimeout,
+             DefaultSendTimeout,
+             DefaultReceiveTimeout,
+             handlesReferralAsException,
+             createAuthenticatedStreamCallback)
     {
     }
 
-    public ImapSession(string host, int port, bool handlesReferralAsException)
-      : this(host, port, handlesReferralAsException, DefaultTransactionTimeout, null)
+    public ImapSession(string host,
+                       int port,
+                       int transactionTimeout,
+                       int sendTimeout,
+                       int receiveTimeout,
+                       UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
+      : this(host,
+             port,
+             transactionTimeout,
+             sendTimeout,
+             receiveTimeout,
+             false,
+             createAuthenticatedStreamCallback)
     {
     }
 
-    public ImapSession(string host, int port, bool handlesReferralAsException, int transactionTimeout)
-      : this(host, port, handlesReferralAsException, transactionTimeout, null)
-    {
-    }
-
-    public ImapSession(string host, int port, bool handlesReferralAsException, UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
-      : this(host, port, handlesReferralAsException, DefaultTransactionTimeout, createAuthenticatedStreamCallback)
-    {
-    }
-
-    public ImapSession(string host, int port, bool handlesReferralAsException, int transactionTimeout, UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
+    public ImapSession(string host,
+                       int port,
+                       int transactionTimeout,
+                       int sendTimeout,
+                       int receiveTimeout,
+                       bool handlesReferralAsException,
+                       UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
     {
       if (transactionTimeout < -1)
-        throw new ArgumentOutOfRangeException("transactionTimeout", transactionTimeout, "must be greater than or equals to -1");
+        throw ExceptionUtils.CreateArgumentMustBeGreaterThanOrEqualTo(-1, "transactionTimeout", transactionTimeout);
 
       this.handlesReferralAsException = handlesReferralAsException;
       this.transactionTimeout = transactionTimeout;
 
       this.readonlyHierarchyDelimiters = hierarchyDelimiters.AsReadOnly();
 
-      Connect(host, port, createAuthenticatedStreamCallback);
+      Connect(host,
+              port,
+              transactionTimeout,
+              sendTimeout,
+              receiveTimeout,
+              createAuthenticatedStreamCallback);
     }
 
     public override string ToString()
@@ -177,6 +247,8 @@ namespace Smdn.Net.Imap4.Client.Session {
     }
 
     private const int DefaultTransactionTimeout = Timeout.Infinite;
+    private const int DefaultSendTimeout = Timeout.Infinite;
+    private const int DefaultReceiveTimeout = Timeout.Infinite;
 
     private bool disposed = false;
     private bool handlesReferralAsException;
@@ -216,7 +288,7 @@ namespace Smdn.Net.Imap4.Client.Session {
       get { return authority; }
     }
 
-    public ImapCapabilityList ServerCapabilities {
+    public ImapCapabilitySet ServerCapabilities {
       get { CheckDisposed(); return serverCapabilities; }
     }
 
@@ -247,7 +319,7 @@ namespace Smdn.Net.Imap4.Client.Session {
     private ImapMailbox selectedMailbox = null;
     private bool updateSelectedMailboxSizeAndStatus = true;
     private ImapUriBuilder authority = new ImapUriBuilder();
-    private ImapCapabilityList serverCapabilities;
+    private ImapCapabilitySet serverCapabilities;
     private Dictionary<string, string> hierarchyDelimiters = new Dictionary<string, string>(StringComparer.Ordinal);
     private ImapNamespace namespaces = new ImapNamespace();
     private IDictionary<string, string> serverID = (new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)).AsReadOnly();
@@ -259,15 +331,26 @@ namespace Smdn.Net.Imap4.Client.Session {
     /*
      * transaction methods : connect/disconnect
      */
-    private void Connect(string host, int port, UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
+    private void Connect(string host,
+                         int port,
+                         int connectTimeout,
+                         int sendTimeout,
+                         int receiveTimeout,
+                         UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
     {
       TraceInfo("connecting");
 
-      this.connection = new ImapConnection(host, port, createAuthenticatedStreamCallback);
+      this.connection = new ImapConnection(host,
+                                           port,
+                                           connectTimeout,
+                                           createAuthenticatedStreamCallback);
+
+      this.connection.SendTimeout = sendTimeout;
+      this.connection.ReceiveTimeout = receiveTimeout;
 
       TraceInfo("connected");
 
-      SetServerCapabilities(new ImapCapabilityList(new[] {
+      SetServerCapabilities(new ImapCapabilitySet(new[] {
         ImapCapability.Imap4Rev1 /* required by GreetingTransaction */
       }));
 
@@ -295,8 +378,8 @@ namespace Smdn.Net.Imap4.Client.Session {
                                                      referToUri);
               }
               else {
-                Trace.Info("login referral: '{0}'", refferalResponseCode.ResponseText.Text);
-                Trace.Info("  try to connect to {0}", referToUri);
+                TraceInfo("login referral: '{0}'", refferalResponseCode.ResponseText.Text);
+                TraceInfo(string.Concat("  try to connect to ", referToUri));
               }
             }
           }
@@ -327,7 +410,7 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         if (capabilityResponseCode == null)
           // clear server capabilities
-          SetServerCapabilities(new ImapCapabilityList());
+          SetServerCapabilities(null);
         else
           SetServerCapabilities(ImapResponseTextConverter.FromCapability(capabilityResponseCode.ResponseText));
       }
@@ -403,8 +486,8 @@ namespace Smdn.Net.Imap4.Client.Session {
 
       if (command == null)
         throw new ArgumentNullException("command");
-      else if (command.Length == 0)
-        throw new ArgumentException("command must be a non-empty string", "command");
+      if (command.Length == 0)
+        throw ExceptionUtils.CreateArgumentMustBeNonEmptyString("command");
 
       dataResponses = null;
 
@@ -422,9 +505,12 @@ namespace Smdn.Net.Imap4.Client.Session {
     /*
      * methods for internal state management
      */
-    internal void SetServerCapabilities(ImapCapabilityList newCapabilities)
+    internal void SetServerCapabilities(ImapCapabilitySet newCapabilities)
     {
-      serverCapabilities = new ImapCapabilityList(true, newCapabilities);
+      if (newCapabilities == null)
+        serverCapabilities = ImapCapabilitySet.CreateReadOnlyEmpty();
+      else
+        serverCapabilities = new ImapCapabilitySet(true, newCapabilities);
 
 #if false
       defaultLiteralSynchronizationMode = serverCapabilities.Has(ImapCapability.LiteralNonSync)
@@ -528,31 +614,14 @@ namespace Smdn.Net.Imap4.Client.Session {
       if (extension == null)
         return;
 
-      CheckServerCapability(extension.RequiredCapability);
-    }
-
-    private void CheckServerCapability(IImapMultipleExtension extensions)
-    {
-      if (extensions == null)
-        return;
-
-      foreach (var capability in extensions.RequiredCapabilities) {
-        CheckServerCapability(capability);
-      }
+      if (!serverCapabilities.IsCapable(extension))
+        throw new ImapIncapableException(extension.RequiredCapabilities.ToArray());
     }
 
     private void CheckServerCapability(ImapCapability capability)
     {
-      if (capability != null && !serverCapabilities.Has(capability))
+      if (capability != null && !serverCapabilities.Contains(capability))
         throw new ImapIncapableException(capability);
-    }
-
-    private void RejectInvalidMailboxNameArgument(string mailboxName)
-    {
-      if (mailboxName == null)
-        throw new ArgumentNullException("mailboxName");
-      else if (mailboxName.Length == 0)
-        throw new ArgumentException("invalid mailbox name", "mailboxName");
     }
 
     private void RejectTransactionProceeding()
@@ -564,6 +633,12 @@ namespace Smdn.Net.Imap4.Client.Session {
     /*
      * tracing
      */
+    [System.Diagnostics.Conditional("TRACE")]
+    private void TraceInfo(string message)
+    {
+      Trace.Log(this, message);
+    }
+
     [System.Diagnostics.Conditional("TRACE")]
     private void TraceInfo(string format, params object[] arguments)
     {

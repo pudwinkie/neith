@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -27,16 +27,11 @@ using System;
 using Smdn.Net.Pop3.Protocol.Client;
 
 namespace Smdn.Net.Pop3.Client.Transaction.BuiltIn {
-  internal sealed class CapaTransaction : PopTransactionBase<PopCommandResult<PopCapabilityList>> {
+  internal sealed class CapaTransaction : PopTransactionBase<PopCommandResult<PopCapabilitySet>> {
     public CapaTransaction(PopConnection connection)
       : base(connection)
     {
       IsResponseMultiline = true;
-    }
-
-    protected override ProcessTransactionDelegate Reset()
-    {
-      return ProcessCapa;
     }
 
     /*
@@ -50,9 +45,9 @@ namespace Smdn.Net.Pop3.Client.Transaction.BuiltIn {
      *    Possible Responses:
      *        +OK -ERR
      */
-    private void ProcessCapa()
+    protected override PopCommand PrepareCommand()
     {
-      SendCommand("CAPA", ProcessReceiveResponse);
+      return new PopCommand("CAPA");
     }
 
     protected override void OnFollowingResponseReceived(PopFollowingResponse following)
@@ -64,9 +59,9 @@ namespace Smdn.Net.Pop3.Client.Transaction.BuiltIn {
 
     protected override void OnTerminationResponse(PopTerminationResponse termination)
     {
-      Finish(new PopCommandResult<PopCapabilityList>(capabilities, StatusResponse.ResponseText));
+      Finish(new PopCommandResult<PopCapabilitySet>(capabilities, StatusResponse.ResponseText));
     }
 
-    private PopCapabilityList capabilities = new PopCapabilityList();
+    private PopCapabilitySet capabilities = new PopCapabilitySet();
   }
 }

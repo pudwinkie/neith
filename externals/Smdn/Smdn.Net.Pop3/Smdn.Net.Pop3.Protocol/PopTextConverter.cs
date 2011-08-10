@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -102,17 +102,12 @@ namespace Smdn.Net.Pop3.Protocol {
 
     public static long ToNumber(ByteString text)
     {
-      var num = text.ByteArray;
-      var val = 0L;
-
-      for (var index = 0; index < num.Length; index++) {
-        if (0x30 <= num[index] && num[index] <= 0x39)
-          val = (val * 10) + (num[index] - 0x30);
-        else
-          throw new PopMalformedTextException(text);
+      try {
+        return (long)text.ToUInt64();
       }
-
-      return val;
+      catch (FormatException) {
+        throw new PopMalformedTextException(text);
+      }
     }
 
     public static string ToString(ByteString text)

@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Imaging.Tests-netfx3.5", "Smdn.Imaging.Tests-netfx3.5.csproj", "{C6FC74E0-C53F-45F8-B3DF-489D307B37F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn-netfx3.5", "..\..\Smdn\Smdn-netfx3.5.csproj", "{94EE5515-F253-491B-8F0F-09F70D03B1B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Imaging-netfx3.5", "..\Smdn.Imaging-netfx3.5.csproj", "{3AFC1D4A-7969-402E-8E35-922D60B6AE33}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3AFC1D4A-7969-402E-8E35-922D60B6AE33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AFC1D4A-7969-402E-8E35-922D60B6AE33}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AFC1D4A-7969-402E-8E35-922D60B6AE33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AFC1D4A-7969-402E-8E35-922D60B6AE33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94EE5515-F253-491B-8F0F-09F70D03B1B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94EE5515-F253-491B-8F0F-09F70D03B1B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94EE5515-F253-491B-8F0F-09F70D03B1B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94EE5515-F253-491B-8F0F-09F70D03B1B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6FC74E0-C53F-45F8-B3DF-489D307B37F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6FC74E0-C53F-45F8-B3DF-489D307B37F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6FC74E0-C53F-45F8-B3DF-489D307B37F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6FC74E0-C53F-45F8-B3DF-489D307B37F5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Smdn.Imaging.Tests-netfx3.5.csproj
+	EndGlobalSection
+EndGlobal

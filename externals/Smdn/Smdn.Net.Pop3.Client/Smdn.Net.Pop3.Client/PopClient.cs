@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -83,7 +83,7 @@ namespace Smdn.Net.Pop3.Client {
       get { return Session.IsSecureConnection; }
     }
 
-    public PopCapabilityList ServerCapabilities {
+    public PopCapabilitySet ServerCapabilities {
       get { return Session.ServerCapabilities; }
     }
 
@@ -222,7 +222,7 @@ namespace Smdn.Net.Pop3.Client {
       }
 
       public bool EndConnectCalled {
-        get { return endConnectCalled; }
+        get { return endConnectCalled != 0; }
       }
 
       internal bool OwnerDisposed {
@@ -245,9 +245,8 @@ namespace Smdn.Net.Pop3.Client {
 
       internal PopSession EndConnect()
       {
-        endConnectCalled = true;
-
-        innerAsyncResult.AsyncWaitHandle.WaitOne();
+        if (!innerAsyncResult.IsCompleted)
+          innerAsyncResult.AsyncWaitHandle.WaitOne();
 
         lock (asyncResultLockObject) {
           if (exception != null)
@@ -283,7 +282,7 @@ namespace Smdn.Net.Pop3.Client {
       private AsyncResult innerAsyncResult;
       private AsyncCallback asyncCallback;
       private object asyncState;
-      private bool endConnectCalled;
+      internal int endConnectCalled = 0;
       private object asyncResultLockObject = new object();
       private Exception exception;
       private PopSession createdSession;
@@ -400,9 +399,9 @@ namespace Smdn.Net.Pop3.Client {
       if (asyncResult == null)
         throw new ArgumentNullException("asyncResult");
       if (asyncResult != connectAsyncResult)
-        throw new ArgumentException("invalid IAsyncResult", "asyncResult");
+        throw ExceptionUtils.CreateArgumentMustBeValidIAsyncResult("asyncResult");
 
-      if (connectAsyncResult.EndConnectCalled)
+      if (Interlocked.CompareExchange(ref connectAsyncResult.endConnectCalled, 1, 0) == 1)
         throw new InvalidOperationException("EndConnect already called");
 
       try {

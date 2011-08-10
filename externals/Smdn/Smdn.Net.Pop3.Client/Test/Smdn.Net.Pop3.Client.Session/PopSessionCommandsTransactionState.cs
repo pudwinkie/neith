@@ -8,33 +8,33 @@ namespace Smdn.Net.Pop3.Client.Session {
     [Test]
     public void TestNoOp()
     {
-      using (var session = Login()) {
+      Login(delegate(PopSession session, PopPseudoServer server) {
         server.EnqueueResponse("+OK\r\n");
 
         Assert.IsTrue((bool)session.NoOp());
 
         StringAssert.AreEqualIgnoringCase("NOOP\r\n",
                                           server.DequeueRequest());
-      }
+      });
     }
 
     [Test]
     public void TestRset()
     {
-      using (var session = Login()) {
+      Login(delegate(PopSession session, PopPseudoServer server) {
         server.EnqueueResponse("+OK\r\n");
 
         Assert.IsTrue((bool)session.Rset());
 
         StringAssert.AreEqualIgnoringCase("RSET\r\n",
                                           server.DequeueRequest());
-      }
+      });
     }
 
     [Test]
     public void TestStat()
     {
-      using (var session = Login()) {
+      Login(delegate(PopSession session, PopPseudoServer server) {
         server.EnqueueResponse("+OK 2 320\r\n");
 
         PopDropListing dropListing;
@@ -47,13 +47,13 @@ namespace Smdn.Net.Pop3.Client.Session {
         Assert.AreNotEqual(PopDropListing.Empty, dropListing);
         Assert.AreEqual(2L, dropListing.MessageCount);
         Assert.AreEqual(320L, dropListing.SizeInOctets);
-      }
+      });
     }
 
     [Test]
     public void TestList()
     {
-      using (var session = Login()) {
+      Login(delegate(PopSession session, PopPseudoServer server) {
         server.EnqueueResponse("+OK 2 messages (320 octets)\r\n" +
                                "1 120\r\n" + 
                                "2 200\r\n" + 
@@ -72,13 +72,13 @@ namespace Smdn.Net.Pop3.Client.Session {
         Assert.AreEqual(120L, scanListings[0].SizeInOctets);
         Assert.AreEqual(2L,   scanListings[1].MessageNumber);
         Assert.AreEqual(200L, scanListings[1].SizeInOctets);
-      }
+      });
     }
 
     [Test]
     public void TestListWithMessageNumber()
     {
-      using (var session = Login()) {
+      Login(delegate(PopSession session, PopPseudoServer server) {
         server.EnqueueResponse("+OK 2 200\r\n");
 
         PopScanListing scanListing;
@@ -100,13 +100,13 @@ namespace Smdn.Net.Pop3.Client.Session {
                                           server.DequeueRequest());
 
         Assert.AreEqual(PopScanListing.Invalid, scanListing);
-      }
+      });
     }
 
     [Test]
     public void TestUidl()
     {
-      using (var session = Login(PopCapability.Uidl)) {
+      Login(new[] {PopCapability.Uidl}, delegate(PopSession session, PopPseudoServer server) {
         server.EnqueueResponse("+OK\r\n" +
                                "1 whqtswO00WBw418f9t5JxYwZ\r\n" + 
                                "2 QhdPYR:00WBw1Ph7x7\r\n" + 
@@ -125,13 +125,13 @@ namespace Smdn.Net.Pop3.Client.Session {
         Assert.AreEqual("whqtswO00WBw418f9t5JxYwZ", uidListings[0].UniqueId);
         Assert.AreEqual(2L, uidListings[1].MessageNumber);
         Assert.AreEqual("QhdPYR:00WBw1Ph7x7", uidListings[1].UniqueId);
-      }
+      });
     }
 
     [Test]
     public void TestUidlWithMessageNumber()
     {
-      using (var session = Login(PopCapability.Uidl)) {
+      Login(new[] {PopCapability.Uidl}, delegate(PopSession session, PopPseudoServer server) {
         server.EnqueueResponse("+OK 2 QhdPYR:00WBw1Ph7x7\r\n");
 
         PopUniqueIdListing uidListing;
@@ -153,23 +153,23 @@ namespace Smdn.Net.Pop3.Client.Session {
                                           server.DequeueRequest());
 
         Assert.AreEqual(PopUniqueIdListing.Invalid,  uidListing);
-      }
+      });
     }
 
     [Test, ExpectedException(typeof(PopIncapableException))]
     public void TestUidlIncapable()
     {
-      using (var session = Login()) {
+      Login(delegate(PopSession session, PopPseudoServer server) {
         PopUniqueIdListing uidListing;
 
         session.Uidl(1L, out uidListing);
-      }
+      });
     }
 
     [Test]
     public void TestDele()
     {
-      using (var session = Login()) {
+      Login(delegate(PopSession session, PopPseudoServer server) {
         server.EnqueueResponse("+OK message 1 deleted\r\n");
 
         Assert.IsTrue((bool)session.Dele(1L));
@@ -183,13 +183,13 @@ namespace Smdn.Net.Pop3.Client.Session {
 
         StringAssert.AreEqualIgnoringCase("DELE 2\r\n",
                                           server.DequeueRequest());
-      }
+      });
     }
 
     [Test]
     public void TestRetr()
     {
-      using (var session = Login()) {
+      Login(delegate(PopSession session, PopPseudoServer server) {
         var messageBody = "From: from\r\n" +
           "To: to\r\n" +
           "Subect: subject\r\n" +
@@ -226,13 +226,13 @@ namespace Smdn.Net.Pop3.Client.Session {
                                           server.DequeueRequest());
 
         Assert.IsNull(messageStream);
-      }
+      });
     }
 
     [Test]
     public void TestRetrByteStuffed()
     {
-      using (var session = Login()) {
+      Login(delegate(PopSession session, PopPseudoServer server) {
         var messageBody = @"MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -264,13 +264,13 @@ end of message
         Assert.AreEqual(messageBody, reader.ReadToEnd());
 
         messageStream.Close();
-      }
+      });
     }
 
     [Test]
     public void TestTop()
     {
-      using (var session = Login(PopCapability.Top)) {
+      Login(new[] {PopCapability.Top}, delegate(PopSession session, PopPseudoServer server) {
         var messageBody = "From: from\r\n" +
           "To: to\r\n" +
           "Subect: subject\r\n" +
@@ -303,17 +303,17 @@ end of message
                                           server.DequeueRequest());
 
         Assert.IsNull(messageStream);
-      }
+      });
     }
 
     [Test, ExpectedException(typeof(PopIncapableException))]
     public void TestTopIncapable()
     {
-      using (var session = Login()) {
+      Login(delegate(PopSession session, PopPseudoServer server) {
         Stream messageStream;
 
         session.Top(1L, 0, out messageStream);
-      }
+      });
     }
   }
 }

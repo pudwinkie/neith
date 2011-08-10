@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,6 @@ namespace Smdn.Net.Pop3 {
 
   [Serializable]
   public class PopIncapableException : PopInvalidOperationException {
-    [NonSerialized]
     private PopCapability requiredCapability;
 
     public PopCapability RequiredCapability {
@@ -71,18 +70,14 @@ namespace Smdn.Net.Pop3 {
     protected PopIncapableException(SerializationInfo info, StreamingContext context)
       : base(info, context)
     {
-      // TODO
-      //RequiredCapability = info.GetValue("RequiredCapability", typeof(PopCapability));
+      requiredCapability = (PopCapability)info.GetValue("requiredCapability", typeof(PopCapability));
     }
 
-    /*
     public override void GetObjectData(SerializationInfo info, StreamingContext context)
     {
       base.GetObjectData(info, context);
 
-      // TODO
-      //info.AddValue("RequiredCapability", RequiredCapability);
+      info.AddValue("requiredCapability", requiredCapability);
     }
-    */
   }
 }

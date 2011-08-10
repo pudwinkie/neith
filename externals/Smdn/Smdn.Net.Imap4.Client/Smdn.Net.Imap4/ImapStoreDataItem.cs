@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,11 @@
 // THE SOFTWARE.
 
 using System;
+#if NET_3_5
+using System.Linq;
+#else
+using Smdn.Collections;
+#endif
 
 namespace Smdn.Net.Imap4 {
   // combinable data item types:
@@ -58,15 +63,17 @@ namespace Smdn.Net.Imap4 {
 
     public static ImapStoreDataItem ReplaceFlags(string keyword, params string[] keywords)
     {
-      if (string.IsNullOrEmpty("keyword"))
-        throw new ArgumentException("must be non-empty string", "keyword");
+      if (keyword == null)
+        throw new ArgumentNullException("keyword");
+      if (keyword.Length == 0)
+        throw ExceptionUtils.CreateArgumentMustBeNonEmptyString("keyword");
 
       return ReplaceFlags(keywords.Prepend(keyword), new ImapMessageFlag[] {});
     }
 
     public static ImapStoreDataItem ReplaceFlags(string[] keywords, params ImapMessageFlag[] flags)
     {
-      return ReplaceFlags(new ImapMessageFlagList(keywords, flags));
+      return ReplaceFlags(new ImapMessageFlagSet(keywords, flags));
     }
 
     public static ImapStoreDataItem ReplaceFlags(IImapMessageFlagSet flags)
@@ -86,15 +93,17 @@ namespace Smdn.Net.Imap4 {
 
     public static ImapStoreDataItem ReplaceFlagsSilent(string keyword, params string[] keywords)
     {
-      if (string.IsNullOrEmpty("keyword"))
-        throw new ArgumentException("must be non-empty string", "keyword");
+      if (keyword == null)
+        throw new ArgumentNullException("keyword");
+      if (keyword.Length == 0)
+        throw ExceptionUtils.CreateArgumentMustBeNonEmptyString("keyword");
 
       return ReplaceFlagsSilent(keywords.Prepend(keyword), new ImapMessageFlag[] {});
     }
 
     public static ImapStoreDataItem ReplaceFlagsSilent(string[] keywords, params ImapMessageFlag[] flags)
     {
-      return ReplaceFlagsSilent(new ImapMessageFlagList(keywords, flags));
+      return ReplaceFlagsSilent(new ImapMessageFlagSet(keywords, flags));
     }
 
     public static ImapStoreDataItem ReplaceFlagsSilent(IImapMessageFlagSet flags)
@@ -115,15 +124,17 @@ namespace Smdn.Net.Imap4 {
 
     public static ImapStoreDataItem AddFlags(string keyword, params string[] keywords)
     {
-      if (string.IsNullOrEmpty("keyword"))
-        throw new ArgumentException("must be non-empty string", "keyword");
+      if (keyword == null)
+        throw new ArgumentNullException("keyword");
+      if (keyword.Length == 0)
+        throw ExceptionUtils.CreateArgumentMustBeNonEmptyString("keyword");
 
       return AddFlags(keywords.Prepend(keyword), new ImapMessageFlag[] {});
     }
 
     public static ImapStoreDataItem AddFlags(string[] keywords, params ImapMessageFlag[] flags)
     {
-      return AddFlags(new ImapMessageFlagList(keywords, flags));
+      return AddFlags(new ImapMessageFlagSet(keywords, flags));
     }
 
     public static ImapStoreDataItem AddFlags(IImapMessageFlagSet flags)
@@ -143,15 +154,17 @@ namespace Smdn.Net.Imap4 {
 
     public static ImapStoreDataItem AddFlagsSilent(string keyword, params string[] keywords)
     {
-      if (string.IsNullOrEmpty("keyword"))
-        throw new ArgumentException("must be non-empty string", "keyword");
+      if (keyword == null)
+        throw new ArgumentNullException("keyword");
+      if (keyword.Length == 0)
+        throw ExceptionUtils.CreateArgumentMustBeNonEmptyString("keyword");
 
       return AddFlagsSilent(keywords.Prepend(keyword), new ImapMessageFlag[] {});
     }
 
     public static ImapStoreDataItem AddFlagsSilent(string[] keywords, params ImapMessageFlag[] flags)
     {
-      return AddFlagsSilent(new ImapMessageFlagList(keywords, flags));
+      return AddFlagsSilent(new ImapMessageFlagSet(keywords, flags));
     }
 
     public static ImapStoreDataItem AddFlagsSilent(IImapMessageFlagSet flags)
@@ -173,15 +186,17 @@ namespace Smdn.Net.Imap4 {
 
     public static ImapStoreDataItem RemoveFlags(string keyword, params string[] keywords)
     {
-      if (string.IsNullOrEmpty("keyword"))
-        throw new ArgumentException("must be non-empty string", "keyword");
+      if (keyword == null)
+        throw new ArgumentNullException("keyword");
+      if (keyword.Length == 0)
+        throw ExceptionUtils.CreateArgumentMustBeNonEmptyString("keyword");
 
       return RemoveFlags(keywords.Prepend(keyword), new ImapMessageFlag[] {});
     }
 
     public static ImapStoreDataItem RemoveFlags(string[] keywords, params ImapMessageFlag[] flags)
     {
-      return RemoveFlags(new ImapMessageFlagList(keywords, flags));
+      return RemoveFlags(new ImapMessageFlagSet(keywords, flags));
     }
 
     public static ImapStoreDataItem RemoveFlags(IImapMessageFlagSet flags)
@@ -201,15 +216,17 @@ namespace Smdn.Net.Imap4 {
 
     public static ImapStoreDataItem RemoveFlagsSilent(string keyword, params string[] keywords)
     {
-      if (string.IsNullOrEmpty("keyword"))
-        throw new ArgumentException("must be non-empty string", "keyword");
+      if (keyword == null)
+        throw new ArgumentNullException("keyword");
+      if (keyword.Length == 0)
+        throw ExceptionUtils.CreateArgumentMustBeNonEmptyString("keyword");
 
       return RemoveFlagsSilent(keywords.Prepend(keyword), new ImapMessageFlag[] {});
     }
 
     public static ImapStoreDataItem RemoveFlagsSilent(string[] keywords, params ImapMessageFlag[] flags)
     {
-      return RemoveFlagsSilent(new ImapMessageFlagList(keywords, flags));
+      return RemoveFlagsSilent(new ImapMessageFlagSet(keywords, flags));
     }
 
     public static ImapStoreDataItem RemoveFlagsSilent(IImapMessageFlagSet flags)

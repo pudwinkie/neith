@@ -10,14 +10,14 @@ namespace Smdn.Net.Imap4.Client.Session {
     [Test]
     public void TestCapability()
     {
-      using (var session = Connect()) {
+      Connect(delegate(ImapSession session, ImapPseudoServer server) {
         Assert.IsNotNull(session.ServerCapabilities);
         Assert.AreEqual(0, session.ServerCapabilities.Count);
 
         server.EnqueueResponse("* CAPABILITY IMAP4rev1 CHILDREN\r\n" +
                                "0000 OK done\r\n");
 
-        ImapCapabilityList capabilities;
+        ImapCapabilitySet capabilities;
 
         Assert.IsTrue((bool)session.Capability(out capabilities));
 
@@ -26,13 +26,13 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         Assert.IsNotNull(capabilities);
         Assert.AreEqual(2, capabilities.Count);
-        Assert.IsTrue(capabilities.Has(ImapCapability.Imap4Rev1));
-        Assert.IsTrue(capabilities.Has(ImapCapability.Children));
+        Assert.IsTrue(capabilities.Contains(ImapCapability.Imap4Rev1));
+        Assert.IsTrue(capabilities.Contains(ImapCapability.Children));
 
         Assert.IsNotNull(session.ServerCapabilities);
         Assert.AreEqual(2, session.ServerCapabilities.Count);
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Imap4Rev1));
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Children));
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Imap4Rev1));
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Children));
 
         try {
           session.ServerCapabilities.Add(ImapCapability.Imap4);
@@ -40,17 +40,17 @@ namespace Smdn.Net.Imap4.Client.Session {
         }
         catch (NotSupportedException) {
         }
-      }
+      });
     }
 
     [Test]
     public void TestCapabilityNotHandleIncapableAsException()
     {
-      using (var session = Connect()) {
+      Connect(delegate(ImapSession session, ImapPseudoServer server) {
         session.HandlesIncapableAsException = true;
 
         Assert.IsNotNull(session.ServerCapabilities);
-        Assert.IsFalse(session.ServerCapabilities.Has(ImapCapability.Imap4Rev1));
+        Assert.IsFalse(session.ServerCapabilities.Contains(ImapCapability.Imap4Rev1));
 
         // CAPABILITY transaction 1
         server.EnqueueResponse("* CAPABILITY IMAP4\r\n" +
@@ -61,7 +61,7 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual("0000 CAPABILITY\r\n",
                         server.DequeueRequest());
 
-        Assert.IsFalse(session.ServerCapabilities.Has(ImapCapability.Imap4Rev1));
+        Assert.IsFalse(session.ServerCapabilities.Contains(ImapCapability.Imap4Rev1));
 
         // CAPABILITY transaction 2
         server.EnqueueResponse("* CAPABILITY IMAP4\r\n" +
@@ -72,14 +72,14 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual("0001 CAPABILITY\r\n",
                         server.DequeueRequest());
 
-        Assert.IsFalse(session.ServerCapabilities.Has(ImapCapability.Imap4Rev1));
-      }
+        Assert.IsFalse(session.ServerCapabilities.Contains(ImapCapability.Imap4Rev1));
+      });
     }
 
     [Test]
     public void TestNoOpInNonAuthenticatedState()
     {
-      using (var session = Connect()) {
+      Connect(delegate(ImapSession session, ImapPseudoServer server) {
         Assert.AreEqual(ImapSessionState.NotAuthenticated, session.State);
 
         // NOOP transaction
@@ -89,13 +89,13 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         Assert.AreEqual("0000 NOOP\r\n",
                         server.DequeueRequest());
-      }
+      });
     }
 
     [Test]
     public void TestNoOpInAuthenticatedState()
     {
-      using (var session = Authenticate()) {
+      Authenticate(delegate(ImapSession session, ImapPseudoServer server) {
         Assert.AreEqual(ImapSessionState.Authenticated, session.State);
 
         // NOOP transaction
@@ -105,13 +105,13 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         Assert.AreEqual("0002 NOOP\r\n",
                         server.DequeueRequest());
-      }
+      });
     }
 
     [Test]
     public void TestNoOpInSelectedState()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         Assert.AreEqual(ImapSessionState.Selected, session.State);
 
         // NOOP transaction
@@ -122,14 +122,14 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual("0004 NOOP\r\n",
                         server.DequeueRequest());
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     public void TestNoOpStatusUpdate()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // NOOP transaction
         server.EnqueueResponse("* 22 EXPUNGE\r\n" +
                                "* 18 EXPUNGE\r\n" +
@@ -148,20 +148,20 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual(3L, session.SelectedMailbox.RecentMessage, "selected mailbox recent message count");
         Assert.IsNotNull(session.SelectedMailbox.ApplicableFlags, "selected mailbox applicable flags");
         Assert.AreEqual(5, session.SelectedMailbox.ApplicableFlags.Count);
-        Assert.IsTrue(session.SelectedMailbox.ApplicableFlags.Has(ImapMessageFlag.Answered));
-        Assert.IsTrue(session.SelectedMailbox.ApplicableFlags.Has(ImapMessageFlag.Flagged));
-        Assert.IsTrue(session.SelectedMailbox.ApplicableFlags.Has(ImapMessageFlag.Deleted));
-        Assert.IsTrue(session.SelectedMailbox.ApplicableFlags.Has(ImapMessageFlag.Seen));
-        Assert.IsTrue(session.SelectedMailbox.ApplicableFlags.Has(ImapMessageFlag.Draft));
+        Assert.IsTrue(session.SelectedMailbox.ApplicableFlags.Contains(ImapMessageFlag.Answered));
+        Assert.IsTrue(session.SelectedMailbox.ApplicableFlags.Contains(ImapMessageFlag.Flagged));
+        Assert.IsTrue(session.SelectedMailbox.ApplicableFlags.Contains(ImapMessageFlag.Deleted));
+        Assert.IsTrue(session.SelectedMailbox.ApplicableFlags.Contains(ImapMessageFlag.Seen));
+        Assert.IsTrue(session.SelectedMailbox.ApplicableFlags.Contains(ImapMessageFlag.Draft));
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     public void TestNoOpStatusUpdateExistsBroken()
     {
-      using (var session = SelectMailbox(1)) {
+      SelectMailbox(1, delegate(ImapSession session, ImapPseudoServer server) {
         Assert.AreEqual(1L, session.SelectedMailbox.ExistsMessage);
 
         // NOOP transaction
@@ -177,29 +177,31 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         Assert.AreEqual(0L, session.SelectedMailbox.ExistsMessage);
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     public void TestLogoutInNonAuthenticatedState()
     {
-      server.EnqueueResponse("* OK ImapSimulatedServer ready\r\n");
-      server.EnqueueResponse("* BYE Logging out\r\n" + 
-                             "0000 OK logged out.\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK ImapSimulatedServer ready\r\n");
+        server.EnqueueResponse("* BYE Logging out\r\n" + 
+                               "0000 OK logged out.\r\n");
 
-      using (var session = new ImapSession(host, port)) {
-        Assert.IsTrue(session.Logout().Code == ImapCommandResultCode.Bye);
+        using (var session = new ImapSession(server.Host, server.Port)) {
+          Assert.IsTrue(session.Logout().Code == ImapCommandResultCode.Bye);
 
-        Assert.AreEqual(ImapSessionState.NotConnected, session.State);
-        Assert.AreEqual(null, session.Authority);
+          Assert.AreEqual(ImapSessionState.NotConnected, session.State);
+          Assert.AreEqual(null, session.Authority);
+        }
       }
     }
 
     [Test]
     public void TestLogoutInAuthenticatedState()
     {
-      using (var session = Authenticate()) {
+      Authenticate(delegate(ImapSession session, ImapPseudoServer server) {
         server.EnqueueResponse("* BYE Logging out\r\n" + 
                                "0001 OK logged out.\r\n");
 
@@ -210,13 +212,13 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         Assert.AreEqual(ImapSessionState.NotConnected, session.State);
         Assert.AreEqual(null, session.Authority);
-      }
+      });
     }
 
     [Test]
     public void TestLogoutInSelectedState()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         Assert.IsNotNull(session.SelectedMailbox);
 
         server.EnqueueResponse("* BYE Logging out\r\n" + 
@@ -230,14 +232,16 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual(ImapSessionState.NotConnected, session.State);
         Assert.AreEqual(null, session.Authority);
         Assert.IsNull(session.SelectedMailbox);
-      }
+
+        return -1;
+      });
     }
 
     [Test]
     public void TestID()
     {
-      using (var session = Authenticate("ID")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.ID));
+      Authenticate(new[] {"ID"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.ID));
 
         // ID transaction
         server.EnqueueResponse("* ID NIL\r\n" +
@@ -265,14 +269,14 @@ namespace Smdn.Net.Imap4.Client.Session {
         }
         catch (NotSupportedException) {
         }
-      }
+      });
     }
 
     [Test]
     public void TestIDParameterNil()
     {
-      using (var session = Authenticate("ID")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.ID));
+      Authenticate(new[] {"ID"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.ID));
 
         // ID transaction
         server.EnqueueResponse("* ID (\"name\" \"Cyrus\" \"version\" \"1.5\")\r\n" +
@@ -300,95 +304,95 @@ namespace Smdn.Net.Imap4.Client.Session {
         }
         catch (NotSupportedException) {
         }
-      }
+      });
     }
 
     [Test]
     [ExpectedException(typeof(ArgumentException))]
     public void TestIDTooMatchFieldValuePair()
     {
-      using (var session = Authenticate("ID")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.ID));
-  
+      Authenticate(new[] {"ID"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.ID));
+
         var paramList = new Dictionary<string, string>();
-  
+
         for (var i = 0; i < 31; i++) {
           paramList.Add(string.Format("field{0}", i), string.Format("value{0}", i));
         }
-  
+
         session.ID(paramList);
-      }
+      });
     }
 
     [Test]
     [ExpectedException(typeof(ArgumentException))]
     public void TestIDTooLongField()
     {
-      using (var session = Authenticate("ID")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.ID));
-  
+      Authenticate(new[] {"ID"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.ID));
+
         var paramList = new Dictionary<string, string>();
-  
+
         Assert.IsTrue((bool)session.ID(new Dictionary<string, string>() {
           {new string('x', 31), "value"},
         }));
-  
+
         session.ID(paramList);
-      }
+      });
     }
 
     [Test]
     [ExpectedException(typeof(ArgumentException))]
     public void TestIDTooLongValue()
     {
-      using (var session = Authenticate("ID")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.ID));
-  
+      Authenticate(new[] {"ID"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.ID));
+
         var paramList = new Dictionary<string, string>();
-  
+
         Assert.IsTrue((bool)session.ID(new Dictionary<string, string>() {
           {"field", new string('x', 1025)},
         }));
-  
+
         session.ID(paramList);
-      }
+      });
     }
 
     [Test]
     [ExpectedException(typeof(ArgumentException))]
     public void TestIDContaisNoAsciiChar()
     {
-      using (var session = Authenticate("ID")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.ID));
-  
+      Authenticate(new[] {"ID"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.ID));
+
         var paramList = new Dictionary<string, string>();
-  
+
         Assert.IsTrue((bool)session.ID(new Dictionary<string, string>() {
           {"オワタ", "＼(＾o＾)／"},
         }));
-  
+
         session.ID(paramList);
-      }
+      });
     }
 
     [Test]
     [ExpectedException(typeof(ImapIncapableException))]
     public void TestLanguageIncapable()
     {
-      using (var session = Authenticate()) {
-        Assert.IsFalse(session.ServerCapabilities.Has(ImapCapability.Language));
+      Authenticate(delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsFalse(session.ServerCapabilities.Contains(ImapCapability.Language));
 
         session.HandlesIncapableAsException = true;
 
         session.Language();
-      }
+      });
     }
 
     [Test]
     public void TestLanguageListSupported()
     {
-      using (var session = Authenticate("LANGUAGE")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Language));
+      Authenticate(new[] {"LANGUAGE"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Language));
         Assert.IsNull(session.SelectedLanguage);
 
         // LANGUAGE transaction
@@ -407,14 +411,14 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual("DE", supportedLanguageTags[1]);
         Assert.AreEqual("IT", supportedLanguageTags[2]);
         Assert.AreEqual("i-default", supportedLanguageTags[3]);
-      }
+      });
     }
 
     [Test]
     public void TestLanguageSelectDefault()
     {
-      using (var session = Authenticate("LANGUAGE")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Language));
+      Authenticate(new[] {"LANGUAGE"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Language));
         Assert.IsNull(session.SelectedLanguage);
 
         // LANGUAGE transaction
@@ -433,14 +437,14 @@ namespace Smdn.Net.Imap4.Client.Session {
                         server.DequeueRequest());
 
         Assert.AreEqual("DE", session.SelectedLanguage);
-      }
+      });
     }
 
     [Test]
     public void TestLanguageSelectSupported()
     {
-      using (var session = Authenticate("LANGUAGE")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Language));
+      Authenticate(new[] {"LANGUAGE"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Language));
         Assert.IsNull(session.SelectedLanguage);
 
         // LANGUAGE transaction
@@ -459,14 +463,14 @@ namespace Smdn.Net.Imap4.Client.Session {
                         server.DequeueRequest());
 
         Assert.AreEqual("EN", session.SelectedLanguage);
-      }
+      });
     }
 
     [Test]
     public void TestLanguageSelectWithCultureInfo()
     {
-      using (var session = Authenticate("LANGUAGE")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Language));
+      Authenticate(new[] {"LANGUAGE"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Language));
         Assert.IsNull(session.SelectedLanguage);
 
         // LANGUAGE transaction
@@ -481,14 +485,14 @@ namespace Smdn.Net.Imap4.Client.Session {
                         server.DequeueRequest());
 
         Assert.IsNull(session.SelectedLanguage);
-      }
+      });
     }
 
     [Test]
     public void TestLanguageNamespaceResponse()
     {
-      using (var session = Authenticate("LANGUAGE")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Language));
+      Authenticate(new[] {"LANGUAGE"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Language));
         Assert.IsNull(session.SelectedLanguage);
 
         // LANGUAGE transaction
@@ -522,14 +526,14 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual("/", session.Namespaces.SharedNamespaces[0].HierarchyDelimiter);
         // RFC error? (Gemeinsame Postfächer)
         Assert.AreEqual("Gemeinsame PostfÏcher/", session.Namespaces.SharedNamespaces[0].TranslatedPrefix);
-      }
+      });
     }
 
     [Test]
     public void TestLanguageReceiveResponseAsUTF8()
     {
-      using (var session = Authenticate("LANGUAGE")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Language));
+      Authenticate(new[] {"LANGUAGE"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Language));
         Assert.IsNull(session.SelectedLanguage);
 
         // LANGUAGE transaction
@@ -551,7 +555,7 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         Assert.IsTrue((bool)result);
         Assert.AreEqual("完了", result.TaggedStatusResponse.ResponseText.Text);
-      }
+      });
     }
   }
 }

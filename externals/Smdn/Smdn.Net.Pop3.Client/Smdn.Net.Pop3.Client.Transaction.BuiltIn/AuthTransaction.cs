@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -74,74 +74,6 @@ namespace Smdn.Net.Pop3.Client.Transaction.BuiltIn {
       base.Dispose();
     }
 
-    protected override ProcessTransactionDelegate Reset()
-    {
-      if (saslMechanism == null) {
-        /*
-         * create mechanism
-         */
-#if DEBUG
-        if (!RequestArguments.ContainsKey("mechanism"))
-          return ProcessArgumentNotSetted;
-#endif
-        try {
-          saslMechanism = SaslClientMechanism.Create(RequestArguments["mechanism"]);
-          saslMechanism.Credential = credential;
-
-          // The service name specified by this protocol's profile of SASL
-          // is "pop".
-          saslMechanism.ServiceName = "pop";
-
-          if (saslMechanism is NTLMMechanism)
-            (saslMechanism as NTLMMechanism).TargetHost = Connection.Host;
-        }
-        catch (SaslMechanismNotSupportedException) {
-          return ProcessUnsupported;
-        }
-      }
-      else {
-        /*
-         * use supplied mechanism
-         */
-        saslMechanism.Initialize();
-
-        RequestArguments["mechanism"] = saslMechanism.Name;
-      }
-
-      /*
-       * The optional initial-response argument to the AUTH command is
-       * used to save a round trip when using authentication mechanisms
-       * that support an initial client response.
-       */
-      if (saslMechanism.ClientFirst) {
-        byte[] initialClientResponse;
-
-        if (saslMechanism.GetInitialResponse(out initialClientResponse) == SaslExchangeStatus.Failed || initialClientResponse == null)
-          return ProcessInitialResponseError;
-
-        RequestArguments["initial-response"] = Base64.GetEncodedString(initialClientResponse);
-      }
-
-      return ProcessAuth;
-    }
-
-#if DEBUG
-    private void ProcessArgumentNotSetted()
-    {
-      FinishError(PopCommandResultCode.RequestError, "arguments 'mechanism' must be setted");
-    }
-#endif
-
-    private void ProcessUnsupported()
-    {
-      FinishError(PopCommandResultCode.RequestError, "unsupported authentication mechanism");
-    }
-
-    private void ProcessInitialResponseError()
-    {
-      FinishError(PopCommandResultCode.RequestError, "can't send initial client response");
-    }
-
     /*
      * 4. The AUTH Command
      * 
@@ -168,19 +100,70 @@ namespace Smdn.Net.Pop3.Client.Transaction.BuiltIn {
      *          The AUTH command may only be given during the AUTHORIZATION
      *          state.
      */
-    private void ProcessAuth()
+    protected override PopCommand PrepareCommand()
     {
+      if (saslMechanism == null) {
+        /*
+         * create mechanism
+         */
+#if DEBUG
+        if (!RequestArguments.ContainsKey("mechanism")) {
+          FinishError(PopCommandResultCode.RequestError, "arguments 'mechanism' must be setted");
+          return null;
+        }
+#endif
+
+        try {
+          saslMechanism = SaslClientMechanism.Create(RequestArguments["mechanism"]);
+          saslMechanism.Credential = credential;
+
+          // The service name specified by this protocol's profile of SASL
+          // is "pop".
+          saslMechanism.ServiceName = "pop";
+
+          if (saslMechanism is NTLMMechanism)
+            (saslMechanism as NTLMMechanism).TargetHost = Connection.Host;
+        }
+        catch (SaslMechanismNotSupportedException) {
+          FinishError(PopCommandResultCode.RequestError, "unsupported authentication mechanism");
+          return null;
+        }
+      }
+      else {
+        /*
+         * use supplied mechanism
+         */
+        saslMechanism.Initialize();
+
+        RequestArguments["mechanism"] = saslMechanism.Name;
+      }
+
+      /*
+       * The optional initial-response argument to the AUTH command is
+       * used to save a round trip when using authentication mechanisms
+       * that support an initial client response.
+       */
+      if (saslMechanism.ClientFirst) {
+        byte[] initialClientResponse;
+
+        if (saslMechanism.GetInitialResponse(out initialClientResponse) == SaslExchangeStatus.Failed ||
+            initialClientResponse == null) {
+          FinishError(PopCommandResultCode.RequestError, "can't send initial client response");
+          return null;
+        }
+
+        RequestArguments["initial-response"] = Base64.GetEncodedString(initialClientResponse);
+      }
+
       string initialResponse;
 
       if (RequestArguments.TryGetValue("initial-response", out initialResponse))
-        SendCommand("AUTH",
-                    ProcessReceiveResponse,
-                    RequestArguments["mechanism"],
-                    initialResponse);
+        return new PopCommand("AUTH",
+                              RequestArguments["mechanism"],
+                              initialResponse);
       else
-        SendCommand("AUTH",
-                    ProcessReceiveResponse,
-                    RequestArguments["mechanism"]);
+        return new PopCommand("AUTH",
+                              RequestArguments["mechanism"]);
     }
 
     protected override void OnContinuationRequestReceived(PopContinuationRequest continuationRequest)
@@ -202,14 +185,16 @@ namespace Smdn.Net.Pop3.Client.Transaction.BuiltIn {
        * a "+", followed by a single space.  It MUST NOT contain any
        * other data.
        */
-      var serverChallenge = Base64.Decode(continuationRequest.Base64Text.ByteArray);
+      var serverChallenge = Base64.Decode(continuationRequest.Base64Text.Segment.Array,
+                                          continuationRequest.Base64Text.Segment.Offset,
+                                          continuationRequest.Base64Text.Segment.Count);
       byte[] clientResponse;
       var status = saslMechanism.Exchange(serverChallenge, out clientResponse);
 
       if (status == SaslExchangeStatus.Failed || clientResponse == null)
-        SendContinuation("*");
+        Connection.SendCommand(new PopCommand(null, "*"));
       else
-        SendContinuation(Base64.GetEncodedString(clientResponse));
+        Connection.SendCommand(new PopCommand(null, Base64.GetEncodedString(clientResponse)));
     }
 
     private NetworkCredential credential;

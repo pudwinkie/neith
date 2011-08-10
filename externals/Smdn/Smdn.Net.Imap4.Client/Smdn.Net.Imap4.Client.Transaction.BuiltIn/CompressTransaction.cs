@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -36,41 +36,6 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     {
     }
 
-    protected override ProcessTransactionDelegate Reset()
-    {
-#if DEBUG
-      if (!RequestArguments.ContainsKey("compression mechanism"))
-        return ProcessArgumentNotSetted;
-#endif
-
-      var compressionMechanism = RequestArguments["compression mechanism"] as ImapCompressionMechanism;
-
-      foreach (var decompression in new[] {
-        new {Mechanism = ImapCompressionMechanism.Deflate, CreateStreamCallback = new UpgradeConnectionStreamCallback(CreateDeflateStream)},
-      }) {
-        if (decompression.Mechanism != compressionMechanism)
-          continue;
-
-        createDecompressingStreamCallback = decompression.CreateStreamCallback;
-
-        return ProcessCompress;
-      }
-
-      return ProcessUnsupported;
-    }
-
-#if DEBUG
-    private void ProcessArgumentNotSetted()
-    {
-      FinishError(ImapCommandResultCode.RequestError, "arguments 'compression mechanism' must be setted");
-    }
-#endif
-
-    private void ProcessUnsupported()
-    {
-      FinishError(ImapCommandResultCode.RequestError, "unsupported compression mechanism");
-    }
-
     /*
      * http://tools.ietf.org/html/rfc4978
      * RFC 4978 - The IMAP COMPRESS Extension
@@ -83,9 +48,32 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     //            NO Compression is already active via another layer.
     //           BAD Command unknown, invalid or unknown argument, or COMPRESS
     //               already active.
-    private void ProcessCompress()
+    protected override ImapCommand PrepareCommand()
     {
-      SendCommand("COMPRESS", ProcessReceiveResponse, RequestArguments["compression mechanism"]);
+#if DEBUG
+      if (!RequestArguments.ContainsKey("compression mechanism")) {
+        FinishError(ImapCommandResultCode.RequestError, "arguments 'compression mechanism' must be setted");
+        return null;
+      }
+#endif
+
+      var compressionMechanism = RequestArguments["compression mechanism"] as ImapCompressionMechanism;
+
+      foreach (var decompression in new[] {
+        new {Mechanism = ImapCompressionMechanism.Deflate, CreateStreamCallback = new UpgradeConnectionStreamCallback(CreateDeflateStream)},
+      }) {
+        if (decompression.Mechanism != compressionMechanism)
+          continue;
+
+        createDecompressingStreamCallback = decompression.CreateStreamCallback;
+
+        return Connection.CreateCommand("COMPRESS",
+                                        RequestArguments["compression mechanism"]);
+      }
+
+      FinishError(ImapCommandResultCode.RequestError, "unsupported compression mechanism");
+
+      return null;
     }
 
     protected override void OnTaggedStatusResponseReceived(ImapTaggedStatusResponse tagged)

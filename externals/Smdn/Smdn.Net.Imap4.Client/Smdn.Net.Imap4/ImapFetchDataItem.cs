@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@
 // THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 
 namespace Smdn.Net.Imap4 {
   // combinable data item types:
@@ -68,7 +69,7 @@ namespace Smdn.Net.Imap4 {
         case ImapFetchDataItemMacro.Fast: return Fast;
         case ImapFetchDataItemMacro.Full: return Full;
         case ImapFetchDataItemMacro.Extensible: return Extensible;
-        default: throw new NotSupportedException(string.Format("unsupported fetch data item macro: {0}", macro));
+        default: throw ExceptionUtils.CreateNotSupportedEnumValue(macro);
       }
     }
 
@@ -186,7 +187,7 @@ namespace Smdn.Net.Imap4 {
       }
       else { 
         try {
-          return new ImapFetchDataItem(string.Concat((peek ? "BODY.PEEK[" : "BODY["), section, "]", @partial.Value.ToString("f")));
+          return new ImapFetchDataItem(string.Concat((peek ? "BODY.PEEK[" : "BODY["), section, "]", @partial.Value.ToString("f", null)));
         }
         catch (FormatException ex) {
           throw new ArgumentException(ex.Message, "partial");
@@ -267,8 +268,10 @@ namespace Smdn.Net.Imap4 {
      */ 
     public static ImapFetchDataItem BinarySize(string sectionBinary)
     {
-      if (string.IsNullOrEmpty(sectionBinary))
-        throw new ArgumentException("must be non-empty value", "sectionBinary");
+      if (sectionBinary == null)
+        throw new ArgumentNullException("sectionBinary");
+      if (sectionBinary.Length == 0)
+        throw ExceptionUtils.CreateArgumentMustBeNonEmptyString("sectionBinary");
 
       return new ImapFetchDataItem(ImapCapability.Binary, string.Concat("BINARY.SIZE[", sectionBinary, "]"));
     }
@@ -330,8 +333,10 @@ namespace Smdn.Net.Imap4 {
 
     private static ImapFetchDataItem BinaryInternal(bool peek, string sectionBinary, ImapPartialRange? @partial)
     {
-      if (string.IsNullOrEmpty(sectionBinary))
-        throw new ArgumentException("must be non-empty value", "sectionBinary");
+      if (sectionBinary == null)
+        throw new ArgumentNullException("sectionBinary");
+      if (sectionBinary.Length == 0)
+        throw ExceptionUtils.CreateArgumentMustBeNonEmptyString("sectionBinary");
 
       if (@partial == null) {
         return new ImapFetchDataItem(ImapCapability.Binary, string.Concat((peek ? "BINARY.PEEK[" : "BINARY["), sectionBinary, "]"));
@@ -339,7 +344,7 @@ namespace Smdn.Net.Imap4 {
       else {
         try {
           return new ImapFetchDataItem(ImapCapability.Binary,
-                                       string.Concat((peek ? "BINARY.PEEK[" : "BINARY["), sectionBinary, "]", @partial.Value.ToString("f")));
+                                       string.Concat((peek ? "BINARY.PEEK[" : "BINARY["), sectionBinary, "]", @partial.Value.ToString("f", null)));
         }
         catch (FormatException ex) {
           throw new ArgumentException(ex.Message, "partial");
@@ -393,8 +398,12 @@ namespace Smdn.Net.Imap4 {
       return BodyPeek(ImapStyleUriParser.GetSection(uri), ImapStyleUriParser.GetPartial(uri));
     }
 
-    ImapCapability IImapExtension.RequiredCapability {
-      get { return requiredCapability; }
+    IEnumerable<ImapCapability> IImapExtension.RequiredCapabilities {
+      get
+      {
+        if (requiredCapability != null)
+          yield return requiredCapability;
+      }
     }
 
     protected override ImapStringList GetCombined()

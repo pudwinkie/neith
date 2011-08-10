@@ -178,7 +178,7 @@ namespace Smdn.Net.Imap4.WebClients {
 
         var appendCommand = server.DequeueAll();
 
-        StringAssert.StartsWith("0002 APPEND \"INBOX\" ", appendCommand);
+        StringAssert.StartsWith("0002 APPEND INBOX ", appendCommand);
         StringAssert.EndsWith(" {12}\r\ntest message\r\n", appendCommand);
       }
     }
@@ -272,7 +272,6 @@ namespace Smdn.Net.Imap4.WebClients {
         var stream = GetRequestStream(server, request);
 
         Assert.IsNotNull(stream);
-        Assert.AreEqual(80L, stream.Length);
       }
     }
 
@@ -291,7 +290,6 @@ namespace Smdn.Net.Imap4.WebClients {
         var stream = GetRequestStream(server, request);
 
         Assert.IsNotNull(stream);
-        //Assert.AreEqual(0L, stream.Length); // this will be locked
       }
     }
 
@@ -370,7 +368,7 @@ namespace Smdn.Net.Imap4.WebClients {
 
         var appendCommand = server.DequeueAll();
 
-        StringAssert.StartsWith("0002 APPEND \"INBOX\" ", appendCommand);
+        StringAssert.StartsWith("0002 APPEND INBOX ", appendCommand);
         StringAssert.EndsWith(string.Format(" {{{0}}}\r\n{1}\r\n", Encoding.ASCII.GetByteCount(message), message), appendCommand);
       }
     }
@@ -427,7 +425,7 @@ namespace Smdn.Net.Imap4.WebClients {
 
         var appendCommand = server.DequeueAll();
 
-        StringAssert.StartsWith("0002 APPEND \"INBOX\" ", appendCommand);
+        StringAssert.StartsWith("0002 APPEND INBOX ", appendCommand);
         StringAssert.EndsWith(string.Format(" {{{0}}}\r\n{1}\r\n", Encoding.ASCII.GetByteCount(message), message), appendCommand);
       }
     }
@@ -449,7 +447,7 @@ namespace Smdn.Net.Imap4.WebClients {
         // APPEND
         server.EnqueueResponse("+ continue\r\n");
         server.EnqueueResponse(string.Empty);
-        server.EnqueueResponse("0002 OK done\r\n");
+        //server.EnqueueResponse("0002 OK done\r\n");
 
         var request = WebRequest.Create(string.Format("imap://{0}/INBOX", server.HostPort)) as ImapWebRequest;
 
@@ -580,7 +578,7 @@ namespace Smdn.Net.Imap4.WebClients {
 
         var appendCommand = server.DequeueAll();
 
-        StringAssert.StartsWith("0002 APPEND \"INBOX\" ", appendCommand);
+        StringAssert.StartsWith("0002 APPEND INBOX ", appendCommand);
         StringAssert.EndsWith(string.Format(" {{{0}}}\r\n{1}\r\n", Encoding.ASCII.GetByteCount(message), message), appendCommand);
       }
     }
@@ -660,7 +658,7 @@ namespace Smdn.Net.Imap4.WebClients {
 
         var appendCommand = server.DequeueAll();
 
-        StringAssert.StartsWith("0002 APPEND \"INBOX\" ", appendCommand);
+        StringAssert.StartsWith("0002 APPEND INBOX ", appendCommand);
       }
     }
 
@@ -820,9 +818,9 @@ namespace Smdn.Net.Imap4.WebClients {
         if (mailboxSelected)
           server.DequeueRequest(); // CLOSE
 
-        StringAssert.Contains("CREATE \"&ZbAwVzBEMOEw,DDrMNwwwzCvMLk-\"", server.DequeueRequest());
-        StringAssert.Contains("SUBSCRIBE \"&ZbAwVzBEMOEw,DDrMNwwwzCvMLk-\"", server.DequeueRequest());
-        StringAssert.Contains("LSUB \"\" \"&ZbAwVzBEMOEw,DDrMNwwwzCvMLk-\"", server.DequeueRequest());
+        StringAssert.Contains("CREATE &ZbAwVzBEMOEw,DDrMNwwwzCvMLk-", server.DequeueRequest());
+        StringAssert.Contains("SUBSCRIBE &ZbAwVzBEMOEw,DDrMNwwwzCvMLk-", server.DequeueRequest());
+        StringAssert.Contains("LSUB \"\" &ZbAwVzBEMOEw,DDrMNwwwzCvMLk-", server.DequeueRequest());
       }
     }
 
@@ -860,8 +858,8 @@ namespace Smdn.Net.Imap4.WebClients {
           Assert.AreEqual("新しいメールボックス", response.Mailboxes[0].Name);
         });
 
-        StringAssert.Contains("CREATE \"&ZbAwVzBEMOEw,DDrMNwwwzCvMLk-\"", server.DequeueRequest());
-        StringAssert.Contains("LIST \"\" \"&ZbAwVzBEMOEw,DDrMNwwwzCvMLk-\"", server.DequeueRequest());
+        StringAssert.Contains("CREATE &ZbAwVzBEMOEw,DDrMNwwwzCvMLk-", server.DequeueRequest());
+        StringAssert.Contains("LIST \"\" &ZbAwVzBEMOEw,DDrMNwwwzCvMLk-", server.DequeueRequest());
       }
     }
 
@@ -932,12 +930,12 @@ namespace Smdn.Net.Imap4.WebClients {
         if (mailboxSelected)
           server.DequeueRequest(); // CLOSE
 
-        StringAssert.Contains("RENAME \"&U+QwRDDhMPww6zDcMMMwrzC5-\" \"&ZbAwVzBEMOEw,DDrMNwwwzCvMLk-\"", server.DequeueRequest());
-        StringAssert.Contains("UNSUBSCRIBE \"&U+QwRDDhMPww6zDcMMMwrzC5-\"", server.DequeueRequest());
-        StringAssert.Contains("SUBSCRIBE \"&ZbAwVzBEMOEw,DDrMNwwwzCvMLk-\"", server.DequeueRequest());
-        StringAssert.Contains("LSUB \"\" \"&ZbAwVzBEMOEw,DDrMNwwwzCvMLk-\"", server.DequeueRequest());
-        StringAssert.Contains("LSUB \"\" \"&U+QwRDDhMPww6zDcMMMwrzC5-.*\"", server.DequeueRequest());
-        StringAssert.Contains("LIST \"\" \"&ZbAwVzBEMOEw,DDrMNwwwzCvMLk-.*\"", server.DequeueRequest());
+        StringAssert.Contains("RENAME &U+QwRDDhMPww6zDcMMMwrzC5- &ZbAwVzBEMOEw,DDrMNwwwzCvMLk-", server.DequeueRequest());
+        StringAssert.Contains("UNSUBSCRIBE &U+QwRDDhMPww6zDcMMMwrzC5-", server.DequeueRequest());
+        StringAssert.Contains("SUBSCRIBE &ZbAwVzBEMOEw,DDrMNwwwzCvMLk-", server.DequeueRequest());
+        StringAssert.Contains("LSUB \"\" &ZbAwVzBEMOEw,DDrMNwwwzCvMLk-", server.DequeueRequest());
+        StringAssert.Contains("LSUB \"\" &U+QwRDDhMPww6zDcMMMwrzC5-.*", server.DequeueRequest());
+        StringAssert.Contains("LIST \"\" &ZbAwVzBEMOEw,DDrMNwwwzCvMLk-.*", server.DequeueRequest());
       }
     }
 
@@ -980,8 +978,8 @@ namespace Smdn.Net.Imap4.WebClients {
           Assert.AreEqual("新しいメールボックス", response.Mailboxes[0].Name);
         });
 
-        StringAssert.Contains("RENAME \"&U+QwRDDhMPww6zDcMMMwrzC5-\" \"&ZbAwVzBEMOEw,DDrMNwwwzCvMLk-\"", server.DequeueRequest());
-        StringAssert.Contains("LIST \"\" \"&ZbAwVzBEMOEw,DDrMNwwwzCvMLk-\"", server.DequeueRequest());
+        StringAssert.Contains("RENAME &U+QwRDDhMPww6zDcMMMwrzC5- &ZbAwVzBEMOEw,DDrMNwwwzCvMLk-", server.DequeueRequest());
+        StringAssert.Contains("LIST \"\" &ZbAwVzBEMOEw,DDrMNwwwzCvMLk-", server.DequeueRequest());
       }
     }
 
@@ -1041,22 +1039,22 @@ namespace Smdn.Net.Imap4.WebClients {
         if (mailboxSelected)
           server.DequeueRequest(); // CLOSE
 
-        StringAssert.Contains("RENAME \"&U+QwRDDhMPww6zDcMMMwrzC5-\" \"&ZbAwVzBEMOEw,DDrMNwwwzCvMLk-\"", server.DequeueRequest());
-        StringAssert.Contains("UNSUBSCRIBE \"&U+QwRDDhMPww6zDcMMMwrzC5-\"", server.DequeueRequest());
-        StringAssert.Contains("SUBSCRIBE \"&ZbAwVzBEMOEw,DDrMNwwwzCvMLk-\"", server.DequeueRequest());
-        StringAssert.Contains("LSUB \"\" \"&ZbAwVzBEMOEw,DDrMNwwwzCvMLk-\"", server.DequeueRequest());
+        StringAssert.Contains("RENAME &U+QwRDDhMPww6zDcMMMwrzC5- &ZbAwVzBEMOEw,DDrMNwwwzCvMLk-", server.DequeueRequest());
+        StringAssert.Contains("UNSUBSCRIBE &U+QwRDDhMPww6zDcMMMwrzC5-", server.DequeueRequest());
+        StringAssert.Contains("SUBSCRIBE &ZbAwVzBEMOEw,DDrMNwwwzCvMLk-", server.DequeueRequest());
+        StringAssert.Contains("LSUB \"\" &ZbAwVzBEMOEw,DDrMNwwwzCvMLk-", server.DequeueRequest());
 
         // LSUB children
-        StringAssert.Contains("LSUB \"\" \"&U+QwRDDhMPww6zDcMMMwrzC5-.*\"", server.DequeueRequest());
+        StringAssert.Contains("LSUB \"\" &U+QwRDDhMPww6zDcMMMwrzC5-.*", server.DequeueRequest());
         // UNSUBSCRIBE children
-        StringAssert.Contains("UNSUBSCRIBE \"&U+QwRDDhMPww6zDcMMMwrzC5-.child1\"", server.DequeueRequest());
-        StringAssert.Contains("UNSUBSCRIBE \"&U+QwRDDhMPww6zDcMMMwrzC5-.child2\"", server.DequeueRequest());
+        StringAssert.Contains("UNSUBSCRIBE &U+QwRDDhMPww6zDcMMMwrzC5-.child1", server.DequeueRequest());
+        StringAssert.Contains("UNSUBSCRIBE &U+QwRDDhMPww6zDcMMMwrzC5-.child2", server.DequeueRequest());
 
         // LIST children
-        StringAssert.Contains("LIST \"\" \"&ZbAwVzBEMOEw,DDrMNwwwzCvMLk-.*\"", server.DequeueRequest());
+        StringAssert.Contains("LIST \"\" &ZbAwVzBEMOEw,DDrMNwwwzCvMLk-.*", server.DequeueRequest());
         // SUBSCRIBE children
-        StringAssert.Contains("SUBSCRIBE \"&ZbAwVzBEMOEw,DDrMNwwwzCvMLk-.child1\"", server.DequeueRequest());
-        StringAssert.Contains("SUBSCRIBE \"&ZbAwVzBEMOEw,DDrMNwwwzCvMLk-.child2\"", server.DequeueRequest());
+        StringAssert.Contains("SUBSCRIBE &ZbAwVzBEMOEw,DDrMNwwwzCvMLk-.child1", server.DequeueRequest());
+        StringAssert.Contains("SUBSCRIBE &ZbAwVzBEMOEw,DDrMNwwwzCvMLk-.child2", server.DequeueRequest());
       }
     }
 
@@ -1104,8 +1102,8 @@ namespace Smdn.Net.Imap4.WebClients {
         if (mailboxSelected)
           server.DequeueRequest(); // CLOSE
 
-        StringAssert.Contains("DELETE \"&ZbAwVzBEMOEw,DDrMNwwwzCvMLk-\"", server.DequeueRequest());
-        StringAssert.Contains("UNSUBSCRIBE \"&ZbAwVzBEMOEw,DDrMNwwwzCvMLk-\"", server.DequeueRequest());
+        StringAssert.Contains("DELETE &ZbAwVzBEMOEw,DDrMNwwwzCvMLk-", server.DequeueRequest());
+        StringAssert.Contains("UNSUBSCRIBE &ZbAwVzBEMOEw,DDrMNwwwzCvMLk-", server.DequeueRequest());
       }
     }
 
@@ -1133,7 +1131,7 @@ namespace Smdn.Net.Imap4.WebClients {
           Assert.AreEqual(0, response.Mailboxes.Length);
         });
 
-        StringAssert.Contains("DELETE \"&ZbAwVzBEMOEw,DDrMNwwwzCvMLk-\"", server.DequeueRequest());
+        StringAssert.Contains("DELETE &ZbAwVzBEMOEw,DDrMNwwwzCvMLk-", server.DequeueRequest());
       }
     }
 
@@ -1177,9 +1175,9 @@ namespace Smdn.Net.Imap4.WebClients {
         });
 
         switch (method) {
-          case "DELETE": StringAssert.Contains("DELETE \"&U+QwRDDhMPww6zDcMMMwrzC5-\"", server.DequeueRequest()); break;
-          case "RENAME": StringAssert.Contains("RENAME \"&U+QwRDDhMPww6zDcMMMwrzC5-\" \"&ZbAwVzBEMOEw,DDrMNwwwzCvMLk-\"", server.DequeueRequest()); break;
-          case "CREATE": StringAssert.Contains("CREATE \"&U+QwRDDhMPww6zDcMMMwrzC5-\"", server.DequeueRequest()); break;
+          case "DELETE": StringAssert.Contains("DELETE &U+QwRDDhMPww6zDcMMMwrzC5-", server.DequeueRequest()); break;
+          case "RENAME": StringAssert.Contains("RENAME &U+QwRDDhMPww6zDcMMMwrzC5- &ZbAwVzBEMOEw,DDrMNwwwzCvMLk-", server.DequeueRequest()); break;
+          case "CREATE": StringAssert.Contains("CREATE &U+QwRDDhMPww6zDcMMMwrzC5-", server.DequeueRequest()); break;
         }
       }
     }
@@ -1415,7 +1413,7 @@ namespace Smdn.Net.Imap4.WebClients {
           Assert.AreEqual(44292L, response.Mailboxes[0].UidNext);
         });
 
-        StringAssert.Contains("STATUS \"INBOX\" (MESSAGES UIDNEXT)", server.DequeueRequest());
+        StringAssert.Contains("STATUS INBOX (MESSAGES UIDNEXT)", server.DequeueRequest());
       }
     }
 
@@ -1462,7 +1460,7 @@ namespace Smdn.Net.Imap4.WebClients {
           Assert.IsTrue(response.Result.Failed);
         });
 
-        StringAssert.Contains("STATUS \"INBOX\" (UIDNEXT)", server.DequeueRequest());
+        StringAssert.Contains("STATUS INBOX (UIDNEXT)", server.DequeueRequest());
       }
     }
 

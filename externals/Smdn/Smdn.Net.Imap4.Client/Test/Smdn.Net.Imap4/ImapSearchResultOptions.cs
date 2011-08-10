@@ -11,14 +11,15 @@ namespace Smdn.Net.Imap4 {
 
       Assert.AreEqual("(THREAD=REFS)", options.ToString());
 
-      var caps = (options as IImapMultipleExtension).RequiredCapabilities;
+      var caps = (options as IImapExtension).RequiredCapabilities;
 
-      Assert.AreEqual(4, caps.Length);
-
-      Assert.Contains(ImapCapability.ESearch, caps);
-      Assert.Contains(ImapCapability.ESort, caps);
-      Assert.Contains(ImapCapability.SearchInThread, caps);
-      Assert.Contains(ImapCapability.ThreadRefs, caps);
+      CollectionAssert.AreEquivalent(new[] {
+                                      ImapCapability.ESearch,
+                                      ImapCapability.ESort,
+                                      ImapCapability.SearchInThread,
+                                      ImapCapability.ThreadRefs,
+                                     },
+                                     caps);
     }
   }
 }

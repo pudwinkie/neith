@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@
 // THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 
 namespace Smdn.Net.Imap4 {
   // combinable data item types:
@@ -93,8 +94,12 @@ namespace Smdn.Net.Imap4 {
       return new ImapStatusDataItem(x.requiredCapability ?? y.requiredCapability, GetCombinedItems(x, y));
     }
 
-    ImapCapability IImapExtension.RequiredCapability {
-      get { return requiredCapability; }
+    IEnumerable<ImapCapability> IImapExtension.RequiredCapabilities {
+      get
+      {
+        if (requiredCapability != null)
+          yield return requiredCapability;
+      }
     }
 
     private ImapStatusDataItem(ImapCapability requiredCapability, params ImapString[] items)

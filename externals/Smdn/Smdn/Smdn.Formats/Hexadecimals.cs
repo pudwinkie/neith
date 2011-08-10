@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2009-2010 smdn
+// Copyright (c) 2009-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -28,22 +28,22 @@ namespace Smdn.Formats {
   public static class Hexadecimals {
     public static string ToLowerString(byte[] bytes)
     {
-      return new string(ConvertByteArrayToHex(bytes, Chars.LowerCaseHexChars));
+      return new string(ConvertByteArrayToHex(bytes, Chars.LowerCaseHexCharArray));
     }
 
     public static string ToUpperString(byte[] bytes)
     {
-      return new string(ConvertByteArrayToHex(bytes, Chars.UpperCaseHexChars));
+      return new string(ConvertByteArrayToHex(bytes, Chars.UpperCaseHexCharArray));
     }
 
     public static byte[] ToLowerByteArray(byte[] bytes)
     {
-      return ConvertByteArrayToHex(bytes, Octets.LowerCaseHexOctets);
+      return ConvertByteArrayToHex(bytes, Octets.LowerCaseHexOctetArray);
     }
 
     public static byte[] ToUpperByteArray(byte[] bytes)
     {
-      return ConvertByteArrayToHex(bytes, Octets.UpperCaseHexOctets);
+      return ConvertByteArrayToHex(bytes, Octets.UpperCaseHexOctetArray);
     }
 
     private static T[] ConvertByteArrayToHex<T>(byte[] bytes, T[] table)

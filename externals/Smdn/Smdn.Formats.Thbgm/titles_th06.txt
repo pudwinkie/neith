@@ -1,0 +1,34 @@
+#「東方紅魔郷　～ the Embodiment of Scarlet Devil.」 製品版曲データ (written by santa marta)
+#デフォルトのパスと製品名
+@東方紅魔郷\bgm\th06_01.wav,th06,東方紅魔郷　～ the Embodiment of Scarlet Devil.
+#原作者名
+#=ProductInfo,Creator,上海アリス幻樂団
+#製品略称
+#=ProductInfo,Prefix,th06
+#=ProductInfo,ShortName,東方紅魔郷
+#=ProductInfo,AbbreviatedShortName,紅魔郷
+#=ProductInfo,ShortestName,紅
+#頒布年月日
+#=ProductInfo,ReleaseDate,2002-08-11
+#THxxBGM製品識別用GUID
+#=ProductInfo,THxxBGMProductGuid,881949A1-B453-A741-E8CD-72D1A5741E0F
+#曲データ
+#開始位置[Bytes]、イントロ部の長さ[Bytes]、ループ部の長さ[Bytes]、曲名
+#位置・長さは16進値として記述する
+0000002c,001C0E20,008EF1E0,赤より紅い夢
+0000002c,00384840,00B237C0,ほおずきみたいに紅い魂
+0000002c,000A14C0,008DAB40,妖魔夜行
+0000002c,0013FC80,00D90380,ルーネイトエルフ
+0000002c,0010A000,00E16000,おてんば恋娘
+0000002c,007B9400,00FF6C00,上海紅茶館　～ Chinese Tea
+0000002c,0043F400,00DBCC00,明治十七年の上海アリス
+0000002c,00298200,011EF920,ヴワル魔法図書館
+0000002c,00732240,00EE4224,ラクトガール　～ 少女密室
+0000002c,006C9A00,017F4C80,メイドと血の懐中時計
+0000002c,00290CC0,00D47340,月時計　～ ルナ・ダイアル
+0000002c,0009FFC0,009513A0,ツェペシュの幼き末裔
+0000002c,0099C400,0121BC90,亡き王女の為のセプテット
+0000002c,006E9E00,013C2200,魔法少女達の百年祭
+0000002c,00111400,01486C00,U.N.オーエンは彼女なのか？
+0000002c,001C7C20,007EC3E0,紅より儚い永遠
+0000002c,0017DB30,010E24D0,紅楼　～ Eastern Dream...

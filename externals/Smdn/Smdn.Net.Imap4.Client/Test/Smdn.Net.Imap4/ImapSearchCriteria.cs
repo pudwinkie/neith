@@ -12,7 +12,7 @@ namespace Smdn.Net.Imap4 {
       criteria.Traverse(delegate(ImapString val) {
         Assert.Less(index, expected.Length);
         Assert.IsInstanceOfType(expected[index].GetType(), val);
-        Assert.AreEqual((string)expected[index], (string)val);
+        Assert.AreEqual(expected[index], val);
         index++;
       });
     }
@@ -339,10 +339,9 @@ namespace Smdn.Net.Imap4 {
 
       Assert.AreEqual("OR (NOT (MODSEQ 720162338)) (LARGER 50000)", criteria.ToString());
 
-      var caps = (criteria as IImapMultipleExtension).RequiredCapabilities;
+      var caps = (criteria as IImapExtension).RequiredCapabilities;
 
-      Assert.AreEqual(1, caps.Length);
-      Assert.AreEqual(ImapCapability.CondStore, caps[0]);
+      CollectionAssert.AreEquivalent(new[] {ImapCapability.CondStore}, caps);
     }
 
     [Test]
@@ -352,12 +351,10 @@ namespace Smdn.Net.Imap4 {
 
       Assert.AreEqual("INTHREAD MESSAGEID <4321.1234321@example.com>", criteria.ToString());
 
-      var caps = (criteria as IImapMultipleExtension).RequiredCapabilities;
+      var caps = (criteria as IImapExtension).RequiredCapabilities;
 
-      Assert.AreEqual(2, caps.Length);
-
-      Assert.Contains(ImapCapability.SearchInThread, caps);
-      Assert.Contains(ImapCapability.ThreadRefs, caps);
+      CollectionAssert.AreEquivalent(new[] {ImapCapability.SearchInThread, ImapCapability.ThreadRefs},
+                                     caps);
     }
 
     [Test]

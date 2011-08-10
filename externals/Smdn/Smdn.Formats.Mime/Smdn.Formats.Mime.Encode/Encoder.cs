@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -88,7 +88,7 @@ namespace Smdn.Formats.Mime.Encode {
         }
 
         default:
-          throw new NotSupportedException("unsupported encoding");
+          throw ExceptionUtils.CreateNotSupportedEnumValue(body.Encoding);
       }
     }
 

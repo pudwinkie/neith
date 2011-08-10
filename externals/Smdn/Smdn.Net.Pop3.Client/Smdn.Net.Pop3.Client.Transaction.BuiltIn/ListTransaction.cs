@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -33,16 +33,6 @@ namespace Smdn.Net.Pop3.Client.Transaction.BuiltIn {
     public ListTransaction(PopConnection connection)
       : base(connection)
     {
-      IsResponseMultiline = true;
-    }
-
-    protected override ProcessTransactionDelegate Reset()
-    {
-      messageNumberSpecified = RequestArguments.ContainsKey("msg");
-
-      IsResponseMultiline = !messageNumberSpecified;
-
-      return ProcessList;
     }
 
     /*
@@ -57,17 +47,23 @@ namespace Smdn.Net.Pop3.Client.Transaction.BuiltIn {
      *        +OK scan listing follows
      *        -ERR no such message
      */
-    private void ProcessList()
+    protected override PopCommand PrepareCommand()
     {
-      if (messageNumberSpecified)
-        SendCommand("LIST", ProcessReceiveResponse, RequestArguments["msg"]);
-      else
-        SendCommand("LIST", ProcessReceiveResponse);
+      string messageNumber;
+
+      if (RequestArguments.TryGetValue("msg", out messageNumber)) {
+        IsResponseMultiline = false;
+        return new PopCommand("LIST", messageNumber);
+      }
+      else {
+        IsResponseMultiline = true;
+        return new PopCommand("LIST");
+      }
     }
 
     protected override void OnStatusResponseReceived(PopStatusResponse status)
     {
-      if (messageNumberSpecified && status.Status == PopStatusIndicator.Positive) {
+      if (!IsResponseMultiline && status.Status == PopStatusIndicator.Positive) {
         Finish(new PopCommandResult<PopScanListing[]>(new[] {PopResponseConverter.FromList(status)}, status.ResponseText));
         return;
       }
@@ -85,7 +81,6 @@ namespace Smdn.Net.Pop3.Client.Transaction.BuiltIn {
       Finish(new PopCommandResult<PopScanListing[]>(scanListings.ToArray(), StatusResponse.ResponseText));
     }
 
-    private bool messageNumberSpecified;
     private List<PopScanListing> scanListings = new List<PopScanListing>();
   }
 }

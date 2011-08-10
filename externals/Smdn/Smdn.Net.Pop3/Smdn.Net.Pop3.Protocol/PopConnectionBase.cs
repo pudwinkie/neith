@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -44,26 +44,6 @@ namespace Smdn.Net.Pop3.Protocol {
     {
     }
 
-    protected override void Connect(string host, int port, UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
-    {
-      try {
-        base.Connect(host, port, createAuthenticatedStreamCallback);
-      }
-      catch (ConnectionException ex) {
-        throw new PopConnectionException(ex.Message, ex.InnerException);
-      }
-    }
-
-    public override void UpgradeStream(UpgradeConnectionStreamCallback upgradeStreamCallback)
-    {
-      try {
-        base.UpgradeStream(upgradeStreamCallback);
-      }
-      catch (ConnectionException ex) {
-        throw new PopUpgradeConnectionException(ex.Message, ex.InnerException);
-      }
-    }
-
     protected override LineOrientedBufferedStream CreateBufferedStream(Stream stream)
     {
       var bufferedStream = base.CreateBufferedStream(stream);
@@ -72,6 +52,16 @@ namespace Smdn.Net.Pop3.Protocol {
       sender    = CreateSender(bufferedStream);
 
       return bufferedStream;
+    }
+
+    protected override Exception CreateConnectException(string message, Exception innerException)
+    {
+      return new PopConnectionException(message, innerException);
+    }
+
+    protected override Exception CreateUpgradeStreamException(string message, Exception innerException)
+    {
+      return new PopUpgradeConnectionException(message, innerException);
     }
 
     protected abstract PopSender CreateSender(LineOrientedBufferedStream stream);

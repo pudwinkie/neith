@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -31,14 +31,18 @@ using Smdn.IO;
 
 namespace Smdn.Formats.Mime.Decode {
  internal static class Parser {
-    internal static MimeMessage Parse(Stream stream)
+    internal static MimeMessage Parse(Stream stream,
+                                      EncodingSelectionCallback selectFallbackCharset)
     {
-      return Parse(new LooseLineOrientedStream(stream));
+      return Parse(new LooseLineOrientedStream(stream), selectFallbackCharset);
     }
 
-    private static MimeMessage Parse(LineOrientedStream stream)
+    private static MimeMessage Parse(LineOrientedStream stream,
+                                     EncodingSelectionCallback selectFallbackCharset)
     {
-      return ParseBody(stream, ParseHeader(stream));
+      return ParseBody(stream,
+                       ParseHeader(stream),
+                       selectFallbackCharset);
     }
 
     private static MimeHeaderCollection ParseHeader(LineOrientedStream stream)
@@ -52,7 +56,7 @@ namespace Smdn.Formats.Mime.Decode {
         if (lineBytes == null)
           break; // unexpected end of stream
 
-        var line = new ByteString(lineBytes);
+        var line = ByteString.CreateImmutable(lineBytes);
 
         if (line.IsEmpty)
           break; // end of headers
@@ -89,11 +93,13 @@ namespace Smdn.Formats.Mime.Decode {
       return headers;
     }
 
-    private static MimeMessage ParseBody(LineOrientedStream stream, MimeHeaderCollection headers)
+    private static MimeMessage ParseBody(LineOrientedStream stream,
+                                         MimeHeaderCollection headers,
+                                         EncodingSelectionCallback selectFallbackCharset)
     {
       var message = new MimeMessage(headers);
 
-      ParseContentType(message);
+      ParseContentType(message, selectFallbackCharset);
       ParseContentTransferEncoding(message);
       ParseContentDisposition(message);
 
@@ -112,8 +118,8 @@ namespace Smdn.Formats.Mime.Decode {
 
       // multipart/*
       var parts = new List<MimeMessage>();
-      var delimiter = new ByteString("--" + message.Boundary);
-      var closeDelimiter = new ByteString("--" + message.Boundary + "--");
+      var delimiter = ByteString.CreateImmutable("--" + message.Boundary);
+      var closeDelimiter = ByteString.CreateImmutable("--" + message.Boundary + "--");
       MemoryStream body = null;
       ByteString line = null;
       ByteString lastLine = null;
@@ -122,7 +128,9 @@ namespace Smdn.Formats.Mime.Decode {
 
       for (;;) {
         if (lastLine != null)
-          contentStream.Write(lastLine.ByteArray, 0, lastLine.Length);
+          contentStream.Write(lastLine.Segment.Array,
+                              lastLine.Segment.Offset,
+                              lastLine.Segment.Count);
 
         var l = stream.ReadLine();
 
@@ -130,16 +138,20 @@ namespace Smdn.Formats.Mime.Decode {
           break;
 
         lastLine = line;
-        line = new ByteString(l);
+        line = ByteString.CreateImmutable(l);
 
         if (line.StartsWith(delimiter)) {
           if (lastLine != null) {
-            if (lastLine.EndsWith(Octets.CRLF))
+            if (ByteString.IsTerminatedByCRLF(lastLine))
               // CRLF "--" boundary
-              contentStream.Write(lastLine.ByteArray, 0, lastLine.Length - 2);
+              contentStream.Write(lastLine.Segment.Array,
+                                  lastLine.Segment.Offset,
+                                  lastLine.Segment.Count - 2);
             else
               // LF "--" boundary or CR "--" boundary
-              contentStream.Write(lastLine.ByteArray, 0, lastLine.Length - 1);
+              contentStream.Write(lastLine.Segment.Array,
+                                  lastLine.Segment.Offset,
+                                  lastLine.Segment.Count - 1);
           }
 
           contentStream.Position = 0;
@@ -147,7 +159,7 @@ namespace Smdn.Formats.Mime.Decode {
           if (body == null)
             body = contentStream;
           else
-            parts.Add(Parse(contentStream));
+            parts.Add(Parse(contentStream, selectFallbackCharset));
 
           if (line.StartsWith(closeDelimiter))
             break;
@@ -164,7 +176,8 @@ namespace Smdn.Formats.Mime.Decode {
       return message;
     }
 
-    private static void ParseContentType(MimeMessage message)
+    private static void ParseContentType(MimeMessage message,
+                                         EncodingSelectionCallback selectFallbackCharset)
     {
       const string headerName = "Content-Type";
 
@@ -180,7 +193,7 @@ namespace Smdn.Formats.Mime.Decode {
       var charsetString = contentType.GetParameter("charset", true);
 
       if (!string.IsNullOrEmpty(charsetString))
-        message.Charset = Charsets.FromString(charsetString);
+        message.Charset = Charsets.FromString(charsetString, selectFallbackCharset);
 
       message.Boundary = contentType.GetParameter("boundary", true);
     }

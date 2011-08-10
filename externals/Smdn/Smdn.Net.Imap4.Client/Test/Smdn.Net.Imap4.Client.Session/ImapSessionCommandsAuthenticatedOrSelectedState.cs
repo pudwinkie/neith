@@ -13,7 +13,7 @@ namespace Smdn.Net.Imap4.Client.Session {
     [Test]
     public void TestIdleBeginIdleEndIdle()
     {
-      using (var session = SelectMailbox("IDLE")) {
+      SelectMailbox(new[] {"IDLE"}, delegate(ImapSession session, ImapPseudoServer server) {
         Assert.IsFalse(session.IsIdling);
 
         session.SendTimeout         = 100;
@@ -51,14 +51,14 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual(100, session.ReceiveTimeout);
         Assert.AreEqual(100, session.TransactionTimeout);
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     public void TestIdleBeginIdleNo()
     {
-      using (var session = SelectMailbox("IDLE")) {
+      SelectMailbox(new[] {"IDLE"}, delegate(ImapSession session, ImapPseudoServer server) {
         Assert.IsFalse(session.IsIdling);
 
         // IDLE
@@ -71,14 +71,14 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         Assert.IsFalse(session.IsIdling);
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     public void TestIdleBeginIdleNestedCall()
     {
-      using (var session = SelectMailbox("IDLE")) {
+      SelectMailbox(new[] {"IDLE"}, delegate(ImapSession session, ImapPseudoServer server) {
         Assert.IsFalse(session.IsIdling);
 
         // IDLE
@@ -102,26 +102,28 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual("DONE\r\n",
                                    server.DequeueRequest());
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test, ExpectedException(typeof(ImapIncapableException))]
     public void TestIdleBeginIdleIncapable()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         Assert.IsFalse(session.IsIdling);
 
         session.HandlesIncapableAsException = true;
 
         session.BeginIdle();
-      }
+
+        return -1;
+      });
     }
 
     [Test]
     public void TestIdleEndIdleInvalidAsyncResult()
     {
-      using (var session = SelectMailbox("IDLE")) {
+      SelectMailbox(new[] {"IDLE"}, delegate(ImapSession session, ImapPseudoServer server) {
         Assert.IsFalse(session.IsIdling);
 
         try {
@@ -131,14 +133,14 @@ namespace Smdn.Net.Imap4.Client.Session {
         catch (ArgumentException) {
         }
 
-        CloseMailbox(session, "0004");
-      }
+        return 0;
+      });
     }
 
     [Test]
     public void TestIdleStatusUpdate()
     {
-      using (var session = SelectMailbox("IDLE")) {
+      SelectMailbox(new[] {"IDLE"}, delegate(ImapSession session, ImapPseudoServer server) {
         Assert.IsFalse(session.IsIdling);
 
         session.SendTimeout         = 50;
@@ -173,19 +175,26 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.IsFalse(session.IsIdling);
         Assert.AreEqual(4, session.SelectedMailbox.ExistsMessage);
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     public void TestIdle()
     {
-      using (var session = SelectMailbox("IDLE")) {
+      SelectMailbox(new[] {"IDLE"}, delegate(ImapSession session, ImapPseudoServer server) {
         Assert.IsFalse(session.IsIdling);
 
         // IDLE
-        server.EnqueueResponse("+ idling\r\n");
-        server.EnqueueResponse("0004 OK done.\r\n");
+        ThreadPool.QueueUserWorkItem(delegate(object state) {
+          var s = state as ImapPseudoServer;
+
+          s.EnqueueResponse("+ idling\r\n");
+
+          Thread.Sleep(500);
+
+          s.EnqueueResponse("0004 OK done.\r\n");
+        }, server);
 
         var sw = new Stopwatch();
 
@@ -205,14 +214,14 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual("DONE\r\n",
                         server.DequeueRequest());
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     public void TestIdleNo()
     {
-      using (var session = SelectMailbox("IDLE")) {
+      SelectMailbox(new[] {"IDLE"}, delegate(ImapSession session, ImapPseudoServer server) {
         Assert.IsFalse(session.IsIdling);
 
         // IDLE
@@ -234,8 +243,8 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual("0004 IDLE\r\n",
                         server.DequeueRequest());
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     private class IdleState {
@@ -246,7 +255,7 @@ namespace Smdn.Net.Imap4.Client.Session {
     [Test]
     public void TestIdleKeepIdleCallback()
     {
-      using (var session = Authenticate("IDLE")) {
+      Authenticate(new[] {"IDLE"}, delegate(ImapSession session, ImapPseudoServer server) {
         // SELECT
         server.EnqueueResponse("* FLAGS (\\Deleted \\Seen)\r\n" +
                                "* 4 EXISTS\r\n" +
@@ -256,7 +265,7 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         Assert.IsTrue((bool)session.Select("INBOX"));
 
-        Assert.AreEqual("0002 SELECT \"INBOX\"\r\n",
+        Assert.AreEqual("0002 SELECT INBOX\r\n",
                                    server.DequeueRequest());
 
         Assert.AreEqual(4, session.SelectedMailbox.ExistsMessage);
@@ -302,19 +311,25 @@ namespace Smdn.Net.Imap4.Client.Session {
         idleState.Session = session;
         idleState.CurrentMessageCount = session.SelectedMailbox.ExistsMessage;
 
-        Assert.IsTrue((bool)session.Idle(1000, idleState, delegate(object state, ImapUpdatedStatus updatedStatus) {
+        Assert.IsTrue((bool)session.Idle(1000, idleState, delegate(object state, ImapResponse receivedResponse) {
           var s = state as IdleState;
+          var data = receivedResponse as ImapDataResponse;
 
-          if (updatedStatus.Expunge.HasValue) {
+          if (data == null)
+            return true;
+
+          if (data.Type == ImapDataResponseType.Expunge) {
             s.CurrentMessageCount--;
           }
-          else if (updatedStatus.Exists.HasValue) {
-            if (s.CurrentMessageCount < updatedStatus.Exists.Value) {
+          else if (data.Type == ImapDataResponseType.Exists) {
+            var exists = ImapDataResponseConverter.FromExists(data);
+
+            if (s.CurrentMessageCount < exists) {
               waitForIdleFinishEvent.Set();
               return false;
             }
             else {
-              s.CurrentMessageCount = updatedStatus.Exists.Value;
+              s.CurrentMessageCount = exists;
             }
           }
 
@@ -330,14 +345,22 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         Assert.AreEqual(3L, session.SelectedMailbox.ExistsMessage);
 
-        CloseMailbox(session, "0004");
-      }
+        // CLOSE transaction
+        server.EnqueueResponse("0004 OK CLOSE completed\r\n");
+
+        Assert.IsTrue((bool)session.Close());
+
+        Assert.AreEqual("0004 CLOSE\r\n",
+                        server.DequeueRequest());
+
+        session.Disconnect(false);
+      });
     }
 
     [Test]
     public void TestIdleKeepIdleCallbackTimeout()
     {
-      using (var session = SelectMailbox("IDLE")) {
+      SelectMailbox(new[] {"IDLE"}, delegate(ImapSession session, ImapPseudoServer server) {
         // IDLE
         Assert.IsFalse(session.IsIdling);
 
@@ -384,14 +407,14 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.IsFalse(session.IsTransactionProceeding);
 
         // can't continue
-        //CloseMailbox(session);
-      }
+        return -1;
+      });
     }
 
     [Test]
     public void TestIdleKeepIdleCallbackException()
     {
-      using (var session = SelectMailbox("IDLE")) {
+      SelectMailbox(new[] {"IDLE"}, delegate(ImapSession session, ImapPseudoServer server) {
         // IDLE
         Assert.IsFalse(session.IsIdling);
 
@@ -429,43 +452,126 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         Assert.AreEqual("0004 IDLE\r\n",
                         server.DequeueRequest());
-      }
+
+        // can't continue
+        return -1;
+      });
+    }
+
+    [Test]
+    public void TestIdleBye()
+    {
+      SelectMailbox(new[] {"IDLE"}, delegate(ImapSession session, ImapPseudoServer server) {
+        // IDLE
+        Assert.IsFalse(session.IsIdling);
+
+        session.SendTimeout         = 50;
+        session.ReceiveTimeout      = 50;
+        session.TransactionTimeout  = 50;
+
+        server.WaitForRequest = false;
+
+        ThreadPool.QueueUserWorkItem(delegate(object state) {
+          var s = state as ImapPseudoServer;
+
+          s.EnqueueResponse("+ idling\r\n");
+
+          Thread.Sleep(250);
+
+          s.EnqueueResponse("* BYE Server shutting down.\r\n");
+        }, server);
+
+        Assert.IsFalse((bool)session.Idle(1000));
+
+        Assert.AreEqual(ImapSessionState.NotConnected, session.State);
+        Assert.IsFalse(session.IsTransactionProceeding);
+
+        Assert.AreEqual("0004 IDLE\r\n",
+                        server.DequeueRequest());
+
+        server.Stop();
+
+        // can't continue
+        return -1;
+      });
+    }
+
+    [Test]
+    public void TestIdleDisconnectedFromServer()
+    {
+      SelectMailbox(new[] {"IDLE"}, delegate(ImapSession session, ImapPseudoServer server) {
+        // IDLE
+        Assert.IsFalse(session.IsIdling);
+
+        session.SendTimeout         = 50;
+        session.ReceiveTimeout      = 50;
+        session.TransactionTimeout  = 50;
+
+        server.WaitForRequest = false;
+
+        ThreadPool.QueueUserWorkItem(delegate(object state) {
+          var s = state as ImapPseudoServer;
+
+          s.EnqueueResponse("+ idling\r\n");
+
+          Thread.Sleep(250);
+
+          s.Stop();
+        }, server);
+
+        try {
+          session.Idle(1000);
+
+          Assert.Fail("ImapConnectionException not thrown");
+        }
+        catch (ImapConnectionException) {
+        }
+
+        Assert.AreEqual(ImapSessionState.NotConnected, session.State);
+        Assert.IsFalse(session.IsTransactionProceeding);
+
+        Assert.AreEqual("0004 IDLE\r\n",
+                        server.DequeueRequest());
+
+        // can't continue
+        return -1;
+      });
     }
 
     [Test]
     public void TestNamespace()
     {
-      using (var session = Authenticate("NAMESPACE")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Namespace));
-  
+      Authenticate(new[] {"NAMESPACE"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Namespace));
+
         // NAMESPACE transaction
         server.EnqueueResponse("* NAMESPACE ((\"\" \"/\")) ((\"~\" \"/\")) ((\"#shared/\" \"/\")(\"#public/\" \"/\")(\"#ftp/\" \"/\")(\"#news.\" \".\"))\r\n" +
                                "0002 OK NAMESPACE command completed\r\n");
-  
+
         ImapNamespace namespaces = null;
-  
+
         Assert.IsTrue((bool)session.Namespace(out namespaces));
-  
+
         Assert.AreEqual("0002 NAMESPACE\r\n",
                         server.DequeueRequest());
-  
+
         Assert.IsNotNull(namespaces);
         Assert.AreEqual(1, namespaces.PersonalNamespaces.Length);
         Assert.AreEqual(string.Empty, namespaces.PersonalNamespaces[0].Prefix);
         Assert.AreEqual("/", namespaces.PersonalNamespaces[0].HierarchyDelimiter);
         Assert.AreEqual(0, namespaces.PersonalNamespaces[0].Extensions.Count);
-  
+
         Assert.AreEqual(1, namespaces.OtherUsersNamespaces.Length);
         Assert.AreEqual("~", namespaces.OtherUsersNamespaces[0].Prefix);
         Assert.AreEqual("/", namespaces.OtherUsersNamespaces[0].HierarchyDelimiter);
         Assert.AreEqual(0, namespaces.OtherUsersNamespaces[0].Extensions.Count);
-  
+
         Assert.AreEqual(4, namespaces.SharedNamespaces.Length);
         Assert.AreEqual("#shared/", namespaces.SharedNamespaces[0].Prefix);
         Assert.AreEqual("#public/", namespaces.SharedNamespaces[1].Prefix);
         Assert.AreEqual("#ftp/", namespaces.SharedNamespaces[2].Prefix);
         Assert.AreEqual("#news.", namespaces.SharedNamespaces[3].Prefix);
-  
+
         Assert.IsTrue(namespaces.PersonalNamespaces.Length == session.Namespaces.PersonalNamespaces.Length);
         Assert.IsTrue(namespaces.OtherUsersNamespaces.Length == session.Namespaces.OtherUsersNamespaces.Length);
         Assert.IsTrue(namespaces.SharedNamespaces.Length == session.Namespaces.SharedNamespaces.Length);
@@ -475,27 +581,27 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.IsTrue(namespaces.SharedNamespaces[1].Prefix == session.Namespaces.SharedNamespaces[1].Prefix);
         Assert.IsTrue(namespaces.SharedNamespaces[2].Prefix == session.Namespaces.SharedNamespaces[2].Prefix);
         Assert.IsTrue(namespaces.SharedNamespaces[3].Prefix == session.Namespaces.SharedNamespaces[3].Prefix);
-      }
+      });
     }
 
     [Test]
     [ExpectedException(typeof(ImapIncapableException))]
     public void TestComparatorIncapable()
     {
-      using (var session = Authenticate()) {
-        Assert.IsFalse(session.ServerCapabilities.Has(ImapCapability.I18NLevel2));
+      Authenticate(delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsFalse(session.ServerCapabilities.Contains(ImapCapability.I18NLevel2));
 
         session.HandlesIncapableAsException = true;
 
         session.Comparator();
-      }
+      });
     }
 
     [Test]
     public void TestComparator()
     {
-      using (var session = Authenticate("I18NLEVEL=2")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.I18NLevel2));
+      Authenticate(new[] {"I18NLEVEL=2"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.I18NLevel2));
         Assert.AreEqual(ImapCollationAlgorithm.Default, session.ActiveComparator);
 
         // COMPARATOR transaction
@@ -510,14 +616,14 @@ namespace Smdn.Net.Imap4.Client.Session {
                         server.DequeueRequest());
 
         Assert.AreEqual(ImapCollationAlgorithm.UnicodeCasemap, session.ActiveComparator);
-      }
+      });
     }
 
     [Test]
     public void TestComparatorChangeComparator()
     {
-      using (var session = Authenticate("I18NLEVEL=2")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.I18NLevel2));
+      Authenticate(new[] {"I18NLEVEL=2"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.I18NLevel2));
         Assert.AreEqual(ImapCollationAlgorithm.Default, session.ActiveComparator);
 
         // COMPARATOR transaction
@@ -539,14 +645,14 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual(0, matchingComparators.Length);
 
         Assert.AreEqual(new ImapCollationAlgorithm("i;basic"), session.ActiveComparator);
-      }
+      });
     }
 
     [Test]
     public void TestSetQuota()
     {
-      using (var session = Authenticate("QUOTA")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Quota));
+      Authenticate(new[] {"QUOTA"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Quota));
 
         // SETQUOTA transaction
         server.EnqueueResponse("* QUOTA \"\" (STORAGE 10 512)\r\n" +
@@ -565,27 +671,27 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual("STORAGE", changedQuota.Resources[0].Name);
         Assert.AreEqual(10L, changedQuota.Resources[0].Usage);
         Assert.AreEqual(512L, changedQuota.Resources[0].Limit);
-      }
+      });
     }
 
     [Test]
     [ExpectedException(typeof(ImapIncapableException))]
     public void TestSetQuotaIncapable()
     {
-      using (var session = Authenticate()) {
-        Assert.IsFalse(session.ServerCapabilities.Has(ImapCapability.Quota));
+      Authenticate(delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsFalse(session.ServerCapabilities.Contains(ImapCapability.Quota));
 
         session.HandlesIncapableAsException = true;
 
         session.SetQuota(string.Empty, "STORAGE", 512L);
-      }
+      });
     }
 
     [Test]
     public void TestGetQuota()
     {
-      using (var session = Authenticate("QUOTA")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Quota));
+      Authenticate(new[] {"QUOTA"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Quota));
 
         // SETQUOTA transaction
         server.EnqueueResponse("* QUOTA \"\" (STORAGE 10 512)\r\n" +
@@ -604,29 +710,29 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual("STORAGE", quota.Resources[0].Name);
         Assert.AreEqual(10L, quota.Resources[0].Usage);
         Assert.AreEqual(512L, quota.Resources[0].Limit);
-      }
+      });
     }
 
     [Test]
     [ExpectedException(typeof(ImapIncapableException))]
     public void TestGetQuotaIncapable()
     {
-      using (var session = Authenticate()) {
-        Assert.IsFalse(session.ServerCapabilities.Has(ImapCapability.Quota));
+      Authenticate(delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsFalse(session.ServerCapabilities.Contains(ImapCapability.Quota));
 
         session.HandlesIncapableAsException = true;
 
         ImapQuota quota;
 
         session.GetQuota(string.Empty, out quota);
-      }
+      });
     }
 
     [Test]
     public void TestGetQuotaRoot()
     {
-      using (var session = Authenticate("QUOTA")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Quota));
+      Authenticate(new[] {"QUOTA"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Quota));
 
         // GETQUOTAROOT transaction
         server.EnqueueResponse("* QUOTAROOT INBOX \"\"\r\n" +
@@ -637,7 +743,7 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         Assert.IsTrue((bool)session.GetQuotaRoot("INBOX", out quotaRoots));
 
-        Assert.AreEqual("0002 GETQUOTAROOT \"INBOX\"\r\n",
+        Assert.AreEqual("0002 GETQUOTAROOT INBOX\r\n",
                         server.DequeueRequest());
 
         Assert.IsNotNull(quotaRoots);
@@ -654,29 +760,29 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual("STORAGE", inboxQuotaRoot[0].Resources[0].Name);
         Assert.AreEqual(10L, inboxQuotaRoot[0].Resources[0].Usage);
         Assert.AreEqual(512L, inboxQuotaRoot[0].Resources[0].Limit);
-      }
+      });
     }
 
     [Test]
     [ExpectedException(typeof(ImapIncapableException))]
     public void TestGetQuotaRootIncapable()
     {
-      using (var session = Authenticate()) {
-        Assert.IsFalse(session.ServerCapabilities.Has(ImapCapability.Quota));
+      Authenticate(delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsFalse(session.ServerCapabilities.Contains(ImapCapability.Quota));
 
         session.HandlesIncapableAsException = true;
 
         IDictionary<string, ImapQuota[]> quotaRoots;
 
         session.GetQuotaRoot("INBOX", out quotaRoots);
-      }
+      });
     }
 
     [Test]
     public void TestGetMetadataServer()
     {
-      using (var session = Authenticate("METADATA-SERVER")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.MetadataServer));
+      Authenticate(new[] {"METADATA-SERVER"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.MetadataServer));
 
         // GETMETADATA transaction
         server.EnqueueResponse("* METADATA \"\" (/shared/comment \"Shared comment\")\r\n" +
@@ -692,32 +798,33 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.IsNotNull(metadata);
         Assert.AreEqual(1, metadata.Length);
         Assert.AreEqual("/shared/comment", metadata[0].EntryName);
-        Assert.AreEqual("Shared comment", (string)metadata[0].Value);
-      }
+        //Assert.AreEqual("Shared comment", (string)metadata[0].Value);
+        Assert.IsTrue(metadata[0].Value.Equals("Shared comment"));
+      });
     }
 
     [Test]
     [ExpectedException(typeof(ImapIncapableException))]
     public void TestGetMetadataServerIncapable()
     {
-      using (var session = Authenticate()) {
-        Assert.IsFalse(session.ServerCapabilities.Has(ImapCapability.Metadata));
-        Assert.IsFalse(session.ServerCapabilities.Has(ImapCapability.MetadataServer));
+      Authenticate(delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsFalse(session.ServerCapabilities.Contains(ImapCapability.Metadata));
+        Assert.IsFalse(session.ServerCapabilities.Contains(ImapCapability.MetadataServer));
 
         session.HandlesIncapableAsException = true;
 
         ImapMetadata[] metadata;
 
         session.GetMetadata("/shared/comment", out metadata);
-      }
+      });
     }
 
     [Test]
     public void TestGetMetadataServerCapable1()
     {
-      using (var session = Authenticate("METADATA")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Metadata));
-        Assert.IsFalse(session.ServerCapabilities.Has(ImapCapability.MetadataServer));
+      Authenticate(new[] {"METADATA"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Metadata));
+        Assert.IsFalse(session.ServerCapabilities.Contains(ImapCapability.MetadataServer));
 
         session.HandlesIncapableAsException = true;
 
@@ -728,15 +835,15 @@ namespace Smdn.Net.Imap4.Client.Session {
                                "0002 OK GETMETADATA complete\r\n");
 
         Assert.IsTrue((bool)session.GetMetadata("/shared/comment", out metadata));
-      }
+      });
     }
 
     [Test]
     public void TestGetMetadataServerCapable2()
     {
-      using (var session = Authenticate("METADATA-SERVER")) {
-        Assert.IsFalse(session.ServerCapabilities.Has(ImapCapability.Metadata));
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.MetadataServer));
+      Authenticate(new[] {"METADATA-SERVER"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsFalse(session.ServerCapabilities.Contains(ImapCapability.Metadata));
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.MetadataServer));
 
         session.HandlesIncapableAsException = true;
 
@@ -747,41 +854,42 @@ namespace Smdn.Net.Imap4.Client.Session {
                                "0002 OK GETMETADATA complete\r\n");
 
         Assert.IsTrue((bool)session.GetMetadata("/shared/comment", out metadata));
-      }
+      });
     }
 
     [Test]
     public void TestGetMetadata1()
     {
-      using (var session = Authenticate("METADATA")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Metadata));
+      Authenticate(new[] {"METADATA"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Metadata));
 
         // GETMETADATA transaction
-        server.EnqueueResponse("* METADATA \"INBOX\" (/private/comment \"My own comment\")\r\n" +
+        server.EnqueueResponse("* METADATA INBOX (/private/comment \"My own comment\")\r\n" +
                                "0002 OK GETMETADATA complete\r\n");
 
         ImapMetadata[] metadata;
 
         Assert.IsTrue((bool)session.GetMetadata("INBOX", "/private/comment", out metadata));
 
-        Assert.AreEqual("0002 GETMETADATA \"INBOX\" /private/comment\r\n",
+        Assert.AreEqual("0002 GETMETADATA INBOX /private/comment\r\n",
                         server.DequeueRequest());
 
         Assert.IsNotNull(metadata);
         Assert.AreEqual(1, metadata.Length);
         Assert.AreEqual("/private/comment", metadata[0].EntryName);
-        Assert.AreEqual("My own comment", (string)metadata[0].Value);
-      }
+        //Assert.AreEqual("My own comment", (string)metadata[0].Value);
+        Assert.IsTrue(metadata[0].Value.Equals("My own comment"));
+      });
     }
 
     [Test]
     public void TestGetMetadata2()
     {
-      using (var session = Authenticate("METADATA")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Metadata));
+      Authenticate(new[] {"METADATA"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Metadata));
 
         // GETMETADATA transaction
-        server.EnqueueResponse("* METADATA \"INBOX\" (/shared/comment \"Shared comment\" " +
+        server.EnqueueResponse("* METADATA INBOX (/shared/comment \"Shared comment\" " +
                                "/private/comment \"My own comment\")\r\n"+
                                "0002 OK GETMETADATA complete\r\n");
 
@@ -789,26 +897,28 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         Assert.IsTrue((bool)session.GetMetadata("INBOX", new[] {"/shared/comment", "/private/comment"}, out metadata));
 
-        Assert.AreEqual("0002 GETMETADATA \"INBOX\" (/shared/comment /private/comment)\r\n",
+        Assert.AreEqual("0002 GETMETADATA INBOX (/shared/comment /private/comment)\r\n",
                         server.DequeueRequest());
 
         Assert.IsNotNull(metadata);
         Assert.AreEqual(2, metadata.Length);
         Assert.AreEqual("/shared/comment", metadata[0].EntryName);
-        Assert.AreEqual("Shared comment", (string)metadata[0].Value);
+        //Assert.AreEqual("Shared comment", (string)metadata[0].Value);
+        Assert.IsTrue(metadata[0].Value.Equals("Shared comment"));
         Assert.AreEqual("/private/comment", metadata[1].EntryName);
-        Assert.AreEqual("My own comment", (string)metadata[1].Value);
-      }
+        //Assert.AreEqual("My own comment", (string)metadata[1].Value);
+        Assert.IsTrue(metadata[1].Value.Equals("My own comment"));
+      });
     }
 
     [Test]
     public void TestGetMetadataMaxSize()
     {
-      using (var session = Authenticate("METADATA")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Metadata));
+      Authenticate(new[] {"METADATA"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Metadata));
 
         // GETMETADATA transaction
-        server.EnqueueResponse("* METADATA \"INBOX\" (/private/comment \"My own comment\")\r\n"+
+        server.EnqueueResponse("* METADATA INBOX (/private/comment \"My own comment\")\r\n"+
                                "0002 OK [METADATA LONGENTRIES 2199] GETMETADATA complete\r\n");
 
         ImapMetadata[] metadata;
@@ -820,29 +930,30 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         Assert.IsTrue((bool)result);
 
-        Assert.AreEqual("0002 GETMETADATA \"INBOX\" (MAXSIZE 1024) (/shared/comment /private/comment)\r\n",
+        Assert.AreEqual("0002 GETMETADATA INBOX (MAXSIZE 1024) (/shared/comment /private/comment)\r\n",
                         server.DequeueRequest());
 
         Assert.IsNotNull(metadata);
         Assert.AreEqual(1, metadata.Length);
         Assert.AreEqual("/private/comment", metadata[0].EntryName);
-        Assert.AreEqual("My own comment", (string)metadata[0].Value);
+        //Assert.AreEqual("My own comment", (string)metadata[0].Value);
+        Assert.IsTrue(metadata[0].Value.Equals("My own comment"));
 
         var resp = result.GetResponseCode(ImapResponseCode.MetadataLongEntries);
 
         Assert.IsNotNull(resp);
         Assert.AreEqual(2199, ImapResponseTextConverter.FromMetadataLongEntries(resp.ResponseText));
-      }
+      });
     }
 
     [Test]
     public void TestGetMetadataDepth()
     {
-      using (var session = Authenticate("METADATA")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Metadata));
+      Authenticate(new[] {"METADATA"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Metadata));
 
         // GETMETADATA transaction
-        server.EnqueueResponse("* METADATA \"INBOX\" (/private/filters/values/small " +
+        server.EnqueueResponse("* METADATA INBOX (/private/filters/values/small " +
                                "\"SMALLER 5000\" /private/filters/values/boss " +
                                "\"FROM \\\"boss@example.com\\\"\")\r\n" +
                                "0002 OK GETMETADATA complete\r\n");
@@ -854,54 +965,56 @@ namespace Smdn.Net.Imap4.Client.Session {
                                                 ImapGetMetadataOptions.Depth1,
                                                 out metadata));
 
-        Assert.AreEqual("0002 GETMETADATA \"INBOX\" (DEPTH 1) /private/filters/values\r\n",
+        Assert.AreEqual("0002 GETMETADATA INBOX (DEPTH 1) /private/filters/values\r\n",
                         server.DequeueRequest());
 
         Assert.IsNotNull(metadata);
         Assert.AreEqual(2, metadata.Length);
         Assert.AreEqual("/private/filters/values/small", metadata[0].EntryName);
-        Assert.AreEqual("SMALLER 5000", (string)metadata[0].Value);
+        //Assert.AreEqual("SMALLER 5000", (string)metadata[0].Value);
+        Assert.IsTrue(metadata[0].Value.Equals("SMALLER 5000"));
         Assert.AreEqual("/private/filters/values/boss", metadata[1].EntryName);
-        Assert.AreEqual("FROM \"boss@example.com\"", (string)metadata[1].Value);
-      }
+        //Assert.AreEqual("FROM \"boss@example.com\"", (string)metadata[1].Value);
+        Assert.IsTrue(metadata[1].Value.Equals("FROM \"boss@example.com\""));
+      });
     }
 
     [Test]
     [ExpectedException(typeof(ImapIncapableException))]
     public void TestGetMetadataIncapable1()
     {
-      using (var session = Authenticate()) {
-        Assert.IsFalse(session.ServerCapabilities.Has(ImapCapability.Metadata));
+      Authenticate(delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsFalse(session.ServerCapabilities.Contains(ImapCapability.Metadata));
 
         session.HandlesIncapableAsException = true;
 
         ImapMetadata[] metadata;
 
         session.GetMetadata("/shared/comment", out metadata);
-      }
+      });
     }
 
     [Test]
     [ExpectedException(typeof(ImapIncapableException))]
     public void TestGetMetadataIncapable2()
     {
-      using (var session = Authenticate("METADATA-SERVER")) {
-        Assert.IsFalse(session.ServerCapabilities.Has(ImapCapability.Metadata));
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.MetadataServer));
+      Authenticate(new[] {"METADATA-SERVER"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsFalse(session.ServerCapabilities.Contains(ImapCapability.Metadata));
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.MetadataServer));
 
         session.HandlesIncapableAsException = true;
 
         ImapMetadata[] metadata;
 
         session.GetMetadata("INBOX", "/shared/comment", out metadata);
-      }
+      });
     }
 
     [Test]
     public void TestSetMetadataServer()
     {
-      using (var session = Authenticate("METADATA-SERVER")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.MetadataServer));
+      Authenticate(new[] {"METADATA-SERVER"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.MetadataServer));
 
         // SETMETADATA transaction
         server.EnqueueResponse("0002 OK SETMETADATA complete\r\n");
@@ -910,29 +1023,29 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         Assert.AreEqual("0002 SETMETADATA \"\" (/shared/vendor/foo/bar NIL)\r\n",
                         server.DequeueRequest());
-      }
+      });
     }
 
     [Test]
     [ExpectedException(typeof(ImapIncapableException))]
     public void TestSetMetadataServerIncapable()
     {
-      using (var session = Authenticate()) {
-        Assert.IsFalse(session.ServerCapabilities.Has(ImapCapability.Metadata));
-        Assert.IsFalse(session.ServerCapabilities.Has(ImapCapability.MetadataServer));
+      Authenticate(delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsFalse(session.ServerCapabilities.Contains(ImapCapability.Metadata));
+        Assert.IsFalse(session.ServerCapabilities.Contains(ImapCapability.MetadataServer));
 
         session.HandlesIncapableAsException = true;
 
         session.SetMetadata(new[] {"/shared/vendor/foo/bar"});
-      }
+      });
     }
 
     [Test]
     public void TestSetMetadataServerCapable1()
     {
-      using (var session = Authenticate("METADATA")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Metadata));
-        Assert.IsFalse(session.ServerCapabilities.Has(ImapCapability.MetadataServer));
+      Authenticate(new[] {"METADATA"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Metadata));
+        Assert.IsFalse(session.ServerCapabilities.Contains(ImapCapability.MetadataServer));
 
         session.HandlesIncapableAsException = true;
 
@@ -940,15 +1053,15 @@ namespace Smdn.Net.Imap4.Client.Session {
         server.EnqueueResponse("0002 OK SETMETADATA complete\r\n");
 
         Assert.IsTrue((bool)session.SetMetadata(new[] {"/shared/vendor/foo/bar"}));
-      }
+      });
     }
 
     [Test]
     public void TestSetMetadataServerCapable2()
     {
-      using (var session = Authenticate("METADATA-SERVER")) {
-        Assert.IsFalse(session.ServerCapabilities.Has(ImapCapability.Metadata));
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.MetadataServer));
+      Authenticate(new[] {"METADATA-SERVER"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsFalse(session.ServerCapabilities.Contains(ImapCapability.Metadata));
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.MetadataServer));
 
         session.HandlesIncapableAsException = true;
 
@@ -956,14 +1069,14 @@ namespace Smdn.Net.Imap4.Client.Session {
         server.EnqueueResponse("0002 OK SETMETADATA complete\r\n");
 
         Assert.IsTrue((bool)session.SetMetadata(new[] {"/shared/vendor/foo/bar"}));
-      }
+      });
     }
 
     [Test]
     public void TestSetMetadata1()
     {
-      using (var session = Authenticate("METADATA")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Metadata));
+      Authenticate(new[] {"METADATA"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Metadata));
 
         // SETMETADATA transaction
         server.EnqueueResponse("+ ready for data\r\n");
@@ -976,35 +1089,35 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         Assert.IsTrue((bool)session.SetMetadata("INBOX", metadata));
 
-        Assert.AreEqual("0002 SETMETADATA \"INBOX\" (/private/comment {33}\r\n" +
+        Assert.AreEqual("0002 SETMETADATA INBOX (/private/comment {33}\r\n" +
                         "My new comment across\n" +
                         "two lines.\n" +
                         ")\r\n",
                         server.DequeueAll());
-      }
+      });
     }
 
     [Test]
     public void TestSetMetadata2()
     {
-      using (var session = Authenticate("METADATA")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Metadata));
+      Authenticate(new[] {"METADATA"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Metadata));
 
         // SETMETADATA transaction
         server.EnqueueResponse("0002 OK SETMETADATA complete\r\n");
 
         Assert.IsTrue((bool)session.SetMetadata("INBOX", "/private/comment"));
 
-        Assert.AreEqual("0002 SETMETADATA \"INBOX\" (/private/comment NIL)\r\n",
+        Assert.AreEqual("0002 SETMETADATA INBOX (/private/comment NIL)\r\n",
                         server.DequeueRequest());
-      }
+      });
     }
 
     [Test]
     public void TestSetMetadata3()
     {
-      using (var session = Authenticate("METADATA")) {
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Metadata));
+      Authenticate(new[] {"METADATA"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Metadata));
 
         // SETMETADATA transaction
         server.EnqueueResponse("0002 OK SETMETADATA complete\r\n");
@@ -1016,37 +1129,37 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         Assert.IsTrue((bool)session.SetMetadata("INBOX", metadata));
 
-        Assert.AreEqual("0002 SETMETADATA \"INBOX\" (/private/comment \"My new comment\" " +
+        Assert.AreEqual("0002 SETMETADATA INBOX (/private/comment \"My new comment\" " +
                         "/shared/comment \"This one is for you!\")\r\n",
                         server.DequeueRequest());
-      }
+      });
     }
 
     [Test]
     [ExpectedException(typeof(ImapIncapableException))]
     public void TestSetMetadataIncapable1()
     {
-      using (var session = Authenticate()) {
-        Assert.IsFalse(session.ServerCapabilities.Has(ImapCapability.Metadata));
+      Authenticate(delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsFalse(session.ServerCapabilities.Contains(ImapCapability.Metadata));
 
         session.HandlesIncapableAsException = true;
 
         session.SetMetadata("INBOX", "/private/comment");
-      }
+      });
     }
 
     [Test]
     [ExpectedException(typeof(ImapIncapableException))]
     public void TestSetMetadataIncapable2()
     {
-      using (var session = Authenticate("METADATA-SERVER")) {
-        Assert.IsFalse(session.ServerCapabilities.Has(ImapCapability.Metadata));
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.MetadataServer));
+      Authenticate(new[] {"METADATA-SERVER"}, delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsFalse(session.ServerCapabilities.Contains(ImapCapability.Metadata));
+        Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.MetadataServer));
 
         session.HandlesIncapableAsException = true;
 
         session.SetMetadata("INBOX", "/private/comment");
-      }
+      });
     }
   }
 }

@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2009-2010 smdn
+// Copyright (c) 2009-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -29,6 +29,10 @@ using System.Collections.Generic;
 namespace Smdn.Collections {
 #if !NET_3_5
   public static class Enumerable {
+    private static class EmptyOf<T> {
+      public static readonly T[] Enumerable = new T[0];
+    }
+
     private static void CheckArgs(object source)
     {
       if (source == null)
@@ -154,6 +158,11 @@ namespace Smdn.Collections {
       return count;
     }
 
+    public static IEnumerable<TSource> Empty<TSource>()
+    {
+      return EmptyOf<TSource>.Enumerable;
+    }
+
     public static TSource First<TSource>(this IEnumerable<TSource> source)
     {
       CheckArgs(source);
@@ -216,6 +225,17 @@ namespace Smdn.Collections {
       }
 
       return default(TSource);
+    }
+
+    public static IEnumerable<int> Range(int start, int count)
+    {
+      if (count < 0)
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("count", count);
+      if (int.MaxValue - count < start - 1)
+        throw new ArgumentOutOfRangeException("count");
+
+      for (var i = 0; i < count; i++)
+        yield return start++;
     }
 
     public static IEnumerable<TSource> Reverse<TSource>(this IEnumerable<TSource> source)
@@ -307,6 +327,13 @@ namespace Smdn.Collections {
 
         return array;
       }
+    }
+
+    public static List<TSource> ToList<TSource>(this IEnumerable<TSource> source)
+    {
+      CheckArgs(source);
+
+      return new List<TSource>(source);
     }
 
     public static IEnumerable<TSource> Where<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)

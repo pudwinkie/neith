@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
+using Smdn.IO;
 using Smdn.Net.Imap4.Client.Session;
 using Smdn.Net.Imap4.Protocol;
 using Smdn.Net.Imap4.Protocol.Client;
@@ -90,7 +91,7 @@ namespace Smdn.Net.Imap4.Client {
     }
 
     public bool Exists {
-      get { return !deleted && !mailbox.Flags.Has(ImapMailboxFlag.NonExistent); }
+      get { return !deleted && !mailbox.Flags.Contains(ImapMailboxFlag.NonExistent); }
     }
 
     public bool IsUnselectable {
@@ -110,7 +111,7 @@ namespace Smdn.Net.Imap4.Client {
     }
 
     protected bool CanNotHaveChild {
-      get { return mailbox.Flags.Has(ImapMailboxFlag.NoInferiors) || string.IsNullOrEmpty(mailbox.HierarchyDelimiter); }
+      get { return mailbox.Flags.Contains(ImapMailboxFlag.NoInferiors) || string.IsNullOrEmpty(mailbox.HierarchyDelimiter); }
     }
 
     internal protected ImapMailbox Mailbox {
@@ -139,9 +140,9 @@ namespace Smdn.Net.Imap4.Client {
                                           GetStatusDataItem(client.ServerCapabilities)));
     }
 
-    internal static ImapStatusDataItem GetStatusDataItem(ImapCapabilityList serverCapabilities)
+    internal static ImapStatusDataItem GetStatusDataItem(ImapCapabilitySet serverCapabilities)
     {
-      if (serverCapabilities.Has(ImapCapability.CondStore))
+      if (serverCapabilities.Contains(ImapCapability.CondStore))
         return ImapStatusDataItem.StandardAll + ImapStatusDataItem.HighestModSeq;
       else
         return ImapStatusDataItem.StandardAll;
@@ -155,9 +156,9 @@ namespace Smdn.Net.Imap4.Client {
       return Open(ImapClient.DefaultSelectReadOnly);
     }
 
-    public virtual ImapOpenedMailboxInfo Open(bool readOnly)
+    public virtual ImapOpenedMailboxInfo Open(bool asReadOnly)
     {
-      return client.OpenMailbox(this, readOnly);
+      return client.OpenMailbox(this, asReadOnly);
     }
 
     /*
@@ -174,12 +175,18 @@ namespace Smdn.Net.Imap4.Client {
         client.CloseMailbox();
 
       if (Exists)
-        ProcessResult(client.Session.Delete(mailbox));
+        ProcessResult(client.Session.Delete(mailbox),
+                      delegate(ImapResponseCode code) {
+          if (code == ImapResponseCode.NonExistent)
+            return false; // throw no exception
+          else
+            return true;
+        });
+
+      deleted = true;
 
       if (unsubscribe)
         ProcessResult(client.Session.Unsubscribe(mailbox.Name)); // mailbox is detached already
-
-      deleted = true;
     }
 
     /*
@@ -192,13 +199,19 @@ namespace Smdn.Net.Imap4.Client {
 
     public void Create(bool subscribe)
     {
-      ProcessResult(client.Session.Create(mailbox.Name));
+      ProcessResult(client.Session.Create(mailbox.Name),
+                    delegate(ImapResponseCode code) {
+        if (code == ImapResponseCode.AlreadyExists)
+          return false; // throw no exception
+        else
+          return true;
+      });
 
       deleted = false;
 
       // remove \NonExistent flag
-      if (mailbox.Flags.Has(ImapMailboxFlag.NonExistent)) {
-        var flags = new ImapMailboxFlagList(mailbox.Flags);
+      if (mailbox.Flags.Contains(ImapMailboxFlag.NonExistent)) {
+        var flags = new ImapMailboxFlagSet(mailbox.Flags);
 
         flags.Remove(ImapMailboxFlag.NonExistent);
 
@@ -209,12 +222,17 @@ namespace Smdn.Net.Imap4.Client {
         ProcessResult(client.Session.Subscribe(mailbox.Name));
     }
 
-    public static ImapMailboxInfo Create(ImapClient client, string mailboxName)
+    public static ImapMailboxInfo Create(ImapClient client,
+                                         string mailboxName)
     {
-      return Create(client, mailboxName, ImapClient.DefaultSubscription);
+      return Create(client,
+                    mailboxName,
+                    ImapClient.DefaultSubscription);
     }
 
-    public static ImapMailboxInfo Create(ImapClient client, string mailboxName, bool subscribe)
+    public static ImapMailboxInfo Create(ImapClient client,
+                                         string mailboxName,
+                                         bool subscribe)
     {
       if (client == null)
         throw new ArgumentNullException("client");
@@ -230,14 +248,19 @@ namespace Smdn.Net.Imap4.Client {
       MoveTo(destinationMailbox, ImapClient.DefaultSubscription);
     }
 
-    public void MoveTo(ImapMailboxInfo destinationMailbox, bool subscribe)
+    public void MoveTo(ImapMailboxInfo destinationMailbox,
+                       bool subscribe)
     {
       if (destinationMailbox == null)
         throw new ArgumentNullException("destinationMailbox");
+      if (destinationMailbox.client != this.client)
+        // TODO: impl
+        throw new NotImplementedException("moving to mailbox of different session is currently not supported");
 
       destinationMailbox.ThrowIfCanNotHaveChild();
 
-      MoveTo(destinationMailbox.GetFullNameOf(mailbox.LeafName), subscribe);
+      MoveTo(destinationMailbox.GetFullNameOf(mailbox.LeafName),
+             subscribe);
     }
 
     public void MoveTo(string newMailboxName)
@@ -245,11 +268,12 @@ namespace Smdn.Net.Imap4.Client {
       MoveTo(newMailboxName, ImapClient.DefaultSubscription);
     }
 
-    public void MoveTo(string newMailboxName, bool subscribe)
+    public void MoveTo(string newMailboxName,
+                       bool subscribe)
     {
-      if (newMailboxName == null)
-        throw new ArgumentNullException("newMailboxName");
-      else if (mailbox.NameEquals(newMailboxName))
+      ImapClient.GetValidatedMailboxName(newMailboxName);
+
+      if (mailbox.NameEquals(newMailboxName))
         throw new ImapProtocolViolationException("new mailbox name must be different from current mailbox name");
       else if (ImapMailbox.IsNameInbox(newMailboxName))
         throw new ImapProtocolViolationException("can't move to INBOX");
@@ -296,6 +320,39 @@ namespace Smdn.Net.Imap4.Client {
       if (selected)
         client.OpenMailbox(this, readOnly);
     }
+
+#if false
+    public void CopyTo(ImapMailboxInfo destinationMailbox)
+    {
+      CopyTo(destinationMailbox, ImapClient.DefaultSubscription);
+    }
+
+    public void CopyTo(ImapMailboxInfo destinationMailbox,
+                       bool subscribe)
+    {
+      if (destinationMailbox == null)
+        throw new ArgumentNullException("destinationMailbox");
+      if (destinationMailbox.client != this.client)
+        // TODO: impl
+        throw new NotImplementedException("moving to mailbox of different session is currently not supported");
+    }
+
+    public void CopyTo(string newMailboxName)
+    {
+      MoveTo(newMailboxName, ImapClient.DefaultSubscription);
+    }
+
+    public void CopyTo(string newMailboxName,
+                       bool subscribe)
+    {
+      if (newMailboxName == null)
+        throw new ArgumentNullException("newMailboxName");
+      else if (mailbox.NameEquals(newMailboxName))
+        throw new ImapProtocolViolationException("new mailbox name must be different from current mailbox name");
+      else if (ImapMailbox.IsNameInbox(newMailboxName))
+        throw new ImapProtocolViolationException("can't move to INBOX");
+    }
+#endif
 
     /*
      * SUBSCRIBE/UNSUBSCRIBE
@@ -355,37 +412,49 @@ namespace Smdn.Net.Imap4.Client {
     public ImapMailboxInfo GetParent(ImapMailboxListOptions options)
     {
       if (string.Empty.Equals(mailbox.SuperiorName))
-        return null;
+        return null; // TODO: throw exception
 
       return client.GetMailbox(mailbox.SuperiorName, options);
     }
 
     public ImapMailboxInfo GetOrCreateParent()
     {
-      return GetOrCreateParent(ImapClient.DefaultSubscription, ImapMailboxListOptions.Default);
+      return GetOrCreateParent(ImapClient.DefaultSubscription,
+                               ImapMailboxListOptions.Default);
     }
 
     public ImapMailboxInfo GetOrCreateParent(ImapMailboxListOptions options)
     {
-      return GetOrCreateParent(ImapClient.DefaultSubscription, options);
+      return GetOrCreateParent(ImapClient.DefaultSubscription,
+                               options);
     }
 
-    public ImapMailboxInfo GetOrCreateParent(bool subscribe)
+    public ImapMailboxInfo GetOrCreateParent(bool subscribeIfCreated)
     {
-      return GetOrCreateParent(subscribe, ImapMailboxListOptions.Default);
+      return GetOrCreateParent(subscribeIfCreated,
+                               ImapMailboxListOptions.Default);
     }
 
-    public ImapMailboxInfo GetOrCreateParent(bool subscribe, ImapMailboxListOptions options)
+    public ImapMailboxInfo GetOrCreateParent(bool subscribeIfCreated,
+                                             ImapMailboxListOptions options)
     {
       if (string.Empty.Equals(mailbox.SuperiorName))
-        return null;
+        return null; // TODO: throw exception
 
-      return client.GetOrCreateMailbox(mailbox.SuperiorName, subscribe, options);
+      return client.GetOrCreateMailbox(mailbox.SuperiorName,
+                                       subscribeIfCreated,
+                                       options);
     }
 
     /// <remarks>This method throws NotSupportedException if <see cref="CanHaveChild"/> is false.</remarks>
     public string GetFullNameOf(string childName)
     {
+      // XXX: use ImapClient.GetValidatedMailboxName
+      if (childName == null)
+        throw new ArgumentNullException("childName");
+      if (childName.Length == 0)
+        throw ExceptionUtils.CreateArgumentMustBeNonEmptyString("childName");
+
       ThrowIfCanNotHaveChild();
 
       return mailbox.GetChildName(childName);
@@ -398,7 +467,8 @@ namespace Smdn.Net.Imap4.Client {
     }
 
     /// <remarks>This method throws NotSupportedException if <see cref="CanHaveChild"/> is false.</remarks>
-    public ImapMailboxInfo CreateChild(string name, bool subscribe)
+    public ImapMailboxInfo CreateChild(string name,
+                                       bool subscribe)
     {
       return client.CreateMailbox(GetFullNameOf(name), subscribe);
     }
@@ -410,7 +480,8 @@ namespace Smdn.Net.Imap4.Client {
     }
 
     /// <remarks>This method throws NotSupportedException if <see cref="CanHaveChild"/> is false.</remarks>
-    public ImapMailboxInfo GetChild(string name, ImapMailboxListOptions options)
+    public ImapMailboxInfo GetChild(string name,
+                                    ImapMailboxListOptions options)
     {
       return client.GetMailbox(GetFullNameOf(name), options);
     }
@@ -418,25 +489,40 @@ namespace Smdn.Net.Imap4.Client {
     /// <remarks>This method throws NotSupportedException if <see cref="CanHaveChild"/> is false.</remarks>
     public ImapMailboxInfo GetOrCreateChild(string name)
     {
-      return GetOrCreateChild(name, ImapClient.DefaultSubscription, ImapMailboxListOptions.Default);
+      return GetOrCreateChild(name,
+                              ImapClient.DefaultSubscription,
+                              ImapMailboxListOptions.Default);
     }
 
     /// <remarks>This method throws NotSupportedException if <see cref="CanHaveChild"/> is false.</remarks>
-    public ImapMailboxInfo GetOrCreateChild(string name, ImapMailboxListOptions options)
+    public ImapMailboxInfo GetOrCreateChild(string name,
+                                            ImapMailboxListOptions options)
     {
-      return GetOrCreateChild(name, ImapClient.DefaultSubscription, options);
+      return GetOrCreateChild(name,
+                              ImapClient.DefaultSubscription,
+                              options);
     }
 
     /// <remarks>This method throws NotSupportedException if <see cref="CanHaveChild"/> is false.</remarks>
-    public ImapMailboxInfo GetOrCreateChild(string name, bool subscribe)
+    public ImapMailboxInfo GetOrCreateChild(string name,
+                                            bool subscribeIfCreated)
     {
-      return GetOrCreateChild(name, subscribe, ImapMailboxListOptions.Default);
+      return GetOrCreateChild(name,
+                              subscribeIfCreated,
+                              ImapMailboxListOptions.Default);
     }
 
     /// <remarks>This method throws NotSupportedException if <see cref="CanHaveChild"/> is false.</remarks>
-    public ImapMailboxInfo GetOrCreateChild(string name, bool subscribe, ImapMailboxListOptions options)
+    public ImapMailboxInfo GetOrCreateChild(string name,
+                                            bool subscribeIfCreated,
+                                            ImapMailboxListOptions options)
     {
-      return client.GetMailboxNoException(GetFullNameOf(name), options) ?? CreateChild(name, subscribe);
+      var mailbox = client.GetMailboxNoException(GetFullNameOf(name), options);
+
+      if (mailbox == null)
+        return CreateChild(name, subscribeIfCreated);
+      else
+        return mailbox;
     }
 
     /*
@@ -447,19 +533,27 @@ namespace Smdn.Net.Imap4.Client {
       AppendMessage(new ImapAppendMessage(stream));
     }
 
-    public void AppendMessage(Stream stream, DateTimeOffset internalDate)
+    public void AppendMessage(Stream stream,
+                              DateTimeOffset internalDate)
     {
-      AppendMessage(new ImapAppendMessage(stream, internalDate));
+      AppendMessage(new ImapAppendMessage(stream,
+                                          internalDate));
     }
 
-    public void AppendMessage(Stream stream, IImapMessageFlagSet flags)
+    public void AppendMessage(Stream stream,
+                              IImapMessageFlagSet flags)
     {
-      AppendMessage(new ImapAppendMessage(stream, flags));
+      AppendMessage(new ImapAppendMessage(stream,
+                                          flags));
     }
 
-    public void AppendMessage(Stream stream, DateTimeOffset internalDate, IImapMessageFlagSet flags)
+    public void AppendMessage(Stream stream,
+                              DateTimeOffset internalDate,
+                              IImapMessageFlagSet flags)
     {
-      AppendMessage(new ImapAppendMessage(stream, internalDate, flags));
+      AppendMessage(new ImapAppendMessage(stream,
+                                          internalDate,
+                                          flags));
     }
 
     public void AppendMessage(IImapAppendMessage message)
@@ -467,7 +561,10 @@ namespace Smdn.Net.Imap4.Client {
       if (message == null)
         throw new ArgumentNullException("message");
 
-      ProcessResult(Client.Session.Append(message, Mailbox));
+      ThrowIfNonExistentOrUnselectable();
+
+      ProcessResult(Client.Session.Append(message, Mailbox),
+                    ThrowIfAppendErrorResponse);
     }
 
     public void AppendMessages(IEnumerable<IImapAppendMessage> messages)
@@ -475,82 +572,157 @@ namespace Smdn.Net.Imap4.Client {
       if (messages == null)
         throw new ArgumentNullException("messages");
 
-      if (Client.ServerCapabilities.Has(ImapCapability.MultiAppend)) {
-        ProcessResult(Client.Session.AppendMultiple(messages, Mailbox));
+      ThrowIfNonExistentOrUnselectable();
+
+      if (Client.ServerCapabilities.Contains(ImapCapability.MultiAppend)) {
+        ProcessResult(Client.Session.AppendMultiple(messages, Mailbox),
+                      ThrowIfAppendErrorResponse);
       }
       else {
         foreach (var message in messages) {
-          ProcessResult(Client.Session.Append(message, Mailbox));
+          ProcessResult(Client.Session.Append(message, Mailbox),
+                        ThrowIfAppendErrorResponse);
         }
       }
     }
 
-    public void WriteMessage(Action<Stream> write)
+    public void AppendMessage(Action<Stream> writeMessage)
     {
-      WriteMessageCore(null, null, null, write);
+      AppendMessageCore(null,
+                        null,
+                        null,
+                        writeMessage);
     }
 
-    public void WriteMessage(long length, Action<Stream> write)
+    public void AppendMessage(long length,
+                              Action<Stream> writeMessage)
     {
-      WriteMessageCore(length, null, null, write);
+      AppendMessageCore(length,
+                        null,
+                        null,
+                        writeMessage);
     }
 
-    public void WriteMessage(DateTimeOffset internalDate, Action<Stream> write)
+    public void AppendMessage(DateTimeOffset internalDate,
+                              Action<Stream> writeMessage)
     {
-      WriteMessageCore(null, internalDate, null, write);
+      AppendMessageCore(null,
+                        internalDate,
+                        null,
+                        writeMessage);
     }
 
-    public void WriteMessage(IImapMessageFlagSet flags, Action<Stream> write)
+    public void AppendMessage(IImapMessageFlagSet flags,
+                              Action<Stream> writeMessage)
     {
-      WriteMessageCore(null, null, flags, write);
+      AppendMessageCore(null,
+                        null,
+                        flags,
+                        writeMessage);
     }
 
-    public void WriteMessage(DateTimeOffset internalDate, IImapMessageFlagSet flags, Action<Stream> write)
+    public void AppendMessage(DateTimeOffset internalDate,
+                              IImapMessageFlagSet flags,
+                              Action<Stream> writeMessage)
     {
-      WriteMessageCore(null, internalDate, flags, write);
+      AppendMessageCore(null,
+                        internalDate,
+                        flags,
+                        writeMessage);
     }
 
-    public void WriteMessage(long length, DateTimeOffset internalDate, Action<Stream> write)
+    public void AppendMessage(long length,
+                              DateTimeOffset internalDate,
+                              Action<Stream> writeMessage)
     {
-      WriteMessageCore(length, internalDate, null, write);
+      AppendMessageCore(length,
+                        internalDate,
+                        null,
+                        writeMessage);
     }
 
-    public void WriteMessage(long length, IImapMessageFlagSet flags, Action<Stream> write)
+    public void AppendMessage(long length,
+                              IImapMessageFlagSet flags,
+                              Action<Stream> writeMessage)
     {
-      WriteMessageCore(length, null, flags, write);
+      AppendMessageCore(length,
+                        null,
+                        flags,
+                        writeMessage);
     }
 
-    public void WriteMessage(long length, DateTimeOffset internalDate, IImapMessageFlagSet flags, Action<Stream> write)
+    public void AppendMessage(long length,
+                              DateTimeOffset internalDate,
+                              IImapMessageFlagSet flags,
+                              Action<Stream> writeMessage)
     {
-      WriteMessageCore(length, internalDate, flags, write);
+      AppendMessageCore(length,
+                        internalDate,
+                        flags,
+                        writeMessage);
     }
 
-    private void WriteMessageCore(long? length, DateTimeOffset? internalDate, IImapMessageFlagSet flags, Action<Stream> write)
+    public void AppendMessage(ImapMessageInfo message)
     {
-      if (write == null)
-        throw new ArgumentNullException("write");
+      if (message == null)
+        throw new ArgumentNullException("message");
+
+      if (message.Client == this.client)
+        message.CopyTo(this);
+      else
+        AppendMessageInternal(message);
+    }
+
+    internal void AppendMessageInternal(ImapMessageInfo message)
+    {
+      var ret = message.OpenRead(string.Empty,
+                                 null,
+                                 null,
+                                 ImapMessageFetchBodyOptions.Default,
+                                 ImapFetchDataItem.Rfc822Size + ImapFetchDataItem.InternalDate + ImapFetchDataItem.Flags);
+
+      using (var sourceStream = ret.Item1) {
+        AppendMessageCore(ret.Item2.Rfc822Size,
+                          ret.Item2.InternalDate,
+                          ret.Item2.Flags,
+                          delegate(Stream destStream) {
+          sourceStream.CopyTo(destStream,
+                              ImapFetchMessageBodyStream.DefaultFetchBlockSize);
+        });
+      }
+    }
+
+    private void AppendMessageCore(long? length,
+                                   DateTimeOffset? internalDate,
+                                   IImapMessageFlagSet flags,
+                                   Action<Stream> writeMessage)
+    {
+      if (writeMessage == null)
+        throw new ArgumentNullException("writeMessage");
       if (length.HasValue && length.Value < 0L)
-        throw new ArgumentOutOfRangeException("length", length.Value, "must be zero or positive number");
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("length", length.Value);
 
-      using (var stream = new ImapAppendMessageBodyStream()) {
-        if (length.HasValue)
-          stream.SetLength(length.Value);
+      ThrowIfNonExistentOrUnselectable();
 
-        try {
-          var asyncResult = client.Session.BeginAppend(stream, internalDate, flags, mailbox);
+      var appendContext = client.Session.PrepareAppend(length,
+                                                       internalDate,
+                                                       flags,
+                                                       mailbox);
 
-          if (!asyncResult.IsCompleted) {
-            write(stream);
+      writeMessage(appendContext.WriteStream);
 
-            stream.UpdateLength();
-          }
+      ImapAppendedUidSet appendedUidSet;
 
-          ProcessResult(client.Session.EndAppend(asyncResult));
-        }
-        finally {
-          stream.InternalDispose();
-        }
-      }
+      ProcessResult(appendContext.GetResult(out appendedUidSet),
+                    ThrowIfAppendErrorResponse);
+    }
+
+    private bool ThrowIfAppendErrorResponse(ImapResponseCode code)
+    {
+      if (code == ImapResponseCode.TryCreate)
+        throw new ImapMailboxNotFoundException(FullName);
+      else
+        return true;
     }
 
     /*
@@ -558,7 +730,7 @@ namespace Smdn.Net.Imap4.Client {
      */
     public IEnumerable<ImapQuota> GetQuota()
     {
-      if (!client.IsCapable(ImapCapability.Quota))
+      if (!client.ServerCapabilities.Contains(ImapCapability.Quota))
         yield break;
 
       IDictionary<string, ImapQuota[]> quotaRoots;
@@ -580,13 +752,21 @@ namespace Smdn.Net.Imap4.Client {
     internal protected virtual ImapCommandResult ProcessResult(ImapCommandResult result,
                                                                Func<ImapResponseCode, bool> throwIfError)
     {
-      return ImapClient.ThrowIfError(result, throwIfError);
+      return client.ProcessResult(result, throwIfError);
     }
 
     private void ThrowIfCanNotHaveChild()
     {
       if (CanNotHaveChild)
         throw new NotSupportedException(string.Format("It is not possible for any child levels of hierarchy to exist under this mailbox. (mailbox name: '{0}')", FullName));
+    }
+
+    internal void ThrowIfNonExistentOrUnselectable()
+    {
+      if (!Exists)
+        throw new ImapProtocolViolationException(string.Format("mailbox '{0}' is not existent", FullName));
+      if (mailbox.IsUnselectable)
+        throw new ImapProtocolViolationException(string.Format("mailbox '{0}' is unselectable", FullName));
     }
 
     /// <summary>Infrastructure. It is not intended to be used directly from your code.</summary>

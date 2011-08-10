@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -34,6 +34,8 @@ using Smdn.Collections;
 #endif
 using Smdn.IO;
 
+using Smdn.Net.Pop3.Protocol.Client;
+
 namespace Smdn.Net.Pop3.Client {
   public sealed class PopMessageInfo {
     public PopClient Client {
@@ -50,7 +52,15 @@ namespace Smdn.Net.Pop3.Client {
     }
 
     public string UniqueId {
-      get { ThrowIfSessionClosed(); return EnsureUniqueIdListed().UniqueId; }
+      get
+      {
+        EnsureUniqueIdListed();
+
+        if (uniqueIdList.HasValue)
+          return uniqueIdList.Value.UniqueId;
+        else
+          return null;
+      }
     }
 
     internal PopScanListing ScanList {
@@ -60,7 +70,11 @@ namespace Smdn.Net.Pop3.Client {
 
     internal PopUniqueIdListing? UniqueIdList {
       get { return uniqueIdList; }
-      set { uniqueIdList = value; }
+      set
+      {
+        uniqueIdList = value;
+        isUniqueIdListed = true;
+      }
     }
 
     public bool IsMarkedAsDeleted {
@@ -73,13 +87,15 @@ namespace Smdn.Net.Pop3.Client {
       this.client = client;
       this.scanList = scanList;
       this.uniqueIdList = uniqueIdList;
-      this.IsMarkedAsDeleted = false;
+      this.isMarkedAsDeleted = false;
+      this.isUniqueIdListed = uniqueIdList.HasValue;
     }
 
     private PopClient client;
     private PopScanListing scanList;
     private PopUniqueIdListing? uniqueIdList;
     private bool isMarkedAsDeleted;
+    private bool isUniqueIdListed;
 
     /*
      * operation
@@ -96,20 +112,54 @@ namespace Smdn.Net.Pop3.Client {
       isMarkedAsDeleted = true;
     }
 
-    private PopUniqueIdListing EnsureUniqueIdListed()
+    private void EnsureUniqueIdListed()
     {
-      if (uniqueIdList.HasValue)
-        return uniqueIdList.Value;
+      ThrowIfSessionClosed();
+
+      if (isUniqueIdListed)
+        return;
 
       ThrowIfMakredAsDeleted();
 
       PopUniqueIdListing uid;
 
-      PopClient.ThrowIfError(client.Session.Uidl(MessageNumber, out uid));
+      var ret = client.Session.Uidl(MessageNumber, out uid);
 
-      uniqueIdList = uid;
+      switch (ret.Code) {
+        case PopCommandResultCode.Ok:
+        case PopCommandResultCode.Error:
+          uniqueIdList = uid;
+          isUniqueIdListed = true;
+          break;
 
-      return uid;
+        default:
+          PopClient.ThrowIfError(ret);
+          break;
+      }
+    }
+
+    public string GetUniqueId()
+    {
+      string uniqueId;
+
+      if (TryGetUniqueId(out uniqueId))
+        return uniqueId;
+      else
+        throw new PopIncapableException(PopCapability.Uidl);
+    }
+
+    public bool TryGetUniqueId(out string uniqueId)
+    {
+      EnsureUniqueIdListed();
+
+      if (uniqueIdList.HasValue && uniqueIdList.Value.UniqueId != null) {
+        uniqueId = uniqueIdList.Value.UniqueId;
+        return true;
+      }
+      else {
+        uniqueId = null;
+        return false;
+      }
     }
 
     private const int entireMessage = -1;
@@ -149,6 +199,9 @@ namespace Smdn.Net.Pop3.Client {
       return messageStream;
     }
 
+    /*
+     * ReadAs<TOutput>(Converter<Stream>)
+     */
     public TOutput ReadAs<TOutput>(Converter<Stream, TOutput> converter)
     {
       return ReadAs(entireMessage, converter);
@@ -161,6 +214,81 @@ namespace Smdn.Net.Pop3.Client {
 
       using (var stream = OpenRead(maxLines)) {
         return converter(stream);
+      }
+    }
+
+    /*
+     * ReadAs<TResult>(Func<Stream, ...>)
+     */
+    public TResult ReadAs<T, TResult>
+      (Func<Stream, T, TResult> read, T arg)
+    {
+      return ReadAs(entireMessage, read, arg);
+    }
+
+    public TResult ReadAs<T1, T2, TResult>
+      (Func<Stream, T1, T2, TResult> read, T1 arg1, T2 arg2)
+    {
+      return ReadAs(entireMessage, read, arg1, arg2);
+    }
+
+    public TResult ReadAs<T1, T2, T3, TResult>
+      (Func<Stream, T1, T2, T3, TResult> read, T1 arg1, T2 arg2, T3 arg3)
+    {
+      return ReadAs(entireMessage, read, arg1, arg2, arg3);
+    }
+
+    public TResult ReadAs<T1, T2, T3, T4, TResult>
+      (Func<Stream, T1, T2, T3, T4, TResult> read, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
+    {
+      return ReadAs(entireMessage, read, arg1, arg2, arg3, arg4);
+    }
+
+    public TResult ReadAs<T, TResult>
+      (int maxLines,
+       Func<Stream, T, TResult> read, T arg)
+    {
+      if (read == null)
+        throw new ArgumentNullException("read");
+
+      using (var stream = OpenRead(maxLines)) {
+        return read(stream, arg);
+      }
+    }
+
+    public TResult ReadAs<T1, T2, TResult>
+      (int maxLines,
+       Func<Stream, T1, T2, TResult> read, T1 arg1, T2 arg2)
+    {
+      if (read == null)
+        throw new ArgumentNullException("read");
+
+      using (var stream = OpenRead(maxLines)) {
+        return read(stream, arg1, arg2);
+      }
+    }
+
+    public TResult ReadAs<T1, T2, T3, TResult>
+      (int maxLines,
+       Func<Stream, T1, T2, T3, TResult> read, T1 arg1, T2 arg2, T3 arg3)
+    {
+      if (read == null)
+        throw new ArgumentNullException("read");
+
+      using (var stream = OpenRead(maxLines)) {
+        return read(stream, arg1, arg2, arg3);
+      }
+    }
+
+    public TResult ReadAs<T1, T2, T3, T4, TResult>
+      (int maxLines,
+       Func<Stream, T1, T2, T3, T4, TResult> read, T1 arg1, T2 arg2, T3 arg3, T4 arg4)
+    {
+      if (read == null)
+        throw new ArgumentNullException("read");
+
+      using (var stream = OpenRead(maxLines)) {
+        return read(stream, arg1, arg2, arg3, arg4);
       }
     }
 
@@ -279,7 +407,7 @@ namespace Smdn.Net.Pop3.Client {
     }
 
     /*
-     * ReadAs()
+     * ReadAs<TOutput>(Converter<StreamReader>)
      */
     public TOutput ReadAs<TOutput>(Converter<StreamReader, TOutput> converter)
     {

@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -41,7 +41,7 @@ namespace Smdn.Net.Imap4.WebClients {
       set
       {
         if (value < -1)
-          throw new ArgumentOutOfRangeException("Timeout", value, "must be greater than or equals to -1");
+          throw ExceptionUtils.CreateArgumentMustBeGreaterThanOrEqualTo(-1, "Timeout", value);
         timeout = value;
       }
     }
@@ -53,7 +53,7 @@ namespace Smdn.Net.Imap4.WebClients {
       set
       {
         if (value < -1)
-          throw new ArgumentOutOfRangeException("ReadWriteTimeout", value, "must be greater than or equals to -1");
+          throw ExceptionUtils.CreateArgumentMustBeGreaterThanOrEqualTo(-1, "ReadWriteTimeout", value);
         readWriteTimeout = value;
       }
     }
@@ -81,7 +81,7 @@ namespace Smdn.Net.Imap4.WebClients {
       set
       {
         if (value <= 0)
-          throw new ArgumentOutOfRangeException("FetchBlockSize", value, "must be non-zero positive number");
+          throw ExceptionUtils.CreateArgumentMustBeNonZeroPositive("FetchBlockSize", value);
         fetchBlockSize = value;
       }
     }
@@ -175,7 +175,7 @@ namespace Smdn.Net.Imap4.WebClients {
 
         clientID.Add("name", assembly.GetName().Name);
         clientID.Add("version", assembly.GetName().Version.ToString());
-        clientID.Add("environment", string.Format("{0} {1}", Runtime.Name, Environment.Version));
+        clientID.Add("environment", string.Concat(Runtime.Name, " ", Environment.Version));
       }
     }
 

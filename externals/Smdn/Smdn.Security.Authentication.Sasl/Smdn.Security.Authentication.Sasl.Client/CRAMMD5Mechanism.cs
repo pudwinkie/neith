@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -85,13 +85,15 @@ namespace Smdn.Security.Authentication.Sasl.Client {
 
       md5.Key = Encoding.ASCII.GetBytes(Credential.Password ?? string.Empty);
 
-      var keyed = md5.ComputeHash(serverChallenge.ByteArray);
+      var keyed = md5.ComputeHash(serverChallenge.Segment.Array,
+                                  serverChallenge.Segment.Offset,
+                                  serverChallenge.Segment.Count);
 
       // The `digest' parameter itself is a 16-octet value which is sent in
       // hexadecimal format, using lower-case ASCII characters.
       var digest = Smdn.Formats.Hexadecimals.ToLowerString(keyed);
 
-      clientResponse = new ByteString(string.Format("{0} {1}", Credential.UserName, digest));
+      clientResponse = ByteString.CreateMutable(string.Concat(Credential.UserName, " ", digest));
 
       return SaslExchangeStatus.Succeeded;
     }

@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
 using System.Threading;
 
 using Smdn.Net.Imap4.Protocol;
@@ -55,16 +56,34 @@ namespace Smdn.Net.Imap4.Client.Session {
       }
 
       public IImapTransaction Transaction { get { return transaction; } }
-      public IAsyncResult ProcessTransactionAsyncResult { get { return processTransactionAsyncResult; } }
+      public bool GetResultCalled { get { return processTransactionAsyncResult == null; } }
 
-      public TransactionAsyncResult(IImapTransaction transaction, IAsyncResult processTransactionAsyncResult)
+      public TransactionAsyncResult(IImapTransaction transaction, ProcessTransactionDelegate processTransactionProc)
       {
         this.transaction = transaction;
-        this.processTransactionAsyncResult = processTransactionAsyncResult;
+        this.processTransactionAsyncResult = (AsyncResult)processTransactionProc.BeginInvoke(transaction,
+                                                                                             null,
+                                                                                             null);
       }
 
-      private /*readonly*/ IImapTransaction transaction;
-      private /*readonly*/ IAsyncResult processTransactionAsyncResult;
+      public IImapTransaction GetResult()
+      {
+        try {
+          if (Runtime.IsRunningOnMono && !processTransactionAsyncResult.IsCompleted)
+            // XXX: mono 2.6.x bug?
+            processTransactionAsyncResult.AsyncWaitHandle.WaitOne();
+
+          var processTransactionProc = processTransactionAsyncResult.AsyncDelegate as ProcessTransactionDelegate;
+
+          return processTransactionProc.EndInvoke(processTransactionAsyncResult);
+        }
+        finally {
+          processTransactionAsyncResult = null;
+        }
+      }
+
+      private readonly IImapTransaction transaction;
+      private AsyncResult processTransactionAsyncResult;
     }
 
     private ImapCommandResult ProcessTransaction(IImapTransaction t)
@@ -78,12 +97,14 @@ namespace Smdn.Net.Imap4.Client.Session {
         return PostProcessTransaction(t);
       }
       else {
-        var async = BeginProcessTransaction(t, handlesIncapableAsException);
+        var asyncResult = BeginProcessTransaction(t, handlesIncapableAsException);
 
-        if (async.AsyncWaitHandle.WaitOne(transactionTimeout, false)) {
-          return EndProcessTransaction(async);
+        if (asyncResult.IsCompleted ||
+            asyncResult.AsyncWaitHandle.WaitOne(transactionTimeout, false)) {
+          return EndProcessTransaction(asyncResult);
         }
         else {
+          // TODO: cleanup
           CloseConnection();
           throw new TimeoutException(string.Format("transaction timeout ({0})", t.GetType().FullName));
         }
@@ -94,26 +115,23 @@ namespace Smdn.Net.Imap4.Client.Session {
     {
       PreProcessTransaction(t, exceptionIfIncapable);
 
-      var processTransaction = new ProcessTransactionDelegate(ProcessTransactionInternal);
-
-      return new TransactionAsyncResult(t, processTransaction.BeginInvoke(t, null, null));
+      return new TransactionAsyncResult(t, ProcessTransactionInternal);
     }
 
     private ImapCommandResult EndProcessTransaction(IAsyncResult asyncResult)
     {
+      if (asyncResult == null)
+        throw new ArgumentNullException("asyncResult");
+
       var ar = asyncResult as TransactionAsyncResult;
 
       if (ar == null)
-        throw new ArgumentException("invalid IAsyncResult", "asyncResult");
+        throw ExceptionUtils.CreateArgumentMustBeValidIAsyncResult("asyncResult");
 
-      var ptar = ar.ProcessTransactionAsyncResult as System.Runtime.Remoting.Messaging.AsyncResult;
-
-      if (ptar.EndInvokeCalled)
+      if (ar.GetResultCalled)
         throw new InvalidOperationException("EndProcessTransaction already called");
 
-      var processTransaction = ptar.AsyncDelegate as ProcessTransactionDelegate;
-
-      return PostProcessTransaction(processTransaction.EndInvoke(ptar));
+      return PostProcessTransaction(ar.GetResult());
     }
 
     private delegate IImapTransaction ProcessTransactionDelegate(IImapTransaction t);
@@ -149,8 +167,8 @@ namespace Smdn.Net.Imap4.Client.Session {
       RejectIdling();
 
       // check and set literal options
-      var isNonSyncLiteralCapable = serverCapabilities.Has(ImapCapability.LiteralNonSync);
-      var isLiteral8Capable = serverCapabilities.Has(ImapCapability.Binary);
+      var isNonSyncLiteralCapable = serverCapabilities.Contains(ImapCapability.LiteralNonSync);
+      var isLiteral8Capable = serverCapabilities.Contains(ImapCapability.Binary);
       var containsNonSyncLiteral = false;
       var containsLiteral8 = false;
 
@@ -184,7 +202,7 @@ namespace Smdn.Net.Imap4.Client.Session {
       if (!exceptionIfIncapable)
         return;
 
-      if (!serverCapabilities.Has(Imap4.ImapCapability.Imap4Rev1) && !(t is CapabilityTransaction))
+      if (!serverCapabilities.Contains(Imap4.ImapCapability.Imap4Rev1) && !(t is CapabilityTransaction))
         throw new ImapIncapableException(ImapCapability.Imap4Rev1);
 
       if (containsNonSyncLiteral && !isNonSyncLiteralCapable)
@@ -193,11 +211,9 @@ namespace Smdn.Net.Imap4.Client.Session {
         throw new ImapIncapableException(ImapCapability.Binary);
 
       CheckServerCapability(t as IImapExtension);
-      CheckServerCapability(t as IImapMultipleExtension);
 
       foreach (var arg in t.RequestArguments.Values) {
         CheckServerCapability(arg as IImapExtension);
-        CheckServerCapability(arg as IImapMultipleExtension);
       }
     }
 

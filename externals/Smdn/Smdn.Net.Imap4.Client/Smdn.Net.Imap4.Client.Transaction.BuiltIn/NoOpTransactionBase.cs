@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -34,11 +34,6 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     {
     }
 
-    protected override ProcessTransactionDelegate Reset()
-    {
-      return ProcessNoOp;
-    }
-
     // 6.1.2. NOOP Command
     //    Arguments:  none
     //    Responses:  no specific responses for this command (but see below)
@@ -68,12 +63,12 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     //       There is no guarantee that an EXISTS untagged response will happen
     //       as a result of CHECK.  NOOP, not CHECK, SHOULD be used for new
     //       message polling.
-    private void ProcessNoOp()
+    protected override ImapCommand PrepareCommand()
     {
       if (this is NoOpTransaction)
-        SendCommand("NOOP", ProcessReceiveResponse);
-      else if (this is CheckTransaction)
-        SendCommand("CHECK", ProcessReceiveResponse);
+        return Connection.CreateCommand("NOOP");
+      else /*if (this is CheckTransaction)*/
+        return Connection.CreateCommand("CHECK");
     }
   }
 }

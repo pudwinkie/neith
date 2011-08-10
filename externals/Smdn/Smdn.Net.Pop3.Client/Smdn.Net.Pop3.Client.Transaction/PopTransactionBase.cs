@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -39,8 +39,6 @@ namespace Smdn.Net.Pop3.Client.Transaction {
   internal abstract class PopTransactionBase<TResult> : IPopTransaction, IDisposable
     where TResult : PopCommandResult, new()
   {
-    protected delegate void ProcessTransactionDelegate();
-
     public PopConnection Connection {
       get
       {
@@ -80,7 +78,7 @@ namespace Smdn.Net.Pop3.Client.Transaction {
     }
 
     protected PopStatusResponse StatusResponse {
-      get; private set;
+      get { return statusResponse; }
     }
 
     protected PopTransactionBase(PopConnection connection)
@@ -111,11 +109,12 @@ namespace Smdn.Net.Pop3.Client.Transaction {
 
     private PopConnection connection;
     private Dictionary<string, string> requestArguments;
+    private PopStatusResponse statusResponse;
     private TResult result;
     private bool disposed = false;
 
 #region "processing transaction / state transition"
-    protected abstract ProcessTransactionDelegate Reset();
+    protected abstract PopCommand PrepareCommand();
 
     void IPopTransaction.Process()
     {
@@ -124,35 +123,73 @@ namespace Smdn.Net.Pop3.Client.Transaction {
       RejectFinished();
 #endif
 
-      currentProcess = Reset();
-
       connection.HandleResponseAsMultiline = false;
 
+      // prepare and send command
+      try {
+        var command = PrepareCommand();
+
+        if (command != null)
+          connection.SendCommand(command);
+      }
+      catch (Exception ex) {
+        Finish(CreateExceptionResult(ex));
+        Trace.Log(ex);
+      }
+
+      // receive response or send continuation
       for (;;) {
+        if (isFinished)
+          return;
+
         try {
-          if (currentProcess != null)
-            currentProcess();
+          ProcessReceiveResponse();
         }
         catch (Exception ex) {
           Finish(CreateExceptionResult(ex));
           Trace.Log(ex);
         }
-
-        if (isFinished)
-          return;
       }
     }
 
-    /// <remarks>do not call directly</remarks>
-    protected void ProcessReceiveResponse()
+    private void ProcessReceiveResponse()
     {
-      var response = Receive();
-
-      if (response == null)
-        return;
+      PopResponse response = null;
 
       try {
-        OnResponseReceived(response);
+        for (;;) {
+          response = connection.TryReceiveResponse();
+
+          if (response != null) {
+            receivedResponses.Enqueue(response);
+            break;
+          }
+        }
+      }
+      catch (PopMalformedResponseException) {
+        // protocol error, abort transaction
+        throw;
+      }
+
+      try {
+        var following = response as PopFollowingResponse;
+
+        if (following == null) {
+          var status = response as PopStatusResponse;
+
+          if (status == null) {
+            if (response is PopTerminationResponse)
+              OnTerminationResponse(response as PopTerminationResponse);
+            else if (response is PopContinuationRequest)
+              OnContinuationRequestReceived(response as PopContinuationRequest);
+          }
+          else {
+            OnStatusResponseReceived(status);
+          }
+        }
+        else {
+          OnFollowingResponseReceived(following);
+        }
       }
       catch (PopMalformedTextException ex) {
         if (response is PopStatusResponse) {
@@ -164,18 +201,6 @@ namespace Smdn.Net.Pop3.Client.Transaction {
           Trace.Log(ex);
         }
       }
-    }
-
-    protected void Transit(ProcessTransactionDelegate process)
-    {
-#if DEBUG
-      if (isFinished)
-        throw new InvalidOperationException("transaction already finished");
-      if (process == null)
-        throw new ArgumentNullException("process");
-#endif
-
-      currentProcess = process;
     }
 
     private TResult CreateExceptionResult(Exception exception)
@@ -234,80 +259,24 @@ namespace Smdn.Net.Pop3.Client.Transaction {
 
       this.result = result;
       this.result.ReceivedResponses = receivedResponses;
-      this.result.StatusResponse = StatusResponse;
-
-      currentProcess = null;
+      this.result.StatusResponse = statusResponse;
 
       isFinished = true;
     }
 
+#if DEBUG
     private void RejectFinished()
     {
       if (isFinished)
         throw new InvalidOperationException("transaction already finished");
     }
+#endif
 
     private bool isFinished;
-    private ProcessTransactionDelegate currentProcess;
-#endregion
-
-#region "sending / receiving"
-    protected PopResponse Receive()
-    {
-#if DEBUG
-      RejectFinished();
-#endif
-
-      try {
-        var resp = Connection.TryReceiveResponse();
-
-        if (resp != null)
-          receivedResponses.Enqueue(resp);
-
-        return resp;
-      }
-      catch (PopMalformedResponseException) {
-        // protocol error, abort transaction
-        throw;
-      }
-    }
-
-    protected void SendCommand(string command, ProcessTransactionDelegate nextProcess, params string[] arguments)
-    {
-#if DEBUG
-      RejectFinished();
-#endif
-
-      Connection.SendCommand(new PopCommand(command, arguments));
-
-      Transit(nextProcess);
-    }
-
-    protected void SendContinuation(params string[] arguments)
-    {
-#if DEBUG
-      RejectFinished();
-#endif
-
-      Connection.SendCommand(new PopCommand(null, arguments));
-    }
-
     private Queue<PopResponse> receivedResponses;
 #endregion
 
 #region "response processing"
-    private void OnResponseReceived(PopResponse response)
-    {
-      if (response is PopFollowingResponse)
-        OnFollowingResponseReceived(response as PopFollowingResponse);
-      else if (response is PopStatusResponse)
-        OnStatusResponseReceived(response as PopStatusResponse);
-      else if (response is PopTerminationResponse)
-        OnTerminationResponse(response as PopTerminationResponse);
-      else if (response is PopContinuationRequest)
-        OnContinuationRequestReceived(response as PopContinuationRequest);
-    }
-
     protected virtual void OnFollowingResponseReceived(PopFollowingResponse following)
     {
     }
@@ -316,18 +285,18 @@ namespace Smdn.Net.Pop3.Client.Transaction {
     {
       if (IsResponseMultiline) {
         if (status.Status == PopStatusIndicator.Positive) {
-          if (StatusResponse == null)
-            Connection.HandleResponseAsMultiline = true;
-          StatusResponse = status;
+          if (statusResponse == null)
+            connection.HandleResponseAsMultiline = true;
+          statusResponse = status;
         }
         else {
-          StatusResponse = status;
+          statusResponse = status;
 
           FinishError(status);
         }
       }
       else {
-        StatusResponse = status;
+        statusResponse = status;
 
         if (status.Status == PopStatusIndicator.Positive)
           FinishOk(status);
@@ -339,7 +308,7 @@ namespace Smdn.Net.Pop3.Client.Transaction {
     protected virtual void OnTerminationResponse(PopTerminationResponse termination)
     {
       if (IsResponseMultiline)
-        FinishOk(StatusResponse);
+        FinishOk(statusResponse);
     }
 
     protected virtual void OnContinuationRequestReceived(PopContinuationRequest continuationRequest)

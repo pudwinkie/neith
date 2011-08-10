@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -33,23 +33,6 @@ namespace Smdn.Net.Pop3.Client.Transaction.BuiltIn {
     {
     }
 
-    protected override ProcessTransactionDelegate Reset()
-    {
-#if DEBUG
-      if (!RequestArguments.ContainsKey("msg"))
-        return ProcessArgumentNotSetted;
-#endif
-
-      return ProcessDele;
-    }
-
-#if DEBUG
-    private void ProcessArgumentNotSetted()
-    {
-      FinishError(PopCommandResultCode.RequestError, "arguments 'msg' must be setted");
-    }
-#endif
-
     /*
      * 5. The TRANSACTION State
      * DELE msg
@@ -62,9 +45,16 @@ namespace Smdn.Net.Pop3.Client.Transaction.BuiltIn {
      *        +OK message deleted
      *        -ERR no such message
      */
-    private void ProcessDele()
+    protected override PopCommand PrepareCommand()
     {
-      SendCommand("DELE", ProcessReceiveResponse, RequestArguments["msg"]);
+#if DEBUG
+      if (!RequestArguments.ContainsKey("msg")) {
+        FinishError(PopCommandResultCode.RequestError, "arguments 'msg' must be setted");
+        return null;
+      }
+      else
+#endif
+        return new PopCommand("DELE", RequestArguments["msg"]);
     }
   }
 }

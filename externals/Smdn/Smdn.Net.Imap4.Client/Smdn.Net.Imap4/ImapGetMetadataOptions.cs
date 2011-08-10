@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -66,7 +66,7 @@ namespace Smdn.Net.Imap4 {
     public static ImapGetMetadataOptions MaxSize(long maxSize)
     {
       if (maxSize < 0L)
-        throw new ArgumentOutOfRangeException("maxSize", maxSize, "must be zero or positive number");
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("maxSize", maxSize);
 
       return new ImapGetMetadataOptions("MAXSIZE", maxSize.ToString());
     }

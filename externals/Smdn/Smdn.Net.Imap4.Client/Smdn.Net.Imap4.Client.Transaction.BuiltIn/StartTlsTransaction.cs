@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,14 +23,15 @@
 // THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 
 using Smdn.Net.Imap4.Protocol;
 using Smdn.Net.Imap4.Protocol.Client;
 
 namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
   internal sealed class StartTlsTransaction : ImapTransactionBase, IImapExtension {
-    ImapCapability IImapExtension.RequiredCapability {
-      get { return ImapCapability.StartTls; }
+    IEnumerable<ImapCapability> IImapExtension.RequiredCapabilities {
+      get { yield return ImapCapability.StartTls; }
     }
 
     public StartTlsTransaction(ImapConnection connection, UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
@@ -42,19 +43,14 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
       this.createAuthenticatedStreamCallback = createAuthenticatedStreamCallback;
     }
 
-    protected override ProcessTransactionDelegate Reset()
-    {
-      return ProcessStartTls;
-    }
-
     // 6.2.1. STARTTLS Command
     //    Arguments:  none
     //    Responses:  no specific response for this command
     //    Result:     OK - starttls completed, begin TLS negotiation
     //                BAD - command unknown or arguments invalid
-    private void ProcessStartTls()
+    protected override ImapCommand PrepareCommand()
     {
-      SendCommand("STARTTLS", ProcessReceiveResponse);
+      return Connection.CreateCommand("STARTTLS");
     }
 
     protected override void OnTaggedStatusResponseReceived(ImapTaggedStatusResponse tagged)

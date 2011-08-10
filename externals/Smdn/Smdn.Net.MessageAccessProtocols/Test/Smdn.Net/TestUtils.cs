@@ -7,14 +7,14 @@ using NUnit.Framework;
 namespace Smdn.Net {
   public static class TestUtils {
     public static void SerializeBinary<TSerializable>(TSerializable obj)
-      where TSerializable : ISerializable
+      /*where TSerializable : ISerializable*/
     {
       SerializeBinary(obj, null);
     }
 
     public static void SerializeBinary<TSerializable>(TSerializable obj,
                                                       Action<TSerializable> action)
-      where TSerializable : ISerializable
+      /*where TSerializable : ISerializable*/
     {
       var serializeFormatter = new BinaryFormatter();
 

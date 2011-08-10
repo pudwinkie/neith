@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3AFC1D4A-7969-402E-8E35-922D60B6AE33}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Smdn.Imaging</RootNamespace>
+    <AssemblyName>Smdn.Imaging</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <OutputPath>..\build\bin\</OutputPath>
+    <IntermediateOutputPath>..\build\obj\</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>NET_2_0;NET_3_5;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>3</WarningLevel>
+    <OutputType>Library</OutputType>
+    <OutputPath>..\build\bin\Debug\netfx3.5\</OutputPath>
+    <IntermediateOutputPath>..\build\obj\Debug\netfx3.5\</IntermediateOutputPath>
+    <RootNamespace>Smdn.Imaging</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>NET_2_0;NET_3_5</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>3</WarningLevel>
+    <OutputType>Library</OutputType>
+    <OutputPath>..\build\bin\Release\netfx3.5\</OutputPath>
+    <IntermediateOutputPath>..\build\obj\Release\netfx3.5\</IntermediateOutputPath>
+    <RootNamespace>Smdn.Imaging</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Smdn.Imaging\LockedBitmap.cs" />
+    <Compile Include="Smdn.Imaging.Interop\wingdi.h.cs" />
+    <Compile Include="Smdn.Imaging.Interop\windef.h.cs" />
+    <Compile Include="Smdn.Imaging.Interop\gdi32.cs" />
+    <Compile Include="Smdn.Imaging.Interop\user32.cs" />
+    <Compile Include="Smdn.Imaging\AlignedRgbColor.cs" />
+    <Compile Include="Smdn.Imaging\ColorDepth.cs" />
+    <Compile Include="Smdn.Imaging\ColorModel.cs" />
+    <Compile Include="Smdn.Imaging\AlignedHsvColor.cs" />
+    <Compile Include="Smdn.Imaging\HsvColor.cs" />
+    <Compile Include="Smdn.Imaging\GraphicsExtensions.cs" />
+    <Compile Include="Smdn.Imaging\ImageFillStyle.cs" />
+    <Compile Include="Smdn.Imaging\RectangleExtensions.cs" />
+    <Compile Include="Smdn.Imaging\RectangleFExtensions.cs" />
+    <Compile Include="Smdn.Imaging\PolarExtensions.cs" />
+    <Compile Include="Smdn.Imaging\BitmapExtensions.cs" />
+    <Compile Include="Smdn.Imaging\ImageCodecs.cs" />
+    <Compile Include="Smdn.Imaging\IImageCodec.cs" />
+    <Compile Include="Smdn.Imaging\IImageEncoder.cs" />
+    <Compile Include="Smdn.Imaging\IImageDecoder.cs" />
+    <Compile Include="Smdn.Imaging\IImageCodecs.cs" />
+    <Compile Include="Smdn.Imaging\Codecs.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <StandardHeader Text="&#xA;Author:&#xA;      ${AuthorName} &lt;${AuthorEmail}&gt;&#xA;&#xA;Copyright (c) 2009-${Year} ${CopyrightHolder}&#xA;&#xA;Permission is hereby granted, free of charge, to any person obtaining a copy&#xA;of this software and associated documentation files (the &quot;Software&quot;), to deal&#xA;in the Software without restriction, including without limitation the rights&#xA;to use, copy, modify, merge, publish, distribute, sublicense, and/or sell&#xA;copies of the Software, and to permit persons to whom the Software is&#xA;furnished to do so, subject to the following conditions:&#xA;&#xA;The above copyright notice and this permission notice shall be included in&#xA;all copies or substantial portions of the Software.&#xA;&#xA;THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR&#xA;IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,&#xA;FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE&#xA;AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER&#xA;LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,&#xA;OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN&#xA;THE SOFTWARE." inheritsSet="MITX11License" />
+          <ChangeLogPolicy UpdateMode="None" VcsIntegration="None" inheritsSet="Mono" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
+  <ItemGroup>
+    <Folder Include="Smdn.Imaging.Interop\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Smdn\Smdn-netfx3.5.csproj">
+      <Project>{94EE5515-F253-491B-8F0F-09F70D03B1B6}</Project>
+      <Name>Smdn-netfx3.5</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

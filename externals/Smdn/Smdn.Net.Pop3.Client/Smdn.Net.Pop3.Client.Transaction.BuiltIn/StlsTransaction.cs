@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -48,11 +48,6 @@ namespace Smdn.Net.Pop3.Client.Transaction.BuiltIn {
       this.createAuthenticatedStreamCallback = createAuthenticatedStreamCallback;
     }
 
-    protected override ProcessTransactionDelegate Reset()
-    {
-      return ProcessStls;
-    }
-
     // 4. POP3 STARTTLS extension
     //     STLS
     //        Arguments: none
@@ -60,9 +55,9 @@ namespace Smdn.Net.Pop3.Client.Transaction.BuiltIn {
     //            Only permitted in AUTHORIZATION state.
     //        Possible Responses:
     //            +OK -ERR
-    private void ProcessStls()
+    protected override PopCommand PrepareCommand()
     {
-      SendCommand("STLS", ProcessReceiveResponse);
+      return new PopCommand("STLS");
     }
 
     protected override void OnStatusResponseReceived(PopStatusResponse status)

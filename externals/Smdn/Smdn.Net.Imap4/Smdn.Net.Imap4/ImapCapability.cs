@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -48,8 +48,9 @@ namespace Smdn.Net.Imap4 {
   //     Protocol.ImapDataResponseType
   //       => handles server response types
 
+  [Serializable]
   public class ImapCapability : ImapStringEnum {
-    public static readonly ImapCapabilityList AllCapabilities;
+    public static readonly ImapCapabilitySet AllCapabilities;
 
     /*
      * Internet Message Access Protocol (IMAP) 4 Capabilities Registry
@@ -155,6 +156,8 @@ namespace Smdn.Net.Imap4 {
                                       UTF8User = new ImapCapability("UTF8=USER");
     public static readonly ImapCapability /* [RFC5819] IMAP4 Extension for Returning STATUS Information in Extended LIST */
                                       ListStatus = new ImapCapability("LIST-STATUS");
+    public static readonly ImapCapability /* [RFC5957] Display-Based Address Sorting for the IMAP4 SORT Extension */
+                                      SortDisplay = new ImapCapability("SORT=DISPLAY");
 
     /*
      * obsolete
@@ -169,10 +172,10 @@ namespace Smdn.Net.Imap4 {
                                       SearchInThread = new ImapCapability("SEARCH=INTHREAD");
     public static readonly ImapCapability /* [draft-ietf-morg-inthread-00] The IMAP SEARCH=INTHREAD and THREAD=REFS Extensions) */
                                       ThreadRefs = new ImapCapability("THREAD=REFS");
-    public static readonly ImapCapability /* [draft-ietf-morg-list-specialuse-01] IMAP LIST extension for special-use mailboxes */
+    public static readonly ImapCapability /* [draft-ietf-morg-list-specialuse-06] IMAP LIST extension for special-use mailboxes */
+                                      SpecialUse = new ImapCapability("SPECIAL-USE");
+    public static readonly ImapCapability /* [draft-ietf-morg-list-specialuse-06] IMAP LIST extension for special-use mailboxes */
                                       CreateSpecialUse = new ImapCapability("CREATE-SPECIAL-USE");
-    public static readonly ImapCapability /* [draft-ietf-morg-sortdisplay-03] Display-based Address Sorting for the IMAP4 SORT Extension */
-                                      SortDisplay = new ImapCapability("SORT=DISPLAY");
 
     /*
      * extended capabilities
@@ -198,13 +201,15 @@ namespace Smdn.Net.Imap4 {
         capabilities.Add(new ImapCapability("AUTH=" + saslMechansim));
       }
 
-      AllCapabilities = new ImapCapabilityList(true, capabilities);
+      AllCapabilities = new ImapCapabilitySet(true, capabilities);
     }
 
     internal static ImapCapability GetKnownOrCreate(string capability)
     {
-      if (AllCapabilities.Has(capability))
-        return AllCapabilities[capability];
+      ImapCapability capa;
+
+      if (AllCapabilities.TryGet(capability, out capa))
+        return capa;
       else
         //Trace.Verbose("unknown capability: {0}", capability);
         return new ImapCapability(capability);

@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -291,16 +291,12 @@ namespace Smdn.Net.Imap4.Client.Session {
 
       // ESEARCH or ESORT capability
       if (t is SearchTransaction) {
-        if (!resultOptions.RequiredCapabilities.Contains(ImapCapability.ESearch))
-          resultOptions.RequiredCapabilities.Add(ImapCapability.ESearch);
-        if (resultOptions.RequiredCapabilities.Contains(ImapCapability.ESort))
-          resultOptions.RequiredCapabilities.Remove(ImapCapability.ESort);
+        resultOptions.RequiredCapabilities.Add(ImapCapability.ESearch);
+        resultOptions.RequiredCapabilities.Remove(ImapCapability.ESort);
       }
       else if (t is SortTransaction) {
-        if (!resultOptions.RequiredCapabilities.Contains(ImapCapability.ESort))
-          resultOptions.RequiredCapabilities.Add(ImapCapability.ESort);
-        if (resultOptions.RequiredCapabilities.Contains(ImapCapability.ESearch))
-          resultOptions.RequiredCapabilities.Remove(ImapCapability.ESearch);
+        resultOptions.RequiredCapabilities.Add(ImapCapability.ESort);
+        resultOptions.RequiredCapabilities.Remove(ImapCapability.ESearch);
       }
 
       SearchSortInternal(t, sortingCriteria, searchingCriteria, charset, resultOptions, out matched);
@@ -845,7 +841,7 @@ namespace Smdn.Net.Imap4.Client.Session {
       else if (sequenceOrUidSet.IsEmpty)
         throw new ArgumentException("sequence or uid set is empty", "sequenceOrUidSet");
 
-      RejectInvalidMailboxNameArgument(mailboxName);
+      var argMailboxName = ImapMailboxNameString.CreateMailboxNameNonEmpty(mailboxName);
 
       copiedUids = null;
       createdMailbox = null;
@@ -860,7 +856,7 @@ namespace Smdn.Net.Imap4.Client.Session {
           t.RequestArguments["sequence set"] = sequenceOrUidSet.ToString();
 
           // mailbox name
-          t.RequestArguments["mailbox name"] = new ImapMailboxNameString(mailboxName);
+          t.RequestArguments["mailbox name"] = argMailboxName;
 
           if (ProcessTransaction(t).Succeeded) {
             copiedUids = t.Result.Value;

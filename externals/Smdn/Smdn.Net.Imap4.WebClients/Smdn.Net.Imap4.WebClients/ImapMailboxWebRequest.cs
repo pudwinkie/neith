@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -106,10 +106,13 @@ namespace Smdn.Net.Imap4.WebClients {
 
     public override Stream EndGetRequestStream(IAsyncResult asyncResult)
     {
+      if (asyncResult == null)
+        throw new ArgumentNullException("asyncResult");
+
       var ar = asyncResult as System.Runtime.Remoting.Messaging.AsyncResult;
 
       if (ar != beginGetRequestStreamAsyncResult)
-        throw new ArgumentException("invalid IAsyncResult", "asyncResult");
+        throw ExceptionUtils.CreateArgumentMustBeValidIAsyncResult("asyncResult");
 
       try {
         return (ar.AsyncDelegate as GetRequestStreamDelegate).EndInvoke(ar);
@@ -125,29 +128,24 @@ namespace Smdn.Net.Imap4.WebClients {
 
       CloseMailbox(); // ignore error
 
-      appendMessageBodyStream = new ImapWebClientAppendMessageBodyStream(ReadWriteTimeout);
-
-      // Content-Length
-      if (0 < ContentLength)
-        appendMessageBodyStream.SetLength(ContentLength);
-
       // TODO: TRYCREATE when AllowCreateMailbox == true
-      beginAppendAsyncResult = session.BeginAppend(appendMessageBodyStream, DateTimeOffset.Now, null, RequestMailbox);
+      appendContext = session.PrepareAppend(0 < ContentLength ? (long?)ContentLength : null,
+                                            DateTimeOffset.Now,
+                                            null,
+                                            RequestMailbox);
 
-      return appendMessageBodyStream;
+      return appendContext.WriteStream;
     }
 
     private ImapWebResponse GetAppendResponse()
     {
-      if (beginAppendAsyncResult == null)
+      if (appendContext == null)
         throw new InvalidOperationException("GetRequestStream not called");
 
       try {
-        appendMessageBodyStream.UpdateLength();
-
         ImapAppendedUidSet appendedUid;
 
-        var response = new ImapWebResponse(Session.EndAppend(beginAppendAsyncResult, out appendedUid));
+        var response = new ImapWebResponse(appendContext.GetResult(out appendedUid));
 
         if (response.Result.Succeeded) {
           // set empty stream; WebClient.Upload*() methods call WebResponse.GetResponseStream
@@ -166,15 +164,11 @@ namespace Smdn.Net.Imap4.WebClients {
         return response;
       }
       finally {
-        appendMessageBodyStream.InternalDispose();
-        appendMessageBodyStream = null;
-
-        beginAppendAsyncResult = null;
+        appendContext = null;
       }
     }
 
     private IAsyncResult beginGetRequestStreamAsyncResult = null;
-    private ImapWebClientAppendMessageBodyStream appendMessageBodyStream = null;
 #endregion
 
     private ImapWebResponse GetCreateResponse()

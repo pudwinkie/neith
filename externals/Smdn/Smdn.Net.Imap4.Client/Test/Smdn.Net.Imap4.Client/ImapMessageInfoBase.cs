@@ -107,8 +107,8 @@ namespace Smdn.Net.Imap4.Client {
 
         Assert.IsNotNull(messages[0].Flags);
         Assert.AreEqual(2, messages[0].Flags.Count);
-        Assert.IsTrue(messages[0].Flags.Has(ImapMessageFlag.Seen));
-        Assert.IsTrue(messages[0].Flags.Has(ImapMessageFlag.Draft));
+        Assert.IsTrue(messages[0].Flags.Contains(ImapMessageFlag.Seen));
+        Assert.IsTrue(messages[0].Flags.Contains(ImapMessageFlag.Draft));
         Assert.IsTrue(messages[0].IsSeen);
         Assert.IsTrue(messages[0].IsDraft);
       });
@@ -129,7 +129,7 @@ namespace Smdn.Net.Imap4.Client {
 
         Assert.IsNotNull(messages[0].Flags);
         Assert.AreEqual(1, messages[0].Flags.Count);
-        Assert.IsTrue(messages[0].Flags.Has(ImapMessageFlag.Seen));
+        Assert.IsTrue(messages[0].Flags.Contains(ImapMessageFlag.Seen));
         Assert.IsTrue(messages[0].IsSeen);
       });
     }
@@ -149,8 +149,8 @@ namespace Smdn.Net.Imap4.Client {
 
         Assert.IsNotNull(messages[0].Flags);
         Assert.AreEqual(2, messages[0].Flags.Count);
-        Assert.IsTrue(messages[0].Flags.Has(ImapMessageFlag.Draft));
-        Assert.IsTrue(messages[0].Flags.Has(ImapMessageFlag.Flagged));
+        Assert.IsTrue(messages[0].Flags.Contains(ImapMessageFlag.Draft));
+        Assert.IsTrue(messages[0].Flags.Contains(ImapMessageFlag.Flagged));
         Assert.IsTrue(messages[0].IsDraft);
         Assert.IsTrue(messages[0].IsFlagged);
       });
@@ -181,7 +181,7 @@ namespace Smdn.Net.Imap4.Client {
 
         Assert.IsNotNull(messages[0].Flags);
         Assert.AreEqual(1, messages[0].Flags.Count);
-        Assert.IsTrue(messages[0].Flags.Has(ImapMessageFlag.Seen));
+        Assert.IsTrue(messages[0].Flags.Contains(ImapMessageFlag.Seen));
         Assert.IsTrue(messages[0].IsSeen);
       });
     }
@@ -203,12 +203,12 @@ namespace Smdn.Net.Imap4.Client {
 
         Assert.IsNotNull(messages[0].Flags);
         Assert.AreEqual(1, messages[0].Flags.Count);
-        Assert.IsTrue(messages[0].Flags.Has(ImapMessageFlag.Draft));
+        Assert.IsTrue(messages[0].Flags.Contains(ImapMessageFlag.Draft));
         Assert.IsTrue(messages[0].IsDraft);
 
         Assert.IsNotNull(messages[1].Flags);
         Assert.AreEqual(1, messages[1].Flags.Count);
-        Assert.IsTrue(messages[1].Flags.Has("$label1"));
+        Assert.IsTrue(messages[1].Flags.Contains("$label1"));
 
         Assert.IsNotNull(messages[2].Flags);
         Assert.AreEqual(0, messages[2].Flags.Count);
@@ -269,20 +269,20 @@ namespace Smdn.Net.Imap4.Client {
 
         Assert.IsNotNull(messages[0].Flags);
         Assert.AreEqual(1, messages[0].Flags.Count);
-        Assert.IsTrue(messages[0].Flags.Has(ImapMessageFlag.Deleted));
+        Assert.IsTrue(messages[0].Flags.Contains(ImapMessageFlag.Deleted));
         Assert.IsTrue(messages[0].IsMarkedAsDeleted);
 
         Assert.IsNotNull(messages[1].Flags);
         Assert.AreEqual(2, messages[1].Flags.Count);
-        Assert.IsTrue(messages[1].Flags.Has(ImapMessageFlag.Deleted));
-        Assert.IsTrue(messages[1].Flags.Has(ImapMessageFlag.Seen));
+        Assert.IsTrue(messages[1].Flags.Contains(ImapMessageFlag.Deleted));
+        Assert.IsTrue(messages[1].Flags.Contains(ImapMessageFlag.Seen));
         Assert.IsTrue(messages[1].IsSeen);
         Assert.IsTrue(messages[1].IsMarkedAsDeleted);
 
         Assert.IsNotNull(messages[2].Flags);
         Assert.AreEqual(2, messages[2].Flags.Count);
-        Assert.IsTrue(messages[2].Flags.Has(ImapMessageFlag.Deleted));
-        Assert.IsTrue(messages[2].Flags.Has("$label1"));
+        Assert.IsTrue(messages[2].Flags.Contains(ImapMessageFlag.Deleted));
+        Assert.IsTrue(messages[2].Flags.Contains("$label1"));
         Assert.IsTrue(messages[2].IsMarkedAsDeleted);
       });
     }
@@ -304,20 +304,20 @@ namespace Smdn.Net.Imap4.Client {
 
         Assert.IsNotNull(messages[0].Flags);
         Assert.AreEqual(1, messages[0].Flags.Count);
-        Assert.IsTrue(messages[0].Flags.Has(ImapMessageFlag.Seen));
+        Assert.IsTrue(messages[0].Flags.Contains(ImapMessageFlag.Seen));
         Assert.IsTrue(messages[0].IsSeen);
 
         Assert.IsNotNull(messages[1].Flags);
         Assert.AreEqual(2, messages[1].Flags.Count);
-        Assert.IsTrue(messages[1].Flags.Has(ImapMessageFlag.Seen));
-        Assert.IsTrue(messages[1].Flags.Has(ImapMessageFlag.Draft));
+        Assert.IsTrue(messages[1].Flags.Contains(ImapMessageFlag.Seen));
+        Assert.IsTrue(messages[1].Flags.Contains(ImapMessageFlag.Draft));
         Assert.IsTrue(messages[1].IsSeen);
         Assert.IsTrue(messages[1].IsDraft);
 
         Assert.IsNotNull(messages[2].Flags);
         Assert.AreEqual(2, messages[2].Flags.Count);
-        Assert.IsTrue(messages[2].Flags.Has(ImapMessageFlag.Seen));
-        Assert.IsTrue(messages[2].Flags.Has("$label1"));
+        Assert.IsTrue(messages[2].Flags.Contains(ImapMessageFlag.Seen));
+        Assert.IsTrue(messages[2].Flags.Contains("$label1"));
         Assert.IsTrue(messages[2].IsSeen);
       });
     }
@@ -370,7 +370,7 @@ namespace Smdn.Net.Imap4.Client {
 
         Assert.IsNotNull(messages[0].Flags);
         Assert.AreEqual(1, messages[0].Flags.Count);
-        Assert.IsTrue(messages[0].Flags.Has(ImapMessageFlag.Deleted));
+        Assert.IsTrue(messages[0].Flags.Contains(ImapMessageFlag.Deleted));
         Assert.IsTrue(messages[0].IsMarkedAsDeleted);
 
         Assert.AreEqual(ImapMessageInfo.ExpungedMessageSequenceNumber, messages[1].Sequence);
@@ -378,8 +378,8 @@ namespace Smdn.Net.Imap4.Client {
 
         Assert.IsNotNull(messages[1].Flags);
         Assert.AreEqual(2, messages[1].Flags.Count);
-        Assert.IsTrue(messages[1].Flags.Has(ImapMessageFlag.Deleted));
-        Assert.IsTrue(messages[1].Flags.Has(ImapMessageFlag.Seen));
+        Assert.IsTrue(messages[1].Flags.Contains(ImapMessageFlag.Deleted));
+        Assert.IsTrue(messages[1].Flags.Contains(ImapMessageFlag.Seen));
         Assert.IsTrue(messages[1].IsMarkedAsDeleted);
         Assert.IsTrue(messages[1].IsSeen);
 
@@ -388,8 +388,8 @@ namespace Smdn.Net.Imap4.Client {
 
         Assert.IsNotNull(messages[2].Flags);
         Assert.AreEqual(2, messages[2].Flags.Count);
-        Assert.IsTrue(messages[2].Flags.Has(ImapMessageFlag.Deleted));
-        Assert.IsTrue(messages[2].Flags.Has("$label1"));
+        Assert.IsTrue(messages[2].Flags.Contains(ImapMessageFlag.Deleted));
+        Assert.IsTrue(messages[2].Flags.Contains("$label1"));
         Assert.IsTrue(messages[2].IsMarkedAsDeleted);
       });
     }
@@ -442,27 +442,27 @@ namespace Smdn.Net.Imap4.Client {
         else
           messageSet.CopyTo(destMailbox);
 
-        Assert.That(server.DequeueRequest(), Text.EndsWith("UID COPY 1,3,5 \"dest\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("UID COPY 1,3,5 dest\r\n"));
 
         if (move) {
           Assert.That(server.DequeueRequest(), Text.EndsWith("UID STORE 1,3,5 +FLAGS (\\Deleted)\r\n"));
 
           Assert.IsNotNull(messages[0].Flags);
           Assert.AreEqual(1, messages[0].Flags.Count);
-          Assert.IsTrue(messages[0].Flags.Has(ImapMessageFlag.Deleted));
+          Assert.IsTrue(messages[0].Flags.Contains(ImapMessageFlag.Deleted));
           Assert.IsTrue(messages[0].IsMarkedAsDeleted);
 
           Assert.IsNotNull(messages[1].Flags);
           Assert.AreEqual(2, messages[1].Flags.Count);
-          Assert.IsTrue(messages[1].Flags.Has(ImapMessageFlag.Deleted));
-          Assert.IsTrue(messages[1].Flags.Has(ImapMessageFlag.Seen));
+          Assert.IsTrue(messages[1].Flags.Contains(ImapMessageFlag.Deleted));
+          Assert.IsTrue(messages[1].Flags.Contains(ImapMessageFlag.Seen));
           Assert.IsTrue(messages[1].IsMarkedAsDeleted);
           Assert.IsTrue(messages[1].IsSeen);
 
           Assert.IsNotNull(messages[2].Flags);
           Assert.AreEqual(2, messages[2].Flags.Count);
-          Assert.IsTrue(messages[2].Flags.Has(ImapMessageFlag.Deleted));
-          Assert.IsTrue(messages[2].Flags.Has("$label1"));
+          Assert.IsTrue(messages[2].Flags.Contains(ImapMessageFlag.Deleted));
+          Assert.IsTrue(messages[2].Flags.Contains("$label1"));
           Assert.IsTrue(messages[2].IsMarkedAsDeleted);
         }
       });
@@ -489,7 +489,93 @@ namespace Smdn.Net.Imap4.Client {
           messageSet.MoveTo(destMailbox);
         });
 
-        Assert.That(server.DequeueRequest(), Text.EndsWith("UID COPY 1,3,5 \"dest\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("UID COPY 1,3,5 dest\r\n"));
+      });
+    }
+
+    [Test]
+    public void TestCopyToDestinationMailboxItself()
+    {
+      CopyOrMoveToDestinationMailboxItself(false);
+    }
+
+    [Test]
+    public void TestMoveToDestinationMailboxItself()
+    {
+      CopyOrMoveToDestinationMailboxItself(true);
+    }
+
+    private void CopyOrMoveToDestinationMailboxItself(bool move)
+    {
+      TestMessage(3, ImapSequenceSet.CreateUidSet(1L, 3L, 5L),
+                  delegate(ImapPseudoServer server, ImapMessageInfoBase messageSet, ImapMessageInfo[] messages) {
+        Assert.AreEqual(3, messageSet.Mailbox.ExistMessageCount);
+        Assert.AreEqual(0, messageSet.Mailbox.RecentMessageCount);
+
+        if (!move) {
+          // UID COPY
+          server.EnqueueTaggedResponse("* 3 RECENT\r\n" +
+                                       "* 6 EXISTS\r\n" +
+                                       "$tag OK done\r\n");
+        }
+
+        if (move)
+          messageSet.MoveTo(messageSet.Mailbox);
+        else
+          messageSet.CopyTo(messageSet.Mailbox);
+
+        if (move) {
+          Assert.AreEqual(3, messageSet.Mailbox.ExistMessageCount);
+          Assert.AreEqual(0, messageSet.Mailbox.RecentMessageCount);
+        }
+        else {
+          Assert.That(server.DequeueRequest(), Text.EndsWith("UID COPY 1,3,5 " + messageSet.Mailbox.FullName + "\r\n"));
+
+          Assert.AreEqual(6, messageSet.Mailbox.ExistMessageCount);
+          Assert.AreEqual(3, messageSet.Mailbox.RecentMessageCount);
+        }
+      });
+    }
+
+    [Test]
+    public void TestCopyToDestinationMailboxOfDifferentSession()
+    {
+      CopyOrMoveToDestinationMailboxOfDifferentSession(false);
+    }
+
+    [Test]
+    public void TestMoveToDestinationMailboxOfDifferentSession()
+    {
+      CopyOrMoveToDestinationMailboxOfDifferentSession(true);
+    }
+
+    private void CopyOrMoveToDestinationMailboxOfDifferentSession(bool move)
+    {
+      TestMessage(3, ImapSequenceSet.CreateUidSet(1L, 3L, 5L),
+                  delegate(ImapPseudoServer serverSrc, ImapMessageInfoBase srcMessageSet, ImapMessageInfo[] srcMessages) {
+        TestUtils.TestAuthenticated(delegate(ImapPseudoServer serverDest, ImapClient clientDest) {
+          // LIST
+          serverDest.EnqueueTaggedResponse("* LIST () \"\" dest\r\n" +
+                                           "$tag OK done\r\n");
+
+          var destMailbox = clientDest.GetMailbox("dest");
+
+          serverDest.DequeueRequest();
+
+          Assert.AreNotSame(srcMessageSet.Client, destMailbox.Client);
+
+          // FETCH
+          serverSrc.EnqueueTaggedResponse("$tag NO FETCH failed\r\n");
+
+          TestUtils.ExpectExceptionThrown<ImapErrorResponseException>(delegate {
+            if (move)
+              srcMessageSet.MoveTo(destMailbox);
+            else
+              srcMessageSet.CopyTo(destMailbox);
+          });
+
+          Assert.That(serverSrc.DequeueRequest(), Text.EndsWith("UID FETCH 1,3,5 (UID)\r\n"));
+        });
       });
     }
 
@@ -501,6 +587,29 @@ namespace Smdn.Net.Imap4.Client {
     [Test, Ignore("not implemented")]
     public void TestMoveToDestinationMailboxUidValidityChanged()
     {
+    }
+
+    [Test, ExpectedException(typeof(ArgumentNullException))]
+    public void TestCopyToDestinationMailboxArgumentNull()
+    {
+      CopyOrMoveToDestinationMailboxArgumentNull(false);
+    }
+
+    [Test, ExpectedException(typeof(ArgumentNullException))]
+    public void TestMoveToDestinationMailboxArgumentNull()
+    {
+      CopyOrMoveToDestinationMailboxArgumentNull(true);
+    }
+
+    private void CopyOrMoveToDestinationMailboxArgumentNull(bool move)
+    {
+      TestMessage(3, ImapSequenceSet.CreateUidSet(1L, 3L, 5L),
+                  delegate(ImapPseudoServer server, ImapMessageInfoBase messageSet, ImapMessageInfo[] messages) {
+        if (move)
+          messageSet.MoveTo((ImapMailboxInfo)null);
+        else
+          messageSet.CopyTo((ImapMailboxInfo)null);
+      });
     }
 
     [Test, ExpectedException(typeof(ImapProtocolViolationException))]
@@ -530,6 +639,42 @@ namespace Smdn.Net.Imap4.Client {
         server.DequeueRequest();
 
         Assert.IsFalse(destMailbox.Exists);
+
+        // throws exception
+        if (move)
+          messageSet.MoveTo(destMailbox);
+        else
+          messageSet.CopyTo(destMailbox);
+      });
+    }
+
+    [Test, ExpectedException(typeof(ImapProtocolViolationException))]
+    public void TestCopyToDestinationMailboxUnselectable()
+    {
+      CopyOrMoveToDestinationMailboxUnselectable(false);
+    }
+
+    [Test, ExpectedException(typeof(ImapProtocolViolationException))]
+    public void TestMoveToDestinationMailboxUnselectable()
+    {
+      CopyOrMoveToDestinationMailboxUnselectable(true);
+    }
+
+    private void CopyOrMoveToDestinationMailboxUnselectable(bool move)
+    {
+      TestMessage(10,
+                  new[] {ImapCapability.ListExtended},
+                  ImapSequenceSet.CreateUidRangeSet(1L, 10L),
+                  delegate(ImapPseudoServer server, ImapMessageInfoBase messageSet, ImapMessageInfo[] messages) {
+        // LIST
+        server.EnqueueTaggedResponse("* LIST (\\Noselect) \"\" dest\r\n" +
+                                     "$tag OK done\r\n");
+
+        var destMailbox = messageSet.Client.GetMailbox("dest", ImapMailboxListOptions.SubscribedOnly);
+
+        server.DequeueRequest();
+
+        Assert.IsTrue(destMailbox.IsUnselectable);
 
         // throws exception
         if (move)
@@ -678,29 +823,119 @@ namespace Smdn.Net.Imap4.Client {
         if (tryCreate)
           Assert.IsNull(createdMailbox);
 
-        Assert.That(server.DequeueRequest(), Text.EndsWith("UID COPY 1:3 \"dest\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("UID COPY 1:3 dest\r\n"));
 
         if (move) {
           Assert.That(server.DequeueRequest(), Text.EndsWith("UID STORE 1:3 +FLAGS (\\Deleted)\r\n"));
 
           Assert.IsNotNull(messages[0].Flags);
           Assert.AreEqual(1, messages[0].Flags.Count);
-          Assert.IsTrue(messages[0].Flags.Has(ImapMessageFlag.Deleted));
+          Assert.IsTrue(messages[0].Flags.Contains(ImapMessageFlag.Deleted));
           Assert.IsTrue(messages[0].IsMarkedAsDeleted);
 
           Assert.IsNotNull(messages[1].Flags);
           Assert.AreEqual(2, messages[1].Flags.Count);
-          Assert.IsTrue(messages[1].Flags.Has(ImapMessageFlag.Deleted));
-          Assert.IsTrue(messages[1].Flags.Has(ImapMessageFlag.Seen));
+          Assert.IsTrue(messages[1].Flags.Contains(ImapMessageFlag.Deleted));
+          Assert.IsTrue(messages[1].Flags.Contains(ImapMessageFlag.Seen));
           Assert.IsTrue(messages[1].IsMarkedAsDeleted);
           Assert.IsTrue(messages[1].IsSeen);
 
           Assert.IsNotNull(messages[2].Flags);
           Assert.AreEqual(2, messages[2].Flags.Count);
-          Assert.IsTrue(messages[2].Flags.Has(ImapMessageFlag.Deleted));
-          Assert.IsTrue(messages[2].Flags.Has("$label1"));
+          Assert.IsTrue(messages[2].Flags.Contains(ImapMessageFlag.Deleted));
+          Assert.IsTrue(messages[2].Flags.Contains("$label1"));
           Assert.IsTrue(messages[2].IsMarkedAsDeleted);
         }
+      });
+    }
+
+    [Test]
+    public void TestCopyToDestinationNameSameMailbox()
+    {
+      CopyOrMoveToDestinationNameSameMailbox(false);
+    }
+
+    [Test]
+    public void TestMoveToDestinationNameSameMailbox()
+    {
+      CopyOrMoveToDestinationNameSameMailbox(true);
+    }
+
+    private void CopyOrMoveToDestinationNameSameMailbox(bool move)
+    {
+      TestMessage(3, ImapSequenceSet.CreateUidRangeSet(1L, 3L),
+                  delegate(ImapPseudoServer server, ImapMessageInfoBase messageSet, ImapMessageInfo[] messages) {
+        Assert.AreEqual(3, messageSet.Mailbox.ExistMessageCount);
+        Assert.AreEqual(0, messageSet.Mailbox.RecentMessageCount);
+
+        if (!move) {
+          // UID COPY
+          server.EnqueueTaggedResponse("* 3 RECENT\r\n" +
+                                       "* 6 EXISTS\r\n" +
+                                       "$tag OK done\r\n");
+        }
+
+        if (move)
+          messageSet.MoveTo(messageSet.Mailbox.FullName);
+        else
+          messageSet.CopyTo(messageSet.Mailbox.FullName);
+
+        if (move) {
+          Assert.AreEqual(3, messageSet.Mailbox.ExistMessageCount);
+          Assert.AreEqual(0, messageSet.Mailbox.RecentMessageCount);
+        }
+        else {
+          Assert.That(server.DequeueRequest(), Text.EndsWith("UID COPY 1:3 " + messageSet.Mailbox.FullName + "\r\n"));
+
+          Assert.AreEqual(6, messageSet.Mailbox.ExistMessageCount);
+          Assert.AreEqual(3, messageSet.Mailbox.RecentMessageCount);
+        }
+      });
+    }
+
+    [Test, ExpectedException(typeof(ArgumentException))]
+    public void TestCopyToDestinationNameArgumentEmpty()
+    {
+      CopyOrMoveToDestinationNameArgumentEmpty(false);
+    }
+
+    [Test, ExpectedException(typeof(ArgumentException))]
+    public void TestMoveToDestinationNameArgumentEmpty()
+    {
+      CopyOrMoveToDestinationNameArgumentEmpty(true);
+    }
+
+    private void CopyOrMoveToDestinationNameArgumentEmpty(bool move)
+    {
+      TestMessage(3, ImapSequenceSet.CreateUidSet(1L, 3L, 5L),
+                  delegate(ImapPseudoServer server, ImapMessageInfoBase messageSet, ImapMessageInfo[] messages) {
+        if (move)
+          messageSet.MoveTo(string.Empty);
+        else
+          messageSet.CopyTo(string.Empty);
+      });
+    }
+
+    [Test, ExpectedException(typeof(ArgumentNullException))]
+    public void TestCopyToDestinationNameArgumentNull()
+    {
+      CopyOrMoveToDestinationNameArgumentNull(false);
+    }
+
+    [Test, ExpectedException(typeof(ArgumentNullException))]
+    public void TestMoveToDestinationNameArgumentNull()
+    {
+      CopyOrMoveToDestinationNameArgumentNull(true);
+    }
+
+    private void CopyOrMoveToDestinationNameArgumentNull(bool move)
+    {
+      TestMessage(3, ImapSequenceSet.CreateUidSet(1L, 3L, 5L),
+                  delegate(ImapPseudoServer server, ImapMessageInfoBase messageSet, ImapMessageInfo[] messages) {
+        if (move)
+          messageSet.MoveTo((string)null);
+        else
+          messageSet.CopyTo((string)null);
       });
     }
 
@@ -889,30 +1124,104 @@ namespace Smdn.Net.Imap4.Client {
         Assert.AreEqual("dest", createdMailbox.Name);
         Assert.AreEqual("dest", createdMailbox.FullName);
 
-        Assert.That(server.DequeueRequest(), Text.EndsWith("UID COPY 1:3 \"dest\"\r\n"));
-        Assert.That(server.DequeueRequest(), Text.EndsWith("CREATE \"dest\"\r\n"));
-        Assert.That(server.DequeueRequest(), Text.EndsWith("UID COPY 1:3 \"dest\"\r\n"));
-        Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" \"dest\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("UID COPY 1:3 dest\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("CREATE dest\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("UID COPY 1:3 dest\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" dest\r\n"));
 
         if (move) {
           Assert.That(server.DequeueRequest(), Text.EndsWith("UID STORE 1:3 +FLAGS (\\Deleted)\r\n"));
 
           Assert.IsNotNull(messages[0].Flags);
           Assert.AreEqual(1, messages[0].Flags.Count);
-          Assert.IsTrue(messages[0].Flags.Has(ImapMessageFlag.Deleted));
+          Assert.IsTrue(messages[0].Flags.Contains(ImapMessageFlag.Deleted));
           Assert.IsTrue(messages[0].IsMarkedAsDeleted);
 
           Assert.IsNotNull(messages[1].Flags);
           Assert.AreEqual(2, messages[1].Flags.Count);
-          Assert.IsTrue(messages[1].Flags.Has(ImapMessageFlag.Deleted));
-          Assert.IsTrue(messages[1].Flags.Has(ImapMessageFlag.Seen));
+          Assert.IsTrue(messages[1].Flags.Contains(ImapMessageFlag.Deleted));
+          Assert.IsTrue(messages[1].Flags.Contains(ImapMessageFlag.Seen));
           Assert.IsTrue(messages[1].IsMarkedAsDeleted);
           Assert.IsTrue(messages[1].IsSeen);
 
           Assert.IsNotNull(messages[2].Flags);
           Assert.AreEqual(2, messages[2].Flags.Count);
-          Assert.IsTrue(messages[2].Flags.Has(ImapMessageFlag.Deleted));
-          Assert.IsTrue(messages[2].Flags.Has("$label1"));
+          Assert.IsTrue(messages[2].Flags.Contains(ImapMessageFlag.Deleted));
+          Assert.IsTrue(messages[2].Flags.Contains("$label1"));
+          Assert.IsTrue(messages[2].IsMarkedAsDeleted);
+        }
+      });
+    }
+
+    [Test]
+    public void TestCopyToDestinationNameNoResponseTryCreateNameContainsWildcard()
+    {
+      CopyOrMoveToDestinationNameNoResponseTryCreateNameContainsWildcard(true);
+    }
+
+    [Test]
+    public void TestMoveToDestinationNameNoResponseTryCreateNameContainsWildcard()
+    {
+      CopyOrMoveToDestinationNameNoResponseTryCreateNameContainsWildcard(false);
+    }
+
+    private void CopyOrMoveToDestinationNameNoResponseTryCreateNameContainsWildcard(bool move)
+    {
+      TestMessage(3, ImapSequenceSet.CreateUidRangeSet(1L, 3L),
+                  delegate(ImapPseudoServer server, ImapMessageInfoBase messageSet, ImapMessageInfo[] messages) {
+        // UID COPY
+        server.EnqueueTaggedResponse("$tag NO [TRYCREATE] mailbox not exist\r\n");
+        // CREATE
+        server.EnqueueTaggedResponse("$tag OK done\r\n");
+        // UID COPY
+        server.EnqueueTaggedResponse("$tag OK done\r\n");
+        // LIST
+        server.EnqueueTaggedResponse("* LIST (\\Marked) \".\" Box*\r\n" +
+                                     "* LIST () \".\" Box\r\n" +
+                                     "* LIST () \".\" Box.Child\r\n" +
+                                     "* LIST () \".\" Boxes\r\n" +
+                                     "$tag OK done\r\n");
+        if (move)
+          // UID STORE
+          server.EnqueueTaggedResponse("* FETCH 1 (FLAGS (\\Deleted))\r\n" +
+                                       "* FETCH 2 (FLAGS (\\Deleted \\Seen))\r\n" +
+                                       "* FETCH 3 (FLAGS (\\Deleted $label1))\r\n" +
+                                       "$tag OK done\r\n");
+
+        var createdMailbox = move
+          ? messageSet.MoveTo("Box*", true)
+          : messageSet.CopyTo("Box*", true);
+
+        Assert.IsNotNull(createdMailbox);
+        Assert.AreEqual("Box*", createdMailbox.Name);
+        Assert.AreEqual("Box*", createdMailbox.FullName);
+        Assert.AreEqual(1, createdMailbox.Flags.Count);
+        CollectionAssert.Contains(createdMailbox.Flags, ImapMailboxFlag.Marked);
+
+        Assert.That(server.DequeueRequest(), Text.EndsWith("UID COPY 1:3 \"Box*\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("CREATE \"Box*\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("UID COPY 1:3 \"Box*\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" Box*\r\n"));
+
+        if (move) {
+          Assert.That(server.DequeueRequest(), Text.EndsWith("UID STORE 1:3 +FLAGS (\\Deleted)\r\n"));
+
+          Assert.IsNotNull(messages[0].Flags);
+          Assert.AreEqual(1, messages[0].Flags.Count);
+          Assert.IsTrue(messages[0].Flags.Contains(ImapMessageFlag.Deleted));
+          Assert.IsTrue(messages[0].IsMarkedAsDeleted);
+
+          Assert.IsNotNull(messages[1].Flags);
+          Assert.AreEqual(2, messages[1].Flags.Count);
+          Assert.IsTrue(messages[1].Flags.Contains(ImapMessageFlag.Deleted));
+          Assert.IsTrue(messages[1].Flags.Contains(ImapMessageFlag.Seen));
+          Assert.IsTrue(messages[1].IsMarkedAsDeleted);
+          Assert.IsTrue(messages[1].IsSeen);
+
+          Assert.IsNotNull(messages[2].Flags);
+          Assert.AreEqual(2, messages[2].Flags.Count);
+          Assert.IsTrue(messages[2].Flags.Contains(ImapMessageFlag.Deleted));
+          Assert.IsTrue(messages[2].Flags.Contains("$label1"));
           Assert.IsTrue(messages[2].IsMarkedAsDeleted);
         }
       });

@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -30,41 +30,69 @@ namespace Smdn.Formats {
   public static class EncodingUtils {
     public static Encoding GetEncoding(string name)
     {
+      return GetEncoding(name, null);
+    }
+
+    public static Encoding GetEncoding(string name,
+                                       EncodingSelectionCallback selectFallbackEncoding)
+    {
       if (name == null)
         throw new ArgumentNullException("name");
 
+      // remove leading and trailing whitespaces (\x20, \n, \t, etc.)
+      name = name.Trim();
+
+      string encodingName;
+
+      if (!encodingCollationTable.TryGetValue(name.RemoveChars('-', '_', ' '), out encodingName))
+        encodingName = name;
+
       try {
-        string alias;
-
-        if (encodingAliases.TryGetValue(name, out alias))
-          name = alias;
-
-        return Encoding.GetEncoding(name);
+        return Encoding.GetEncoding(encodingName);
       }
       catch (ArgumentException) {
-        return null;
+        // illegal or unsupported
+        if (selectFallbackEncoding == null)
+          return null;
+        else
+          return selectFallbackEncoding(name); // trimmed name
       }
     }
 
     public static Encoding GetEncodingThrowException(string name)
     {
-      var encoding = GetEncoding(name);
+      return GetEncodingThrowException(name, null);
+    }
+
+    public static Encoding GetEncodingThrowException(string name,
+                                                     EncodingSelectionCallback selectFallbackEncoding)
+    {
+      var encoding = GetEncoding(name, selectFallbackEncoding);
 
       if (encoding == null)
-        throw new NotSupportedException(string.Format("charset '{0}' is not supported by runtime", name));
+        throw new EncodingNotSupportedException(name);
       else
         return encoding;
     }
 
-    private static Dictionary<string, string> encodingAliases = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
+    private static Dictionary<string, string> encodingCollationTable
+      = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase) {
+      /* UTF-16 */
+      {"utf16",       "utf-16"},
       /* UTF-8 */
       {"utf8",        "utf-8"},
-      {"utf_8",       "utf-8"},
       /* Shift_JIS */
-      {"x-sjis",      "shift_jis"},
-      {"shift-jis",   "shift_jis"},
+      {"shiftjis",    "shift_jis"},     // shift_jis
+      {"xsjis",       "shift_jis"},     // x-sjis
       /* EUC-JP */
-      {"x-euc-jp",    "euc-jp"},
+      {"eucjp",       "euc-jp"},        // euc-jp
+      {"xeucjp",      "euc-jp"},        // x-euc-jp
+      /* ISO-2022-JP */
+      {"iso2022jp",   "iso-2022-jp"},   // iso-2022-jp
+
+      // TODO
+      // {"utf16be",     "utf-16"},
+      // {"utf16le",     "utf-16"},
     };
   }
 }

@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -39,10 +39,12 @@ namespace Smdn.Formats.Ini {
           // null as default section
           name = string.Empty;
 
-        if (!sections.ContainsKey(name))
-          AppendSection(name);
+        IniSection sec;
 
-        return sections[name];
+        if (sections.TryGetValue(name, out sec))
+          return sec;
+        else
+          return AppendSection(name);
       }
     }
 
@@ -164,11 +166,13 @@ namespace Smdn.Formats.Ini {
       return sections.Values.GetEnumerator();
     }
 
-    private void AppendSection(string name)
+    private IniSection AppendSection(string name)
     {
       var section = new IniSection(name, Comparer);
 
-      sections.Add(section.Name, section);
+      sections[section.Name] = section;
+
+      return section;
     }
 
     public IniSection Find(string section)
@@ -176,8 +180,10 @@ namespace Smdn.Formats.Ini {
       if (string.IsNullOrEmpty(section))
         return DefaultSection;
 
-      if (sections.ContainsKey(section))
-        return sections[section];
+      IniSection sec;
+
+      if (sections.TryGetValue(section, out sec))
+        return sec;
       else
         return null;
     }
@@ -213,8 +219,7 @@ namespace Smdn.Formats.Ini {
       if(string.IsNullOrEmpty(section))
         return;
 
-      if (sections.ContainsKey(section))
-        sections.Remove(section);
+      sections.Remove(section);
     }
 
     public override string ToString()

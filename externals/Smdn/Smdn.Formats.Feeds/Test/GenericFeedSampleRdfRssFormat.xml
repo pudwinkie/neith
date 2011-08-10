@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rdf:RDF xmlns="http://purl.org/rss/1.0/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:annotate="http://purl.org/rss/1.0/modules/annotate/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel rdf:about="http://localhost/feed">
+    <title>title</title>
+    <link>http://localhost/updated</link>
+    <description>description</description>
+    <sy:updatePeriod>weekly</sy:updatePeriod>
+    <sy:updateFrequency>2</sy:updateFrequency>
+    <sy:updateBase>2009-07-11T18:00:00.0000000+00:00</sy:updateBase>
+    <dc:creator>author (mailto:author@localhost)</dc:creator>
+    <dc:date>2009-07-11T18:00:00.0000000+00:00</dc:date>
+    <atom:link href="http://localhost/feed" rel="self" type="application/rdf+xml" />
+    <atom:link href="http://localhost/" rel="related" />
+    <items>
+      <rdf:Seq>
+        <rdf:li rdf:resource="http://localhost/0" />
+        <rdf:li rdf:resource="http://localhost/1" />
+      </rdf:Seq>
+    </items>
+  </channel>
+  <item rdf:about="http://localhost/0">
+    <title>title0</title>
+    <link>http://localhost/0</link>
+    <description>title0</description>
+    <annotate:reference rdf:resource="http://localhost/annotation0" />
+    <content:encoded><![CDATA[description0]]></content:encoded>
+    <dc:date>2009-07-11T18:00:00.0000000+00:00</dc:date>
+  </item>
+  <item rdf:about="http://localhost/1">
+    <title>title1</title>
+    <link>http://localhost/1</link>
+    <description>title1</description>
+    <annotate:reference rdf:resource="http://localhost/annotation1" />
+    <content:encoded><![CDATA[description1]]></content:encoded>
+    <dc:date>2009-07-11T18:00:01.0000000+00:00</dc:date>
+  </item>
+</rdf:RDF>

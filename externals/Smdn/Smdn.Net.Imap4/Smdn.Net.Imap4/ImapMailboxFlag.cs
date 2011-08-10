@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -47,7 +47,7 @@ namespace Smdn.Net.Imap4 {
   //       => handles server response types
 
   public sealed class ImapMailboxFlag : ImapStringEnum, IImapExtension {
-    public static readonly ImapMailboxFlagList AllFlags;
+    public static readonly ImapMailboxFlagSet AllFlags;
 
     /*
      * RFC 3501 INTERNET MESSAGE ACCESS PROTOCOL - VERSION 4rev1
@@ -69,46 +69,52 @@ namespace Smdn.Net.Imap4 {
     public static readonly ImapMailboxFlag Remote         = new ImapMailboxFlag(@"\Remote", ImapCapability.ListExtended);
 
     /*
-     * http://tools.ietf.org/html/draft-ietf-morg-list-specialuse-01
-     * draft-ietf-morg-list-specialuse-01 - IMAP LIST extension for special-use mailboxes
-     * 2. New mailbox flags identifying special-use mailboxes
+     * draft-ietf-morg-list-specialuse-06 - IMAP LIST extension for special-use mailboxes
+     * http://tools.ietf.org/html/draft-ietf-morg-list-specialuse-06
+     * 2. New mailbox attributes identifying special-use mailboxes
      */
     public static readonly ImapMailboxFlag Drafts   = new ImapMailboxFlag(@"\Drafts");
     public static readonly ImapMailboxFlag Flagged  = new ImapMailboxFlag(@"\Flagged");
-    public static readonly ImapMailboxFlag Inbox    = new ImapMailboxFlag(@"\Inbox");
     public static readonly ImapMailboxFlag Junk     = new ImapMailboxFlag(@"\Junk");
     public static readonly ImapMailboxFlag Sent     = new ImapMailboxFlag(@"\Sent");
     public static readonly ImapMailboxFlag Trash    = new ImapMailboxFlag(@"\Trash");
     public static readonly ImapMailboxFlag All      = new ImapMailboxFlag(@"\All");
     public static readonly ImapMailboxFlag Archive  = new ImapMailboxFlag(@"\Archive");
 
-    public static readonly ImapMailboxFlagList UseFlags = new ImapMailboxFlagList(true, new[] {
-      All, Archive, Drafts, Flagged, Inbox, Junk, Sent, Trash,
+    public static readonly ImapMailboxFlagSet UseFlags = new ImapMailboxFlagSet(true, new[] {
+      All, Archive, Drafts, Flagged, Junk, Sent, Trash,
     });
 
     /*
      * Gimap XLIST
      */
     public static readonly ImapMailboxFlag GimapAllMail = new ImapMailboxFlag(@"\AllMail");
-    public static readonly ImapMailboxFlag GimapStarred = new ImapMailboxFlag(@"\Starred");
+    public static readonly ImapMailboxFlag GimapInbox   = new ImapMailboxFlag(@"\Inbox");
     public static readonly ImapMailboxFlag GimapSpam    = new ImapMailboxFlag(@"\Spam");
+    public static readonly ImapMailboxFlag GimapStarred = new ImapMailboxFlag(@"\Starred");
 
     static ImapMailboxFlag()
     {
-      AllFlags = new ImapMailboxFlagList(true, GetDefinedConstants<ImapMailboxFlag>());
+      AllFlags = new ImapMailboxFlagSet(true, GetDefinedConstants<ImapMailboxFlag>());
     }
 
     internal static ImapMailboxFlag GetKnownOrCreate(string flag)
     {
-      if (AllFlags.Has(flag))
-        return AllFlags[flag];
+      ImapMailboxFlag f;
+
+      if (AllFlags.TryGet(flag, out f))
+        return f;
       else
         //Trace.Verbose("unknown mailbox flag: {0}", flag);
         return new ImapMailboxFlag(flag);
     }
 
-    ImapCapability IImapExtension.RequiredCapability {
-      get { return requiredCapability; }
+    IEnumerable<ImapCapability> IImapExtension.RequiredCapabilities {
+      get
+      {
+        if (requiredCapability != null)
+          yield return requiredCapability;
+      }
     }
 
     internal ImapMailboxFlag(string flag)
@@ -125,6 +131,6 @@ namespace Smdn.Net.Imap4 {
       this.requiredCapability = requiredCapability;
     }
 
-    private /*readonly*/ ImapCapability requiredCapability;
+    private readonly ImapCapability requiredCapability;
   }
 }

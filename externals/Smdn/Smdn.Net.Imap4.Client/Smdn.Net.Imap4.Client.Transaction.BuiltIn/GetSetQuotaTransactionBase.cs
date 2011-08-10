@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@
 // THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 
 using Smdn.Net.Imap4.Protocol;
 using Smdn.Net.Imap4.Protocol.Client;
@@ -33,36 +34,14 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
    * http://tools.ietf.org/html/rfc2087
    */
   internal abstract class GetSetQuotaTransactionBase : ImapTransactionBase<ImapCommandResult<ImapQuota>>, IImapExtension {
-    ImapCapability IImapExtension.RequiredCapability {
-      get { return ImapCapability.Quota; }
+    IEnumerable<ImapCapability> IImapExtension.RequiredCapabilities {
+      get { yield return ImapCapability.Quota; }
     }
 
     protected GetSetQuotaTransactionBase(ImapConnection connection)
       : base(connection)
     {
     }
-
-    protected override ProcessTransactionDelegate Reset()
-    {
-#if DEBUG
-      if (!RequestArguments.ContainsKey("quota root"))
-        return ProcessArgumentNotSetted;
-      else if (this is SetQuotaTransaction && !RequestArguments.ContainsKey("list of resource limits"))
-        return ProcessArgumentNotSetted;
-      else
-#endif
-        return ProcessGetSetQuota;
-    }
-
-#if DEBUG
-    private void ProcessArgumentNotSetted()
-    {
-      if (this is SetQuotaTransaction)
-        FinishError(ImapCommandResultCode.RequestError, "arguments 'quota root' and 'list of resource limits' must be setted");
-      else
-        FinishError(ImapCommandResultCode.RequestError, "arguments 'quota root' must be setted");
-    }
-#endif
 
     /*
      * 4.1. SETQUOTA Command
@@ -85,19 +64,28 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
      *                denied
      *                BAD - command unknown or arguments invalid
      */
-    private void ProcessGetSetQuota()
+    protected override ImapCommand PrepareCommand()
     {
+#if DEBUG
+      if (!RequestArguments.ContainsKey("quota root")) {
+        FinishError(ImapCommandResultCode.RequestError, "arguments 'quota root' must be setted");
+        return null;
+      }
+      else if (this is SetQuotaTransaction && !RequestArguments.ContainsKey("list of resource limits")) {
+        FinishError(ImapCommandResultCode.RequestError, "arguments 'list of resource limits' must be setted");
+        return null;
+      }
+#endif
+
       if (this is SetQuotaTransaction)
         // SETQUOTA
-        SendCommand("SETQUOTA",
-                    ProcessReceiveResponse,
-                    RequestArguments["quota root"],
-                    RequestArguments["list of resource limits"]);
+        return Connection.CreateCommand("SETQUOTA",
+                                        RequestArguments["quota root"],
+                                        RequestArguments["list of resource limits"]);
       else
         // GETQUOTA
-        SendCommand("GETQUOTA",
-                    ProcessReceiveResponse,
-                    RequestArguments["quota root"]);
+        return Connection.CreateCommand("GETQUOTA",
+                                        RequestArguments["quota root"]);
     }
 
     protected override void OnDataResponseReceived(ImapDataResponse data)

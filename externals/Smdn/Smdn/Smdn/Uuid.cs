@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2009-2010 smdn
+// Copyright (c) 2009-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -37,11 +37,13 @@ namespace Smdn {
    * RFC 4122 - A Universally Unique IDentifier (UUID) URN Namespace
    * http://tools.ietf.org/html/rfc4122
    */
-  [CLSCompliant(false), StructLayout(LayoutKind.Explicit, Pack = 1)]
-  public unsafe struct Uuid :
+  [StructLayout(LayoutKind.Explicit, Pack = 1)]
+  public struct Uuid :
     IEquatable<Uuid>,
     IEquatable<Guid>,
     IComparable<Uuid>,
+    IComparable<Guid>,
+    IComparable,
     IFormattable
   {
     public enum Namespace : int {
@@ -58,6 +60,26 @@ namespace Smdn {
       Reserved              = 0xe0,
     }
 
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    private struct _Node {
+      public byte N0;
+      public byte N1;
+      public byte N2;
+      public byte N3;
+      public byte N4;
+      public byte N5;
+
+      public _Node(byte n0, byte n1, byte n2, byte n3, byte n4, byte n5)
+      {
+        N0 = n0;
+        N1 = n1;
+        N2 = n2;
+        N3 = n3;
+        N4 = n4;
+        N5 = n5;
+      }
+    }
+
     /*
      * 4.1.7. Nil UUID
      *    The nil UUID is special form of UUID that is specified to have all
@@ -68,10 +90,10 @@ namespace Smdn {
     /*
      * Appendix C. Appendix C - Some Name Space IDs
      */
-    public static readonly Uuid RFC4122NamespaceDns     = new Uuid(new byte[] {0x6b, 0xa7, 0xb8, 0x10, 0x9d, 0xad, 0x11, 0xd1, 0x80, 0xb4, 0x00, 0xc0, 0x4f, 0xd4, 0x30, 0xc8});
-    public static readonly Uuid RFC4122NamespaceUrl     = new Uuid(new byte[] {0x6b, 0xa7, 0xb8, 0x11, 0x9d, 0xad, 0x11, 0xd1, 0x80, 0xb4, 0x00, 0xc0, 0x4f, 0xd4, 0x30, 0xc8});
-    public static readonly Uuid RFC4122NamespaceIsoOid  = new Uuid(new byte[] {0x6b, 0xa7, 0xb8, 0x12, 0x9d, 0xad, 0x11, 0xd1, 0x80, 0xb4, 0x00, 0xc0, 0x4f, 0xd4, 0x30, 0xc8});
-    public static readonly Uuid RFC4122NamespaceX500    = new Uuid(new byte[] {0x6b, 0xa7, 0xb8, 0x14, 0x9d, 0xad, 0x11, 0xd1, 0x80, 0xb4, 0x00, 0xc0, 0x4f, 0xd4, 0x30, 0xc8});
+    public static readonly Uuid RFC4122NamespaceDns     = new Uuid(new byte[] {0x6b, 0xa7, 0xb8, 0x10, 0x9d, 0xad, 0x11, 0xd1, 0x80, 0xb4, 0x00, 0xc0, 0x4f, 0xd4, 0x30, 0xc8}, 0, Endianness.BigEndian);
+    public static readonly Uuid RFC4122NamespaceUrl     = new Uuid(new byte[] {0x6b, 0xa7, 0xb8, 0x11, 0x9d, 0xad, 0x11, 0xd1, 0x80, 0xb4, 0x00, 0xc0, 0x4f, 0xd4, 0x30, 0xc8}, 0, Endianness.BigEndian);
+    public static readonly Uuid RFC4122NamespaceIsoOid  = new Uuid(new byte[] {0x6b, 0xa7, 0xb8, 0x12, 0x9d, 0xad, 0x11, 0xd1, 0x80, 0xb4, 0x00, 0xc0, 0x4f, 0xd4, 0x30, 0xc8}, 0, Endianness.BigEndian);
+    public static readonly Uuid RFC4122NamespaceX500    = new Uuid(new byte[] {0x6b, 0xa7, 0xb8, 0x14, 0x9d, 0xad, 0x11, 0xd1, 0x80, 0xb4, 0x00, 0xc0, 0x4f, 0xd4, 0x30, 0xc8}, 0, Endianness.BigEndian);
 
     public static Uuid NewUuid()
     {
@@ -159,7 +181,7 @@ namespace Smdn {
         timestamp = timestamp.ToUniversalTime();
 
       if (timestamp < timestampEpoch)
-        throw new ArgumentOutOfRangeException("timestamp", timestamp, string.Format("must be greater than or equals to {0}", timestampEpoch));
+        throw ExceptionUtils.CreateArgumentMustBeGreaterThanOrEqualTo(timestampEpoch, "timestamp", timestamp);
 
       if (clock < 0 || 0x3fff <= clock)
         throw new ArgumentOutOfRangeException("clock", clock, "must be 14-bit unsigned integer");
@@ -184,9 +206,12 @@ namespace Smdn {
        *       time_hi_and_version field equal to bits 48 through 59 from the
        *       timestamp in the same order of significance.
        */
-      uuid.time_low = (uint)(ts & 0xffffffff);
-      uuid.time_mid = (ushort)((ts >> 32) & 0xffff);
-      uuid.time_hi_and_version = (ushort)((ts >> 48) & 0x0fff);
+      unchecked {
+        uuid.time_low = (uint)ts; // (uint)(ts & 0xffffffff);
+        uuid.time_mid = (ushort)(ts >> 32); //(ushort)((ts >> 32) & 0xffff);
+        uuid.time_hi_and_version =(ushort)(ts >> 48); // (ushort)((ts >> 48) & 0x0fff);
+        // MSB will be replaced at SetRFC4122Fields()
+      }
 
       /*
        *    o  Set the four most significant bits (bits 12 through 15) of the
@@ -203,8 +228,11 @@ namespace Smdn {
        *       (bits 8 through 13) of the clock sequence in the same order of
        *       significance.
        */
-      uuid.clock_seq_low = (byte)(clock & 0xff);
-      uuid.clock_seq_hi_and_reserved = (byte)((clock >> 8) & 0x3f);
+      unchecked {
+        uuid.clock_seq_low = (byte)clock; // (byte)(clock & 0xff);
+        uuid.clock_seq_hi_and_reserved = (byte)(clock >> 8); // (byte)((clock >> 8) & 0x3f);
+        // MSB will be replaced at SetRFC4122Fields()
+      }
 
       /*
        *    o  Set the two most significant bits (bits 6 and 7) of the
@@ -213,7 +241,7 @@ namespace Smdn {
        *    o  Set the node field to the 48-bit IEEE address in the same order of
        *       significance as the address.
        */
-      uuid.Node = node;
+      uuid.node = new _Node(node[0], node[1], node[2], node[3], node[4], node[5]);
 
       SetRFC4122Fields(ref uuid, UuidVersion.Version1);
 
@@ -276,7 +304,7 @@ namespace Smdn {
         case Namespace.RFC4122Url:    return CreateNameBased(name, RFC4122NamespaceUrl, version);
         case Namespace.RFC4122IsoOid: return CreateNameBased(name, RFC4122NamespaceIsoOid, version);
         case Namespace.RFC4122X500:   return CreateNameBased(name, RFC4122NamespaceX500, version);
-        default: throw new ArgumentException(string.Format("undefined namespace id: {0}", ns));
+        default: throw ExceptionUtils.CreateArgumentMustBeValidEnumValue("ns", ns);
       }
     }
 
@@ -307,7 +335,7 @@ namespace Smdn {
         switch (version) {
           case UuidVersion.NameBasedMD5Hash: hashAlgorithm = MD5.Create(); break;
           case UuidVersion.NameBasedSHA1Hash: hashAlgorithm = SHA1.Create(); break;
-          default: throw new ArgumentException("version must be 3 or 5", "version");
+          default:  throw ExceptionUtils.CreateArgumentMustBeValidEnumValue("version", version, "must be 3 or 5");
         }
 
         /* 
@@ -317,7 +345,13 @@ namespace Smdn {
          * 
          *    o  Compute the hash of the name space ID concatenated with the name.
          */
-        var hash = hashAlgorithm.ComputeHash(ArrayExtensions.Concat(namespaceId.ToByteArray(), name));
+        var buffer = new byte[16 + name.Length];
+
+        namespaceId.GetBytes(buffer, 0, Endianness.BigEndian);
+
+        Buffer.BlockCopy(name, 0, buffer, 16, name.Length);
+
+        var hash = hashAlgorithm.ComputeHash(buffer);
 
         /*
          *    o  Set octets zero through 3 of the time_low field to octets zero
@@ -329,7 +363,7 @@ namespace Smdn {
          *    o  Set octets zero and one of the time_hi_and_version field to octets
          *       6 and 7 of the hash.
          */
-        var uuid = new Uuid(hash);
+        var uuid = new Uuid(hash, 0, Endianness.BigEndian);
 
         /*
          *    o  Set the four most significant bits (bits 12 through 15) of the
@@ -409,54 +443,47 @@ namespace Smdn {
 
     private static void SetRFC4122Fields(ref Uuid uuid, UuidVersion version)
     {
-      uuid.time_hi_and_version &= 0x0fff;
-      uuid.time_hi_and_version |= (ushort)((int)version << 12);
+      unchecked {
+        //uuid.time_hi_and_version &= 0x0fff;
+        //uuid.time_hi_and_version |= (ushort)((int)version << 12);
+        uuid.time_hi_and_version = (ushort)((uuid.time_hi_and_version & 0x0fff) | ((int)version << 12));
 
-      uuid.clock_seq_hi_and_reserved &= 0x3f;
-      uuid.clock_seq_hi_and_reserved |= 0x80;
+        //uuid.clock_seq_hi_and_reserved &= 0x3f;
+        //uuid.clock_seq_hi_and_reserved |= 0x80;
+        uuid.clock_seq_hi_and_reserved = (byte)((uuid.clock_seq_hi_and_reserved & 0x3f) | 0x80);
+      }
     }
 
     /*
      * 4.1.2. Layout and Byte Order
      */
     /* Octet# */
-    /*   0- 3 */ [FieldOffset( 0)] private uint time_low;
-    /*   4- 5 */ [FieldOffset( 4)] private ushort time_mid;
-    /*   6- 7 */ [FieldOffset( 6)] private ushort time_hi_and_version;
+    /*   0- 3 */ [FieldOffset( 0)] private uint time_low; // host order
+    /*   4- 5 */ [FieldOffset( 4)] private ushort time_mid; // host order
+    /*   6- 7 */ [FieldOffset( 6)] private ushort time_hi_and_version; // host order
     /*   8    */ [FieldOffset( 8)] private byte clock_seq_hi_and_reserved;
     /*   9    */ [FieldOffset( 9)] private byte clock_seq_low;
-    /*  10-15 */ [FieldOffset(10)] private fixed byte node[6];
+    /*  10-15 */ [FieldOffset(10)] private _Node node;
 
     [FieldOffset( 0)] private ulong fields_high;
     [FieldOffset( 8)] private ulong fields_low;
 
-    [FieldOffset( 0)] private fixed byte octets[16];
-
     /// <value>time_low; The low field of the timestamp</value>
+    [CLSCompliant(false)]
     public uint TimeLow {
       get { return time_low; }
     }
 
-    private uint TimeLowNetworkOrder {
-      get { return (uint)IPAddress.HostToNetworkOrder((int)time_low); }
-    }
-
     /// <value>time_mid; The middle field of the timestamp</value>
+    [CLSCompliant(false)]
     public ushort TimeMid {
       get { return time_mid; }
     }
 
-    private ushort TimeMidNetworkOrder {
-      get { return (ushort)IPAddress.HostToNetworkOrder((short)time_mid); }
-    }
-
     /// <value>time_hi_and_version; The high field of the timestamp multiplexed with the version number</value>
+    [CLSCompliant(false)]
     public ushort TimeHighAndVersion {
       get { return time_hi_and_version; }
-    }
-
-    private ushort TimeHighAndVersionNetworkOrder {
-      get { return (ushort)IPAddress.HostToNetworkOrder((short)time_hi_and_version); }
     }
 
     /// <value>clock_seq_hi_and_reserved; The high field of the clock sequence multiplexed with the variant</value>
@@ -471,20 +498,7 @@ namespace Smdn {
 
     /// <value>node;The spatially unique node identifier</value>
     public byte[] Node {
-      get
-      {
-        fixed (byte* n = node) {
-          return new[] {n[0], n[1], n[2], n[3], n[4], n[5]};
-        }
-      }
-      private set
-      {
-        fixed (byte* n = node) {
-          for (var i = 0; i < 6; i++) {
-            n[i] = value[i];
-          }
-        }
-      }
+      get { return new[] {node.N0, node.N1, node.N2, node.N3, node.N4, node.N5}; }
     }
 
     /*
@@ -511,12 +525,7 @@ namespace Smdn {
     }
 
     public string IEEE802MacAddress {
-      get
-      {
-        fixed (byte* n = node) {
-          return string.Format("{0:x2}:{1:x2}:{2:x2}:{3:x2}:{4:x2}:{5:x2}", n[0], n[1], n[2], n[3], n[4], n[5]);
-        }
-      }
+      get { return string.Format("{0:x2}:{1:x2}:{2:x2}:{3:x2}:{4:x2}:{5:x2}", node.N0, node.N1, node.N2, node.N3, node.N4, node.N5); }
     }
 
     public PhysicalAddress PhysicalAddress {
@@ -558,6 +567,7 @@ namespace Smdn {
       }
     }
 
+    [CLSCompliant(false)]
     public Uuid(uint time_low, ushort time_mid, ushort time_hi_and_version, byte clock_seq_hi_and_reserved, byte clock_seq_low,
                 PhysicalAddress node)
     : this(time_low, time_mid, time_hi_and_version, clock_seq_hi_and_reserved, clock_seq_low,
@@ -565,6 +575,7 @@ namespace Smdn {
     {
     }
 
+    [CLSCompliant(false)]
     public Uuid(uint time_low, ushort time_mid, ushort time_hi_and_version, byte clock_seq_hi_and_reserved, byte clock_seq_low,
                 byte[] node)
       : this(time_low, time_mid, time_hi_and_version, clock_seq_hi_and_reserved, clock_seq_low,
@@ -572,27 +583,17 @@ namespace Smdn {
     {
     }
 
+    [CLSCompliant(false)]
     public Uuid(uint time_low, ushort time_mid, ushort time_hi_and_version, byte clock_seq_hi_and_reserved, byte clock_seq_low,
                 byte node0, byte node1, byte node2, byte node3, byte node4, byte node5)
       : this()
     {
-      this.fields_high = 0;
-      this.fields_low = 0;
-
       this.time_low = time_low;
       this.time_mid = time_mid;
       this.time_hi_and_version = time_hi_and_version;
       this.clock_seq_hi_and_reserved = clock_seq_hi_and_reserved;
       this.clock_seq_low = clock_seq_low;
-
-      fixed (byte* n = this.node) {
-        n[0] = node0;
-        n[1] = node1;
-        n[2] = node2;
-        n[3] = node3;
-        n[4] = node4;
-        n[5] = node5;
-      }
+      this.node = new _Node(node0, node1, node2, node3, node4, node5);
     }
 
     public Uuid(Guid guid)
@@ -601,27 +602,36 @@ namespace Smdn {
     }
 
     public Uuid(byte[] octets)
-      : this(octets, 0)
+      : this(octets, 0, Platform.Endianness)
     {
     }
 
     public Uuid(byte[] octets, int index)
+      : this(octets, index, Platform.Endianness)
+    {
+    }
+
+    public Uuid(byte[] octets, int index, Endianness endian)
       : this()
     {
       if (octets == null)
         throw new ArgumentNullException("octets");
       if (index < 0)
-        throw new ArgumentOutOfRangeException("index", index, "must be zero or positive number");
-      if (octets.Length - index < 16)
-        throw new ArgumentException("at least 16 octets is required", "octets, index");
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("index", index);
+      if (octets.Length - 16 < index)
+        throw ExceptionUtils.CreateArgumentAttemptToAccessBeyondEndOfArray("index", octets, index, 16);
 
-      fixed (byte* o = this.octets) {
-        for (var i = index; i < 16; i++) {
-          o[i] = octets[i];
-        }
-      }
-
-      ConvertBytesNetworkToHostOrder();
+      this.time_low                   = BinaryConvert.ToUInt32(octets, index + 0, endian);
+      this.time_mid                   = BinaryConvert.ToUInt16(octets, index + 4, endian);
+      this.time_hi_and_version        = BinaryConvert.ToUInt16(octets, index + 6, endian);
+      this.clock_seq_hi_and_reserved  = octets[index +  8];
+      this.clock_seq_low              = octets[index +  9];
+      this.node.N0                    = octets[index + 10];
+      this.node.N1                    = octets[index + 11];
+      this.node.N2                    = octets[index + 12];
+      this.node.N3                    = octets[index + 13];
+      this.node.N4                    = octets[index + 14];
+      this.node.N5                    = octets[index + 15];
     }
 
     public Uuid(Uri uuidUrn)
@@ -630,12 +640,10 @@ namespace Smdn {
     }
 
     public Uuid(string uuid)
+      : this()
     {
       if (uuid == null)
         throw new ArgumentNullException("uuid");
-
-      this.fields_high = 0;
-      this.fields_low = 0;
 
       // xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
       var fields = uuid.Split('-');
@@ -658,18 +666,13 @@ namespace Smdn {
         throw new FormatException(string.Format("invalid UUID (node): {0}", uuid));
 
       try {
-        this.Node = Hexadecimals.ToByteArray(fields[4]);
+        var n = Hexadecimals.ToByteArray(fields[4]);
+
+        this.node = new _Node(n[0], n[1], n[2], n[3], n[4], n[5]);
       }
       catch (FormatException) {
         throw new FormatException(string.Format("invalid UUID (node): {0}", uuid));
       }
-    }
-
-    private void ConvertBytesNetworkToHostOrder()
-    {
-      this.time_low = (uint)IPAddress.NetworkToHostOrder((int)this.time_low);
-      this.time_mid = (ushort)IPAddress.NetworkToHostOrder((short)this.time_mid);
-      this.time_hi_and_version = (ushort)IPAddress.NetworkToHostOrder((short)this.time_hi_and_version);
     }
 
 #region "comparison"
@@ -705,38 +708,42 @@ namespace Smdn {
         throw new ArgumentException("obj is not Uuid", "obj");
     }
 
-    public int ComapreTo(Guid other)
+    public int CompareTo(Guid other)
     {
-      return ComapreTo((Uuid)other);
+      return CompareTo((Uuid)other);
     }
 
     public int CompareTo(Uuid other)
     {
-      if (this.time_low != other.time_low)
-        return (int)((long)this.time_low - (long)other.time_low);
+      int ret;
 
-      if (this.time_mid != other.time_mid)
-        return this.time_mid - other.time_mid;
+      if ((ret = (int)((long)this.time_low - (long)other.time_low)) != 0)
+        return ret;
 
-      if (this.time_hi_and_version != other.time_hi_and_version)
-        return this.time_hi_and_version - other.time_hi_and_version;
+      if ((ret = this.time_mid - other.time_mid) != 0)
+        return ret;
 
-      if (this.clock_seq_hi_and_reserved != other.clock_seq_hi_and_reserved)
-        return this.clock_seq_hi_and_reserved - other.clock_seq_hi_and_reserved;
+      if ((ret = this.time_hi_and_version - other.time_hi_and_version) != 0)
+        return ret;
 
-      if (this.clock_seq_low != other.clock_seq_low)
-        return this.clock_seq_low - other.clock_seq_low;
+      if ((ret = this.clock_seq_hi_and_reserved - other.clock_seq_hi_and_reserved) != 0)
+        return ret;
 
-      fixed (byte* nthis = this.node) {
-        byte* nother = other.node;
+      if ((ret = this.clock_seq_low - other.clock_seq_low) != 0)
+        return ret;
 
-        for (var i = 0; i < 6; i++) {
-          if (nthis[i] < nother[i])
-            return -1;
-          else if (nthis[i] > nother[i])
-            return 1;
-        }
-      }
+      if ((ret = this.node.N0 - other.node.N0) != 0)
+        return ret;
+      if ((ret = this.node.N1 - other.node.N1) != 0)
+        return ret;
+      if ((ret = this.node.N2 - other.node.N2) != 0)
+        return ret;
+      if ((ret = this.node.N3 - other.node.N3) != 0)
+        return ret;
+      if ((ret = this.node.N4 - other.node.N4) != 0)
+        return ret;
+      if ((ret = this.node.N5 - other.node.N5) != 0)
+        return ret;
 
       return 0;
     }
@@ -775,12 +782,12 @@ namespace Smdn {
 #endregion
 
 #region "conversion"
-    public static implicit operator Guid(Uuid @value)
+    public static explicit operator Guid(Uuid @value)
     {
       return @value.ToGuid();
     }
 
-    public static implicit operator Uuid(Guid @value)
+    public static explicit operator Uuid(Guid @value)
     {
       return new Uuid(@value);
     }
@@ -795,13 +802,46 @@ namespace Smdn {
       return Urn.Create(Urn.NamespaceUuid, ToString(null, null));
     }
 
+    public void GetBytes(byte[] buffer, int startIndex)
+    {
+      GetBytes(buffer, startIndex, Platform.Endianness);
+    }
+
+    public void GetBytes(byte[] buffer, int startIndex, Endianness endian)
+    {
+      if (buffer == null)
+        throw new ArgumentNullException("buffer");
+      if (startIndex < 0)
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("startIndex", startIndex);
+      if (buffer.Length - 16 < startIndex)
+        throw ExceptionUtils.CreateArgumentAttemptToAccessBeyondEndOfArray("startIndex", buffer, startIndex, 16);
+
+      BinaryConvert.GetBytes(time_low,            endian, buffer, startIndex + 0);
+      BinaryConvert.GetBytes(time_mid,            endian, buffer, startIndex + 4);
+      BinaryConvert.GetBytes(time_hi_and_version, endian, buffer, startIndex + 6);
+
+      buffer[startIndex +  8] = clock_seq_hi_and_reserved;
+      buffer[startIndex +  9] = clock_seq_low;
+      buffer[startIndex + 10] = node.N0;
+      buffer[startIndex + 11] = node.N1;
+      buffer[startIndex + 12] = node.N2;
+      buffer[startIndex + 13] = node.N3;
+      buffer[startIndex + 14] = node.N4;
+      buffer[startIndex + 15] = node.N5;
+    }
+
     public byte[] ToByteArray()
     {
-      return ArrayExtensions.Concat(BitConverter.GetBytes(TimeLowNetworkOrder),
-                                    BitConverter.GetBytes(TimeMidNetworkOrder),
-                                    BitConverter.GetBytes(TimeHighAndVersionNetworkOrder),
-                                    new byte[] {clock_seq_hi_and_reserved, clock_seq_low},
-                                    Node);
+      return ToByteArray(Platform.Endianness);
+    }
+
+    public byte[] ToByteArray(Endianness endian)
+    {
+      var bytes = new byte[16];
+
+      GetBytes(bytes, 0, endian);
+
+      return bytes;
     }
 #endregion
 
@@ -827,45 +867,41 @@ namespace Smdn {
 
       switch (format) {
         case "N":
-          fixed (byte* n = node) {
-            return string.Format("{0:x8}{1:x4}{2:x4}{3:x2}{4:x2}{5:x2}{6:x2}{7:x2}{8:x2}{9:x2}{10:x2}",
-                                 time_low,
-                                 time_mid,
-                                 time_hi_and_version,
-                                 clock_seq_hi_and_reserved,
-                                 clock_seq_low,
-                                 n[0],
-                                 n[1],
-                                 n[2],
-                                 n[3],
-                                 n[4],
-                                 n[5]);
-          }
+          return string.Format("{0:x8}{1:x4}{2:x4}{3:x2}{4:x2}{5:x2}{6:x2}{7:x2}{8:x2}{9:x2}{10:x2}",
+                               time_low,
+                               time_mid,
+                               time_hi_and_version,
+                               clock_seq_hi_and_reserved,
+                               clock_seq_low,
+                               node.N0,
+                               node.N1,
+                               node.N2,
+                               node.N3,
+                               node.N4,
+                               node.N5);
 
         case "D":
         case "B":
         case "P":
-          fixed (byte* n = node) {
-            var ret = string.Format("{0:x8}-{1:x4}-{2:x4}-{3:x2}{4:x2}-{5:x2}{6:x2}{7:x2}{8:x2}{9:x2}{10:x2}",
-                                    time_low,
-                                    time_mid,
-                                    time_hi_and_version,
-                                    clock_seq_hi_and_reserved,
-                                    clock_seq_low,
-                                    n[0],
-                                    n[1],
-                                    n[2],
-                                    n[3],
-                                    n[4],
-                                    n[5]);
+          var ret = string.Format("{0:x8}-{1:x4}-{2:x4}-{3:x2}{4:x2}-{5:x2}{6:x2}{7:x2}{8:x2}{9:x2}{10:x2}",
+                                  time_low,
+                                  time_mid,
+                                  time_hi_and_version,
+                                  clock_seq_hi_and_reserved,
+                                  clock_seq_low,
+                                  node.N0,
+                                  node.N1,
+                                  node.N2,
+                                  node.N3,
+                                  node.N4,
+                                  node.N5);
 
-            if (format == "B")
-              return "{" + ret + "}";
-            else if (format == "P")
-              return "(" + ret + ")";
-            else
-              return ret;
-          }
+          if (format == "B")
+            return "{" + ret + "}";
+          else if (format == "P")
+            return "(" + ret + ")";
+          else
+            return ret;
 
         default:
           throw new FormatException(string.Format("invalid format: {0}", format));

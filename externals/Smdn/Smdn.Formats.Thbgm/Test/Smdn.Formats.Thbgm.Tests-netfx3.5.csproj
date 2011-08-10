@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{38FA3E83-5C50-4818-AEB2-619DBF59A526}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Smdn.Formats.Thbgm.Tests</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <RootNamespace>Smdn.Formats.Thbgm.Tests</RootNamespace>
+    <OutputPath>bin\</OutputPath>
+    <IntermediateOutputPath>obj\</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\netfx3.5\</OutputPath>
+    <IntermediateOutputPath>obj\Debug\netfx3.5\</IntermediateOutputPath>
+    <DefineConstants>NET_2_0;NET_3_5;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>NET_2_0;NET_3_5</DefineConstants>
+    <OutputPath>bin\Release\netfx3.5\</OutputPath>
+    <IntermediateOutputPath>obj\Release\netfx3.5\</IntermediateOutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Smdn.Formats.Thbgm\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Smdn.Formats.Thbgm\BgmStream.cs" />
+    <Compile Include="Smdn.Formats.Thbgm\WaveStream.cs" />
+    <Compile Include="Smdn.Formats.Thbgm\ProductInfo.cs" />
+    <Compile Include="Smdn.Formats.Thbgm\TrackInfo.cs" />
+    <Compile Include="Smdn.Formats.Thbgm\StreamFormat.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Smdn.Formats.Thbgm-netfx3.5.csproj">
+      <Project>{327110C8-F04B-4E6F-BA13-DD33B5B6E18D}</Project>
+      <Name>Smdn.Formats.Thbgm-netfx3.5</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Smdn\Smdn-netfx3.5.csproj">
+      <Project>{94EE5515-F253-491B-8F0F-09F70D03B1B6}</Project>
+      <Name>Smdn-netfx3.5</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Smdn.Formats.Riff\Smdn.Formats.Riff-netfx3.5.csproj">
+      <Project>{2D99573F-7DB3-4FD5-95BB-507B11939264}</Project>
+      <Name>Smdn.Formats.Riff-netfx3.5</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Smdn.Core.BinaryFormats\Smdn.Core.BinaryFormats-netfx3.5.csproj">
+      <Project>{85C40D26-DC95-447C-B746-6005B8D93C52}</Project>
+      <Name>Smdn.Core.BinaryFormats-netfx3.5</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

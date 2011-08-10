@@ -1,0 +1,41 @@
+#「東方風神録　～ Mountain of Faith.」 製品版曲データ (written by santa marta, 2007/08/18)
+#デフォルトのパスと製品名
+@上海アリス幻樂団\東方風神録\thbgm.dat,東方風神録　～ Mountain of Faith.
+#原作者名
+#=ProductInfo,Creator,上海アリス幻樂団
+#製品略称
+#=ProductInfo,Prefix,th10
+#=ProductInfo,ShortName,東方風神録
+#=ProductInfo,AbbreviatedShortName,風神録
+#=ProductInfo,ShortestName,風
+#頒布年月日
+#=ProductInfo,ReleaseDate,2007-08-17
+#thbgm.datのサイズ(バイト単位)
+#=ProductInfo,BgmSourceLength,403789620
+#thbgm.datのハッシュ値(MD5)
+#=ProductInfo,BgmSourceHash,MD5Sum,7e3cc90e75817f774847440ea38bdd5b
+#thbgm.datの識別用ハッシュ値(末尾4MBのハッシュ)
+#=ProductInfo,BgmSourceIdentificationHash,MD5Sum,8d3a7ddf2a24545f77a2b23fe5929a63
+#THxxBGM製品識別用GUID
+#=ProductInfo,THxxBGMProductGuid,881949A7-B453-A741-E8CD-72D1A5741E0F
+#曲データ
+#開始位置[Bytes]、イントロ部の長さ[Bytes]、ループ部の長さ[Bytes]、曲名
+#位置・長さは16進値として記述する
+00000010,003C25E0,00A6D430,封印されし神々
+00E2FA20,00297930,0144CED0,人恋し神様　～ Romantic Fall
+02514220,0003B780,00745880,稲田姫様に叱られるから
+02C95220,0009F060,013CCBA0,厄神様の通り道　～ Dark Road
+04100E20,0007B050,0114F5B0,運命のダークサイド
+052CB420,002FFA50,01BABBB0,神々が恋した幻想郷
+07176A20,001AA7D0,016EDD20,芥川龍之介の河童　～ Candid Friend
+08A0EF20,001A08E0,020B1F20,フォールオブフォール　～ 秋めく滝
+0AC61720,001940B0,00C7ED50,妖怪の山　～ Mysterious Mountain
+0BA74520,00081350,01E48630,少女が見た日本の原風景
+0D93DEA0,00272720,01B87660,信仰は儚き人間の為に
+0F737C20,002186A0,00948A60,御柱の墓場　～ Grave of Being
+10298D20,004D8670,0168C990,神さびた古戦場　～ Suwa Foughten Field
+11DFDD20,00065220,02157960,明日ハレの日、ケの昨日
+13FBA8A0,000D6F60,01C306E0,ネイティブフェイス
+15CC1EE0,007A3340,00711EC0,麓の神社
+16B770E0,00A9BDE0,00494BD0,神は恵みの雨を降らす　～ Sylphid Dream
+17AA7A90,002F1CB0,0037BFF4,プレイヤーズスコア

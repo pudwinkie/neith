@@ -8,9 +8,7 @@ namespace Smdn.Net.Pop3.Protocol.Client {
     [SetUp]
     public void Setup()
     {
-      baseStream = new MemoryStream();
-      stream = new LineOrientedBufferedStream(baseStream);
-      receiver = new PopResponseReceiver(stream);
+      receiver = new PopPseudoResponseReceiver();
     }
 
     [TearDown]
@@ -21,11 +19,7 @@ namespace Smdn.Net.Pop3.Protocol.Client {
 
     private void WriteResponse(string response)
     {
-      var resp = NetworkTransferEncoding.Transfer8Bit.GetBytes(response);
-
-      baseStream.Seek(0, SeekOrigin.Begin);
-      baseStream.Write(resp, 0, resp.Length);
-      baseStream.Seek(0, SeekOrigin.Begin);
+      receiver.SetResponse(response);
     }
 
     private PopResponse ReadResponse()
@@ -133,6 +127,38 @@ namespace Smdn.Net.Pop3.Protocol.Client {
       Assert.IsNotNull(status.ResponseText.Code);
       Assert.AreEqual(PopResponseCode.InUse, status.ResponseText.Code);
       Assert.IsEmpty(status.Text);
+    }
+
+    [Test]
+    public void TestStatusOkResponseWithExtraSpace()
+    {
+      WriteResponse("+OK \r\n");
+
+      var response = ReadResponse();
+
+      Assert.IsNotNull(response);
+      Assert.IsTrue(response is PopStatusResponse, "response type");
+
+      var status = response as PopStatusResponse;
+
+      Assert.AreEqual(PopStatusIndicator.Positive, status.Status);
+      Assert.IsNull(status.ResponseText.Code);
+    }
+
+    [Test]
+    public void TestStatusNoResponseWithExtraSpace()
+    {
+      WriteResponse("-ERR \r\n");
+
+      var response = ReadResponse();
+
+      Assert.IsNotNull(response);
+      Assert.IsTrue(response is PopStatusResponse, "response type");
+
+      var status = response as PopStatusResponse;
+
+      Assert.AreEqual(PopStatusIndicator.Negative, status.Status);
+      Assert.IsNull(status.ResponseText.Code);
     }
 
     [Test]
@@ -293,8 +319,6 @@ namespace Smdn.Net.Pop3.Protocol.Client {
       }
     }
 
-    private PopResponseReceiver receiver;
-    private MemoryStream baseStream;
-    private LineOrientedBufferedStream stream;
+    private PopPseudoResponseReceiver receiver;
   }
 }

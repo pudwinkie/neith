@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -68,18 +68,29 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
       base.Dispose();
     }
 
-    protected override ProcessTransactionDelegate Reset()
+    // 6.2.2. AUTHENTICATE Command
+    //    Arguments:  authentication mechanism name
+    //    Responses:  continuation data can be requested
+    //    Result:     OK - authenticate completed, now in authenticated state
+    //                NO - authenticate failure: unsupported authentication
+    //                     mechanism, credentials rejected
+    //                BAD - command unknown or arguments invalid,
+    //                     authentication exchange cancelled
+    protected override ImapCommand PrepareCommand()
     {
       if (saslMechanism == null) {
         /*
          * create mechanism
          */
 #if DEBUG
-        if (!RequestArguments.ContainsKey("authentication mechanism name"))
-          return ProcessArgumentNotSetted;
+        if (!RequestArguments.ContainsKey("authentication mechanism name")) {
+          FinishError(ImapCommandResultCode.RequestError, "arguments 'authentication mechanism name' must be setted");
+          return null;
+        }
 #endif
+
         try {
-          saslMechanism = SaslClientMechanism.Create((string)RequestArguments["authentication mechanism name"]);
+          saslMechanism = SaslClientMechanism.Create(RequestArguments["authentication mechanism name"].Value);
           saslMechanism.Credential = credential;
 
           // The service name specified by this protocol's profile of [SASL] is
@@ -90,7 +101,8 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
             (saslMechanism as NTLMMechanism).TargetHost = Connection.Host;
         }
         catch (SaslMechanismNotSupportedException) {
-          return ProcessUnsupported;
+          FinishError(ImapCommandResultCode.RequestError, "unsupported authentication mechanism");
+          return null;
         }
       }
       else {
@@ -115,8 +127,11 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
       if (sendInitialResponse && saslMechanism.ClientFirst) {
         byte[] initialClientResponse;
 
-        if (saslMechanism.GetInitialResponse(out initialClientResponse) == SaslExchangeStatus.Failed || initialClientResponse == null)
-          return ProcessInitialResponseError;
+        if (saslMechanism.GetInitialResponse(out initialClientResponse) == SaslExchangeStatus.Failed ||
+            initialClientResponse == null) {
+          FinishError(ImapCommandResultCode.RequestError, "can't send initial client response");
+          return null;
+        }
 
         /*
          * http://tools.ietf.org/html/rfc4959
@@ -130,45 +145,15 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
         RequestArguments["initial client response"] = Base64.GetEncodedString(initialClientResponse);
       }
 
-      return ProcessAuthenticate;
-    }
+      ImapString initialResponse;
 
-#if DEBUG
-    private void ProcessArgumentNotSetted()
-    {
-      FinishError(ImapCommandResultCode.RequestError, "arguments 'authentication mechanism name' must be setted");
-    }
-#endif
-
-    private void ProcessInitialResponseError()
-    {
-      FinishError(ImapCommandResultCode.RequestError, "can't send initial client response");
-    }
-
-    private void ProcessUnsupported()
-    {
-      FinishError(ImapCommandResultCode.RequestError, "unsupported authentication mechanism");
-    }
-
-    // 6.2.2. AUTHENTICATE Command
-    //    Arguments:  authentication mechanism name
-    //    Responses:  continuation data can be requested
-    //    Result:     OK - authenticate completed, now in authenticated state
-    //                NO - authenticate failure: unsupported authentication
-    //                     mechanism, credentials rejected
-    //                BAD - command unknown or arguments invalid,
-    //                     authentication exchange cancelled
-    private void ProcessAuthenticate()
-    {
-      if (RequestArguments.ContainsKey("initial client response"))
-        SendCommand("AUTHENTICATE",
-                    ProcessReceiveResponse,
-                    RequestArguments["authentication mechanism name"],
-                    RequestArguments["initial client response"]);
+      if (RequestArguments.TryGetValue("initial client response", out initialResponse))
+        return Connection.CreateCommand("AUTHENTICATE",
+                                        RequestArguments["authentication mechanism name"],
+                                        initialResponse);
       else
-        SendCommand("AUTHENTICATE",
-                    ProcessReceiveResponse,
-                    RequestArguments["authentication mechanism name"]);
+        return Connection.CreateCommand("AUTHENTICATE",
+                                        RequestArguments["authentication mechanism name"]);
     }
 
     protected override void OnCommandContinuationRequestReceived(ImapCommandContinuationRequest continuationRequest)

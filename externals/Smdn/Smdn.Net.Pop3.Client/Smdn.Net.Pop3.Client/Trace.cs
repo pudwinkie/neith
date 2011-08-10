@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -36,36 +36,46 @@ namespace Smdn.Net.Pop3.Client {
   internal static class Trace {
     private static readonly TraceSource traceSource = new TraceSource(Assembly.GetExecutingAssembly().GetName().Name);
 
-    private static string Format(string format, params object[] args)
+    [Conditional("TRACE")]
+    public static void Info(string message)
     {
-      return string.Format("{0:o} ", DateTime.Now) + string.Format(format, args);
+      traceSource.TraceEvent(TraceEventType.Information,
+                             Thread.CurrentThread.ManagedThreadId,
+                             string.Concat(DateTime.Now.ToString("o"),
+                                           " ",
+                                           message));
     }
 
     [Conditional("TRACE")]
-    public static void Info(string format, params object[] args)
+    public static void Verbose(string message)
     {
-      traceSource.TraceEvent(TraceEventType.Information, Thread.CurrentThread.ManagedThreadId, Format(format, args));
-    }
-
-    [Conditional("TRACE")]
-    public static void Verbose(string format, params object[] args)
-    {
-      traceSource.TraceEvent(TraceEventType.Verbose, Thread.CurrentThread.ManagedThreadId, Format(format, args));
+      traceSource.TraceEvent(TraceEventType.Verbose,
+                             Thread.CurrentThread.ManagedThreadId,
+                             string.Concat(DateTime.Now.ToString("o"),
+                                           " ",
+                                           message));
     }
 
     [Conditional("TRACE")]
     public static void Log(Exception ex)
     {
-      traceSource.TraceEvent(TraceEventType.Error, Thread.CurrentThread.ManagedThreadId, Format("EXCEPTION{0}{1}", Environment.NewLine, ex));
+      traceSource.TraceEvent(TraceEventType.Error,
+                             Thread.CurrentThread.ManagedThreadId,
+                             string.Concat(DateTime.Now.ToString("o"),
+                                           " EXCEPTION",
+                                           Environment.NewLine,
+                                           ex));
     }
 
     [Conditional("TRACE")]
-    public static void Log(IPopTransaction transaction, string format, params object[] args)
+    public static void Log(IPopTransaction transaction, string message)
     {
-      Verbose("CID:{0} {1}: {2}",
-              transaction.Connection.Id,
-              transaction.GetType().Name.Replace("Transaction", string.Empty),
-              args == null ? format : string.Format(format, args));
+      Verbose(string.Concat("CID:",
+                            transaction.Connection.Id,
+                            " ",
+                            transaction.GetType().Name.Replace("Transaction", string.Empty),
+                            ": ",
+                            message));
     }
 
     [Conditional("TRACE")]
@@ -77,26 +87,33 @@ namespace Smdn.Net.Pop3.Client {
         args.AppendFormat("'{0}'=>'{1}'; ", p.Key, p.Value);
       }
 
-      Log(transaction,
-          args.ToString(),
-          null);
+      Log(transaction, args.ToString());
     }
 
     [Conditional("TRACE")]
     public static void LogResponse(IPopTransaction transaction)
     {
-      Log(transaction,
-          "{0} {1}",
-          transaction.Result.Code,
-          transaction.Result.ResultText);
+      Log(transaction, string.Concat(transaction.Result.Code,
+                                     " ",
+                                     transaction.Result.ResultText));
+    }
+
+    [Conditional("TRACE")]
+    public static void Log(PopSession session, string message)
+    {
+      Info(string.Concat("CID:",
+                         session.Id.HasValue ? session.Id.Value.ToString() : "-",
+                         " ",
+                         message));
     }
 
     [Conditional("TRACE")]
     public static void Log(PopSession session, string format, params object[] args)
     {
-      Info("CID:{0} {1}",
-           session.Id.HasValue ? session.Id.Value.ToString() :  "-",
-           args == null ? format : string.Format(format, args));
+      Info(string.Concat("CID:",
+                         session.Id.HasValue ? session.Id.Value.ToString() : "-",
+                         " ",
+                         string.Format(format, args)));
     }
   }
 }

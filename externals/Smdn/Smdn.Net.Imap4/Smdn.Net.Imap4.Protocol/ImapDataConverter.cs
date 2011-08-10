@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -304,18 +304,9 @@ namespace Smdn.Net.Imap4.Protocol {
       return ImapCapability.GetKnownOrCreate(capability.GetTextAsString());
     }
 
-    public static ImapCapabilityList ToCapability(ImapData[] list)
+    public static ImapCapabilitySet ToCapability(ImapData[] list)
     {
-      var capabilities = new ImapCapabilityList();
-
-      foreach (var data in list) {
-        var capa = ToCapability(data);
-
-        if (!capabilities.Has(capa))
-          capabilities.Add(capa);
-      }
-
-      return capabilities;
+      return new ImapCapabilitySet(false, Array.ConvertAll<ImapData, ImapCapability>(list, ToCapability));
     }
 
     public static IImapMessageFlagSet ToFlagList(ImapData flagList)
@@ -358,7 +349,7 @@ namespace Smdn.Net.Imap4.Protocol {
 
     private static IImapMessageFlagSet ToFlags(ImapData[] flags, IImapMessageFlagSet permittedSystemFlags)
     {
-      var flagsList = new ImapMessageFlagList();
+      var flagsList = new ImapMessageFlagSet();
 
 #pragma warning disable 642
       foreach (var flag in flags) {
@@ -366,10 +357,10 @@ namespace Smdn.Net.Imap4.Protocol {
 
         var f = ImapMessageFlag.GetKnownOrCreate(flag.GetTextAsString());
 
-        if (permittedSystemFlags != null && f.IsSystemFlag && !permittedSystemFlags.Has(f))
+        if (permittedSystemFlags != null && f.IsSystemFlag && !permittedSystemFlags.Contains(f))
           //Trace.Info("ignored invalid system flag: {0}", f);
           ;
-        else if (!flagsList.Has(f))
+        else
           flagsList.Add(f);
       }
 #pragma warning restore 642
@@ -526,15 +517,12 @@ namespace Smdn.Net.Imap4.Protocol {
                           ; Selectability flags; only one per LIST response
       */
 
-      var flags = new ImapMailboxFlagList();
+      var flags = new ImapMailboxFlagSet();
 
       foreach (var data in list) {
         ExceptionIfInvalidFormat(data, ImapDataFormat.Text);
 
-        var flag = ImapMailboxFlag.GetKnownOrCreate(data.GetTextAsString());
-
-        if (!flags.Has(flag))
-          flags.Add(flag);
+        flags.Add(ImapMailboxFlag.GetKnownOrCreate(data.GetTextAsString()));
       }
 
       return flags.AsReadOnly();
@@ -1015,7 +1003,7 @@ namespace Smdn.Net.Imap4.Protocol {
       return ToSequenceSet(false, sequenceSet);
     }
 
-    private static readonly ByteString seqNumberWildcard = new ByteString((byte)'*');
+    private static readonly ByteString seqNumberWildcard = ByteString.CreateImmutable((byte)'*');
 
     public static ImapSequenceSet ToSequenceSet(bool uid, ImapData sequenceSet)
     {

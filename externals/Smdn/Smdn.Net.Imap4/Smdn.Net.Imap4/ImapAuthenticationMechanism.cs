@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -49,7 +49,7 @@ namespace Smdn.Net.Imap4 {
   //       => handles server response types
 
   public sealed class ImapAuthenticationMechanism : ImapStringEnum, IImapExtension {
-    public static readonly ImapStringEnumList<ImapAuthenticationMechanism> AllMechanisms;
+    public static readonly ImapStringEnumSet<ImapAuthenticationMechanism> AllMechanisms;
 
     public static readonly ImapAuthenticationMechanism KerberosV4
                   = CreateSaslMechanism(SaslMechanisms.KerberosV4);
@@ -99,7 +99,7 @@ namespace Smdn.Net.Imap4 {
 
     static ImapAuthenticationMechanism()
     {
-      AllMechanisms = CreateDefinedConstantsList<ImapAuthenticationMechanism>();
+      AllMechanisms = CreateDefinedConstantsSet<ImapAuthenticationMechanism>();
     }
 
     private static ImapAuthenticationMechanism CreateSaslMechanism(string saslMechanismName)
@@ -110,15 +110,21 @@ namespace Smdn.Net.Imap4 {
 
     public static ImapAuthenticationMechanism GetKnownOrCreate(string mechanismName)
     {
-      if (AllMechanisms.Has(mechanismName))
-        return AllMechanisms[mechanismName];
+      ImapAuthenticationMechanism mechanism;
+
+      if (AllMechanisms.TryGet(mechanismName, out mechanism))
+        return mechanism;
       else
         //Trace.Verbose("unknown authentication mechanism: {0}", mechanismName);
         return new ImapAuthenticationMechanism(mechanismName);
     }
 
-    public ImapCapability RequiredCapability {
-      get; private set;
+    public IEnumerable<ImapCapability> RequiredCapabilities {
+      get
+      {
+        if (requiredCapability != null)
+          yield return requiredCapability;
+      }
     }
 
     public ImapAuthenticationMechanism(string mechanismName)
@@ -129,10 +135,9 @@ namespace Smdn.Net.Imap4 {
     public ImapAuthenticationMechanism(string mechanismName, ImapCapability requiredCapability)
       : base(mechanismName)
     {
-      if (mechanismName.Length == 0)
-        throw new ArgumentException("invalid name", "mechanismName");
-
-      this.RequiredCapability = requiredCapability;
+      this.requiredCapability = requiredCapability;
     }
+
+    private readonly ImapCapability requiredCapability;
   }
 }

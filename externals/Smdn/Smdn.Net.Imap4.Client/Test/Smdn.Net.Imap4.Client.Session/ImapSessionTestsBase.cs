@@ -4,158 +4,260 @@ using NUnit.Framework;
 
 namespace Smdn.Net.Imap4.Client.Session {
   public abstract class ImapSessionTestsBase {
-    [SetUp]
-    public void Setup()
+    private class SessionContext : IDisposable {
+      public ImapPseudoServer Server {
+        get; private set;
+      }
+
+      public ImapSession Session {
+        get; private set;
+      }
+
+      public Uri ExpectedAuthority {
+        get; private set;
+      }
+
+      public SessionContext()
+      {
+        Server = new ImapPseudoServer();
+        Server.Start();
+      }
+
+      public void Dispose()
+      {
+        if (Server != null) {
+          Server.EnqueueResponse("* BYE Logging out\r\n");
+          Server.Dispose();
+          Server = null;
+        }
+
+        if (Session != null) {
+          (Session as IDisposable).Dispose();
+          Session = null;
+        }
+      }
+
+      internal void SetSession(ImapSession session)
+      {
+        this.Session = session;
+      }
+
+      internal void SetExpectedAuthority(Uri authority)
+      {
+        this.ExpectedAuthority = authority;
+      }
+
+      public const string UserName = "imapuser";
+      public const string Password = "password";
+    }
+
+    protected ImapPseudoServer CreateServer()
     {
-      server = new ImapPseudoServer();
+      var server = new ImapPseudoServer();
+
       server.Start();
 
-      host = server.ServerEndPoint.Address.ToString();
-      port = server.ServerEndPoint.Port;
-
-      credential = new NetworkCredential(username, password, host);
-      uri = new Uri(string.Format("{0}://{1}@{2}:{3}",
-                                  ImapUri.UriSchemeImap,
-                                  username,
-                                  host,
-                                  port));
+      return server;
     }
 
-    [TearDown]
-    public void TearDown()
+    private void Connect(string[] capabilities, Action<SessionContext> action)
     {
-      server.EnqueueResponse("* BYE Logging out\r\n");
-      server.Stop();
+      using (var ctx = new SessionContext()) {
+        var capa = (capabilities == null || capabilities.Length == 0)
+          ? string.Empty
+          : string.Format(" [CAPABILITY IMAP4REV1 {0}]", string.Join(" ", capabilities));
+
+        ctx.Server.EnqueueResponse(string.Format("* OK{0} ImapPseudoServer ready\r\n", capa));
+
+        ctx.SetSession(new ImapSession(ctx.Server.Host, ctx.Server.Port));
+
+        action(ctx);
+      }
     }
 
-    protected int port;
-    protected string host;
-    protected Uri uri;
-    protected const string username = "imapuser";
-    protected const string password = "password";
-    protected NetworkCredential credential;
-
-    protected ImapPseudoServer server;
-
-    protected ImapSession Connect(params string[] capabilities)
+    protected void Connect(Action<ImapSession> action)
     {
-      var capa = (capabilities == null || capabilities.Length == 0)
-        ? string.Empty
-        : string.Format(" [CAPABILITY IMAP4REV1 {0}]", string.Join(" ", capabilities));
-
-      server.EnqueueResponse(string.Format("* OK{0} ImapPseudoServer ready\r\n", capa));
-
-      return new ImapSession(host, port);
+      Connect((string[])null, delegate(SessionContext ctx) {
+        action(ctx.Session);
+      });
     }
 
-    protected ImapSession Authenticate(params string[] additionalCapabilities)
+    protected void Connect(string[] capabilities, Action<ImapSession> action)
     {
-      // greeting and login transaction
-      var session = Connect();
-
-      server.EnqueueResponse("0000 OK authenticated\r\n");
-
-      session.Login(credential);
-
-      Assert.AreEqual(new Uri(string.Format("imap://{0}@{1}:{2}/", username, host, port)), session.Authority);
-
-      server.DequeueRequest();
-
-      // CAPABILITY transaction
-      server.EnqueueResponse(string.Format("* CAPABILITY {0} IMAP4rev1\r\n", string.Join(" ", additionalCapabilities)) +
-                             "0001 OK CAPABILITY completed\r\n");
-
-      session.Capability();
-
-      server.DequeueRequest();
-
-      return session;
+      Connect(capabilities, delegate(SessionContext ctx) {
+        action(ctx.Session);
+      });
     }
 
-    protected ImapSession SelectMailbox(params string[] additionalCapabilities)
+    protected void Connect(Action<ImapSession, ImapPseudoServer> action)
     {
-      return SelectMailbox(15, additionalCapabilities);
+      Connect((string[])null, delegate(SessionContext ctx) {
+        action(ctx.Session, ctx.Server);
+      });
     }
 
-    protected ImapSession SelectMailbox(int existMessageCount, params string[] additionalCapabilities)
+    protected void Connect(string[] capabilities, Action<ImapSession, ImapPseudoServer> action)
     {
-      // greeting and login transaction
-      var session = Connect();
+      Connect(capabilities, delegate(SessionContext ctx) {
+        action(ctx.Session, ctx.Server);
+      });
+    }
 
-      server.EnqueueResponse("0000 OK authenticated\r\n");
+    protected void Authenticate(Action<ImapSession, ImapPseudoServer> action)
+    {
+      Authenticate((string[])null, delegate(SessionContext ctx) {
+        action(ctx.Session, ctx.Server);
+      });
+    }
 
-      session.Login(credential);
+    protected void Authenticate(string[] additionalCapabilities, Action<ImapSession, ImapPseudoServer> action)
+    {
+      Authenticate(additionalCapabilities, delegate(SessionContext ctx) {
+        action(ctx.Session, ctx.Server);
+      });
+    }
 
-      var expectedAuthority = new Uri(string.Format("imap://{0};AUTH=LOGIN@{1}:{2}/", username, host, port));
+    protected void Authenticate(Action<ImapSession, ImapPseudoServer, Uri> action)
+    {
+      Authenticate((string[])null, delegate(SessionContext ctx) {
+        action(ctx.Session, ctx.Server, ctx.ExpectedAuthority);
+      });
+    }
 
-      Assert.AreEqual(expectedAuthority, session.Authority);
+    protected void Authenticate(string[] additionalCapabilities, Action<ImapSession, ImapPseudoServer, Uri> action)
+    {
+      Authenticate(additionalCapabilities, delegate(SessionContext ctx) {
+        action(ctx.Session, ctx.Server, ctx.ExpectedAuthority);
+      });
+    }
 
-      server.DequeueRequest();
+    private void Authenticate(string[] additionalCapabilities, Action<SessionContext> action)
+    {
+      Connect((string[])null, delegate(SessionContext ctx) {
+        ctx.Server.EnqueueResponse("0000 OK authenticated\r\n");
 
-      // CAPABILITY transaction
-      if (additionalCapabilities.Length == 0)
-        server.EnqueueResponse("* CAPABILITY IMAP4rev1\r\n" +
+        ctx.Session.Login(new NetworkCredential(SessionContext.UserName, SessionContext.Password));
+
+        ctx.SetExpectedAuthority(new Uri(string.Format("{0}://{1}@{2}/",
+                                                       ImapUri.UriSchemeImap,
+                                                       SessionContext.UserName,
+                                                       ctx.Server.HostPort)));
+
+        Assert.AreEqual(ctx.ExpectedAuthority, ctx.Session.Authority);
+
+        ctx.Server.DequeueRequest();
+
+        // CAPABILITY transaction
+        if (additionalCapabilities == null)
+          additionalCapabilities = new string[0];
+
+        ctx.Server.EnqueueResponse(string.Format("* CAPABILITY {0} IMAP4rev1\r\n", string.Join(" ", additionalCapabilities)) +
                                "0001 OK CAPABILITY completed\r\n");
-      else
-        server.EnqueueResponse(string.Format("* CAPABILITY IMAP4rev1 {0}\r\n", string.Join(" ", additionalCapabilities)) +
-                               "0001 OK CAPABILITY completed\r\n");
 
-      session.Capability();
+        ctx.Session.Capability();
 
-      server.DequeueRequest();
+        ctx.Server.DequeueRequest();
 
-      // LIST transaction
-      server.EnqueueResponse("* LIST () \".\" \"INBOX\"\r\n" +
-                             "0002 OK LIST completed\r\n");
-
-      ImapMailbox[] mailboxes;
-
-      session.List(out mailboxes);
-
-      server.DequeueRequest();
-
-      Assert.AreEqual(new Uri(expectedAuthority, "./INBOX"), mailboxes[0].Url);
-
-      // SELECT transaction
-      Assert.IsNull(session.SelectedMailbox);
-
-      server.EnqueueResponse("* FLAGS (\\Answered \\Flagged \\Deleted \\Seen \\Draft custom1 custom2)\r\n" +
-                             "* OK [PERMANENTFLAGS (\\Answered \\Flagged \\Deleted \\Seen \\Draft custom1 \\*)] Flags permitted\r\n" +
-                             string.Format("* {0} EXISTS\r\n", existMessageCount) +
-                             "* 2 RECENT\r\n" +
-                             "* OK [UIDVALIDITY 1202674433] UIDs valid\r\n" +
-                             "* OK [UIDNEXT 16]\r\n" +
-                             "* OK [UNSEEN 13]\r\n" +
-                             "0003 OK [READ-WRITE] SELECT completed\r\n");
-
-      session.Select(mailboxes[0]);
-
-      Assert.AreEqual(new Uri(expectedAuthority, "./INBOX;UIDVALIDITY=1202674433"), mailboxes[0].Url);
-      Assert.AreEqual(mailboxes[0], session.SelectedMailbox);
-
-      server.DequeueRequest();
-
-      session.HandlesIncapableAsException = true;
-
-      return session;
+        action(ctx);
+      });
     }
 
-    protected void CloseMailbox(ImapSession session)
+    private const int defaultExistMessageCount = 15;
+
+    protected void SelectMailbox(Func<ImapSession, ImapPseudoServer, int> func)
     {
-      CloseMailbox(session, "0005");
+      SelectMailbox(defaultExistMessageCount, (string[])null, delegate(SessionContext ctx) {
+        return func(ctx.Session, ctx.Server);
+      });
     }
 
-    protected void CloseMailbox(ImapSession session, string tag)
+    protected void SelectMailbox(int existMessageCount, Func<ImapSession, ImapPseudoServer, int> func)
     {
-      // CLOSE transaction
-      server.EnqueueResponse(tag + " OK CLOSE completed\r\n");
+      SelectMailbox(existMessageCount, (string[])null, delegate(SessionContext ctx) {
+        return func(ctx.Session, ctx.Server);
+      });
+    }
 
-      session.Close();
+    protected void SelectMailbox(string[] additionalCapabilities, Func<ImapSession, ImapPseudoServer, int> func)
+    {
+      SelectMailbox(defaultExistMessageCount, additionalCapabilities, delegate(SessionContext ctx) {
+        return func(ctx.Session, ctx.Server);
+      });
+    }
 
-      Assert.AreEqual(tag + " CLOSE\r\n",
-                      server.DequeueRequest());
+    protected void SelectMailbox(int existMessageCount, string[] additionalCapabilities, Func<ImapSession, ImapPseudoServer, int> func)
+    {
+      SelectMailbox(existMessageCount, additionalCapabilities, delegate(SessionContext ctx) {
+        return func(ctx.Session, ctx.Server);
+      });
+    }
 
-      session.Disconnect(false);
+    protected void SelectMailbox(Func<ImapSession, ImapPseudoServer, Uri, int> func)
+    {
+      SelectMailbox(defaultExistMessageCount, (string[])null, delegate(SessionContext ctx) {
+        return func(ctx.Session, ctx.Server, ctx.ExpectedAuthority);
+      });
+    }
+
+    protected void SelectMailbox(string[] additionalCapabilities, Func<ImapSession, ImapPseudoServer, Uri, int> func)
+    {
+      SelectMailbox(defaultExistMessageCount, additionalCapabilities, delegate(SessionContext ctx) {
+        return func(ctx.Session, ctx.Server, ctx.ExpectedAuthority);
+      });
+    }
+
+    private void SelectMailbox(int existMessageCount, string[] additionalCapabilities, Func<SessionContext, int> func)
+    {
+      Authenticate(additionalCapabilities, delegate(SessionContext ctx) {
+        // LIST transaction
+        ctx.Server.EnqueueResponse("* LIST () \".\" \"INBOX\"\r\n" +
+                               "0002 OK LIST completed\r\n");
+
+        ImapMailbox[] mailboxes;
+
+        ctx.Session.List(out mailboxes);
+
+        ctx.Server.DequeueRequest();
+
+        Assert.AreEqual(new Uri(ctx.ExpectedAuthority, "./INBOX"), mailboxes[0].Url);
+
+        // SELECT transaction
+        Assert.IsNull(ctx.Session.SelectedMailbox);
+
+        ctx.Server.EnqueueResponse("* FLAGS (\\Answered \\Flagged \\Deleted \\Seen \\Draft custom1 custom2)\r\n" +
+                                   "* OK [PERMANENTFLAGS (\\Answered \\Flagged \\Deleted \\Seen \\Draft custom1 \\*)] Flags permitted\r\n" +
+                                   string.Format("* {0} EXISTS\r\n", existMessageCount) +
+                                   "* 2 RECENT\r\n" +
+                                   "* OK [UIDVALIDITY 1202674433] UIDs valid\r\n" +
+                                   "* OK [UIDNEXT 16]\r\n" +
+                                   "* OK [UNSEEN 13]\r\n" +
+                                   "0003 OK [READ-WRITE] SELECT completed\r\n");
+
+        ctx.Session.Select(mailboxes[0]);
+
+        Assert.AreEqual(new Uri(ctx.ExpectedAuthority, "./INBOX;UIDVALIDITY=1202674433"), mailboxes[0].Url);
+        Assert.AreEqual(mailboxes[0], ctx.Session.SelectedMailbox);
+
+        ctx.Server.DequeueRequest();
+
+        ctx.Session.HandlesIncapableAsException = true;
+
+        var sentCommandCount = func(ctx);
+
+        if (0 <= sentCommandCount) {
+          var tag = (4 + sentCommandCount).ToString("D4");
+
+          // CLOSE transaction
+          ctx.Server.EnqueueResponse(tag + " OK CLOSE completed\r\n");
+
+          Assert.IsTrue((bool)ctx.Session.Close());
+
+          Assert.AreEqual(tag + " CLOSE\r\n",
+                          ctx.Server.DequeueRequest());
+
+          ctx.Session.Disconnect(false);
+        }
+      });
     }
   }
 }

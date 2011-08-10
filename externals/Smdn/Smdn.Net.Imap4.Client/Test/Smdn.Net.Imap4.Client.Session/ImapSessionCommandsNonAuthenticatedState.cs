@@ -21,27 +21,29 @@ namespace Smdn.Net.Imap4.Client.Session {
     [Test]
     public void TestLogin()
     {
-      server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1] ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1] ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port)) {
-        session.HandlesIncapableAsException = true;
+        using (var session = new ImapSession(server.Host, server.Port)) {
+          session.HandlesIncapableAsException = true;
 
-        server.EnqueueResponse("0000 NO incorrect\r\n");
+          server.EnqueueResponse("0000 NO incorrect\r\n");
 
-        Assert.IsFalse((bool)session.Login(credential));
+          Assert.IsFalse((bool)session.Login(new NetworkCredential("user", "pass")));
 
-        Assert.AreEqual(string.Format("0000 LOGIN {0} {1}\r\n", username, password),
-                        server.DequeueRequest());
+          Assert.AreEqual("0000 LOGIN user pass\r\n",
+                          server.DequeueRequest());
 
-        server.EnqueueResponse("0001 OK authenticated\r\n");
+          server.EnqueueResponse("0001 OK authenticated\r\n");
 
-        Assert.IsTrue((bool)session.Login(credential));
+          Assert.IsTrue((bool)session.Login(new NetworkCredential("user", "pass")));
 
-        Assert.AreEqual(string.Format("0001 LOGIN {0} {1}\r\n", username, password),
-                        server.DequeueRequest());
+          Assert.AreEqual("0001 LOGIN user pass\r\n",
+                          server.DequeueRequest());
 
-        Assert.AreEqual(new Uri(string.Format("imap://{0}@{1}:{2}/", username, host, port)), session.Authority);
-        Assert.AreEqual(ImapSessionState.Authenticated, session.State);
+          Assert.AreEqual(new Uri(string.Format("imap://user@{0}:{1}/", server.Host, server.Port)), session.Authority);
+          Assert.AreEqual(ImapSessionState.Authenticated, session.State);
+        }
       }
     }
 
@@ -59,64 +61,70 @@ namespace Smdn.Net.Imap4.Client.Session {
 
     private void LoginSelectAppropriateCredential(bool specifyUsername)
     {
-      server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1] ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1] ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port)) {
-        session.HandlesIncapableAsException = true;
+        using (var session = new ImapSession(server.Host, server.Port)) {
+          session.HandlesIncapableAsException = true;
 
-        var credentials = new CredentialCache();
+          var credentials = new CredentialCache();
 
-        credentials.Add("imap.example.net", 143, "LOGIN", new NetworkCredential("user", "pass1"));
-        credentials.Add(server.Host, server.Port, "LOGIN", new NetworkCredential("user", "pass2"));
-        credentials.Add(server.Host, server.Port, "PLAIN", new NetworkCredential("user", "pass3"));
-        credentials.Add(server.Host, server.Port, string.Empty, new NetworkCredential("user", "pass4"));
+          credentials.Add("imap.example.net", 143, "LOGIN", new NetworkCredential("user", "pass1"));
+          credentials.Add(server.Host, server.Port, "LOGIN", new NetworkCredential("user", "pass2"));
+          credentials.Add(server.Host, server.Port, "PLAIN", new NetworkCredential("user", "pass3"));
+          credentials.Add(server.Host, server.Port, string.Empty, new NetworkCredential("user", "pass4"));
 
-        server.EnqueueResponse("0000 OK authenticated\r\n");
+          server.EnqueueResponse("0000 OK authenticated\r\n");
 
-        if (specifyUsername)
-          Assert.IsTrue((bool)session.Login(credentials, "user"));
-        else
-          Assert.IsTrue((bool)session.Login(credentials));
+          if (specifyUsername)
+            Assert.IsTrue((bool)session.Login(credentials, "user"));
+          else
+            Assert.IsTrue((bool)session.Login(credentials));
 
-        Assert.AreEqual(string.Format("0000 LOGIN user pass4\r\n"),
-                        server.DequeueRequest());
+          Assert.AreEqual(string.Format("0000 LOGIN user pass4\r\n"),
+                          server.DequeueRequest());
 
-        Assert.AreEqual(new Uri(string.Format("imap://user@{0}:{1}/", host, port)), session.Authority);
-        Assert.AreEqual(ImapSessionState.Authenticated, session.State);
+          Assert.AreEqual(new Uri(string.Format("imap://user@{0}:{1}/", server.Host, server.Port)), session.Authority);
+          Assert.AreEqual(ImapSessionState.Authenticated, session.State);
+        }
       }
     }
 
     [Test]
     public void TestLoginSelectAppropriateCredentialNotFound()
     {
-      server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1] ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1] ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port)) {
-        session.HandlesIncapableAsException = true;
+        using (var session = new ImapSession(server.Host, server.Port)) {
+          session.HandlesIncapableAsException = true;
 
-        var credentials = new CredentialCache();
+          var credentials = new CredentialCache();
 
-        credentials.Add("imap.example.net", 143, "LOGIN", new NetworkCredential("user", "pass1"));
-        credentials.Add(server.Host, server.Port, "LOGIN", new NetworkCredential("user", "pass2"));
-        credentials.Add(server.Host, server.Port, "PLAIN", new NetworkCredential("user", "pass3"));
-        credentials.Add(server.Host, server.Port, string.Empty, new NetworkCredential("user", "pass4"));
+          credentials.Add("imap.example.net", 143, "LOGIN", new NetworkCredential("user", "pass1"));
+          credentials.Add(server.Host, server.Port, "LOGIN", new NetworkCredential("user", "pass2"));
+          credentials.Add(server.Host, server.Port, "PLAIN", new NetworkCredential("user", "pass3"));
+          credentials.Add(server.Host, server.Port, string.Empty, new NetworkCredential("user", "pass4"));
 
-        var result = session.Login(credentials, "xxxx");
+          var result = session.Login(credentials, "xxxx");
 
-        Assert.IsFalse((bool)result);
-        Assert.AreEqual(ImapCommandResultCode.RequestError, result.Code);
-        Assert.AreEqual(ImapSessionState.NotAuthenticated, session.State);
+          Assert.IsFalse((bool)result);
+          Assert.AreEqual(ImapCommandResultCode.RequestError, result.Code);
+          Assert.AreEqual(ImapSessionState.NotAuthenticated, session.State);
+        }
       }
     }
 
     [Test]
     public void TestLoginCredentialNotFound()
     {
-      server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1] ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1] ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port)) {
-        Assert.IsFalse((bool)session.Login(new NullCredential()));
-        Assert.IsFalse((bool)session.Login(new NullCredential(), "user"));
+        using (var session = new ImapSession(server.Host, server.Port)) {
+          Assert.IsFalse((bool)session.Login(new NullCredential()));
+          Assert.IsFalse((bool)session.Login(new NullCredential(), "user"));
+        }
       }
     }
 
@@ -136,69 +144,77 @@ namespace Smdn.Net.Imap4.Client.Session {
 
     private void LoginCredentialPropertyNull(ICredentialsByHost credential, string expectedArgs)
     {
-      server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1] ImapSimulatedServer ready\r\n");
-      server.EnqueueResponse("0000 NO failed\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1] ImapSimulatedServer ready\r\n");
+        server.EnqueueResponse("0000 NO failed\r\n");
 
-      using (var session = new ImapSession(host, port)) {
-        Assert.IsFalse((bool)session.Login(credential));
+        using (var session = new ImapSession(server.Host, server.Port)) {
+          Assert.IsFalse((bool)session.Login(credential));
 
-        Assert.AreEqual(string.Format("0000 LOGIN {0}\r\n", expectedArgs),
-                        server.DequeueRequest());
+          Assert.AreEqual(string.Format("0000 LOGIN {0}\r\n", expectedArgs),
+                          server.DequeueRequest());
+        }
       }
     }
 
     [Test]
     public void TestLoginReissueCapabilityDataAdvertised()
     {
-      server.EnqueueResponse("* OK ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port)) {
-        server.EnqueueResponse("* CAPABILITY IMAP4rev1\r\n" +
-                               "0000 OK authenticated\r\n");
+        using (var session = new ImapSession(server.Host, server.Port)) {
+          server.EnqueueResponse("* CAPABILITY IMAP4rev1\r\n" +
+                                 "0000 OK authenticated\r\n");
 
-        Assert.IsTrue((bool)session.Login(credential, true));
+          Assert.IsTrue((bool)session.Login(new NetworkCredential("user", "pass"), true));
 
-        StringAssert.StartsWith("0000 LOGIN ", server.DequeueRequest());
+          StringAssert.StartsWith("0000 LOGIN ", server.DequeueRequest());
 
-        Assert.AreEqual(1, session.ServerCapabilities.Count);
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Imap4Rev1));
+          Assert.AreEqual(1, session.ServerCapabilities.Count);
+          Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Imap4Rev1));
+        }
       }
     }
 
     [Test]
     public void TestLoginReissueCapabilityResponseCodeAdvertised()
     {
-      server.EnqueueResponse("* OK ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port)) {
-        server.EnqueueResponse("0000 OK [CAPABILITY IMAP4rev1] authenticated\r\n");
+        using (var session = new ImapSession(server.Host, server.Port)) {
+          server.EnqueueResponse("0000 OK [CAPABILITY IMAP4rev1] authenticated\r\n");
 
-        Assert.IsTrue((bool)session.Login(credential, true));
+          Assert.IsTrue((bool)session.Login(new NetworkCredential("user", "pass"), true));
 
-        StringAssert.StartsWith("0000 LOGIN ", server.DequeueRequest());
+          StringAssert.StartsWith("0000 LOGIN ", server.DequeueRequest());
 
-        Assert.AreEqual(1, session.ServerCapabilities.Count);
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Imap4Rev1));
+          Assert.AreEqual(1, session.ServerCapabilities.Count);
+          Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Imap4Rev1));
+        }
       }
     }
 
     [Test]
     public void TestLoginReissueCapabilityNotAdvertised()
     {
-      server.EnqueueResponse("* OK ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port)) {
-        server.EnqueueResponse("0000 OK authenticated\r\n");
-        server.EnqueueResponse("* CAPABILITY IMAP4rev1\r\n" +
-                               "0001 OK done\r\n");
+        using (var session = new ImapSession(server.Host, server.Port)) {
+          server.EnqueueResponse("0000 OK authenticated\r\n");
+          server.EnqueueResponse("* CAPABILITY IMAP4rev1\r\n" +
+                                 "0001 OK done\r\n");
 
-        Assert.IsTrue((bool)session.Login(credential, true));
+          Assert.IsTrue((bool)session.Login(new NetworkCredential("user", "pass"), true));
 
-        StringAssert.StartsWith("0000 LOGIN ", server.DequeueRequest());
-        Assert.AreEqual("0001 CAPABILITY\r\n", server.DequeueRequest());
+          StringAssert.StartsWith("0000 LOGIN ", server.DequeueRequest());
+          Assert.AreEqual("0001 CAPABILITY\r\n", server.DequeueRequest());
 
-        Assert.AreEqual(1, session.ServerCapabilities.Count);
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Imap4Rev1));
+          Assert.AreEqual(1, session.ServerCapabilities.Count);
+          Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Imap4Rev1));
+        }
       }
     }
 
@@ -206,29 +222,33 @@ namespace Smdn.Net.Imap4.Client.Session {
     [ExpectedException(typeof(ImapIncapableException))]
     public void TestLoginDisabled()
     {
-      server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 LOGINDISABLED] ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 LOGINDISABLED] ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port)) {
-        session.Login(credential);
+        using (var session = new ImapSession(server.Host, server.Port)) {
+          session.Login(new NetworkCredential("user", "pass"));
+        }
       }
     }
 
     [Test]
     public void TestLoginHomerServerReferralAsException()
     {
-      server.EnqueueResponse("* OK ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port, true)) {
-        server.EnqueueResponse("0000 NO [REFERRAL IMAP://MIKE@SERVER2/] Specified user is invalid on this server. Try SERVER2.\r\n");
+        using (var session = new ImapSession(server.Host, server.Port, true)) {
+          server.EnqueueResponse("0000 NO [REFERRAL IMAP://MIKE@SERVER2/] Specified user is invalid on this server. Try SERVER2.\r\n");
 
-        try {
-          session.Login(credential);
+          try {
+            session.Login(new NetworkCredential("user", "pass"));
 
-          Assert.Fail("logged in without exception");
-        }
-        catch (ImapLoginReferralException ex) {
-          Assert.IsTrue(ex.Message.Contains("Specified user is invalid on this server. Try SERVER2."));
-          Assert.AreEqual(new Uri("IMAP://MIKE@SERVER2/"), ex.ReferToUri);
+            Assert.Fail("logged in without exception");
+          }
+          catch (ImapLoginReferralException ex) {
+            Assert.IsTrue(ex.Message.Contains("Specified user is invalid on this server. Try SERVER2."));
+            Assert.AreEqual(new Uri("IMAP://MIKE@SERVER2/"), ex.ReferToUri);
+          }
         }
       }
     }
@@ -236,31 +256,35 @@ namespace Smdn.Net.Imap4.Client.Session {
     [Test]
     public void TestLoginHomerServerReferralAsError()
     {
-      server.EnqueueResponse("* OK ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port, false)) {
-        server.EnqueueResponse("0000 NO [REFERRAL IMAP://MIKE@SERVER2/] Specified user is invalid on this server. Try SERVER2.\r\n");
+        using (var session = new ImapSession(server.Host, server.Port, false)) {
+          server.EnqueueResponse("0000 NO [REFERRAL IMAP://MIKE@SERVER2/] Specified user is invalid on this server. Try SERVER2.\r\n");
 
-        Assert.IsFalse((bool)session.Login(credential));
+          Assert.IsFalse((bool)session.Login(new NetworkCredential("user", "pass")));
+        }
       }
     }
 
     [Test]
     public void TestLoginMailboxReferralAsException()
     {
-      server.EnqueueResponse("* OK ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port, true)) {
-        server.EnqueueResponse("0000 OK [REFERRAL IMAP://MATTHEW@SERVER2/] Specified user's personal mailboxes located on Server2, but public mailboxes are available.\r\n");
+        using (var session = new ImapSession(server.Host, server.Port, true)) {
+          server.EnqueueResponse("0000 OK [REFERRAL IMAP://MATTHEW@SERVER2/] Specified user's personal mailboxes located on Server2, but public mailboxes are available.\r\n");
 
-        try {
-          session.Login(credential);
+          try {
+            session.Login(new NetworkCredential("user", "pass"));
 
-          Assert.Fail("logged in without exception");
-        }
-        catch (ImapLoginReferralException ex) {
-          Assert.IsTrue(ex.Message.Contains("Specified user's personal mailboxes located on Server2, but public mailboxes are available."));
-          Assert.AreEqual(new Uri("IMAP://MATTHEW@SERVER2/"), ex.ReferToUri);
+            Assert.Fail("logged in without exception");
+          }
+          catch (ImapLoginReferralException ex) {
+            Assert.IsTrue(ex.Message.Contains("Specified user's personal mailboxes located on Server2, but public mailboxes are available."));
+            Assert.AreEqual(new Uri("IMAP://MATTHEW@SERVER2/"), ex.ReferToUri);
+          }
         }
       }
     }
@@ -268,31 +292,35 @@ namespace Smdn.Net.Imap4.Client.Session {
     [Test]
     public void TestLoginMailboxReferralAsError()
     {
-      server.EnqueueResponse("* OK ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port, false)) {
-        server.EnqueueResponse("0000 OK [REFERRAL IMAP://MATTHEW@SERVER2/] Specified user's personal mailboxes located on Server2, but public mailboxes are available.\r\n");
+        using (var session = new ImapSession(server.Host, server.Port, false)) {
+          server.EnqueueResponse("0000 OK [REFERRAL IMAP://MATTHEW@SERVER2/] Specified user's personal mailboxes located on Server2, but public mailboxes are available.\r\n");
 
-        Assert.IsTrue((bool)session.Login(credential));
+          Assert.IsTrue((bool)session.Login(new NetworkCredential("user", "pass")));
+        }
       }
     }
 
     [Test]
     public void TestAuthenticateMailboxReferralAsException()
     {
-      server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=LOGIN LOGIN-REFERRALS] ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=LOGIN LOGIN-REFERRALS] ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port, true)) {
-        server.EnqueueResponse("0000 NO [REFERRAL IMAP://user;AUTH=GSSAPI@SERVER2/] Specified user is invalid on this server. Try SERVER2.\r\n");
+        using (var session = new ImapSession(server.Host, server.Port, true)) {
+          server.EnqueueResponse("0000 NO [REFERRAL IMAP://user;AUTH=GSSAPI@SERVER2/] Specified user is invalid on this server. Try SERVER2.\r\n");
 
-        try {
-          session.Authenticate(credential, ImapAuthenticationMechanism.Login);
+          try {
+            session.Authenticate(new NetworkCredential("user", "pass"), ImapAuthenticationMechanism.Login);
 
-          Assert.Fail("authentcated without exception");
-        }
-        catch (ImapLoginReferralException ex) {
-          Assert.IsTrue(ex.Message.Contains("Specified user is invalid on this server. Try SERVER2."));
-          Assert.AreEqual(new Uri("IMAP://user;AUTH=GSSAPI@SERVER2/"), ex.ReferToUri);
+            Assert.Fail("authentcated without exception");
+          }
+          catch (ImapLoginReferralException ex) {
+            Assert.IsTrue(ex.Message.Contains("Specified user is invalid on this server. Try SERVER2."));
+            Assert.AreEqual(new Uri("IMAP://user;AUTH=GSSAPI@SERVER2/"), ex.ReferToUri);
+          }
         }
       }
     }
@@ -300,30 +328,32 @@ namespace Smdn.Net.Imap4.Client.Session {
     [Test]
     public void TestAuthenticateLogin()
     {
-      server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=LOGIN] ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=LOGIN] ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port)) {
-        server.EnqueueResponse("+ " + Convert.ToBase64String(NetworkTransferEncoding.Transfer8Bit.GetBytes("Username:")) + "\r\n");
-        server.EnqueueResponse("+ " + Convert.ToBase64String(NetworkTransferEncoding.Transfer8Bit.GetBytes("Password:")) + "\r\n");
-        server.EnqueueResponse("0000 OK authenticated\r\n");
+        using (var session = new ImapSession(server.Host, server.Port)) {
+          server.EnqueueResponse("+ " + Convert.ToBase64String(NetworkTransferEncoding.Transfer8Bit.GetBytes("Username:")) + "\r\n");
+          server.EnqueueResponse("+ " + Convert.ToBase64String(NetworkTransferEncoding.Transfer8Bit.GetBytes("Password:")) + "\r\n");
+          server.EnqueueResponse("0000 OK authenticated\r\n");
 
-        Assert.IsTrue((bool)session.Authenticate(credential, ImapAuthenticationMechanism.Login));
+          Assert.IsTrue((bool)session.Authenticate(new NetworkCredential("user", "pass"), ImapAuthenticationMechanism.Login));
 
-        Assert.AreEqual("0000 AUTHENTICATE LOGIN\r\n",
-                        server.DequeueRequest());
+          Assert.AreEqual("0000 AUTHENTICATE LOGIN\r\n",
+                          server.DequeueRequest());
 
-        var requested = server.DequeueRequest();
+          var requested = server.DequeueRequest();
 
-        Assert.AreEqual(username,
-                        NetworkTransferEncoding.Transfer8Bit.GetString(Convert.FromBase64String(requested.Substring(0, requested.Length - 2))));
+          Assert.AreEqual("user",
+                          NetworkTransferEncoding.Transfer8Bit.GetString(Convert.FromBase64String(requested.Substring(0, requested.Length - 2))));
 
-        requested = server.DequeueRequest();
+          requested = server.DequeueRequest();
 
-        Assert.AreEqual(password,
-                        NetworkTransferEncoding.Transfer8Bit.GetString(Convert.FromBase64String(requested.Substring(0, requested.Length - 2))));
+          Assert.AreEqual("pass",
+                          NetworkTransferEncoding.Transfer8Bit.GetString(Convert.FromBase64String(requested.Substring(0, requested.Length - 2))));
 
-        Assert.AreEqual(new Uri(string.Format("imap://{0};AUTH=LOGIN@{1}:{2}/", username, host, port)), session.Authority);
-        Assert.AreEqual(ImapSessionState.Authenticated, session.State);
+          Assert.AreEqual(new Uri(string.Format("imap://user;AUTH=LOGIN@{0}:{1}/", server.Host, server.Port)), session.Authority);
+          Assert.AreEqual(ImapSessionState.Authenticated, session.State);
+        }
       }
     }
 
@@ -341,107 +371,117 @@ namespace Smdn.Net.Imap4.Client.Session {
 
     private void AuthenticateSelectAppropriateCredential(bool specifyUsername)
     {
-      server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=LOGIN] ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=LOGIN] ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port)) {
-        server.EnqueueResponse("+ " + Convert.ToBase64String(NetworkTransferEncoding.Transfer8Bit.GetBytes("Username:")) + "\r\n");
-        server.EnqueueResponse("+ " + Convert.ToBase64String(NetworkTransferEncoding.Transfer8Bit.GetBytes("Password:")) + "\r\n");
-        server.EnqueueResponse("0000 OK authenticated\r\n");
+        using (var session = new ImapSession(server.Host, server.Port)) {
+          server.EnqueueResponse("+ " + Convert.ToBase64String(NetworkTransferEncoding.Transfer8Bit.GetBytes("Username:")) + "\r\n");
+          server.EnqueueResponse("+ " + Convert.ToBase64String(NetworkTransferEncoding.Transfer8Bit.GetBytes("Password:")) + "\r\n");
+          server.EnqueueResponse("0000 OK authenticated\r\n");
 
-        var credentials = new CredentialCache();
+          var credentials = new CredentialCache();
 
-        credentials.Add("imap.example.net", 143, "LOGIN", new NetworkCredential("user", "pass1"));
-        credentials.Add(server.Host, server.Port, "LOGIN", new NetworkCredential("user", "pass2"));
-        credentials.Add(server.Host, server.Port, "PLAIN", new NetworkCredential("user", "pass3"));
-        credentials.Add(server.Host, server.Port, string.Empty, new NetworkCredential("user", "pass4"));
+          credentials.Add("imap.example.net", 143, "LOGIN", new NetworkCredential("user", "pass1"));
+          credentials.Add(server.Host, server.Port, "LOGIN", new NetworkCredential("user", "pass2"));
+          credentials.Add(server.Host, server.Port, "PLAIN", new NetworkCredential("user", "pass3"));
+          credentials.Add(server.Host, server.Port, string.Empty, new NetworkCredential("user", "pass4"));
 
-        server.EnqueueResponse("0000 OK authenticated\r\n");
+          server.EnqueueResponse("0000 OK authenticated\r\n");
 
-        if (specifyUsername)
-          Assert.IsTrue((bool)session.Authenticate(credentials, "user", ImapAuthenticationMechanism.Login));
-        else
-          Assert.IsTrue((bool)session.Authenticate(credentials, ImapAuthenticationMechanism.Login));
+          if (specifyUsername)
+            Assert.IsTrue((bool)session.Authenticate(credentials, "user", ImapAuthenticationMechanism.Login));
+          else
+            Assert.IsTrue((bool)session.Authenticate(credentials, ImapAuthenticationMechanism.Login));
 
-        Assert.AreEqual("0000 AUTHENTICATE LOGIN\r\n",
-                        server.DequeueRequest());
+          Assert.AreEqual("0000 AUTHENTICATE LOGIN\r\n",
+                          server.DequeueRequest());
 
-        var requested = server.DequeueRequest();
+          var requested = server.DequeueRequest();
 
-        Assert.AreEqual("user",
-                        NetworkTransferEncoding.Transfer8Bit.GetString(Convert.FromBase64String(requested.Substring(0, requested.Length - 2))));
+          Assert.AreEqual("user",
+                          NetworkTransferEncoding.Transfer8Bit.GetString(Convert.FromBase64String(requested.Substring(0, requested.Length - 2))));
 
-        requested = server.DequeueRequest();
+          requested = server.DequeueRequest();
 
-        Assert.AreEqual("pass2",
-                        NetworkTransferEncoding.Transfer8Bit.GetString(Convert.FromBase64String(requested.Substring(0, requested.Length - 2))));
+          Assert.AreEqual("pass2",
+                          NetworkTransferEncoding.Transfer8Bit.GetString(Convert.FromBase64String(requested.Substring(0, requested.Length - 2))));
 
-        Assert.AreEqual(new Uri(string.Format("imap://user;AUTH=LOGIN@{0}:{1}/", host, port)), session.Authority);
-        Assert.AreEqual(ImapSessionState.Authenticated, session.State);
+          Assert.AreEqual(new Uri(string.Format("imap://user;AUTH=LOGIN@{0}:{1}/", server.Host, server.Port)), session.Authority);
+          Assert.AreEqual(ImapSessionState.Authenticated, session.State);
+        }
       }
     }
 
     [Test]
     public void TestAuthenticateSelectAppropriateCredentialNotFound()
     {
-      server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=LOGIN] ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=LOGIN] ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port)) {
-        var credentials = new CredentialCache();
+        using (var session = new ImapSession(server.Host, server.Port)) {
+          var credentials = new CredentialCache();
 
-        credentials.Add("imap.example.net", 143, "LOGIN", new NetworkCredential("user", "pass1"));
-        credentials.Add(server.Host, server.Port, "LOGIN", new NetworkCredential("user", "pass2"));
-        credentials.Add(server.Host, server.Port, "PLAIN", new NetworkCredential("user", "pass3"));
-        credentials.Add(server.Host, server.Port, string.Empty, new NetworkCredential("user", "pass4"));
+          credentials.Add("imap.example.net", 143, "LOGIN", new NetworkCredential("user", "pass1"));
+          credentials.Add(server.Host, server.Port, "LOGIN", new NetworkCredential("user", "pass2"));
+          credentials.Add(server.Host, server.Port, "PLAIN", new NetworkCredential("user", "pass3"));
+          credentials.Add(server.Host, server.Port, string.Empty, new NetworkCredential("user", "pass4"));
 
-        var result = session.Authenticate(credentials, "xxxx", ImapAuthenticationMechanism.Login);
+          var result = session.Authenticate(credentials, "xxxx", ImapAuthenticationMechanism.Login);
 
-        Assert.IsFalse((bool)result);
-        Assert.AreEqual(ImapCommandResultCode.RequestError, result.Code);
-        Assert.AreEqual(ImapSessionState.NotAuthenticated, session.State);
+          Assert.IsFalse((bool)result);
+          Assert.AreEqual(ImapCommandResultCode.RequestError, result.Code);
+          Assert.AreEqual(ImapSessionState.NotAuthenticated, session.State);
+        }
       }
     }
 
     [Test]
     public void TestAuthenticatePlain()
     {
-      server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=PLAIN] ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=PLAIN] ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port)) {
-        server.EnqueueResponse("+ \r\n");
-        server.EnqueueResponse("0000 OK authenticated\r\n");
+        using (var session = new ImapSession(server.Host, server.Port)) {
+          server.EnqueueResponse("+ \r\n");
+          server.EnqueueResponse("0000 OK authenticated\r\n");
 
-        Assert.IsTrue((bool)session.Authenticate(credential, ImapAuthenticationMechanism.Plain));
+          var credential = new NetworkCredential("user", "pass", server.Host);
 
-        Assert.AreEqual("0000 AUTHENTICATE PLAIN\r\n",
-                        server.DequeueRequest());
+          Assert.IsTrue((bool)session.Authenticate(credential, ImapAuthenticationMechanism.Plain));
 
-        var requested = server.DequeueRequest();
-        var userpass = NetworkTransferEncoding.Transfer8Bit.GetString(Convert.FromBase64String(requested.Substring(0, requested.Length - 2))).Split(new[] {"\0"}, StringSplitOptions.RemoveEmptyEntries);
+          Assert.AreEqual("0000 AUTHENTICATE PLAIN\r\n",
+                          server.DequeueRequest());
 
-        Assert.AreEqual(credential.Domain, userpass[0]);
-        Assert.AreEqual(credential.UserName, userpass[1]);
-        Assert.AreEqual(credential.Password, userpass[2]);
+          var requested = server.DequeueRequest();
+          var userpass = NetworkTransferEncoding.Transfer8Bit.GetString(Convert.FromBase64String(requested.Substring(0, requested.Length - 2))).Split(new[] {"\0"}, StringSplitOptions.RemoveEmptyEntries);
 
-        Assert.AreEqual(new Uri(string.Format("imap://{0};AUTH=PLAIN@{1}:{2}/", username, host, port)), session.Authority);
-        Assert.AreEqual(ImapSessionState.Authenticated, session.State);
+          Assert.AreEqual(credential.Domain, userpass[0]);
+          Assert.AreEqual(credential.UserName, userpass[1]);
+          Assert.AreEqual(credential.Password, userpass[2]);
+
+          Assert.AreEqual(new Uri(string.Format("imap://user;AUTH=PLAIN@{0}:{1}/", server.Host, server.Port)), session.Authority);
+          Assert.AreEqual(ImapSessionState.Authenticated, session.State);
+        }
       }
     }
 
     [Test]
     public void TestAuthenticatePlainSaslIRCapable()
     {
-      server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=PLAIN SASL-IR] ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=PLAIN SASL-IR] ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port)) {
-        server.EnqueueResponse("0000 OK authenticated\r\n");
+        using (var session = new ImapSession(server.Host, server.Port)) {
+          server.EnqueueResponse("0000 OK authenticated\r\n");
 
-        Assert.IsTrue((bool)session.Authenticate(new NetworkCredential("test", "test", "test"),
-                                                 ImapAuthenticationMechanism.Plain));
+          Assert.IsTrue((bool)session.Authenticate(new NetworkCredential("test", "test", "test"),
+                                                   ImapAuthenticationMechanism.Plain));
 
-        Assert.AreEqual("0000 AUTHENTICATE PLAIN dGVzdAB0ZXN0AHRlc3Q=\r\n",
-                        server.DequeueRequest());
+          Assert.AreEqual("0000 AUTHENTICATE PLAIN dGVzdAB0ZXN0AHRlc3Q=\r\n",
+                          server.DequeueRequest());
 
-        Assert.AreEqual(new Uri(string.Format("imap://test;AUTH=PLAIN@{0}:{1}/", host, port)), session.Authority);
+          Assert.AreEqual(new Uri(string.Format("imap://test;AUTH=PLAIN@{0}:{1}/", server.Host, server.Port)), session.Authority);
+        }
       }
     }
 
@@ -459,91 +499,99 @@ namespace Smdn.Net.Imap4.Client.Session {
 
     private void AuthenticateCramMd5(bool saslIRCapable)
     {
-      if (saslIRCapable)
-        server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=CRAM-MD5] ImapSimulatedServer ready\r\n");
-      else
-        server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=CRAM-MD5 SASL-IR] ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        if (saslIRCapable)
+          server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=CRAM-MD5] ImapSimulatedServer ready\r\n");
+        else
+          server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=CRAM-MD5 SASL-IR] ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port)) {
-        var timestamp = ((long)DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds).ToString();
-        var challenge = NetworkTransferEncoding.Transfer8Bit.GetBytes(string.Format("<{0}@{1}>", timestamp, host));
+        using (var session = new ImapSession(server.Host, server.Port)) {
+          var timestamp = ((long)DateTime.Now.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds).ToString();
+          var challenge = NetworkTransferEncoding.Transfer8Bit.GetBytes(string.Format("<{0}@{1}>", timestamp, server.Host));
 
-        server.EnqueueResponse("+ " + Convert.ToBase64String(challenge) + "\r\n");
-        server.EnqueueResponse("0000 OK authenticated\r\n");
+          server.EnqueueResponse("+ " + Convert.ToBase64String(challenge) + "\r\n");
+          server.EnqueueResponse("0000 OK authenticated\r\n");
 
-        Assert.IsTrue((bool)session.Authenticate(credential, ImapAuthenticationMechanism.CRAMMD5));
+          Assert.IsTrue((bool)session.Authenticate(new NetworkCredential("user", "pass"), ImapAuthenticationMechanism.CRAMMD5));
 
-        Assert.AreEqual("0000 AUTHENTICATE CRAM-MD5\r\n",
-                                   server.DequeueRequest());
+          Assert.AreEqual("0000 AUTHENTICATE CRAM-MD5\r\n",
+                                     server.DequeueRequest());
 
-        /*
-        var requested = server.DequeueRequest();
-        var userkeyed = NetworkTransferEncoding.Transfer8Bit.GetString(Convert.FromBase64String(requested.Substring(0, requested.Length - 2))).Split(' ');
+          /*
+          var requested = server.DequeueRequest();
+          var userkeyed = NetworkTransferEncoding.Transfer8Bit.GetString(Convert.FromBase64String(requested.Substring(0, requested.Length - 2))).Split(' ');
 
-        Assert.AreEqual(username, userkeyed[0]);
+          Assert.AreEqual(username, userkeyed[0]);
 
-        var keyed = new List<byte>();
+          var keyed = new List<byte>();
 
-        for (var index = 0; index < userkeyed[1].Length; index += 2) {
-          keyed.Add(Convert.ToByte(userkeyed[1].Substring(index, 2), 16));
+          for (var index = 0; index < userkeyed[1].Length; index += 2) {
+            keyed.Add(Convert.ToByte(userkeyed[1].Substring(index, 2), 16));
+          }
+
+          Assert.AreEqual(Convert.ToBase64String((new HMACMD5(NetworkTransferEncoding.Transfer8Bit.GetBytes(password))).ComputeHash(challenge)),
+                          Convert.ToBase64String(keyed.ToArray()));
+          */
+
+          Assert.AreEqual(new Uri(string.Format("imap://user;AUTH=CRAM-MD5@{0}:{1}/", server.Host, server.Port)), session.Authority);
+          Assert.AreEqual(ImapSessionState.Authenticated, session.State);
         }
-
-        Assert.AreEqual(Convert.ToBase64String((new HMACMD5(NetworkTransferEncoding.Transfer8Bit.GetBytes(password))).ComputeHash(challenge)),
-                        Convert.ToBase64String(keyed.ToArray()));
-        */
-
-        Assert.AreEqual(new Uri(string.Format("imap://{0};AUTH=CRAM-MD5@{1}:{2}/", username, host, port)), session.Authority);
-        Assert.AreEqual(ImapSessionState.Authenticated, session.State);
       }
     }
 
     [Test]
     public void TestAuthenticateInvalidResponse()
     {
-      server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=DIGEST-MD5] ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=DIGEST-MD5] ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port)) {
-        server.EnqueueResponse("+ xxxxx-invalid-response-xxxxx\r\n");
+        using (var session = new ImapSession(server.Host, server.Port)) {
+          server.EnqueueResponse("+ xxxxx-invalid-response-xxxxx\r\n");
 
-        try {
-          session.Authenticate(new NetworkCredential("test", "test", "test"),
-                               ImapAuthenticationMechanism.DigestMD5);
-          Assert.Fail("ImapException not thrown");
+          try {
+            session.Authenticate(new NetworkCredential("test", "test", "test"),
+                                 ImapAuthenticationMechanism.DigestMD5);
+            Assert.Fail("ImapException not thrown");
+          }
+          catch (ImapException) {
+          }
+
+          Assert.AreEqual(ImapSessionState.NotConnected, session.State);
         }
-        catch (ImapException) {
-        }
-
-        Assert.AreEqual(ImapSessionState.NotConnected, session.State);
       }
     }
 
     [Test]
     public void TestAuthenticateCancelExchanging()
     {
-      server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=DIGEST-MD5] ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=DIGEST-MD5] ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port)) {
-        server.EnqueueResponse("+ eD0xLHk9Mix6PTM=\r\n"); // x=1,y=2,z=3
-        server.EnqueueResponse("0000 NO AUTHENTICATE failed.\r\n");
+        using (var session = new ImapSession(server.Host, server.Port)) {
+          server.EnqueueResponse("+ eD0xLHk9Mix6PTM=\r\n"); // x=1,y=2,z=3
+          server.EnqueueResponse("0000 NO AUTHENTICATE failed.\r\n");
 
-        session.Authenticate(new NetworkCredential("test", "test", "test"),
-                             ImapAuthenticationMechanism.DigestMD5);
+          session.Authenticate(new NetworkCredential("test", "test", "test"),
+                               ImapAuthenticationMechanism.DigestMD5);
 
-        Assert.AreEqual("0000 AUTHENTICATE DIGEST-MD5\r\n",
-                        server.DequeueRequest());
-        Assert.AreEqual("*\r\n",
-                        server.DequeueRequest());
+          Assert.AreEqual("0000 AUTHENTICATE DIGEST-MD5\r\n",
+                          server.DequeueRequest());
+          Assert.AreEqual("*\r\n",
+                          server.DequeueRequest());
+        }
       }
     }
 
     [Test]
     public void TestAuthenticateCredentialNotFound()
     {
-      server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=DIGEST-MD5] ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=DIGEST-MD5] ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port)) {
-        Assert.IsFalse((bool)session.Authenticate(new NullCredential(), ImapAuthenticationMechanism.DigestMD5));
-        Assert.IsFalse((bool)session.Authenticate(new NullCredential(), "user", ImapAuthenticationMechanism.DigestMD5));
+        using (var session = new ImapSession(server.Host, server.Port)) {
+          Assert.IsFalse((bool)session.Authenticate(new NullCredential(), ImapAuthenticationMechanism.DigestMD5));
+          Assert.IsFalse((bool)session.Authenticate(new NullCredential(), "user", ImapAuthenticationMechanism.DigestMD5));
+        }
       }
     }
 
@@ -561,18 +609,20 @@ namespace Smdn.Net.Imap4.Client.Session {
 
     private void AuthenticateCredentialPropertyNull(ICredentialsByHost credential)
     {
-      server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=PLAIN] ImapSimulatedServer ready\r\n");
-      server.EnqueueResponse("+ \r\n");
-      server.EnqueueResponse("0000 NO failed\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=PLAIN] ImapSimulatedServer ready\r\n");
+        server.EnqueueResponse("+ \r\n");
+        server.EnqueueResponse("0000 NO failed\r\n");
 
-      using (var session = new ImapSession(host, port)) {
-        Assert.IsFalse((bool)session.Authenticate(credential,
-                                                  ImapAuthenticationMechanism.Plain));
+        using (var session = new ImapSession(server.Host, server.Port)) {
+          Assert.IsFalse((bool)session.Authenticate(credential,
+                                                    ImapAuthenticationMechanism.Plain));
 
-        Assert.AreEqual("0000 AUTHENTICATE PLAIN\r\n",
-                        server.DequeueRequest());
-        Assert.AreEqual("*\r\n",
-                        server.DequeueRequest());
+          Assert.AreEqual("0000 AUTHENTICATE PLAIN\r\n",
+                          server.DequeueRequest());
+          Assert.AreEqual("*\r\n",
+                          server.DequeueRequest());
+        }
       }
     }
 
@@ -590,11 +640,13 @@ namespace Smdn.Net.Imap4.Client.Session {
 
     private void AuthenticateCredentialPropertyNullSaslIRCapable(ICredentialsByHost credential)
     {
-      server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=PLAIN SASL-IR] ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=PLAIN SASL-IR] ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port)) {
-        Assert.IsFalse((bool)session.Authenticate(credential,
-                                                  ImapAuthenticationMechanism.Plain));
+        using (var session = new ImapSession(server.Host, server.Port)) {
+          Assert.IsFalse((bool)session.Authenticate(credential,
+                                                    ImapAuthenticationMechanism.Plain));
+        }
       }
     }
 
@@ -643,155 +695,167 @@ namespace Smdn.Net.Imap4.Client.Session {
 
     private void AuthenticateSpecificMechanism(bool saslIRCapable, SaslClientMechanism authMechanism)
     {
-      if (saslIRCapable)
-        server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 SASL-IR] ImapSimulatedServer ready\r\n");
-      else
-        server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1] ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        if (saslIRCapable)
+          server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 SASL-IR] ImapSimulatedServer ready\r\n");
+        else
+          server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1] ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port)) {
-        session.HandlesIncapableAsException = true;
+        using (var session = new ImapSession(server.Host, server.Port)) {
+          session.HandlesIncapableAsException = true;
 
-        if (!saslIRCapable)
+          if (!saslIRCapable)
+            server.EnqueueResponse("+ \r\n");
           server.EnqueueResponse("+ \r\n");
-        server.EnqueueResponse("+ \r\n");
-        server.EnqueueResponse("0000 OK done\r\n");
+          server.EnqueueResponse("0000 OK done\r\n");
 
-        Assert.IsTrue((bool)session.Authenticate(authMechanism));
+          Assert.IsTrue((bool)session.Authenticate(authMechanism));
 
-        if (saslIRCapable) {
-          Assert.AreEqual("0000 AUTHENTICATE X-PSEUDO-MECHANISM c3RlcDA=\r\n",
-                          server.DequeueRequest());
-          Assert.AreEqual("c3RlcDE=\r\n",
-                          server.DequeueRequest());
+          if (saslIRCapable) {
+            Assert.AreEqual("0000 AUTHENTICATE X-PSEUDO-MECHANISM c3RlcDA=\r\n",
+                            server.DequeueRequest());
+            Assert.AreEqual("c3RlcDE=\r\n",
+                            server.DequeueRequest());
+          }
+          else {
+            Assert.AreEqual("0000 AUTHENTICATE X-PSEUDO-MECHANISM\r\n",
+                            server.DequeueRequest());
+            Assert.AreEqual("c3RlcDA=\r\n",
+                            server.DequeueRequest());
+            Assert.AreEqual("c3RlcDE=\r\n",
+                            server.DequeueRequest());
+          }
+
+          // not disposed
+          Assert.AreEqual(SaslExchangeStatus.Succeeded,
+                          authMechanism.ExchangeStatus);
+
+          Assert.AreEqual(new Uri(string.Format("imap://{0};AUTH=X-PSEUDO-MECHANISM@{1}:{2}/",
+                                                (authMechanism.Credential == null) ? null : authMechanism.Credential.UserName,
+                                                server.Host,
+                                                server.Port)),
+                          session.Authority);
         }
-        else {
-          Assert.AreEqual("0000 AUTHENTICATE X-PSEUDO-MECHANISM\r\n",
-                          server.DequeueRequest());
-          Assert.AreEqual("c3RlcDA=\r\n",
-                          server.DequeueRequest());
-          Assert.AreEqual("c3RlcDE=\r\n",
-                          server.DequeueRequest());
-        }
-
-        // not disposed
-        Assert.AreEqual(SaslExchangeStatus.Succeeded,
-                        authMechanism.ExchangeStatus);
-
-        Assert.AreEqual(new Uri(string.Format("imap://{0};AUTH=X-PSEUDO-MECHANISM@{1}:{2}/",
-                                              (authMechanism.Credential == null) ? null : authMechanism.Credential.UserName,
-                                              host,
-                                              port)),
-                        session.Authority);
       }
     }
 
     [Test, ExpectedException(typeof(ArgumentNullException))]
     public void TestAuthenticateSpecificMechanismArgumentNull()
     {
-      server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1] ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1] ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port)) {
-        session.HandlesIncapableAsException = true;
+        using (var session = new ImapSession(server.Host, server.Port)) {
+          session.HandlesIncapableAsException = true;
 
-        SaslClientMechanism authMechanism = null;
+          SaslClientMechanism authMechanism = null;
 
-        session.Authenticate(authMechanism);
+          session.Authenticate(authMechanism);
+        }
       }
     }
 
     [Test]
     public void TestAuthenticateReissueCapabilityDataAdvertised()
     {
-      server.EnqueueResponse("* OK ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port)) {
-        server.EnqueueResponse("+ \r\n");
-        server.EnqueueResponse("+ \r\n");
-        server.EnqueueResponse("* CAPABILITY IMAP4rev1\r\n" +
-                               "0000 OK authenticated\r\n");
+        using (var session = new ImapSession(server.Host, server.Port)) {
+          server.EnqueueResponse("+ \r\n");
+          server.EnqueueResponse("+ \r\n");
+          server.EnqueueResponse("* CAPABILITY IMAP4rev1\r\n" +
+                                 "0000 OK authenticated\r\n");
 
-        Assert.IsTrue((bool)session.Authenticate(credential, ImapAuthenticationMechanism.Login, true));
+          Assert.IsTrue((bool)session.Authenticate(new NetworkCredential("user", "pass"), ImapAuthenticationMechanism.Login, true));
 
-        StringAssert.StartsWith("0000 AUTHENTICATE ", server.DequeueRequest());
+          StringAssert.StartsWith("0000 AUTHENTICATE ", server.DequeueRequest());
 
-        Assert.AreEqual(1, session.ServerCapabilities.Count);
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Imap4Rev1));
+          Assert.AreEqual(1, session.ServerCapabilities.Count);
+          Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Imap4Rev1));
+        }
       }
     }
 
     [Test]
     public void TestAuthenticateReissueCapabilityResponseCodeAdvertised()
     {
-      server.EnqueueResponse("* OK ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port)) {
-        server.EnqueueResponse("+ \r\n");
-        server.EnqueueResponse("+ \r\n");
-        server.EnqueueResponse("0000 OK [CAPABILITY IMAP4rev1] authenticated\r\n");
+        using (var session = new ImapSession(server.Host, server.Port)) {
+          server.EnqueueResponse("+ \r\n");
+          server.EnqueueResponse("+ \r\n");
+          server.EnqueueResponse("0000 OK [CAPABILITY IMAP4rev1] authenticated\r\n");
 
-        Assert.IsTrue((bool)session.Authenticate(credential, ImapAuthenticationMechanism.Login, true));
+          Assert.IsTrue((bool)session.Authenticate(new NetworkCredential("user", "pass"), ImapAuthenticationMechanism.Login, true));
 
-        StringAssert.StartsWith("0000 AUTHENTICATE ", server.DequeueRequest());
+          StringAssert.StartsWith("0000 AUTHENTICATE ", server.DequeueRequest());
 
-        Assert.AreEqual(1, session.ServerCapabilities.Count);
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Imap4Rev1));
+          Assert.AreEqual(1, session.ServerCapabilities.Count);
+          Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Imap4Rev1));
+        }
       }
     }
 
     [Test]
     public void TestAuthenticateReissueCapabilityNotAdvertised()
     {
-      server.EnqueueResponse("* OK ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port)) {
-        server.EnqueueResponse("+ \r\n");
-        server.EnqueueResponse("+ \r\n");
-        server.EnqueueResponse("0000 OK authenticated\r\n");
-        server.EnqueueResponse("* CAPABILITY IMAP4rev1\r\n" +
-                               "0001 OK done\r\n");
+        using (var session = new ImapSession(server.Host, server.Port)) {
+          server.EnqueueResponse("+ \r\n");
+          server.EnqueueResponse("+ \r\n");
+          server.EnqueueResponse("0000 OK authenticated\r\n");
+          server.EnqueueResponse("* CAPABILITY IMAP4rev1\r\n" +
+                                 "0001 OK done\r\n");
 
-        Assert.IsTrue((bool)session.Authenticate(credential, ImapAuthenticationMechanism.Login, true));
+          Assert.IsTrue((bool)session.Authenticate(new NetworkCredential("user", "pass"), ImapAuthenticationMechanism.Login, true));
 
-        StringAssert.StartsWith("0000 AUTHENTICATE ", server.DequeueRequest());
-        server.DequeueRequest(); // username
-        server.DequeueRequest(); // password
-        Assert.AreEqual("0001 CAPABILITY\r\n", server.DequeueRequest());
+          StringAssert.StartsWith("0000 AUTHENTICATE ", server.DequeueRequest());
+          server.DequeueRequest(); // username
+          server.DequeueRequest(); // password
+          Assert.AreEqual("0001 CAPABILITY\r\n", server.DequeueRequest());
 
-        Assert.AreEqual(1, session.ServerCapabilities.Count);
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Imap4Rev1));
+          Assert.AreEqual(1, session.ServerCapabilities.Count);
+          Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Imap4Rev1));
+        }
       }
     }
 
     [Test]
     public void TestAuthenticateOkWithCapabilityResponse()
     {
-      server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=PLAIN SASL-IR] ImapSimulatedServer ready\r\n");
+      using (var server = CreateServer()) {
+        server.EnqueueResponse("* OK [CAPABILITY IMAP4rev1 AUTH=PLAIN SASL-IR] ImapSimulatedServer ready\r\n");
 
-      using (var session = new ImapSession(host, port)) {
-        Assert.AreEqual(3, session.ServerCapabilities.Count);
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Imap4Rev1));
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.SaslIR));
-        Assert.IsTrue(session.ServerCapabilities.IsCapable(ImapAuthenticationMechanism.Plain));
+        using (var session = new ImapSession(server.Host, server.Port)) {
+          Assert.AreEqual(3, session.ServerCapabilities.Count);
+          Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Imap4Rev1));
+          Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.SaslIR));
+          Assert.IsTrue(session.ServerCapabilities.IsCapable(ImapAuthenticationMechanism.Plain));
 
-        //server.EnqueueResponse();
-        server.EnqueueResponse("0000 OK [CAPABILITY IMAP4rev1] authenticated\r\n");
+          //server.EnqueueResponse();
+          server.EnqueueResponse("0000 OK [CAPABILITY IMAP4rev1] authenticated\r\n");
 
-        Assert.IsTrue((bool)session.Authenticate(new NetworkCredential("test", "test", "test"),
-                                                 ImapAuthenticationMechanism.Plain));
+          Assert.IsTrue((bool)session.Authenticate(new NetworkCredential("test", "test", "test"),
+                                                   ImapAuthenticationMechanism.Plain));
 
-        Assert.AreEqual("0000 AUTHENTICATE PLAIN dGVzdAB0ZXN0AHRlc3Q=\r\n",
-                        server.DequeueRequest());
+          Assert.AreEqual("0000 AUTHENTICATE PLAIN dGVzdAB0ZXN0AHRlc3Q=\r\n",
+                          server.DequeueRequest());
 
-        Assert.AreEqual(new Uri(string.Format("imap://test;AUTH=PLAIN@{0}:{1}/", host, port)), session.Authority);
+          Assert.AreEqual(new Uri(string.Format("imap://test;AUTH=PLAIN@{0}:{1}/", server.Host, server.Port)), session.Authority);
 
-        Assert.AreEqual(1, session.ServerCapabilities.Count);
-        Assert.IsTrue(session.ServerCapabilities.Has(ImapCapability.Imap4Rev1));
+          Assert.AreEqual(1, session.ServerCapabilities.Count);
+          Assert.IsTrue(session.ServerCapabilities.Contains(ImapCapability.Imap4Rev1));
 
-        try {
-          session.ServerCapabilities.Add(ImapCapability.Imap4);
-          Assert.Fail("NotSupportedException not thrown");
-        }
-        catch (NotSupportedException) {
+          try {
+            session.ServerCapabilities.Add(ImapCapability.Imap4);
+            Assert.Fail("NotSupportedException not thrown");
+          }
+          catch (NotSupportedException) {
+          }
         }
       }
     }
@@ -799,43 +863,43 @@ namespace Smdn.Net.Imap4.Client.Session {
     [Test]
     public void TestLoginInAuthenticatedState()
     {
-      using (var session = Authenticate()) {
+      Authenticate(delegate(ImapSession session, ImapPseudoServer server) {
         Assert.AreEqual(ImapSessionState.Authenticated, session.State);
 
-        var result = session.Login(credential);
+        var result = session.Login(new NetworkCredential("user", "pass"));
 
         Assert.IsTrue((bool)result);
         Assert.AreEqual(result.Code, ImapCommandResultCode.RequestDone);
 
         Assert.AreEqual(ImapSessionState.Authenticated, session.State);
-      }
+      });
     }
 
     [Test]
     public void TestAuthenticateInAuthenticatedState()
     {
-      using (var session = Authenticate()) {
+      Authenticate(delegate(ImapSession session, ImapPseudoServer server) {
         Assert.AreEqual(ImapSessionState.Authenticated, session.State);
 
-        var result = session.Authenticate(credential, ImapAuthenticationMechanism.Login);
+        var result = session.Authenticate(new NetworkCredential("user", "pass"), ImapAuthenticationMechanism.Login);
 
         Assert.IsTrue((bool)result);
         Assert.AreEqual(result.Code, ImapCommandResultCode.RequestDone);
 
         Assert.AreEqual(ImapSessionState.Authenticated, session.State);
-      }
+      });
     }
 
     [Test]
     public void TestLoginInSelectedState()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         var selectedMailbox = session.SelectedMailbox;
 
         Assert.AreEqual(ImapSessionState.Selected, session.State);
         Assert.IsNotNull(session.SelectedMailbox);
 
-        var result = session.Login(credential);
+        var result = session.Login(new NetworkCredential("user", "pass"));
 
         Assert.IsTrue((bool)result);
         Assert.AreEqual(result.Code, ImapCommandResultCode.RequestDone);
@@ -844,19 +908,21 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.IsNotNull(session.SelectedMailbox);
 
         Assert.AreSame(selectedMailbox, session.SelectedMailbox);
-      }
+
+        return 0;
+      });
     }
 
     [Test]
     public void TestAuthenticateInSelectedState()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         var selectedMailbox = session.SelectedMailbox;
 
         Assert.AreEqual(ImapSessionState.Selected, session.State);
         Assert.IsNotNull(session.SelectedMailbox);
 
-        var result = session.Authenticate(credential, ImapAuthenticationMechanism.Login);
+        var result = session.Authenticate(new NetworkCredential("user", "pass"), ImapAuthenticationMechanism.Login);
 
         Assert.IsTrue((bool)result);
         Assert.AreEqual(result.Code, ImapCommandResultCode.RequestDone);
@@ -865,13 +931,15 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.IsNotNull(session.SelectedMailbox);
 
         Assert.AreSame(selectedMailbox, session.SelectedMailbox);
-      }
+
+        return 0;
+      });
     }
 
     [Test]
     public void TestStartTls()
     {
-      using (var session = Connect()) {
+      Connect(delegate(ImapSession session, ImapPseudoServer server) {
         session.HandlesIncapableAsException = true;
         server.EnqueueResponse("* CAPABILITY IMAP4rev1 STARTTLS LOGINDISABLED\r\n" +
                                "0000 OK CAPABILITY completed\r\n");
@@ -898,13 +966,13 @@ namespace Smdn.Net.Imap4.Client.Session {
                         server.DequeueRequest());
 
         Assert.AreEqual(prevAuthority, session.Authority);
-      }
+      });
     }
 
     [Test]
     public void TestStartTlsExceptionWhileUpgrading()
     {
-      using (var session = Connect()) {
+      Connect(delegate(ImapSession session, ImapPseudoServer server) {
         session.HandlesIncapableAsException = true;
         server.EnqueueResponse("* CAPABILITY IMAP4rev1 STARTTLS LOGINDISABLED\r\n" +
                                "0000 OK CAPABILITY completed\r\n");
@@ -926,13 +994,13 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         Assert.IsNull(session.Authority);
         Assert.AreEqual(ImapSessionState.NotConnected, session.State);
-      }
+      });
     }
 
     [Test, ExpectedException(typeof(ImapIncapableException))]
     public void TestStartTlsIncapable()
     {
-      using (var session = Connect()) {
+      Connect(delegate(ImapSession session, ImapPseudoServer server) {
         server.EnqueueResponse("* CAPABILITY IMAP4rev1 AUTH=PLAIN\r\n" +
                                "0000 OK CAPABILITY completed\r\n");
 
@@ -952,13 +1020,13 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         Assert.IsFalse(streamUpgraded, "stream upgraded");
         Assert.IsFalse(session.IsSecureConnection, "IsSecureConnection");
-      }
+      });
     }
 
     [Test]
     public void TestStartTlsBadResponse()
     {
-      using (var session = Connect()) {
+      Connect(delegate(ImapSession session, ImapPseudoServer server) {
         server.EnqueueResponse("0000 BAD command unknown\r\n");
 
         var prevAuthority = new Uri(session.Authority.ToString());
@@ -979,7 +1047,7 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         Assert.AreEqual(prevAuthority, session.Authority);
         Assert.IsFalse(session.IsSecureConnection);
-      }
+      });
     }
   }
 }

@@ -33,7 +33,7 @@ namespace Smdn.Net.Pop3.Client.Session {
         return SaslExchangeStatus.Failed;
       }
       else {
-        clientResponse = new ByteString(string.Format("step{0}", step++));
+        clientResponse = ByteString.CreateImmutable(string.Format("step{0}", step++));
 
         if (step == maxStep)
           return SaslExchangeStatus.Succeeded;

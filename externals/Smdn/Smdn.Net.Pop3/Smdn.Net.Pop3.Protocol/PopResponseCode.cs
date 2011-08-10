@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +26,9 @@ using System;
 using System.Collections.Generic;
 
 namespace Smdn.Net.Pop3.Protocol {
+  [Serializable]
   public sealed class PopResponseCode : PopStringEnum {
-    public static readonly PopStringEnumList<PopResponseCode> AllCodes;
+    public static readonly PopStringEnumSet<PopResponseCode> AllCodes;
 
     /*
      * POP3 Extension Mechanism
@@ -106,13 +107,15 @@ namespace Smdn.Net.Pop3.Protocol {
 
     static PopResponseCode()
     {
-      AllCodes = CreateDefinedConstantsList<PopResponseCode>();
+      AllCodes = CreateDefinedConstantsSet<PopResponseCode>();
     }
 
     public static PopResponseCode GetKnownOrCreate(string code)
     {
-      if (AllCodes.Has(code))
-        return AllCodes[code];
+      PopResponseCode respCode;
+
+      if (AllCodes.TryGet(code, out respCode))
+        return respCode;
 
       //Smdn.Net.Pop3.Client.Trace.Verbose("unknown response code: {0}", code);
 

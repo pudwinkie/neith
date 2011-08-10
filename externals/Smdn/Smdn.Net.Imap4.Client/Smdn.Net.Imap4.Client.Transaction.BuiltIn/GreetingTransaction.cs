@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -34,11 +34,12 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     {
     }
 
-    protected override ProcessTransactionDelegate Reset()
+    protected override ImapCommand PrepareCommand()
     {
       Trace.Log(this, "waiting for server greeting response");
 
-      return ProcessReceiveResponse;
+      // send nothing
+      return null;
     }
 
     protected override void OnCommandContinuationRequestReceived(ImapCommandContinuationRequest continuationRequest)

@@ -67,7 +67,7 @@ namespace Smdn.Net.Imap4.WebClients {
 
     private string ToString(byte[] buffer, int length)
     {
-      return (new ByteString(buffer, 0, length)).ToString();
+      return ByteString.CreateImmutable(buffer, 0, length).ToString();
     }
 
     [Test]

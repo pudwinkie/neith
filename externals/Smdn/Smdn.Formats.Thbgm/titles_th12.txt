@@ -1,0 +1,41 @@
+#「東方星蓮船　～ Undefined Fantastic Object.」 製品版曲データ (contributed by Nautilus, 2009/09/17)
+#デフォルトのパスと製品名
+@上海アリス幻樂団\東方星蓮船\thbgm.dat,東方星蓮船　～ Undefined Fantastic Object.
+#原作者名
+#=ProductInfo,Creator,上海アリス幻樂団
+#製品略称
+#=ProductInfo,Prefix,th12
+#=ProductInfo,ShortName,東方星蓮船
+#=ProductInfo,AbbreviatedShortName,星蓮船
+#=ProductInfo,ShortestName,星
+#頒布年月日
+#=ProductInfo,ReleaseDate,2009-08-15
+#thbgm.datのサイズ(バイト単位)
+#=ProductInfo,BgmSourceLength,408829544
+#thbgm.datのハッシュ値(MD5)
+#=ProductInfo,BgmSourceHash,MD5Sum,e3bb060ac084b93d6f6eeee513bad88d
+#thbgm.datの識別用ハッシュ値(末尾4MBのハッシュ)
+#=ProductInfo,BgmSourceIdentificationHash,MD5Sum,8d3a7ddf2a24545f77a2b23fe5929a63
+#THxxBGM製品識別用GUID
+#=ProductInfo,THxxBGMProductGuid,881949AB-B453-A741-E8CD-72D1A5741E0F
+#曲データ
+#開始位置[Bytes]、イントロ部の長さ[Bytes]、ループ部の長さ[Bytes]、曲名
+#位置・長さは16進値として記述する
+00000010,000F8040,00909FC0,青空の影
+00A02010,0024F900,00E96680,春の湊に
+01AE7F90,002B7E00,00D5C300,小さな小さな賢将
+02AFC090,00089000,01278A00,閉ざせし雲の通い路
+03DFDA90,0024F500,014F1E00,万年置き傘にご注意を
+0553ED90,0012E300,01548800,スカイルーイン
+06BB5890,0014C400,0110FE00,時代親父とハイカラ少女
+07E11A90,0009AFF0,01790610,幽霊客船の時空を越えた旅
+0963D090,00173380,01430100,キャプテン・ムラサ
+0ABE0510,0031CA00,01A9A200,魔界地方都市エソテリア
+0C997110,004F0300,01E59680,虎柄の毘沙門天
+0ECE0A90,0008D180,0109C700,法界の火
+0FE0A310,002C96F4,023E0504,感情の摩天楼　～ Cosmic Mind
+124B3F08,0013B000,01DE8800,夜空のユーフォーロマンス
+143D7708,0010D400,01E38C00,平安のエイリアン
+1631D708,0010C430,00813B50,妖怪寺
+16C3D688,000E4EC0,01253C60,空の帰り道　～ Sky Dream
+17F761A8,001CACC8,004A2FF8,プレイヤーズスコア

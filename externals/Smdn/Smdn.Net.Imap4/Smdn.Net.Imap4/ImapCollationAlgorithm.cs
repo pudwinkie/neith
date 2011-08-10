@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@
 // THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 
 namespace Smdn.Net.Imap4 {
   // enum types:
@@ -52,7 +53,7 @@ namespace Smdn.Net.Imap4 {
    * http://tools.ietf.org/html/rfc5255
    */
   public sealed class ImapCollationAlgorithm : ImapStringEnum, IImapExtension {
-    public static readonly ImapStringEnumList<ImapCollationAlgorithm> AllAlgorithms;
+    public static readonly ImapStringEnumSet<ImapCollationAlgorithm> AllAlgorithms;
 
     public static readonly ImapCollationAlgorithm Default = new ImapCollationAlgorithm("default");
 
@@ -67,13 +68,15 @@ namespace Smdn.Net.Imap4 {
 
     static ImapCollationAlgorithm()
     {
-      AllAlgorithms = CreateDefinedConstantsList<ImapCollationAlgorithm>();
+      AllAlgorithms = CreateDefinedConstantsSet<ImapCollationAlgorithm>();
     }
 
     internal static ImapCollationAlgorithm GetKnownOrCreate(string algorithm)
     {
-      if (AllAlgorithms.Has(algorithm))
-        return AllAlgorithms[algorithm];
+      ImapCollationAlgorithm algo;
+
+      if (AllAlgorithms.TryGet(algorithm, out algo))
+        return algo;
       else
         //Trace.Verbose("unknown collation algorithm: {0}", algorithm);
         return new ImapCollationAlgorithm(algorithm);
@@ -82,8 +85,8 @@ namespace Smdn.Net.Imap4 {
     /*
      * instance members
      */
-    ImapCapability IImapExtension.RequiredCapability {
-      get { return ImapCapability.I18NLevel2; }
+    IEnumerable<ImapCapability> IImapExtension.RequiredCapabilities {
+      get { yield return ImapCapability.I18NLevel2; }
     }
 
     public ImapCollationAlgorithm(string collationAlgorithm)

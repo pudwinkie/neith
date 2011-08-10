@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -45,9 +45,9 @@ namespace Smdn.Net.Imap4.Client {
       if (mailbox == null)
         throw new ArgumentNullException("mailbox");
       if (currentCount < 0L)
-        throw new ArgumentOutOfRangeException("currentCount", currentCount, "must be zero or positive number");
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("currentCount", currentCount);
       if (prevCount < 0L)
-        throw new ArgumentOutOfRangeException("prevCount", prevCount, "must be zero or positive number");
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("prevCount", prevCount);
 
       this.Mailbox = mailbox;
       this.CurrentCount = currentCount;

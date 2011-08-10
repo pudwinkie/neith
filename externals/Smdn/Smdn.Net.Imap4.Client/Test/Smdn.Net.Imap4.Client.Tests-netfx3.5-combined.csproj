@@ -80,6 +80,20 @@
     <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapMalformedResponseException.cs" />
     <Compile Include="..\..\Smdn.Net.MessageAccessProtocols\Test\Smdn.Net\TestUtils.cs" />
     <Compile Include="Smdn.Net.Imap4.Client.Session\SaslPseudoMechanism.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapClientOperations.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapMessageInfoOperationsFetch.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapMessageInfoOperationsStore.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapOpenedMailboxInfoOperationsWaiting.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client\ImapOpenedMailboxInfoOperationsFetching.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapResponseText.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapPseudoResponseReceiver.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapDataResponseType.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapCommandContinuationRequest.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapDataResponse.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapTaggedStatusResponse.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapUntaggedStatusResponse.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Client\ImapCommandResult.cs" />
+    <Compile Include="Smdn.Net.Imap4.Client.Session\ImapSessionCommandsList.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

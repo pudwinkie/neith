@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:annotate="http://purl.org/rss/1.0/modules/annotate/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>title</title>
+    <link>http://localhost/updated</link>
+    <description>description</description>
+    <webMaster>author@localhost (author)</webMaster>
+    <pubDate>Sat, 11 Jul 2009 18:00:00 +0000</pubDate>
+    <lastBuildDate>Sat, 11 Jul 2009 18:00:00 +0000</lastBuildDate>
+    <generator>Smdn.Formats.Feeds/1.0</generator>
+    <docs>http://cyber.law.harvard.edu/rss/rss.html</docs>
+    <sy:updatePeriod>weekly</sy:updatePeriod>
+    <sy:updateFrequency>2</sy:updateFrequency>
+    <sy:updateBase>2009-07-11T18:00:00.0000000+00:00</sy:updateBase>
+    <atom:link href="http://localhost/feed" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost/" rel="related" />
+    <item>
+      <title>title0</title>
+      <description>title0</description>
+      <link>http://localhost/0</link>
+      <pubDate>Sat, 11 Jul 2009 18:00:00 +0000</pubDate>
+      <guid isPermaLink="true">http://localhost/0</guid>
+      <annotate:reference rdf:resource="http://localhost/annotation0" />
+      <content:encoded><![CDATA[description0]]></content:encoded>
+    </item>
+    <item>
+      <title>title1</title>
+      <description>title1</description>
+      <link>http://localhost/1</link>
+      <pubDate>Sat, 11 Jul 2009 18:00:01 +0000</pubDate>
+      <guid isPermaLink="true">http://localhost/1</guid>
+      <annotate:reference rdf:resource="http://localhost/annotation1" />
+      <content:encoded><![CDATA[description1]]></content:encoded>
+    </item>
+  </channel>
+</rss>

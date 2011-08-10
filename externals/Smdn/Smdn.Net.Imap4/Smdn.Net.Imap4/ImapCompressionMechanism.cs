@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -49,7 +49,7 @@ namespace Smdn.Net.Imap4 {
   // http://tools.ietf.org/html/rfc4978
   // 3. The COMPRESS Command
   public sealed class ImapCompressionMechanism : ImapStringEnum, IImapExtension {
-    public static readonly ImapStringEnumList<ImapCompressionMechanism> AllMechanisms;
+    public static readonly ImapStringEnumSet<ImapCompressionMechanism> AllMechanisms;
 
     //    The DEFLATE algorithm (defined in [RFC1951]) is
     //    standard, widely available and fairly efficient, so it is the only
@@ -58,11 +58,15 @@ namespace Smdn.Net.Imap4 {
 
     static ImapCompressionMechanism()
     {
-      AllMechanisms = CreateDefinedConstantsList<ImapCompressionMechanism>();
+      AllMechanisms = CreateDefinedConstantsSet<ImapCompressionMechanism>();
     }
 
-    ImapCapability IImapExtension.RequiredCapability {
-      get { return requiredCapability; }
+    IEnumerable<ImapCapability> IImapExtension.RequiredCapabilities {
+      get
+      {
+        if (requiredCapability != null)
+          yield return requiredCapability;
+      }
     }
 
     private ImapCompressionMechanism(string compressionMechanism, ImapCapability requiredCapability)
@@ -71,6 +75,6 @@ namespace Smdn.Net.Imap4 {
       this.requiredCapability = requiredCapability;
     }
 
-    private /*readonly*/ ImapCapability requiredCapability;
+    private readonly ImapCapability requiredCapability;
   }
 }

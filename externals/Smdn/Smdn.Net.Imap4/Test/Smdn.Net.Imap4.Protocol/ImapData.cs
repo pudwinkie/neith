@@ -24,7 +24,7 @@ namespace Smdn.Net.Imap4.Protocol {
       var list = ImapData.CreateListData(new[] {
         ImapData.CreateNilData(),
         ImapData.CreateNilData(),
-        ImapData.CreateTextData(new ByteString("text")),
+        ImapData.CreateTextData(ByteString.CreateImmutable("text")),
       });
 
       Assert.AreEqual(ImapDataFormat.List, list.Format);
@@ -35,24 +35,25 @@ namespace Smdn.Net.Imap4.Protocol {
     [Test]
     public void TestCreateTextDataFromByteString()
     {
-      var str = new ByteString("string");
+      var str = ByteString.CreateImmutable("string");
       var text = ImapData.CreateTextData(str);
 
       Assert.AreEqual(ImapDataFormat.Text, text.Format);
       Assert.AreEqual(6, text.GetTextLength());
       Assert.AreEqual(Encoding.ASCII.GetBytes("string"), text.GetTextAsByteArray());
-      Assert.AreSame(str.ByteArray, text.GetTextAsByteArray());
-      Assert.AreEqual(new ByteString("string"), text.GetTextAsByteString());
+      Assert.AreEqual(str.ToArray(), text.GetTextAsByteArray());
+      Assert.AreEqual(ByteString.CreateImmutable("string"), text.GetTextAsByteString());
       Assert.AreSame(str, text.GetTextAsByteString());
       Assert.AreEqual("string", text.GetTextAsString());
 
-      FileAssert.AreEqual(new MemoryStream(str.ByteArray, false), text.GetTextAsStream());
+      FileAssert.AreEqual(new MemoryStream(str.Segment.Array, str.Segment.Offset, str.Segment.Count, false),
+                          text.GetTextAsStream());
 
       var buffer = new byte[3];
 
       text.CopyText(buffer, 0, buffer.Length);
 
-      Assert.AreEqual(str.ByteArray.Slice(0, 3), buffer);
+      Assert.AreEqual(str.Substring(0, 3).ToArray(), buffer);
     }
 
     [Test]
@@ -69,7 +70,7 @@ namespace Smdn.Net.Imap4.Protocol {
       Assert.AreEqual(ImapDataFormat.Text, text.Format);
       Assert.AreEqual(6, text.GetTextLength());
       Assert.AreEqual(Encoding.ASCII.GetBytes("string"), text.GetTextAsByteArray());
-      Assert.AreEqual(new ByteString(str), text.GetTextAsByteString());
+      Assert.AreEqual(ByteString.CreateImmutable(str), text.GetTextAsByteString());
       Assert.AreEqual("string", text.GetTextAsString());
 
       Assert.AreSame(stream, text.GetTextAsStream());
@@ -86,17 +87,83 @@ namespace Smdn.Net.Imap4.Protocol {
     [Test]
     public void TestGetTextAsNumber()
     {
-      Assert.AreEqual(0UL, ImapData.CreateTextData(new ByteString("0")).GetTextAsNumber());
-      Assert.AreEqual(1UL, ImapData.CreateTextData(new ByteString("1")).GetTextAsNumber());
-      Assert.AreEqual(5UL, ImapData.CreateTextData(new ByteString("005")).GetTextAsNumber());
-      Assert.AreEqual(123UL, ImapData.CreateTextData(new ByteString("123")).GetTextAsNumber());
+      Assert.AreEqual(0UL, ImapData.CreateTextData(ByteString.CreateImmutable("0")).GetTextAsNumber());
+      Assert.AreEqual(1UL, ImapData.CreateTextData(ByteString.CreateImmutable("1")).GetTextAsNumber());
+      Assert.AreEqual(5UL, ImapData.CreateTextData(ByteString.CreateImmutable("005")).GetTextAsNumber());
+      Assert.AreEqual(123UL, ImapData.CreateTextData(ByteString.CreateImmutable("123")).GetTextAsNumber());
 
       try {
-        ImapData.CreateTextData(new ByteString("18446744073709551616")).GetTextAsNumber();
+        ImapData.CreateTextData(ByteString.CreateImmutable("18446744073709551616")).GetTextAsNumber();
         Assert.Fail("OverflowException not thrown");
       }
       catch (OverflowException) {
       }
+    }
+
+    [Test]
+    public void TestSerializeBinaryTextNil()
+    {
+      var nil = ImapData.CreateNilData();
+
+      TestUtils.SerializeBinary(nil, delegate(ImapData deserialized) {
+        Assert.AreEqual(ImapDataFormat.Nil, deserialized.Format);
+        Assert.IsNull(deserialized.List);
+
+        Assert.AreNotSame(deserialized, ImapData.CreateNilData());
+      });
+    }
+
+    [Test]
+    public void TestSerializeBinaryList()
+    {
+      var list = ImapData.CreateListData(new[] {
+        ImapData.CreateNilData(),
+        ImapData.CreateNilData(),
+        ImapData.CreateTextData(ByteString.CreateImmutable("text")),
+      });
+
+      TestUtils.SerializeBinary(list, delegate(ImapData deserialized) {
+        Assert.AreEqual(ImapDataFormat.List, deserialized.Format);
+        Assert.IsNotNull(deserialized.List);
+        Assert.AreEqual(3, deserialized.List.Length);
+      });
+    }
+
+    [Test]
+    public void TestSerializeBinaryTextByteString()
+    {
+      var str = ByteString.CreateImmutable("string");
+      var text = ImapData.CreateTextData(str);
+
+      TestUtils.SerializeBinary(text, delegate(ImapData deserialized) {
+        Assert.AreEqual(ImapDataFormat.Text, deserialized.Format);
+        Assert.AreEqual(6, deserialized.GetTextLength());
+        Assert.AreNotSame(str, deserialized.GetTextAsByteString());
+        Assert.AreEqual("string", deserialized.GetTextAsString());
+
+        Assert.IsNull(deserialized.List);
+      });
+    }
+
+    [Test]
+    public void TestSerializeBinaryTextStream()
+    {
+      var stream = new ChunkedMemoryStream();
+      var str = Encoding.ASCII.GetBytes("string");
+
+      stream.Write(str, 0, str.Length);
+      stream.Position = 0L;
+
+      var text = ImapData.CreateTextData(stream);
+
+      TestUtils.SerializeBinary(text, delegate(ImapData deserialized) {
+        Assert.AreEqual(ImapDataFormat.Text, deserialized.Format);
+        Assert.AreEqual(6, deserialized.GetTextLength());
+        Assert.AreNotSame(stream, deserialized.GetTextAsStream());
+        Assert.AreEqual("string", deserialized.GetTextAsString());
+
+        Assert.IsNull(deserialized.List);
+      });
     }
   }
 }
