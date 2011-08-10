@@ -7,6 +7,9 @@ namespace Neith.Growl.Daemon
     /// <summary>リクエスト情報</summary>
     public interface IGNTPRequest
     {
+        /// <summary>受信時刻(UTC)</summary>
+        DateTime Utc { get; }
+
         /// <summary>アプリケーション名</summary>
         string ApplicationName { get; }
 

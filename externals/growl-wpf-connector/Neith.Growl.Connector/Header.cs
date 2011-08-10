@@ -360,6 +360,15 @@ namespace Neith.Growl.Connector
         }
 
         /// <summary>
+        /// オブジェクトの文字列表現を返します。
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return  string.Format("{0}({1}): {2}", Name, ActualName, Value);
+        }
+
+        /// <summary>
         /// Creates a <see cref="IHeader"/> from a message line
         /// </summary>
         /// <param name="line">The individual message line</param>

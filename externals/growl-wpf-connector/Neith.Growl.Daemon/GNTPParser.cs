@@ -38,6 +38,11 @@ namespace Neith.Growl.Daemon
         long tag;
 
         /// <summary>
+        /// éÛêMäJénéûçè(UTC)
+        /// </summary>
+        private DateTime utc;
+
+        /// <summary>
         /// Represents the method that will handle the <see cref="Error"/> event.
         /// </summary>
         public delegate void GNTPParserErrorEventHandler(IError error);
@@ -302,6 +307,7 @@ namespace Neith.Growl.Daemon
 
                     if (match.Success)
                     {
+                        this.utc = DateTime.UtcNow;
                         this.version = match.Groups["Version"].Value;
                         if (version == MessageParser.GNTP_SUPPORTED_VERSION)
                         {
@@ -668,7 +674,7 @@ namespace Neith.Growl.Daemon
 
             if (this.MessageParsed != null)
             {
-                var request = new GNTPRequest(this.version, this.directive, this.key, this.headers, this.applicationName, this.notificationsToBeRegistered, context);
+                var request = new GNTPRequest(this.utc, this.version, this.directive, this.key, this.headers, this.applicationName, this.notificationsToBeRegistered, context);
                 this.MessageParsed(request);
             }
             else

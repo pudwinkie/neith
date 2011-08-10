@@ -12,39 +12,6 @@ namespace ZTest.Neith.Logger.Model
     [TestClass]
     public class ParseTest
     {
-        private const string TestMessage = @"GNTP/1.0 REGISTER NONE
-Application-Name: SurfWriter 
-Application-Icon: http://www.site.org/image.jpg 
-X-Creator: Apple Software 
-X-Application-ID: 08d6c05a21512a79a1dfeb9d2a8f262f 
-Notifications-Count: 2 
-
-Notification-Name: Download Complete 
-Notification-Display-Name: Download completed 
-Notification-Icon: x-growl-resource://cb08ca4a7bb5f9683c19133a84872ca7 
-Notification-Enabled: True 
-X-Language: English 
-X-Timezone: PST 
-
-Notification-Name: Document Published 
-Notification-Display-Name: Document successfully published 
-Notification-Icon: http://fake.net/image.png 
-Notification-Enabled: False 
-X-Sound: http://fake.net/sound.wav 
-X-Sound-Alt: x-growl-resource://f082d4e3bdfe15f8f5f2450bff69fb17 
-
-Identifier: cb08ca4a7bb5f9683c19133a84872ca7 
-Length: 4 
-
-ABCD
-
-Identifier: f082d4e3bdfe15f8f5f2450bff69fb17 
-Length: 16
-
-FGHIJKLMNOPQRSTU
-
-";
-        private static readonly byte[] TestBytes = Encoding.UTF8.GetBytes(TestMessage);
 
 
         [TestMethod]
@@ -63,9 +30,16 @@ FGHIJKLMNOPQRSTU
                 Assert.Fail("ErrorCode={0}, Description={1}", error.ErrorCode, error.ErrorDescription);
             };
             ParseAll(parser);
-            Assert.IsTrue(items.Count>0);
-            var nLog = NeithNotificationRec.FromHeaders(items[0].Headers);
-
+            Assert.IsTrue(items.Count > 0);
+            foreach (var item in items) {
+                if (item.Directive == RequestType.NOTIFY) {
+                    var nLog = NeithNotificationRec.FromHeaders(item.Headers);
+                }
+                if (item.Directive == RequestType.REGISTER) {
+                    var app = Application.FromHeaders(item.Headers);
+                    Assert.AreEqual("SurfWriter", app.Name);
+                }
+            }
         }
 
         private static void ParseAll(GNTPParser parser)
@@ -102,5 +76,39 @@ FGHIJKLMNOPQRSTU
             }
         }
 
+
+        private const string TestMessage = @"GNTP/1.0 REGISTER NONE
+Application-Name: SurfWriter 
+Application-Icon: http://www.site.org/image.jpg 
+X-Creator: Apple Software 
+X-Application-ID: 08d6c05a21512a79a1dfeb9d2a8f262f 
+Notifications-Count: 2 
+
+Notification-Name: Download Complete 
+Notification-Display-Name: Download completed 
+Notification-Icon: x-growl-resource://cb08ca4a7bb5f9683c19133a84872ca7 
+Notification-Enabled: True 
+X-Language: English 
+X-Timezone: PST 
+
+Notification-Name: Document Published 
+Notification-Display-Name: Document successfully published 
+Notification-Icon: http://fake.net/image.png 
+Notification-Enabled: False 
+X-Sound: http://fake.net/sound.wav 
+X-Sound-Alt: x-growl-resource://f082d4e3bdfe15f8f5f2450bff69fb17 
+
+Identifier: cb08ca4a7bb5f9683c19133a84872ca7 
+Length: 4 
+
+ABCD
+
+Identifier: f082d4e3bdfe15f8f5f2450bff69fb17 
+Length: 16
+
+FGHIJKLMNOPQRSTU
+
+";
+        private static readonly byte[] TestBytes = Encoding.UTF8.GetBytes(TestMessage);
     }
 }

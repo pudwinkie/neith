@@ -11,6 +11,9 @@ namespace Neith.Growl.Daemon
     /// </summary>
     public class GNTPRequest : IGNTPRequest
     {
+        /// <summary>éÛêMéûçè(UTC)</summary>
+        private DateTime utc;
+
         /// <summary>
         /// The version of the GNTP request
         /// </summary>
@@ -50,6 +53,7 @@ namespace Neith.Growl.Daemon
         /// <summary>
         /// Initializes a new instance of the <see cref="GNTPRequest"/> class.
         /// </summary>
+        /// <param name="utc">éÛêMéûçè(UTC)</param>
         /// <param name="version">The version of the GNTP request.</param>
         /// <param name="directive">The type of GNTP request.</param>
         /// <param name="key">The key used to validate and encrypt the message.</param>
@@ -57,8 +61,9 @@ namespace Neith.Growl.Daemon
         /// <param name="applicationName">The name of the application sending the request.</param>
         /// <param name="notificationsToBeRegistered">A collection of the groups of headers for each notification type to be registered.</param>
         /// <param name="callbackContext">The callback context associated with the request.</param>
-        public GNTPRequest(string version, RequestType directive, Key key, HeaderCollection headers, string applicationName, List<HeaderCollection> notificationsToBeRegistered, ICallbackContext callbackContext)
+        public GNTPRequest(DateTime utc, string version, RequestType directive, Key key, HeaderCollection headers, string applicationName, List<HeaderCollection> notificationsToBeRegistered, ICallbackContext callbackContext)
         {
+            this.utc = utc;
             this.version = version;
             this.directive = directive;
             this.key = key;
@@ -67,6 +72,8 @@ namespace Neith.Growl.Daemon
             this.notificationsToBeRegistered = notificationsToBeRegistered;
             this.callbackContext = callbackContext;
         }
+        /// <summary>éÛêMéûçè(UTC)</summary>
+        public DateTime Utc { get { return utc; } }
 
         /// <summary>
         /// Gets the version of the GNTP request
