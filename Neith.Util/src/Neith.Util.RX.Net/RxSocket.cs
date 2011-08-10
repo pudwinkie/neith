@@ -39,6 +39,7 @@ namespace System.Net.Sockets
             if (!string.IsNullOrWhiteSpace(ipAddress)) ip = IPAddress.Parse(ipAddress);
             var endPoint = new IPEndPoint(ip, port);
             var socket = new Socket(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            socket.Blocking = false;
             socket.Bind(endPoint);
             socket.Listen(64);
             return socket
