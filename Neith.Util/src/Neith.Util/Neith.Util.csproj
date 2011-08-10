@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B5385976-C31F-42DF-B1DB-54EA0F98FDC3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Neith.Util</RootNamespace>
+    <AssemblyName>Neith.Util</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Neith.Util.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Neith.Util.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ArrayUtil.cs" />
+    <Compile Include="BCDConverter.cs" />
+    <Compile Include="BigEndianBitConverter.cs" />
+    <Compile Include="Bool2DimCollection.cs" />
+    <Compile Include="BoolCollection.cs" />
+    <Compile Include="CodeDom\ExpressionBuilder\BuilderArrayIndex.cs" />
+    <Compile Include="CodeDom\ExpressionBuilder\BuilderBinaryOperator.cs" />
+    <Compile Include="CodeDom\ExpressionBuilder\BuilderField.cs" />
+    <Compile Include="CodeDom\ExpressionBuilder\BuilderMethodInvoke.cs" />
+    <Compile Include="CodeDom\ExpressionBuilder\BuilderMethodReference.cs" />
+    <Compile Include="CodeDom\ExpressionBuilder\BuilderPrimitive.cs" />
+    <Compile Include="CodeDom\ExpressionBuilder\BuilderProperty.cs" />
+    <Compile Include="CodeDom\ExpressionBuilder\BuilderThis.cs" />
+    <Compile Include="CodeDom\ExpressionBuilder\ET.cs" />
+    <Compile Include="CodeDom\JSEval.cs" />
+    <Compile Include="Collections\Generic\SyncQueue.cs" />
+    <Compile Include="Collections\Generic\SyncWaitQueue.cs" />
+    <Compile Include="ComFactory.cs" />
+    <Compile Include="Configuration\AppConfigUtil.cs" />
+    <Compile Include="Configuration\IniFile.cs" />
+    <Compile Include="CsvUtil.cs" />
+    <Compile Include="DateTimeUtil.cs" />
+    <Compile Include="DisposableObject.cs" />
+    <Compile Include="EnumUtil.cs" />
+    <Compile Include="IO\BigEndianWriter.cs" />
+    <Compile Include="IO\FileUpdateChecker.cs" />
+    <Compile Include="IO\MailSlot.cs" />
+    <Compile Include="IO\MailSlotBase.cs" />
+    <Compile Include="IO\MailSlotReader.cs" />
+    <Compile Include="IO\Pushd.cs" />
+    <Compile Include="IO\UnmanagedTempFile.cs" />
+    <Compile Include="LifeTimeScope.cs" />
+    <Compile Include="Management\QueryUtil.cs" />
+    <Compile Include="Management\Shutdown.cs" />
+    <Compile Include="MarshalByDisposableObject.cs" />
+    <Compile Include="Random\CompatilizedRandom.cs" />
+    <Compile Include="Random\LCG.cs" />
+    <Compile Include="Random\MersenneTwister.cs" />
+    <Compile Include="Random\MotherOfAll.cs" />
+    <Compile Include="Random\RandomBase.cs" />
+    <Compile Include="Random\RanrotB.cs" />
+    <Compile Include="Random\SFMT.cs" />
+    <Compile Include="Random\Well.cs" />
+    <Compile Include="Random\Xorshift.cs" />
+    <Compile Include="Range.cs" />
+    <Compile Include="Reflection\AssemblyUtil.cs" />
+    <Compile Include="Runtime\SerializeUtil.cs" />
+    <Compile Include="StringItem.cs" />
+    <Compile Include="Text\Diff.cs" />
+    <Compile Include="Text\FastDiff.cs" />
+    <Compile Include="Text\LevenshteinDistance.cs" />
+    <Compile Include="Text\Ngram.cs" />
+    <Compile Include="Threading\AsyncUtil.cs" />
+    <Compile Include="Threading\Para.cs" />
+    <Compile Include="Threading\WaitValue.cs" />
+    <Compile Include="WeakReference.cs" />
+    <Compile Include="ObjectUtil.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReentryLock.cs" />
+    <Compile Include="Security\Cryptography\CRC16.cs" />
+    <Compile Include="Security\Cryptography\CRC32.cs" />
+    <Compile Include="Threading\ClockSyncTimer.cs" />
+    <Compile Include="Threading\EventQueueThread.cs" />
+    <Compile Include="Threading\WaitedThreadStartRunner.cs" />
+    <Compile Include="Tuple.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 および x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows インストーラー 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
