@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2009-2010 smdn
+// Copyright (c) 2009-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -32,19 +32,19 @@ namespace Smdn.Net {
     }
 
     public override bool CanSeek {
-      get { return stream.CanSeek; }
+      get { return !disposed && stream.CanSeek; }
     }
 
     public override bool CanRead {
-      get { return stream.CanWrite; }
+      get { return !disposed && stream.CanWrite; }
     }
 
     public override bool CanWrite {
-      get { return stream.CanRead; }
+      get { return !disposed && stream.CanRead; }
     }
 
     public override bool CanTimeout {
-      get { return stream.CanTimeout; }
+      get { return !disposed && stream.CanTimeout; }
     }
 
     public override long Position {

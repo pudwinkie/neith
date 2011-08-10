@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -51,13 +51,13 @@ namespace Smdn.Net.Imap4 {
     {
       if (name == null)
         throw new ArgumentNullException("name");
-      else if (name.Length == 0)
-        throw new ArgumentException("empty name", "name");
+      if (name.Length == 0)
+        throw ExceptionUtils.CreateArgumentMustBeNonEmptyString("name");
 
       if (usage < 0)
-        throw new ArgumentOutOfRangeException("usage", usage, "must be zero or positive number");
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("usage", usage);
       if (limit < 0)
-        throw new ArgumentOutOfRangeException("limit", limit, "must be zero or positive number");
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("limit", limit);
 
       this.Name = name;
       this.Usage = usage;

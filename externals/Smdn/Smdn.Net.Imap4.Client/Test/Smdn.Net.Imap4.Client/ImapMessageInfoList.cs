@@ -542,5 +542,112 @@ namespace Smdn.Net.Imap4.Client {
         Assert.AreEqual(3L, messages[2].Sequence);
       });
     }
+
+    [Test]
+    public void TestCopyToDestinationMailboxOfDifferentSession()
+    {
+      CopyOrMoveToDestinationMailboxOfDifferentSession(false);
+    }
+
+    [Test]
+    public void TestMoveToDestinationMailboxOfDifferentSession()
+    {
+      CopyOrMoveToDestinationMailboxOfDifferentSession(true);
+    }
+
+    private void CopyOrMoveToDestinationMailboxOfDifferentSession(bool move)
+    {
+      var selectResp =
+        "* 3 EXISTS\r\n" +
+        "* OK [UIDVALIDITY 23]\r\n" +
+        "$tag OK [READ-WRITE] done\r\n";
+
+      TestUtils.TestOpenedMailbox("INBOX", selectResp, delegate(ImapPseudoServer serverSource, ImapOpenedMailboxInfo mailboxSource) {
+        Assert.AreEqual(3L, mailboxSource.ExistMessageCount);
+
+        TestUtils.TestAuthenticated(delegate(ImapPseudoServer serverDest, ImapClient clientDest) {
+          // LIST
+          serverDest.EnqueueTaggedResponse("* LIST () \"\" dest\r\n" +
+                                           "$tag OK done\r\n");
+
+          var mailboxDest = clientDest.GetMailbox("dest");
+
+          serverDest.DequeueRequest();
+
+          Assert.AreNotSame(mailboxSource.Client, mailboxDest.Client);
+
+          // NOOP (source)
+          serverSource.EnqueueTaggedResponse("$tag OK done\r\n");
+          // FETCH (source)
+          serverSource.EnqueueTaggedResponse("* FETCH 1 (UID 1)\r\n" +
+                                             "* FETCH 2 (UID 2)\r\n" +
+                                             "* FETCH 3 (UID 3)\r\n" +
+                                             "$tag OK done\r\n");
+          serverSource.EnqueueTaggedResponse("* FETCH 1 (" +
+                                             "FLAGS (\\Answered $label1) " +
+                                             "INTERNALDATE \"25-Jan-2011 15:29:06 +0900\" " +
+                                             "RFC822.SIZE 13 " +
+                                             "BODY[] {13}\r\ntest message1)\r\n" +
+                                             "$tag OK done\r\n");
+          serverSource.EnqueueTaggedResponse("* FETCH 2 (" +
+                                             "FLAGS (\\Answered $label2) " +
+                                             "INTERNALDATE \"25-Jan-2011 15:29:06 +0900\" " +
+                                             "RFC822.SIZE 13 " +
+                                             "BODY[] {13}\r\ntest message2)\r\n" +
+                                             "$tag OK done\r\n");
+          serverSource.EnqueueTaggedResponse("* FETCH 3 (" +
+                                             "FLAGS (\\Answered $label3) " +
+                                             "INTERNALDATE \"25-Jan-2011 15:29:06 +0900\" " +
+                                             "RFC822.SIZE 13 " +
+                                             "BODY[] {13}\r\ntest message3)\r\n" +
+                                             "$tag OK done\r\n");
+
+          if (move)
+            // UID STORE (source)
+            serverSource.EnqueueTaggedResponse("* FETCH 1 (FLAGS (\\Deleted))\r\n" +
+                                               "* FETCH 2 (FLAGS (\\Deleted))\r\n" +
+                                               "* FETCH 3 (FLAGS (\\Deleted))\r\n" +
+                                               "$tag OK done\r\n");
+
+          // APPEND (dest)
+          serverDest.EnqueueResponse("+ OK continue\r\n");
+          serverDest.EnqueueResponse(string.Empty);
+          serverDest.EnqueueTaggedResponse("$tag OK [APPENDUID 38505 3955] APPEND completed\r\n");
+          serverDest.EnqueueResponse("+ OK continue\r\n");
+          serverDest.EnqueueResponse(string.Empty);
+          serverDest.EnqueueTaggedResponse("$tag OK [APPENDUID 38505 3956] APPEND completed\r\n");
+          serverDest.EnqueueResponse("+ OK continue\r\n");
+          serverDest.EnqueueResponse(string.Empty);
+          serverDest.EnqueueTaggedResponse("$tag OK [APPENDUID 38505 3957] APPEND completed\r\n");
+
+          if (move)
+            mailboxSource.GetMessages().MoveTo(mailboxDest);
+          else
+            mailboxSource.GetMessages().CopyTo(mailboxDest);
+
+          Assert.That(serverSource.DequeueRequest(), Text.EndsWith("NOOP\r\n"));
+          Assert.That(serverSource.DequeueRequest(), Text.EndsWith("FETCH 1:3 (UID)\r\n"));
+          Assert.That(serverSource.DequeueRequest(), Text.EndsWith("UID FETCH 1 (RFC822.SIZE INTERNALDATE FLAGS BODY.PEEK[]<0.10240>)\r\n"));
+          Assert.That(serverSource.DequeueRequest(), Text.EndsWith("UID FETCH 2 (RFC822.SIZE INTERNALDATE FLAGS BODY.PEEK[]<0.10240>)\r\n"));
+          Assert.That(serverSource.DequeueRequest(), Text.EndsWith("UID FETCH 3 (RFC822.SIZE INTERNALDATE FLAGS BODY.PEEK[]<0.10240>)\r\n"));
+
+          if (move)
+            Assert.That(serverSource.DequeueRequest(), Text.EndsWith("STORE 1:3 +FLAGS (\\Deleted)\r\n"));
+
+          Assert.That(serverDest.DequeueRequest(),
+                      Text.EndsWith("APPEND dest (\\Answered $label1) \"25-Jan-2011 15:29:06 +0900\" {13}\r\n"));
+          Assert.That(serverDest.DequeueRequest(),
+                      Text.StartsWith("test message1"));
+          Assert.That(serverDest.DequeueRequest(),
+                      Text.EndsWith("APPEND dest (\\Answered $label2) \"25-Jan-2011 15:29:06 +0900\" {13}\r\n"));
+          Assert.That(serverDest.DequeueRequest(),
+                      Text.StartsWith("test message2"));
+          Assert.That(serverDest.DequeueRequest(),
+                      Text.EndsWith("APPEND dest (\\Answered $label3) \"25-Jan-2011 15:29:06 +0900\" {13}\r\n"));
+          Assert.That(serverDest.DequeueRequest(),
+                      Text.StartsWith("test message3"));
+        });
+      });
+    }
   }
 }

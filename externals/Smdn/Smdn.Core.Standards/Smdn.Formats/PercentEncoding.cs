@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -43,8 +43,18 @@ namespace Smdn.Formats {
 
     public static string GetEncodedString(byte[] bytes, ToPercentEncodedTransformMode mode)
     {
+      if (bytes == null)
+        throw new ArgumentNullException();
+
+      return GetEncodedString(bytes, 0, bytes.Length, mode);
+    }
+
+    public static string GetEncodedString(byte[] bytes, int offset, int count, ToPercentEncodedTransformMode mode)
+    {
       return Encoding.ASCII.GetString(ICryptoTransformExtensions.TransformBytes(new ToPercentEncodedTransform(mode),
-                                                                                bytes));
+                                                                                bytes,
+                                                                                offset,
+                                                                                count));
     }
 
     public static byte[] Encode(string str, ToPercentEncodedTransformMode mode)
@@ -57,8 +67,12 @@ namespace Smdn.Formats {
       if (encoding == null)
         throw new ArgumentNullException("encoding");
 
+      var bytes = encoding.GetBytes(str);
+
       return ICryptoTransformExtensions.TransformBytes(new ToPercentEncodedTransform(mode),
-                                                       encoding.GetBytes(str));
+                                                       bytes,
+                                                       0,
+                                                       bytes.Length);
     }
 
     public static string GetDecodedString(string str)
@@ -90,8 +104,12 @@ namespace Smdn.Formats {
 
     public static byte[] Decode(string str, bool decodePlusToSpace)
     {
+      var bytes = Encoding.ASCII.GetBytes(str);
+
       return ICryptoTransformExtensions.TransformBytes(new FromPercentEncodedTransform(decodePlusToSpace),
-                                                       Encoding.ASCII.GetBytes(str));
+                                                       bytes,
+                                                       0,
+                                                       bytes.Length);
     }
   }
 }

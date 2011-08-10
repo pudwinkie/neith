@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -31,8 +31,8 @@ namespace Smdn.Net {
     private class TransferEncoding : Encoding {
       public TransferEncoding(int bits)
       {
-        if (bits < 0 || 8 < bits)
-          throw new ArgumentOutOfRangeException("bits", bits, "must be from 0 to 8");
+        if (bits < 1 || 8 < bits)
+          throw ExceptionUtils.CreateArgumentMustBeInRange(1, 8, "bits", bits);
 
         maxValue = (char)(1 << bits);
       }
@@ -40,7 +40,7 @@ namespace Smdn.Net {
       public override int GetMaxCharCount(int byteCount)
       {
         if (byteCount < 0)
-          throw new ArgumentOutOfRangeException("byteCount", byteCount, "must be zero or positive number");
+          throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("byteCount", byteCount);
 
         return byteCount;
       }
@@ -48,7 +48,7 @@ namespace Smdn.Net {
       public override int GetMaxByteCount(int charCount)
       {
         if (charCount < 0)
-          throw new ArgumentOutOfRangeException("charCount", charCount, "must be zero or positive number");
+          throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("charCount", charCount);
 
         return charCount;
       }
@@ -56,9 +56,9 @@ namespace Smdn.Net {
       public override int GetByteCount(char[] chars, int index, int count)
       {
         if (index < 0)
-          throw new ArgumentOutOfRangeException("index", index, "must be zero or positive number");
+          throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("index", index);
         if (count < 0)
-          throw new ArgumentOutOfRangeException("count", count, "must be zero or positive nubmer");
+          throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("count", count);
 
         if (EncoderFallback == null)
           return count - index;
@@ -92,9 +92,9 @@ namespace Smdn.Net {
       public override int GetCharCount(byte[] bytes, int index, int count)
       {
         if (index < 0)
-          throw new ArgumentOutOfRangeException("index", index, "must be zero or positive number");
+          throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("index", index);
         if (count < 0)
-          throw new ArgumentOutOfRangeException("count", count, "must be zero or positive number");
+          throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("count", count);
 
         return count;
       }
@@ -106,11 +106,13 @@ namespace Smdn.Net {
         if (bytes == null)
           throw new ArgumentNullException("chars");
         if (charIndex < 0)
-          throw new ArgumentOutOfRangeException("charIndex", charIndex, "must be zero or positive number");
-        if (chars.Length < charIndex + charCount)
-          throw new ArgumentOutOfRangeException("charCount", charCount, "must be less than length of chars");
+          throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("charIndex", charIndex);
+        if (charCount < 0)
+          throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("charCount", charCount);
+        if (chars.Length - charCount < charIndex)
+          throw ExceptionUtils.CreateArgumentAttemptToAccessBeyondEndOfArray("charIndex", chars, charIndex, charCount);
         if (byteIndex < 0)
-          throw new ArgumentOutOfRangeException("byteIndex", byteIndex, "must be zero or positive number");
+          throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("byteIndex", byteIndex);
 
         var byteCount = 0;
 
@@ -157,11 +159,13 @@ namespace Smdn.Net {
         if (chars == null)
           throw new ArgumentNullException("chars");
         if (byteIndex < 0)
-          throw new ArgumentOutOfRangeException("byteIndex", byteIndex, "must be zero or positive number");
-        if (bytes.Length < byteIndex + byteCount)
-          throw new ArgumentOutOfRangeException("byteCount", byteCount, "must be less than length of bytes");
+          throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("byteIndex", byteIndex);
+        if (byteCount < 0)
+          throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("byteCount", byteCount);
+        if (bytes.Length - byteCount < byteIndex)
+          throw ExceptionUtils.CreateArgumentAttemptToAccessBeyondEndOfArray("byteIndex", bytes, byteIndex, byteCount);
         if (charIndex < 0)
-          throw new ArgumentOutOfRangeException("charIndex", charIndex, "must be zero or positive number");
+          throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("charIndex", charIndex);
 
         var charCount = 0;
 

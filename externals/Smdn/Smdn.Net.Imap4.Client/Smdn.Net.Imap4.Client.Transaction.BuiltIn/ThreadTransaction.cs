@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -37,27 +37,6 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
       this.uid = uid;
     }
 
-    protected override ProcessTransactionDelegate Reset()
-    {
-#if DEBUG
-      if (!RequestArguments.ContainsKey("threading algorithm"))
-        return ProcessArgumentNotSetted;
-      if (!RequestArguments.ContainsKey("charset specification"))
-        return ProcessArgumentNotSetted;
-      if (!RequestArguments.ContainsKey("searching criteria"))
-        return ProcessArgumentNotSetted;
-#endif
-
-      return ProcessThread;
-    }
-
-#if DEBUG
-    private void ProcessArgumentNotSetted()
-    {
-      FinishError(ImapCommandResultCode.RequestError, "arguments 'threading algorithm', 'charset specification' and 'searching criteria' must be setted");
-    }
-#endif
-
     // BASE.6.4.THREAD. THREAD Command
     // Arguments:  threading algorithm
     //             charset specification
@@ -67,14 +46,22 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     //             NO - thread error: can't thread that charset or
     //                  criteria
     //             BAD - command unknown or arguments invalid
-    private void ProcessThread()
+    protected override ImapCommand PrepareCommand()
     {
+#if DEBUG
+      if (!RequestArguments.ContainsKey("threading algorithm") ||
+          !RequestArguments.ContainsKey("charset specification") ||
+          !RequestArguments.ContainsKey("searching criteria")) {
+        FinishError(ImapCommandResultCode.RequestError, "arguments 'threading algorithm', 'charset specification' and 'searching criteria' must be setted");
+        return null;
+      }
+#endif
+
       // THREAD / UID THREAD
-      SendCommand(uid ? "UID THREAD" : "THREAD",
-                  ProcessReceiveResponse,
-                  RequestArguments["threading algorithm"],
-                  RequestArguments["charset specification"],
-                  RequestArguments["searching criteria"]);
+      return Connection.CreateCommand(uid ? "UID THREAD" : "THREAD",
+                                      RequestArguments["threading algorithm"],
+                                      RequestArguments["charset specification"],
+                                      RequestArguments["searching criteria"]);
     }
 
     protected override void OnDataResponseReceived(ImapDataResponse data)

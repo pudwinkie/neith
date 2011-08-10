@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="3.5" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{74542EB7-3069-41C2-B0F9-91CBBA6DA988}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Smdn.Formats.Playlists.Tests</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <RootNamespace>Smdn.Formats.Playlists.Tests</RootNamespace>
+    <OutputPath>bin\</OutputPath>
+    <IntermediateOutputPath>obj\</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\netfx3.5\</OutputPath>
+    <IntermediateOutputPath>obj\Debug\netfx3.5\</IntermediateOutputPath>
+    <DefineConstants>NET_2_0;NET_3_5;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>NET_2_0;NET_3_5</DefineConstants>
+    <OutputPath>bin\Release\netfx3.5\</OutputPath>
+    <IntermediateOutputPath>obj\Release\netfx3.5\</IntermediateOutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\Smdn.Formats.Playlists-netfx3.5.csproj">
+      <Project>{77EB2918-18A0-43A4-8398-5576292D8A72}</Project>
+      <Name>Smdn.Formats.Playlists-netfx3.5</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Smdn\Smdn-netfx3.5.csproj">
+      <Project>{94EE5515-F253-491B-8F0F-09F70D03B1B6}</Project>
+      <Name>Smdn-netfx3.5</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Smdn.Xml\Smdn.Xml-netfx3.5.csproj">
+      <Project>{470C9328-0BAD-4186-AA7B-4E11E84DF29B}</Project>
+      <Name>Smdn.Xml-netfx3.5</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Smdn.Formats.Playlists\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Smdn.Formats.Playlists\Playlist.cs" />
+    <Compile Include="Smdn.Formats.Playlists\PlaylistFormat.cs" />
+  </ItemGroup>
+</Project>

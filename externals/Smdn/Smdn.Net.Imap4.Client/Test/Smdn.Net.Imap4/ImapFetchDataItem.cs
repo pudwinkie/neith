@@ -93,7 +93,7 @@ namespace Smdn.Net.Imap4 {
       }
     }
 
-    [Test, ExpectedException(typeof(ArgumentException))]
+    [Test, ExpectedException(typeof(ArgumentNullException))]
     public void TestBinarySectionNull()
     {
       ImapFetchDataItem.Binary(null);
@@ -114,7 +114,8 @@ namespace Smdn.Net.Imap4 {
       var combined = dataItem1 + dataItem2;
 
       Assert.AreEqual("(MODSEQ INTERNALDATE)", combined.ToString());
-      Assert.AreEqual(ImapCapability.CondStore, (combined as IImapExtension).RequiredCapability);
+      CollectionAssert.AreEquivalent(new[] {ImapCapability.CondStore},
+                                     (combined as IImapExtension).RequiredCapabilities);
     }
   }
 }

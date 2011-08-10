@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,11 +24,17 @@
 
 using System;
 using System.Net;
+using System.Runtime.Serialization;
 
 using Smdn.Net.Pop3.Client.Session;
 
 namespace Smdn.Net.Pop3.Client {
-  public class PopClientProfile : IPopSessionProfile, ICloneable {
+  [Serializable]
+  public class PopClientProfile :
+    IPopSessionProfile,
+    ISerializable,
+    ICloneable
+  {
     public Uri Authority {
       get { return authority.Uri; }
     }
@@ -77,7 +83,7 @@ namespace Smdn.Net.Pop3.Client {
       set
       {
         if (value < -1)
-          throw new ArgumentOutOfRangeException("Timeout", value, "must be greater than or equals to -1");
+          throw ExceptionUtils.CreateArgumentMustBeGreaterThanOrEqualTo(-1, "Timeout", value);
         timeout = value;
       }
     }
@@ -89,7 +95,7 @@ namespace Smdn.Net.Pop3.Client {
       set
       {
         if (value < -1)
-          throw new ArgumentOutOfRangeException("SendTimeout", value, "must be greater than or equals to -1");
+          throw ExceptionUtils.CreateArgumentMustBeGreaterThanOrEqualTo(-1, "SendTimeout", value);
         sendTimeout = value;
       }
     }
@@ -101,11 +107,12 @@ namespace Smdn.Net.Pop3.Client {
       set
       {
         if (value < -1)
-          throw new ArgumentOutOfRangeException("ReceiveTimeout", value, "must be greater than or equals to -1");
+          throw ExceptionUtils.CreateArgumentMustBeGreaterThanOrEqualTo(-1, "ReceiveTimeout", value);
         receiveTimeout = value;
       }
     }
 
+    [NonSerialized]
     private ICredentialsByHost credentials = null;
 
     ICredentialsByHost IPopSessionProfile.Credentials {
@@ -227,6 +234,28 @@ namespace Smdn.Net.Pop3.Client {
       this.UserName = userName;
       this.AuthType = authType;
       this.Timeout = timeout;
+    }
+
+    protected PopClientProfile(SerializationInfo info, StreamingContext context)
+    {
+      this.authority = new PopUriBuilder(info.GetString("authority"));
+      this.timeout = info.GetInt32("timeout");
+      this.sendTimeout = info.GetInt32("sendTimeout");
+      this.receiveTimeout = info.GetInt32("receiveTimeout");
+      this.useTlsIfAvailable = info.GetBoolean("useTlsIfAvailable");
+      this.usingSaslMechanisms = (string[])info.GetValue("usingSaslMechanisms", typeof(string[]));
+      this.allowInsecureLogin = info.GetBoolean("allowInsecureLogin");
+    }
+
+    public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+      info.AddValue("authority", authority.ToString());
+      info.AddValue("timeout", timeout);
+      info.AddValue("sendTimeout", sendTimeout);
+      info.AddValue("receiveTimeout", receiveTimeout);
+      info.AddValue("useTlsIfAvailable", useTlsIfAvailable);
+      info.AddValue("usingSaslMechanisms", usingSaslMechanisms);
+      info.AddValue("allowInsecureLogin", allowInsecureLogin);
     }
 
     internal void SetCredentials(ICredentialsByHost credentials)

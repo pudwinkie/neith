@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -62,7 +62,7 @@ namespace Smdn.Net.Imap4.Protocol.Client {
       return Array.ConvertAll<ImapData, string>(respText.Arguments[0].List, ImapDataConverter.ToAString);
     }
 
-    public static ImapCapabilityList FromCapability(ImapResponseText respText)
+    public static ImapCapabilitySet FromCapability(ImapResponseText respText)
     {
       RejectMalformed(respText, ImapResponseCode.Capability, 0);
 
@@ -74,7 +74,7 @@ namespace Smdn.Net.Imap4.Protocol.Client {
       RejectMalformed(respText, ImapResponseCode.PermanentFlags, 0);
 
       if (respText.Arguments.Length < 1)
-        return new ImapMessageFlagList();
+        return new ImapMessageFlagSet();
 
       if (respText.Arguments[0].Format != ImapDataFormat.List)
         throw new ImapMalformedDataException(string.Format("invalid format: expected type is {0}, but was {1}",

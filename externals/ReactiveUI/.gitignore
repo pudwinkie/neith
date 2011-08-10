@@ -1,0 +1,16 @@
+*.suo
+*.user
+*/bin/
+*/Bin/
+*/obj/
+*/Obj/
+*.vspscc
+*.vssscc
+*.vs10x
+*.pidb
+*.userprefs
+ReactiveUI/Generated/*.cs
+*.tmp_proj
+**/StyleCop.Cache
+StyleCop.Cache
+TestResults

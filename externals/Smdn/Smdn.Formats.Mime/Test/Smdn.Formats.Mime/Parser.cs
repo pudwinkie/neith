@@ -135,6 +135,48 @@ MIME-Version: 1.0");
     }
 
     [Test]
+    public void TestContentTypeCharsetNotFoundOrUnsupported()
+    {
+      try {
+        MimeMessage.LoadMessage(@"Content-Type: text/plain; charset=x-unsupported
+
+body");
+
+        Assert.Fail("EncodingNotSupportedException not thrown");
+      }
+      catch (EncodingNotSupportedException) {
+      }
+    }
+
+    [Test]
+    public void TestContentTypeUseFallbackCharset()
+    {
+      var mime = MimeMessage.LoadMessage(@"Content-Type: text/plain; charset=x-unsupported
+
+body", Encoding.UTF8);
+
+      Assert.IsNotNull(mime.Charset);
+      Assert.AreEqual(Encoding.UTF8, mime.Charset);
+      Assert.AreEqual("body", mime.ReadContentAsText());
+    }
+
+    [Test]
+    public void TestContentTypeSelectFallbackCharset()
+    {
+      var mime = MimeMessage.LoadMessage(@"Content-Type: text/plain; charset=x-unsupported
+
+body", delegate(string name) {
+        Assert.AreEqual("x-unsupported", name, "callback name arg");
+
+        return Encoding.UTF8;
+      });
+
+      Assert.IsNotNull(mime.Charset);
+      Assert.AreEqual(Encoding.UTF8, mime.Charset);
+      Assert.AreEqual("body", mime.ReadContentAsText());
+    }
+
+    [Test]
     public void TestSinglePartTextBody()
     {
       var mime = MimeMessage.LoadMessage(@"Content-Type: text/plain
@@ -278,6 +320,37 @@ ERROR: Update failed. Your network may be down or none of the mirrors listed in 
       Assert.AreEqual("message/delivery-status", mime.SubParts[1].Headers["Content-Type"].Value);
       Assert.AreEqual(new MimeType("message", "rfc822"), mime.SubParts[2].MimeType);
       Assert.AreEqual("message/rfc822", mime.SubParts[2].Headers["Content-Type"].Value);
+    }
+
+    [Test]
+    public void TestNewlineDelimitedByInternalStreamBuffer()
+    {
+      const int bufferSize = 1024;
+
+      var message = "MIME-Version: 1.0\r\nSubject: ";
+      var splittedAt = bufferSize - message.Length - 1;
+      var expectedSubject = new string('x', splittedAt) + " yyy";
+
+      message += new string('x', splittedAt);
+      message += "\r";
+
+      if (message.Length != bufferSize)
+        Assert.Fail("not splitted");
+
+      message += "\n";
+      message += "\tyyy\r\n";
+      message += "From: from@example.com\r\n\r\n";
+      message += "body";
+
+      var mime = MimeMessage.LoadMessage(message);
+
+      Assert.IsTrue(mime.Headers.Contains("Subject"));
+      Assert.AreEqual(expectedSubject, mime.Headers["Subject"].Value);
+
+      Assert.IsTrue(mime.Headers.Contains("From"));
+      Assert.AreEqual("from@example.com", mime.Headers["From"].Value);
+
+      Assert.AreEqual("body", mime.ReadContentAsText());
     }
   }
 }

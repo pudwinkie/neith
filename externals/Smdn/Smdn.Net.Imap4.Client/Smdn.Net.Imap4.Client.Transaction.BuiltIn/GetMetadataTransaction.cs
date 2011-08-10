@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -46,25 +46,6 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     {
     }
 
-    protected override ProcessTransactionDelegate Reset()
-    {
-#if DEBUG
-      if (!RequestArguments.ContainsKey("mailbox-name"))
-        return ProcessArgumentNotSetted;
-      else if (!RequestArguments.ContainsKey("entry-specifier"))
-        return ProcessArgumentNotSetted;
-      else
-#endif
-        return ProcessGetMetadata;
-    }
-
-#if DEBUG
-    private void ProcessArgumentNotSetted()
-    {
-      FinishError(ImapCommandResultCode.RequestError, "arguments 'mailbox-name' and 'entry-specifier' must be setted");
-    }
-#endif
-
     /*
      * 4.2. GETMETADATA Command
      *        Arguments:  mailbox-name
@@ -76,22 +57,28 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
      *                         the server
      *                    BAD - command unknown or arguments invalid
      */
-    private void ProcessGetMetadata()
+    protected override ImapCommand PrepareCommand()
     {
+#if DEBUG
+      if (!RequestArguments.ContainsKey("mailbox-name") ||
+          !RequestArguments.ContainsKey("entry-specifier")) {
+        FinishError(ImapCommandResultCode.RequestError, "arguments 'mailbox-name' and 'entry-specifier' must be setted");
+        return null;
+      }
+#endif
+
       // GETMETADATA
       ImapString options;
 
       if (RequestArguments.TryGetValue("options", out options))
-        SendCommand("GETMETADATA",
-                    ProcessReceiveResponse,
-                    RequestArguments["mailbox-name"],
-                    options,
-                    RequestArguments["entry-specifier"]);
+        return Connection.CreateCommand("GETMETADATA",
+                                        RequestArguments["mailbox-name"],
+                                        options,
+                                        RequestArguments["entry-specifier"]);
       else
-        SendCommand("GETMETADATA",
-                    ProcessReceiveResponse,
-                    RequestArguments["mailbox-name"],
-                    RequestArguments["entry-specifier"]);
+        return Connection.CreateCommand("GETMETADATA",
+                                        RequestArguments["mailbox-name"],
+                                        RequestArguments["entry-specifier"]);
     }
 
     protected override void OnDataResponseReceived(ImapDataResponse data)

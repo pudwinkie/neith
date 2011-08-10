@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -35,51 +35,61 @@ namespace Smdn.Net.Imap4 {
 
   [Serializable]
   public class ImapIncapableException : ImapInvalidOperationException {
-    [NonSerialized]
-    private ImapCapability requiredCapability;
+    private ImapCapability[] requiredCapabilities;
 
-    public ImapCapability RequiredCapability {
-      get { return requiredCapability; }
+    public ImapCapability[] RequiredCapabilities {
+      get { return requiredCapabilities; }
     }
 
     public ImapIncapableException()
       : base()
     {
-      this.requiredCapability = null;
+      this.requiredCapabilities = null;
     }
 
     public ImapIncapableException(ImapCapability requiredCapability)
-      : this(string.Format("{0} is incapable", requiredCapability), requiredCapability)
+      : this(string.Concat(requiredCapability, " is incapable"), new[] {requiredCapability})
+    {
+    }
+
+    public ImapIncapableException(ImapCapability[] requiredCapabilities)
+#if NET_4_0
+      : this(string.Format("incapable ({0})", string.Join<ImapCapability>(", ", requiredCapabilities)), requiredCapabilities)
+#else
+      : this(string.Format("incapable ({0})", string.Join(", ", Array.ConvertAll(requiredCapabilities, (c) => c.ToString()))), requiredCapabilities)
+#endif
     {
     }
 
     public ImapIncapableException(string message, ImapCapability requiredCapability)
+      : this(message, new[] {requiredCapability})
+    {
+    }
+
+    public ImapIncapableException(string message, ImapCapability[] requiredCapabilities)
       : base(message)
     {
-      this.requiredCapability = requiredCapability;
+      this.requiredCapabilities = requiredCapabilities;
     }
 
     public ImapIncapableException(string message)
       : base(message)
     {
-      this.requiredCapability = null;
+      this.requiredCapabilities = null;
     }
 
     protected ImapIncapableException(SerializationInfo info, StreamingContext context)
       : base(info, context)
     {
-      // TODO
-      //RequiredCapability = info.GetValue("RequiredCapability", typeof(ImapCapability));
+      this.requiredCapabilities = (ImapCapability[])info.GetValue("requiredCapabilities",
+                                                                  typeof(ImapCapability[]));
     }
 
-    /*
     public override void GetObjectData(SerializationInfo info, StreamingContext context)
     {
       base.GetObjectData(info, context);
 
-      // TODO
-      //info.AddValue("RequiredCapability", RequiredCapability);
+      info.AddValue("requiredCapabilities", requiredCapabilities);
     }
-    */
   }
 }

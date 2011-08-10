@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -30,29 +30,18 @@ using Smdn.Net.Imap4.Protocol.Client;
 
 namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
   internal sealed class ExpungeTransaction : ImapTransactionBase<ImapCommandResult<long[]>>, IImapExtension {
-    ImapCapability IImapExtension.RequiredCapability {
-      get { return uid ? ImapCapability.UidPlus : null; }
+    IEnumerable<ImapCapability> IImapExtension.RequiredCapabilities {
+      get
+      {
+        if (uid)
+          yield return ImapCapability.UidPlus;
+      }
     }
 
     public ExpungeTransaction(ImapConnection connection, bool uid)
       : base(connection)
     {
       this.uid = uid;
-    }
-
-    protected override ProcessTransactionDelegate Reset()
-    {
-#if DEBUG
-      if (uid && !RequestArguments.ContainsKey("sequence set"))
-        return ProcessArgumentNotSetted;
-      else
-#endif
-        return ProcessExpunge;
-    }
-
-    private void ProcessArgumentNotSetted()
-    {
-      FinishError(ImapCommandResultCode.RequestError, "arguments 'sequence set' must be setted");
     }
 
     // 6.4.3. EXPUNGE Command
@@ -71,13 +60,21 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     //    Result:     OK - expunge completed
     //                NO - expunge failure (e.g., permission denied)
     //                BAD - command unknown or arguments invalid
-    private void ProcessExpunge()
+    protected override ImapCommand PrepareCommand()
     {
+#if DEBUG
+      if (uid && !RequestArguments.ContainsKey("sequence set")) {
+        FinishError(ImapCommandResultCode.RequestError, "arguments 'sequence set' must be setted");
+        return null;
+      }
+#endif
+
       // EXPUNGE / UID EXPUNGE
       if (uid)
-        SendCommand("UID EXPUNGE", ProcessReceiveResponse, RequestArguments["sequence set"]);
+        return Connection.CreateCommand("UID EXPUNGE",
+                                        RequestArguments["sequence set"]);
       else
-        SendCommand("EXPUNGE", ProcessReceiveResponse);
+        return Connection.CreateCommand("EXPUNGE");
     }
 
     protected override void OnDataResponseReceived(ImapDataResponse data)

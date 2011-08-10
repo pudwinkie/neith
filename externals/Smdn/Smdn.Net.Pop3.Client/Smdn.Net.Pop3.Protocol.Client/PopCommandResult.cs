@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,16 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
+
+#if NET_3_5
+using System.Linq;
+#else
+using Smdn.Collections;
+#endif
 
 namespace Smdn.Net.Pop3.Protocol.Client {
+  [Serializable]
   internal sealed class PopCommandResult<TResultValue> : PopCommandResult {
     public TResultValue Value {
       get { return val; }
@@ -49,10 +57,17 @@ namespace Smdn.Net.Pop3.Protocol.Client {
       this.val = val;
     }
 
+    protected PopCommandResult(SerializationInfo info, StreamingContext context)
+      : base(info, context)
+    {
+    }
+
+    [NonSerialized]
     private /*readonly*/ TResultValue val;
   }
 
-  public class PopCommandResult {
+  [Serializable]
+  public class PopCommandResult : ISerializable {
     public PopCommandResultCode Code {
       get { return code; }
       internal set { code = value; }
@@ -67,9 +82,9 @@ namespace Smdn.Net.Pop3.Protocol.Client {
       get { return !Succeeded; }
     }
 
-    public Exception Exception {
+    internal Exception Exception {
       get { return exception; }
-      internal set { exception = value; }
+      set { exception = value; }
     }
 
     public string Description {
@@ -91,9 +106,9 @@ namespace Smdn.Net.Pop3.Protocol.Client {
       get
       {
         if (responseText == null)
-          return string.Format("<{0}>", description);
+          return string.Concat("<", description, ">");
         else
-          return string.Format("\"{0}\"", responseText);
+          return string.Concat("\"", responseText, "\"");
       }
     }
 
@@ -128,6 +143,24 @@ namespace Smdn.Net.Pop3.Protocol.Client {
       this.code = code;
       this.description = description;
       this.responseText = responseText;
+    }
+
+    internal protected PopCommandResult(SerializationInfo info, StreamingContext context)
+    {
+      this.code = (PopCommandResultCode)info.GetValue("code", typeof(PopCommandResultCode));
+      this.description = info.GetString("description");
+      this.responseText = info.GetString("responseText");
+      this.statusResponse = (PopStatusResponse)info.GetValue("statusResponse", typeof(PopStatusResponse));
+      this.receivedResponses = (PopResponse[])info.GetValue("receivedResponses", typeof(PopResponse[]));
+    }
+
+    public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+      info.AddValue("code", code);
+      info.AddValue("description", description);
+      info.AddValue("responseText", responseText);
+      info.AddValue("statusResponse", statusResponse);
+      info.AddValue("receivedResponses", receivedResponses.ToArray());
     }
 
     public PopStatusResponse GetResponseCode(PopResponseCode code)

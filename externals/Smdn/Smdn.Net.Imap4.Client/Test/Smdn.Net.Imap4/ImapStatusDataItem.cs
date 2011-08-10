@@ -26,7 +26,9 @@ namespace Smdn.Net.Imap4 {
       var combined = status1 + status2;
 
       Assert.AreEqual("(HIGHESTMODSEQ UIDVALIDITY)", combined.ToString());
-      Assert.AreEqual(ImapCapability.CondStore, (combined as IImapExtension).RequiredCapability);
+
+      CollectionAssert.AreEquivalent(new[] {ImapCapability.CondStore},
+                                     (combined as IImapExtension).RequiredCapabilities);
     }
   }
 }

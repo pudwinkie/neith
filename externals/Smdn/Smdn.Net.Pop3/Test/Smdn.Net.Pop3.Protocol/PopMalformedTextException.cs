@@ -15,7 +15,7 @@ namespace Smdn.Net.Pop3.Protocol {
         Assert.IsNull(deserialized.CausedText);
       });
 
-      var ex2 = new PopMalformedTextException(new ByteString("+ERR"));
+      var ex2 = new PopMalformedTextException(ByteString.CreateImmutable("+ERR"));
 
       Assert.IsNotNull(ex2.CausedText);
 

@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2009-2010 smdn
+// Copyright (c) 2009-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -81,12 +81,12 @@ namespace Smdn.IO {
 
     public static string RemoveInvalidPathChars(string path)
     {
-      return StringExtensions.Remove(path, Path.GetInvalidPathChars());
+      return StringExtensions.RemoveChars(path, Path.GetInvalidPathChars());
     }
 
     public static string RemoveInvalidFileNameChars(string path)
     {
-      return StringExtensions.Remove(path, Path.GetInvalidFileNameChars());
+      return StringExtensions.RemoveChars(path, Path.GetInvalidFileNameChars());
     }
 
     public static string ReplaceInvalidPathCharsWithBlanks(string path)

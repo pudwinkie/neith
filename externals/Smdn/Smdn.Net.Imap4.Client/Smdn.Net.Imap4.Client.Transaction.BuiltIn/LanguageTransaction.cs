@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@
 // THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 
 using Smdn.Net.Imap4.Protocol;
 using Smdn.Net.Imap4.Protocol.Client;
@@ -33,18 +34,13 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
    * http://tools.ietf.org/html/rfc5255
    */
   internal sealed class LanguageTransaction : ImapTransactionBase<ImapCommandResult<Tuple<string[], ImapNamespace>>>, IImapExtension {
-    ImapCapability IImapExtension.RequiredCapability {
-      get { return ImapCapability.Language; }
+    IEnumerable<ImapCapability> IImapExtension.RequiredCapabilities {
+      get { yield return ImapCapability.Language; }
     }
 
     public LanguageTransaction(ImapConnection connection)
       : base(connection)
     {
-    }
-
-    protected override ProcessTransactionDelegate Reset()
-    {
-      return ProcessLanguage;
     }
 
     /*
@@ -56,15 +52,16 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
      *               NO - Could not complete command
      *               BAD - Arguments invalid
      */
-    private void ProcessLanguage()
+    protected override ImapCommand PrepareCommand()
     {
       // LANGUAGE
       ImapString languageRange;
-      
+
       if (RequestArguments.TryGetValue("language range arguments", out languageRange))
-        SendCommand("LANGUAGE", ProcessReceiveResponse, languageRange);
+        return Connection.CreateCommand("LANGUAGE",
+                                        languageRange);
       else
-        SendCommand("LANGUAGE", ProcessReceiveResponse);
+        return Connection.CreateCommand("LANGUAGE");
     }
 
     protected override void OnDataResponseReceived(ImapDataResponse data)

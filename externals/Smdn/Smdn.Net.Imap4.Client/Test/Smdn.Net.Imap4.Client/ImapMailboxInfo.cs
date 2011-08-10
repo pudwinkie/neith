@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 
@@ -8,6 +10,8 @@ using System.Linq;
 #else
 using Smdn.Collections;
 #endif
+
+using Smdn.Net.Imap4.Protocol;
 
 namespace Smdn.Net.Imap4.Client {
   [TestFixture]
@@ -57,10 +61,10 @@ namespace Smdn.Net.Imap4.Client {
 
         if (Array.Exists(capabilities, delegate(ImapCapability capa) { return capa == ImapCapability.ListExtended; })) {
           Assert.That(requested, Text.Contains("LIST ("));
-          Assert.That(requested, Text.Contains(string.Format(") \"\" \"{0}\"", name)));
+          Assert.That(requested, Text.Contains(string.Format(") \"\" {0}", name)));
         }
         else {
-          Assert.That(requested, Text.EndsWith(string.Format("LIST \"\" \"{0}\"\r\n", name)));
+          Assert.That(requested, Text.EndsWith(string.Format("LIST \"\" {0}\r\n", name)));
         }
 
         action(server, mailbox);
@@ -82,7 +86,7 @@ namespace Smdn.Net.Imap4.Client {
 
         var requested = server.DequeueRequest();
 
-        Assert.That(requested, Text.Contains("STATUS \"INBOX\" ("));
+        Assert.That(requested, Text.Contains("STATUS INBOX ("));
         Assert.That(requested, Text.DoesNotContain("HIGHESTMODSEQ"));
       });
     }
@@ -102,7 +106,7 @@ namespace Smdn.Net.Imap4.Client {
 
         var requested = server.DequeueRequest();
 
-        Assert.That(requested, Text.Contains("STATUS \"INBOX\" ("));
+        Assert.That(requested, Text.Contains("STATUS INBOX ("));
         Assert.That(requested, Text.Contains("HIGHESTMODSEQ"));
       });
     }
@@ -142,12 +146,12 @@ namespace Smdn.Net.Imap4.Client {
     }
 
     [Test]
-    public void TestOpenReadOnly()
+    public void TestOpenAsReadOnly()
     {
       Open(true);
     }
 
-    private void Open(bool readOnly)
+    private void Open(bool asReadOnly)
     {
       TestMailbox("INBOX", delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
         // SELECT/EXAMINE
@@ -158,16 +162,16 @@ namespace Smdn.Net.Imap4.Client {
                                      "* OK [UIDNEXT 4392] Predicted next UID\r\n" +
                                      "* FLAGS (\\Answered \\Flagged \\Deleted \\Seen \\Draft)\r\n" +
                                      "* OK [PERMANENTFLAGS (\\Deleted \\Seen \\*)] Limited\r\n" +
-                                     string.Format("$tag OK [{0}] done\r\n", readOnly ? "READ-ONLY" : "READ-WRITE"));
+                                     string.Format("$tag OK [{0}] done\r\n", asReadOnly ? "READ-ONLY" : "READ-WRITE"));
 
         Assert.IsFalse(mailbox.IsOpen);
 
-        using (var opened = readOnly ? mailbox.Open(true) : mailbox.Open()) {
+        using (var opened = asReadOnly ? mailbox.Open(true) : mailbox.Open()) {
           try {
-            if (readOnly)
-              Assert.That(server.DequeueRequest(), Text.EndsWith("EXAMINE \"INBOX\"\r\n"));
+            if (asReadOnly)
+              Assert.That(server.DequeueRequest(), Text.EndsWith("EXAMINE INBOX\r\n"));
             else
-              Assert.That(server.DequeueRequest(), Text.EndsWith("SELECT \"INBOX\"\r\n"));
+              Assert.That(server.DequeueRequest(), Text.EndsWith("SELECT INBOX\r\n"));
 
             Assert.IsNotNull(opened);
             Assert.IsTrue(opened.IsOpen);
@@ -191,7 +195,7 @@ namespace Smdn.Net.Imap4.Client {
             Assert.IsTrue(opened.IsAllowedToCreateKeywords);
             Assert.IsTrue(opened.IsUidPersistent);
 
-            if (readOnly)
+            if (asReadOnly)
               Assert.IsTrue(opened.IsReadOnly);
             else
               Assert.IsFalse(opened.IsReadOnly);
@@ -231,7 +235,7 @@ namespace Smdn.Net.Imap4.Client {
 
         Assert.IsFalse(mailbox.Exists);
 
-        Assert.That(server.DequeueRequest(), Text.EndsWith("DELETE \"Trash\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("DELETE Trash\r\n"));
       });
     }
 
@@ -250,8 +254,8 @@ namespace Smdn.Net.Imap4.Client {
 
         Assert.IsFalse(mailbox.Exists);
 
-        Assert.That(server.DequeueRequest(), Text.EndsWith("DELETE \"Trash\"\r\n"));
-        Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE \"Trash\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("DELETE Trash\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE Trash\r\n"));
       });
     }
 
@@ -264,7 +268,7 @@ namespace Smdn.Net.Imap4.Client {
 
         var opened = mailbox.Open();
 
-        Assert.That(server.DequeueRequest(), Text.EndsWith("SELECT \"Trash\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("SELECT Trash\r\n"));
 
         // CLOSE
         server.EnqueueTaggedResponse("$tag OK done\r\n");
@@ -278,12 +282,12 @@ namespace Smdn.Net.Imap4.Client {
         Assert.IsFalse(opened.Exists);
 
         Assert.That(server.DequeueRequest(), Text.EndsWith("CLOSE\r\n"));
-        Assert.That(server.DequeueRequest(), Text.EndsWith("DELETE \"Trash\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("DELETE Trash\r\n"));
       });
     }
 
     [Test]
-    public void TestDeleteNonExistentMailbox()
+    public void TestDeleteMailboxNonExistent()
     {
       TestMailbox(null,
                   new[] {ImapMailboxFlag.NonExistent},
@@ -298,7 +302,46 @@ namespace Smdn.Net.Imap4.Client {
 
         Assert.IsFalse(mailbox.Exists);
 
-        Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE \"Trash\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE Trash\r\n"));
+      });
+    }
+
+    [Test]
+    public void TestDeleteNonExistent()
+    {
+      DeleteNonExistent(false);
+    }
+
+    [Test]
+    public void TestDeleteNonExistentSubscribe()
+    {
+      DeleteNonExistent(true);
+    }
+
+    private void DeleteNonExistent(bool unsubscribe)
+    {
+      TestMailbox("Trash",
+                  delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
+        Assert.IsTrue(mailbox.Exists);
+
+        // someone deletes 'Trash'
+        // C2: TAG CREATE "Trash"
+        // S2: TAG OK deleted "Trash"
+
+        // DELETE
+        server.EnqueueTaggedResponse("$tag NO [NONEXISTENT] done\r\n");
+
+        // UNSUBSCRIBE
+        if (unsubscribe)
+          server.EnqueueTaggedResponse("$tag OK done\r\n");
+
+        mailbox.Delete(unsubscribe);
+
+        Assert.IsFalse(mailbox.Exists);
+
+        Assert.That(server.DequeueRequest(), Text.EndsWith("DELETE Trash\r\n"));
+        if (unsubscribe)
+          Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE Trash\r\n"));
       });
     }
 
@@ -345,9 +388,9 @@ namespace Smdn.Net.Imap4.Client {
 
         Assert.IsTrue(mailbox.Exists);
 
-        Assert.That(server.DequeueRequest(), Text.EndsWith("CREATE \"Trash\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("CREATE Trash\r\n"));
         if (subscribe)
-          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE \"Trash\"\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE Trash\r\n"));
       });
     }
 
@@ -385,15 +428,54 @@ namespace Smdn.Net.Imap4.Client {
 
         Assert.IsTrue(mailbox.Exists);
 
-        Assert.That(server.DequeueRequest(), Text.EndsWith("CREATE \"deleted\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("CREATE deleted\r\n"));
         if (subscribe)
-          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE \"deleted\"\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE deleted\r\n"));
       });
     }
 
-    [Test, Ignore("not implemented")]
+    [Test]
     public void TestCreateAlreadyExists()
     {
+      CreateAlreadyExists(false);
+    }
+
+    [Test]
+    public void TestCreateAlreadyExistsSubscribe()
+    {
+      CreateAlreadyExists(true);
+    }
+
+    private void CreateAlreadyExists(bool subscribe)
+    {
+      TestMailbox(null,
+                  new[] {ImapMailboxFlag.NonExistent},
+                  "Sent",
+                  delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
+        Assert.IsFalse(mailbox.Exists);
+
+        // someone creates 'Sent'
+        // C2: TAG CREATE "Sent"
+        // S2: TAG OK created "Sent"
+
+        // CREATE
+        server.EnqueueTaggedResponse("$tag NO [ALREADYEXISTS] Mailbox 'Sent' already exists\r\n");
+
+        if (subscribe)
+          // SUBSCRIBE
+          server.EnqueueTaggedResponse("$tag OK done\r\n");
+
+        if (subscribe)
+          mailbox.Create(true);
+        else
+          mailbox.Create();
+
+        Assert.IsTrue(mailbox.Exists);
+
+        Assert.That(server.DequeueRequest(), Text.EndsWith("CREATE Sent\r\n"));
+        if (subscribe)
+          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE Sent\r\n"));
+      });
     }
 
     [Test]
@@ -457,10 +539,10 @@ namespace Smdn.Net.Imap4.Client {
         else
           mailbox.MoveTo("INBOX/backup");
 
-        Assert.That(server.DequeueRequest(), Text.EndsWith("RENAME \"INBOX\" \"INBOX/backup\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("RENAME INBOX INBOX/backup\r\n"));
 
         if (subscribe)
-          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE \"INBOX/backup\"\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE INBOX/backup\r\n"));
 
         Assert.AreEqual("backup", mailbox.Name);
         Assert.AreEqual("INBOX/backup", mailbox.FullName);
@@ -493,7 +575,7 @@ namespace Smdn.Net.Imap4.Client {
 
         var destMailbox = mailbox.Client.GetMailbox("dest");
 
-        Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" \"dest\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" dest\r\n"));
 
         if (subscribe) {
           // LSUB
@@ -532,21 +614,21 @@ namespace Smdn.Net.Imap4.Client {
           mailbox.MoveTo(destMailbox);
 
         if (subscribe) {
-          Assert.That(server.DequeueRequest(), Text.Contains("LSUB \"\" \"src/*\""));
+          Assert.That(server.DequeueRequest(), Text.Contains("LSUB src/ *"));
         }
 
-        Assert.That(server.DequeueRequest(), Text.EndsWith("RENAME \"src\" \"dest/src\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("RENAME src dest/src\r\n"));
 
         if (subscribe) {
-          Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE \"src\"\r\n"));
-          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE \"dest/src\"\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE src\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE dest/src\r\n"));
 
-          Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE \"src/sub1\"\r\n"));
-          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE \"dest/src/sub1\"\r\n"));
-          Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE \"src/sub2/sub3\"\r\n"));
-          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE \"dest/src/sub2/sub3\"\r\n"));
-          Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE \"src/sub4/sub5/sub6\"\r\n"));
-          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE \"dest/src/sub4/sub5/sub6\"\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE src/sub1\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE dest/src/sub1\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE src/sub2/sub3\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE dest/src/sub2/sub3\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE src/sub4/sub5/sub6\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE dest/src/sub4/sub5/sub6\r\n"));
         }
 
         Assert.AreEqual("src", mailbox.Name);
@@ -583,14 +665,131 @@ namespace Smdn.Net.Imap4.Client {
 
       var sourceMailbox = destMailbox.Client.GetMailbox("src");
 
-      Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" \"src\"\r\n"));
+      Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" src\r\n"));
 
       sourceMailbox.MoveTo(destMailbox);
     }
 
-    [Test, Ignore("not implemented")]
+    [Test]
     public void TestMoveToDestinationMailboxAlreadyExists()
     {
+      MoveToDestinationMailboxAlreadyExists(false);
+    }
+
+    [Test]
+    public void TestMoveToDestinationMailboxAlreadyExistsSubscribe()
+    {
+      MoveToDestinationMailboxAlreadyExists(true);
+    }
+
+    private void MoveToDestinationMailboxAlreadyExists(bool subscribe)
+    {
+      TestMailbox("/", "src", delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
+        Assert.AreEqual("src", mailbox.Name);
+        Assert.AreEqual("src", mailbox.FullName);
+        Assert.AreEqual(string.Empty, mailbox.ParentMailboxName);
+
+        // LIST
+        server.EnqueueTaggedResponse("* LIST () \"/\" dest\r\n" +
+                                     "$tag OK done\r\n");
+
+        var destMailbox = mailbox.Client.GetMailbox("dest");
+
+        Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" dest\r\n"));
+
+        if (subscribe) {
+          // LSUB
+          server.EnqueueTaggedResponse("* LSUB () \"/\" src/sub1\r\n" +
+                                       "* LSUB () \"/\" src/sub2/sub3\r\n" +
+                                       "$tag OK done\r\n");
+        }
+
+        // RENAME
+        server.EnqueueTaggedResponse("$tag NO [ALREADYEXISTS] mailbox exists\r\n");
+
+        try {
+          if (subscribe)
+            mailbox.MoveTo(destMailbox, true);
+          else
+            mailbox.MoveTo(destMailbox);
+
+          Assert.Fail("ImapErrorResponseException not thrown");
+        }
+        catch (ImapErrorResponseException ex) {
+          Assert.AreEqual(ImapResponseCode.AlreadyExists,
+                          ex.Result.TaggedStatusResponse.ResponseText.Code);
+        }
+
+        if (subscribe) {
+          Assert.That(server.DequeueRequest(), Text.Contains("LSUB src/ *"));
+        }
+
+        Assert.That(server.DequeueRequest(), Text.EndsWith("RENAME src dest/src\r\n"));
+
+        Assert.AreEqual("src", mailbox.Name);
+        Assert.AreEqual("src", mailbox.FullName);
+        Assert.AreEqual(string.Empty, mailbox.ParentMailboxName);
+      });
+    }
+
+    [Test]
+    public void TestMoveToDestinationMailboxOfDifferentSession()
+    {
+      TestMailbox("/", "INBOX", delegate(ImapPseudoServer serverSrc, ImapMailboxInfo mailboxSrc) {
+        Assert.AreEqual("INBOX", mailboxSrc.Name);
+        Assert.AreEqual("INBOX", mailboxSrc.FullName);
+        Assert.AreEqual(string.Empty, mailboxSrc.ParentMailboxName);
+        Assert.IsTrue(mailboxSrc.IsInbox);
+
+        TestMailbox("/", "INBOX", delegate(ImapPseudoServer serverDest, ImapMailboxInfo mailboxDest) {
+          Assert.AreEqual("INBOX", mailboxDest.Name);
+          Assert.AreEqual("INBOX", mailboxDest.FullName);
+          Assert.AreEqual(string.Empty, mailboxDest.ParentMailboxName);
+          Assert.IsTrue(mailboxDest.IsInbox);
+
+          Assert.AreNotSame(mailboxSrc.Client, mailboxDest.Client);
+
+          TestUtils.ExpectExceptionThrown<NotImplementedException>(delegate {
+            mailboxSrc.MoveTo(mailboxDest);
+          });
+        });
+      });
+    }
+
+    [Test]
+    public void TestMoveToNewNameContainsWildcard()
+    {
+      TestMailbox(".", "Box", delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
+        // RENAME
+        server.EnqueueTaggedResponse("$tag OK done\r\n");
+
+        mailbox.MoveTo("Box*");
+
+        Assert.That(server.DequeueRequest(), Text.EndsWith("RENAME Box \"Box*\"\r\n"));
+
+        Assert.AreEqual("Box*", mailbox.Name);
+        Assert.AreEqual("Box*", mailbox.FullName);
+        Assert.AreEqual(string.Empty, mailbox.ParentMailboxName);
+        Assert.IsFalse(mailbox.IsOpen);
+      });
+    }
+
+    [Test]
+    [ExpectedException(typeof(ArgumentNullException))]
+    public void TestMoveToNewNameNull()
+    {
+      TestMailbox(".", "Box", delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
+        mailbox.MoveTo((string)null);
+      });
+    }
+
+    [Test]
+    [ExpectedException(typeof(ArgumentException))]
+    public void TestMoveToNewNameEmpty()
+    {
+      TestMailbox(".", "Box", delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
+        mailbox.MoveTo(string.Empty);
+      });
     }
 
     [Test]
@@ -670,18 +869,18 @@ namespace Smdn.Net.Imap4.Client {
           mailbox.MoveTo("Trash.src");
 
         if (subscribe) {
-          Assert.That(server.DequeueRequest(), Text.Contains("LIST (SUBSCRIBED) \"\" \"src.*\""));
+          Assert.That(server.DequeueRequest(), Text.Contains("LIST (SUBSCRIBED) src. *"));
         }
 
-        Assert.That(server.DequeueRequest(), Text.EndsWith("RENAME \"src\" \"Trash.src\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("RENAME src Trash.src\r\n"));
 
         if (subscribe) {
-          Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE \"src\"\r\n"));
-          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE \"Trash.src\"\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE src\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE Trash.src\r\n"));
 
-          Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE \"src.sub1\"\r\n"));
-          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE \"Trash.src.sub1\"\r\n"));
-          Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE \"src.sub2\"\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE src.sub1\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE Trash.src.sub1\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE src.sub2\r\n"));
         }
 
         Assert.AreEqual("src", mailbox.Name);
@@ -743,19 +942,19 @@ namespace Smdn.Net.Imap4.Client {
           mailbox.MoveTo("dest");
 
         if (subscribe) {
-          Assert.That(server.DequeueRequest(), Text.Contains("LSUB \"\" \"nested/src/*\""));
+          Assert.That(server.DequeueRequest(), Text.Contains("LSUB nested/src/ *"));
         }
 
-        Assert.That(server.DequeueRequest(), Text.EndsWith("RENAME \"nested/src\" \"dest\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("RENAME nested/src dest\r\n"));
 
         if (subscribe) {
-          Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE \"nested/src\"\r\n"));
-          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE \"dest\"\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE nested/src\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE dest\r\n"));
 
-          Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE \"nested/src/sub1\"\r\n"));
-          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE \"dest/sub1\"\r\n"));
-          Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE \"nested/src/sub2/sub3\"\r\n"));
-          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE \"dest/sub2/sub3\"\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE nested/src/sub1\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE dest/sub1\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE nested/src/sub2/sub3\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE dest/sub2/sub3\r\n"));
         }
 
         Assert.AreEqual("dest", mailbox.Name);
@@ -773,7 +972,7 @@ namespace Smdn.Net.Imap4.Client {
 
         mailbox.Open();
 
-        Assert.That(server.DequeueRequest(), Text.EndsWith("SELECT \"INBOX\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("SELECT INBOX\r\n"));
 
         Assert.IsTrue(mailbox.IsOpen);
 
@@ -787,8 +986,8 @@ namespace Smdn.Net.Imap4.Client {
         mailbox.MoveTo("Trash.INBOX");
 
         Assert.That(server.DequeueRequest(), Text.EndsWith("CLOSE\r\n"));
-        Assert.That(server.DequeueRequest(), Text.EndsWith("RENAME \"INBOX\" \"Trash.INBOX\"\r\n"));
-        Assert.That(server.DequeueRequest(), Text.EndsWith("SELECT \"Trash.INBOX\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("RENAME INBOX Trash.INBOX\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("SELECT Trash.INBOX\r\n"));
 
         Assert.AreEqual("INBOX", mailbox.Name);
         Assert.AreEqual("Trash.INBOX", mailbox.FullName);
@@ -821,12 +1020,12 @@ namespace Smdn.Net.Imap4.Client {
 
         mailbox.MoveTo("Sent", true);
 
-        Assert.That(server.DequeueRequest(), Text.Contains("LSUB \"\" \"Draft.*\""));
-        Assert.That(server.DequeueRequest(), Text.EndsWith("RENAME \"Draft\" \"Sent\"\r\n"));
-        Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE \"Draft\"\r\n"));
-        Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE \"Sent\"\r\n"));
-        Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE \"Draft.Created\"\r\n"));
-        Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE \"Sent.Created\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.Contains("LSUB Draft. *"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("RENAME Draft Sent\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE Draft\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE Sent\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE Draft.Created\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE Sent.Created\r\n"));
 
         Assert.AreEqual("Sent", mailbox.Name);
         Assert.AreEqual("Sent", mailbox.FullName);
@@ -865,14 +1064,67 @@ namespace Smdn.Net.Imap4.Client {
 
       mailbox.MoveTo("OldSent", true);
 
-      Assert.That(server.DequeueRequest(), Text.EndsWith("RENAME \"Sent\" \"OldSent\"\r\n"));
-      Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE \"Sent\"\r\n"));
-      Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE \"OldSent\"\r\n"));
+      Assert.That(server.DequeueRequest(), Text.EndsWith("RENAME Sent OldSent\r\n"));
+      Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE Sent\r\n"));
+      Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE OldSent\r\n"));
     }
 
-    [Test, Ignore("not implemented")]
+    [Test]
     public void TestMoveToNewNameAlreadyExists()
     {
+      MoveToNewNameAlreadyExists(false);
+    }
+
+    [Test]
+    public void TestMoveToNewNameAlreadyExistsSubscribe()
+    {
+      MoveToNewNameAlreadyExists(true);
+    }
+
+    private void MoveToNewNameAlreadyExists(bool subscribe)
+    {
+      TestMailbox(new[] {ImapCapability.ListExtended},
+                  null,
+                  ".",
+                  "src",
+                  delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
+        Assert.AreEqual("src", mailbox.Name);
+        Assert.AreEqual("src", mailbox.FullName);
+        Assert.AreEqual(string.Empty, mailbox.ParentMailboxName);
+
+        if (subscribe) {
+          // LIST
+          server.EnqueueTaggedResponse("* LIST (\\Subscribed) \".\" src.sub1\r\n" +
+                                       "* LIST (\\Subscribed \\NonExistent) \".\" src.sub2\r\n" +
+                                       "$tag OK done\r\n");
+        }
+
+        // RENAME
+        server.EnqueueTaggedResponse("$tag NO [ALREADYEXISTS] mailbox exists\r\n");
+
+        try {
+          if (subscribe)
+            mailbox.MoveTo("Trash.src", true);
+          else
+            mailbox.MoveTo("Trash.src");
+
+          Assert.Fail("ImapErrorResponseException not thrown");
+        }
+        catch (ImapErrorResponseException ex) {
+          Assert.AreEqual(ImapResponseCode.AlreadyExists,
+                          ex.Result.TaggedStatusResponse.ResponseText.Code);
+        }
+
+        if (subscribe) {
+          Assert.That(server.DequeueRequest(), Text.Contains("LIST (SUBSCRIBED) src. *"));
+        }
+
+        Assert.That(server.DequeueRequest(), Text.EndsWith("RENAME src Trash.src\r\n"));
+
+        Assert.AreEqual("src", mailbox.Name);
+        Assert.AreEqual("src", mailbox.FullName);
+        Assert.AreEqual(string.Empty, mailbox.ParentMailboxName);
+      });
     }
 
     [Test]
@@ -908,12 +1160,12 @@ namespace Smdn.Net.Imap4.Client {
         else
           mailbox.Subscribe();
 
-        Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE \"INBOX\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE INBOX\r\n"));
 
         if (recursive) {
-          Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" \"INBOX.*\"\r\n"));
-          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE \"INBOX.Child1\"\r\n"));
-          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE \"INBOX.Child2\"\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("LIST INBOX. *\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE INBOX.Child1\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE INBOX.Child2\r\n"));
         }
       });
     }
@@ -951,12 +1203,12 @@ namespace Smdn.Net.Imap4.Client {
         else
           mailbox.Unsubscribe();
 
-        Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE \"INBOX\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE INBOX\r\n"));
 
         if (recursive) {
-          Assert.That(server.DequeueRequest(), Text.EndsWith("LSUB \"\" \"INBOX.*\"\r\n"));
-          Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE \"INBOX.Child1\"\r\n"));
-          Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE \"INBOX.Child2\"\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("LSUB INBOX. *\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE INBOX.Child1\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("UNSUBSCRIBE INBOX.Child2\r\n"));
         }
       });
     }
@@ -994,7 +1246,7 @@ namespace Smdn.Net.Imap4.Client {
         Assert.AreEqual("Child1", enumerator.Current.Name);
         Assert.AreEqual("INBOX.Child1", enumerator.Current.FullName);
 
-        StringAssert.EndsWith("LIST \"\" \"INBOX.*\"\r\n", server.DequeueRequest());
+        StringAssert.EndsWith("LIST INBOX. *\r\n", server.DequeueRequest());
 
         Assert.IsTrue(enumerator.MoveNext());
         Assert.AreEqual("Child2", enumerator.Current.Name);
@@ -1050,7 +1302,7 @@ namespace Smdn.Net.Imap4.Client {
 
         var parent = mailbox.GetParent();
 
-        Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" \"INBOX\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" INBOX\r\n"));
 
         Assert.IsNotNull(parent);
         Assert.AreEqual("INBOX", parent.Name);
@@ -1121,11 +1373,11 @@ namespace Smdn.Net.Imap4.Client {
           ? mailbox.GetOrCreateParent(true)
           : mailbox.GetOrCreateParent();
 
-        Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" \"Sent\"\r\n"));
-        Assert.That(server.DequeueRequest(), Text.EndsWith("CREATE \"Sent\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" Sent\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("CREATE Sent\r\n"));
         if (subscribe)
-          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE \"Sent\"\r\n"));
-        Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" \"Sent\"\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE Sent\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" Sent\r\n"));
 
         Assert.IsNotNull(parent);
         Assert.AreEqual("Sent", parent.Name);
@@ -1142,6 +1394,22 @@ namespace Smdn.Net.Imap4.Client {
 
       TestMailbox("/", "INBOX", delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
         Assert.AreEqual("INBOX/Child", mailbox.GetFullNameOf("Child"));
+      });
+    }
+
+    [Test, ExpectedException(typeof(ArgumentException))]
+    public void TestGetFullNameOfArgumentEmpty()
+    {
+      TestMailbox(".", "INBOX", delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
+        mailbox.GetFullNameOf(string.Empty);
+      });
+    }
+
+    [Test, ExpectedException(typeof(ArgumentNullException))]
+    public void TestGetFullNameOfArgumentNull()
+    {
+      TestMailbox(".", "INBOX", delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
+        mailbox.GetFullNameOf(null);
       });
     }
 
@@ -1173,10 +1441,10 @@ namespace Smdn.Net.Imap4.Client {
           ? mailbox.CreateChild("Child", true)
           : mailbox.CreateChild("Child");
 
-        Assert.That(server.DequeueRequest(), Text.EndsWith("CREATE \"Sent.Child\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("CREATE Sent.Child\r\n"));
         if (subscribe)
-          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE \"Sent.Child\"\r\n"));
-        Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" \"Sent.Child\"\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE Sent.Child\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" Sent.Child\r\n"));
 
         Assert.IsNotNull(child);
         Assert.AreEqual("Child", child.Name);
@@ -1184,9 +1452,53 @@ namespace Smdn.Net.Imap4.Client {
       });
     }
 
-    [Test, Ignore("not implemented")]
+    [Test, ExpectedException(typeof(ArgumentException))]
+    public void TestCreateChildNameEmpty()
+    {
+      TestMailbox(".", "INBOX", delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
+        mailbox.CreateChild(string.Empty);
+      });
+    }
+
+    [Test, ExpectedException(typeof(ArgumentNullException))]
+    public void TestCreateChildNameNull()
+    {
+      TestMailbox(".", "INBOX", delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
+        mailbox.CreateChild((string)null);
+      });
+    }
+
+    [Test]
     public void TestCreateChildAlreadyExists()
     {
+      CreateChildAlreadyExists(false);
+    }
+
+    [Test]
+    public void TestCreateChildAlreadyExistsSubscribe()
+    {
+      CreateChildAlreadyExists(true);
+    }
+
+    private void CreateChildAlreadyExists(bool subscribe)
+    {
+      TestMailbox(".", "Sent", delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
+        // CREATE
+        server.EnqueueTaggedResponse("$tag NO [ALREADYEXISTS] mailbox already exists\r\n");
+
+        try {
+          if (subscribe)
+            mailbox.CreateChild("Child", true);
+          else
+            mailbox.CreateChild("Child");
+        }
+        catch (ImapErrorResponseException ex) {
+          Assert.AreEqual(ImapResponseCode.AlreadyExists,
+                          ex.Result.TaggedStatusResponse.ResponseText.Code);
+        }
+
+        StringAssert.EndsWith("CREATE Sent.Child\r\n", server.DequeueRequest());
+      });
     }
 
     [Test]
@@ -1199,11 +1511,27 @@ namespace Smdn.Net.Imap4.Client {
 
         var child = mailbox.GetChild("Child");
 
-        Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" \"INBOX.Child\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" INBOX.Child\r\n"));
 
         Assert.IsNotNull(child);
         Assert.AreEqual("Child", child.Name);
         Assert.AreEqual("INBOX.Child", child.FullName);
+      });
+    }
+
+    [Test, ExpectedException(typeof(ArgumentException))]
+    public void TestGetChildNameEmpty()
+    {
+      TestMailbox(".", "INBOX", delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
+        mailbox.GetChild(string.Empty);
+      });
+    }
+
+    [Test, ExpectedException(typeof(ArgumentNullException))]
+    public void TestGetChildNameNull()
+    {
+      TestMailbox(".", "INBOX", delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
+        mailbox.GetChild((string)null);
       });
     }
 
@@ -1231,18 +1559,49 @@ namespace Smdn.Net.Imap4.Client {
     }
 
     [Test]
-    public void TestGetOrCreateChild()
+    public void TestGetOrCreateExistentChild()
     {
-      GetOrCreateChild(false);
+      GetOrCreateChildExistent(false);
     }
 
     [Test]
-    public void TestGetOrCreateChildSubscribe()
+    public void TestGetOrCreateExistentChildSubscribe()
     {
-      GetOrCreateChild(true);
+      GetOrCreateChildExistent(true);
     }
 
-    private void GetOrCreateChild(bool subscribe)
+    private void GetOrCreateChildExistent(bool subscribe)
+    {
+      TestMailbox(".", "Sent", delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
+        // LIST
+        server.EnqueueTaggedResponse("* LIST () \".\" Sent.Child\r\n" +
+                                     "$tag OK done\r\n");
+
+        var child = subscribe
+          ? mailbox.GetOrCreateChild("Child", true)
+          : mailbox.GetOrCreateChild("Child");
+
+        Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" Sent.Child\r\n"));
+
+        Assert.IsNotNull(child);
+        Assert.AreEqual("Child", child.Name);
+        Assert.AreEqual("Sent.Child", child.FullName);
+      });
+    }
+
+    [Test]
+    public void TestGetOrCreateNonExistentChild()
+    {
+      GetOrCreateChildNonExistent(false);
+    }
+
+    [Test]
+    public void TestGetOrCreateNonExistentChildSubscribe()
+    {
+      GetOrCreateChildNonExistent(true);
+    }
+
+    private void GetOrCreateChildNonExistent(bool subscribe)
     {
       TestMailbox(".", "Sent", delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
         // LIST
@@ -1260,15 +1619,31 @@ namespace Smdn.Net.Imap4.Client {
           ? mailbox.GetOrCreateChild("Child", true)
           : mailbox.GetOrCreateChild("Child");
 
-        Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" \"Sent.Child\"\r\n"));
-        Assert.That(server.DequeueRequest(), Text.EndsWith("CREATE \"Sent.Child\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" Sent.Child\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("CREATE Sent.Child\r\n"));
         if (subscribe)
-          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE \"Sent.Child\"\r\n"));
-        Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" \"Sent.Child\"\r\n"));
+          Assert.That(server.DequeueRequest(), Text.EndsWith("SUBSCRIBE Sent.Child\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" Sent.Child\r\n"));
 
         Assert.IsNotNull(child);
         Assert.AreEqual("Child", child.Name);
         Assert.AreEqual("Sent.Child", child.FullName);
+      });
+    }
+
+    [Test, ExpectedException(typeof(ArgumentException))]
+    public void TestGetOrCreateChildNameEmpty()
+    {
+      TestMailbox(".", "INBOX", delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
+        mailbox.GetOrCreateChild(string.Empty);
+      });
+    }
+
+    [Test, ExpectedException(typeof(ArgumentNullException))]
+    public void TestGetOrCreateChildNameNull()
+    {
+      TestMailbox(".", "INBOX", delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
+        mailbox.GetOrCreateChild((string)null);
       });
     }
 
@@ -1367,8 +1742,65 @@ namespace Smdn.Net.Imap4.Client {
     }
 
     [Test, Ignore("to be written")]
-    public void TestAppendMessage()
+    public void TestAppendMessageIAppendMessage()
     {
+    }
+
+    [Test]
+    [ExpectedException(typeof(ImapProtocolViolationException))]
+    public void TestAppendMessageIAppendMessageMailboxNonExistent()
+    {
+      TestMailbox(null,
+                  new[] {ImapMailboxFlag.NonExistent},
+                  "INBOX",
+                  delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
+        Assert.IsFalse(mailbox.Exists);
+
+        using (var stream = new MemoryStream(new byte[] {0x40})) {
+          mailbox.AppendMessage(stream);
+        }
+      });
+    }
+
+    [Test]
+    [ExpectedException(typeof(ImapProtocolViolationException))]
+    public void TestAppendMessageIAppendMessageMailboxUnselectable()
+    {
+      TestMailbox(null,
+                  new[] {ImapMailboxFlag.NoSelect},
+                  "INBOX",
+                  delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
+        Assert.IsTrue(mailbox.IsUnselectable);
+
+        using (var stream = new MemoryStream(new byte[] {0x40})) {
+          mailbox.AppendMessage(stream);
+        }
+      });
+    }
+
+    [Test]
+    public void TestAppendMessageIAppendMessageNoTryCreate()
+    {
+      TestMailbox("NonExistent",
+                  delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
+        // APPEND
+        server.EnqueueTaggedResponse("$tag NO [TRYCREATE] mailbox not exist\r\n");
+
+        try {
+          mailbox.AppendMessage(new MemoryStream(new byte[] {0x40}));
+        }
+        catch (ImapMailboxNotFoundException ex) {
+          Assert.IsNotNull(ex.Mailbox);
+          Assert.AreEqual("NonExistent", ex.Mailbox);
+
+          Smdn.Net.TestUtils.SerializeBinary(ex, delegate(ImapMailboxNotFoundException deserialized) {
+            Assert.IsNotNull(deserialized.Mailbox);
+            Assert.AreEqual(ex.Mailbox, deserialized.Mailbox);
+          });
+        }
+
+        Assert.That(server.DequeueRequest(), Text.EndsWith("APPEND NonExistent {1}\r\n"));
+      });
     }
 
     [Test, Ignore("to be written")]
@@ -1377,8 +1809,223 @@ namespace Smdn.Net.Imap4.Client {
     }
 
     [Test, Ignore("to be written")]
-    public void TestWriteMessage()
+    public void TestAppendMessagesNonExistentMailbox()
     {
+    }
+
+    [Test, Ignore("to be written")]
+    public void TestAppendMessagesUnselectableMailbox()
+    {
+    }
+
+    [Test, Ignore("to be written")]
+    public void TestAppendMessagesNoTryCreate()
+    {
+    }
+
+    [Test]
+    public void TestAppendMessageMessageInfoOfSameSession()
+    {
+      TestMailbox("INBOX", delegate(ImapPseudoServer server, ImapMailboxInfo sourceMailbox) {
+        // LIST
+        server.EnqueueTaggedResponse("* LIST () \"\" dest\r\n" +
+                                     "$tag OK done\r\n");
+
+        var destMailbox = sourceMailbox.Client.GetMailbox("dest");
+
+        Assert.That(server.DequeueRequest(), Text.EndsWith("LIST \"\" dest\r\n"));
+
+        // SELECT
+        server.EnqueueTaggedResponse("* EXISTS 3\r\n" +
+                                     "* OK [UIDVALIDITY 23]\r\n" +
+                                     "$tag OK [READ-WRITE] done\r\n");
+
+        using (var openedSourceMailbox = sourceMailbox.Open()) {
+          Assert.That(server.DequeueRequest(), Text.EndsWith("SELECT INBOX\r\n"));
+
+          // FETCH
+          server.EnqueueTaggedResponse("* FETCH 1 (UID 3)\r\n" +
+                                       "$tag OK done\r\n");
+
+          var message = openedSourceMailbox.GetMessageBySequence(1L);
+
+          Assert.That(server.DequeueRequest(), Text.EndsWith("FETCH 1 (UID)\r\n"));
+
+          // UID COPY
+          server.EnqueueTaggedResponse("$tag OK done\r\n");
+
+          destMailbox.AppendMessage(message);
+
+          Assert.That(server.DequeueRequest(), Text.EndsWith("UID COPY 3 dest\r\n"));
+
+          // CLOSE
+          server.EnqueueTaggedResponse("$tag OK done\r\n");
+        }
+      });
+    }
+
+    [Test]
+    public void TestAppendMessageMessageInfoOfDifferentSession()
+    {
+      TestMailbox("dest", delegate(ImapPseudoServer destServer, ImapMailboxInfo destMailbox) {
+        var selectResp = "* EXISTS 3\r\n" +
+                         "* OK [UIDVALIDITY 23]\r\n" +
+                         "$tag OK [READ-WRITE] done\r\n";
+
+        TestUtils.TestOpenedMailbox("INBOX",
+                                    selectResp,
+                                    delegate(ImapPseudoServer sourceServer, ImapOpenedMailboxInfo sourceMailbox) {
+          // FETCH
+          sourceServer.EnqueueTaggedResponse("* FETCH 1 (UID 3)\r\n" +
+                                             "$tag OK done\r\n");
+
+          var message = sourceMailbox.GetMessageBySequence(1L);
+
+          Assert.That(sourceServer.DequeueRequest(), Text.EndsWith("FETCH 1 (UID)\r\n"));
+
+          // FETCH (source)
+          sourceServer.EnqueueTaggedResponse("* FETCH 1 (" +
+                                             "FLAGS (\\Answered $label1) " +
+                                             "INTERNALDATE \"25-Jan-2011 15:29:06 +0900\" " +
+                                             "RFC822.SIZE 12 " +
+                                             "BODY[] {12}\r\ntest message)\r\n" +
+                                             "$tag OK done\r\n");
+          // APPEND (dest)
+          destServer.EnqueueResponse("+ OK continue\r\n");
+          destServer.EnqueueTaggedResponse("$tag OK [APPENDUID 38505 3955] APPEND completed\r\n");
+
+          destMailbox.AppendMessage(message);
+
+          Assert.That(sourceServer.DequeueRequest(), Text.EndsWith("UID FETCH 3 (RFC822.SIZE INTERNALDATE FLAGS BODY.PEEK[]<0.10240>)\r\n"));
+
+          Assert.That(destServer.DequeueRequest(),
+                      Text.EndsWith("APPEND dest (\\Answered $label1) \"25-Jan-2011 15:29:06 +0900\" {12}\r\n"));
+          Assert.That(destServer.DequeueAll(),
+                      Text.StartsWith("test message"));
+        });
+      });
+    }
+
+    [Test]
+    public void TestAppendMessageAction()
+    {
+      AppendMessageAction(false);
+    }
+
+    [Test]
+    public void TestAppendMessageActionLengthSpecified()
+    {
+      AppendMessageAction(true);
+    }
+
+    private void AppendMessageAction(bool specifyLength)
+    {
+      TestMailbox("INBOX",
+                  delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
+        const string uploadingMessage = "MIME-Version: 1.0\r\n\r\ntest message";
+
+        var length = uploadingMessage.Length;
+        var flags = new ImapMessageFlagSet(new[] {"$label1"}, ImapMessageFlag.Seen);
+        var internalDate = new DateTimeOffset(2011, 1, 24, 14, 52, 30, TimeSpan.FromHours(+9.0));
+        var writeUploadMessage = new Action<Stream>(delegate(Stream stream) {
+          var writer = new StreamWriter(stream, Encoding.ASCII);
+
+          writer.Write(uploadingMessage);
+          writer.Flush();
+        });
+
+        // APPEND
+        server.EnqueueResponse("+ OK continue\r\n");
+        server.EnqueueTaggedResponse("$tag OK [APPENDUID 38505 3955] APPEND completed\r\n");
+
+        if (specifyLength)
+          mailbox.AppendMessage(length,
+                                internalDate,
+                                flags,
+                                writeUploadMessage);
+        else
+          mailbox.AppendMessage(internalDate,
+                                flags,
+                                writeUploadMessage);
+
+        Assert.That(server.DequeueRequest(),
+                    Text.EndsWith(string.Format("APPEND INBOX (\\Seen $label1) \"24-Jan-2011 14:52:30 +0900\" {{{0}}}\r\n",
+                                                length)));
+        Assert.That(server.DequeueAll(),
+                    Text.StartsWith(uploadingMessage));
+      });
+    }
+
+    [Test]
+    [ExpectedException(typeof(ImapProtocolViolationException))]
+    public void TestAppendMessageActionMailboxNonExistent()
+    {
+      TestMailbox(null,
+                  new[] {ImapMailboxFlag.NonExistent},
+                  "INBOX",
+                  delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
+        Assert.IsFalse(mailbox.Exists);
+
+        mailbox.AppendMessage(delegate(Stream stream) {
+          Assert.Fail("expected exception not thrown");
+        });
+      });
+    }
+
+    [Test]
+    [ExpectedException(typeof(ImapProtocolViolationException))]
+    public void TestAppendMessageActionMailboxUnselectable()
+    {
+      TestMailbox(null,
+                  new[] {ImapMailboxFlag.NoSelect},
+                  "INBOX",
+                  delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
+        Assert.IsTrue(mailbox.IsUnselectable);
+
+        mailbox.AppendMessage(delegate(Stream stream) {
+          Assert.Fail("expected exception not thrown");
+        });
+      });
+    }
+
+    [Test]
+    [ExpectedException(typeof(ArgumentOutOfRangeException))]
+    public void TestAppendMessageActionLengthSpecifiedButOutOfRange()
+    {
+      TestMailbox("INBOX",
+                  delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
+
+        mailbox.AppendMessage(-1L, delegate(Stream stream) {
+          Assert.Fail("expected exception not thrown");
+        });
+      });
+    }
+
+    [Test]
+    public void TestAppendMessageActionNoTryCreate()
+    {
+      TestMailbox("NonExistent",
+                  delegate(ImapPseudoServer server, ImapMailboxInfo mailbox) {
+        // APPEND
+        server.EnqueueTaggedResponse("$tag NO [TRYCREATE] mailbox not exist\r\n");
+
+        try {
+          mailbox.AppendMessage(1, delegate(Stream stream) {
+            stream.WriteByte(0x40);
+          });
+        }
+        catch (ImapMailboxNotFoundException ex) {
+          Assert.IsNotNull(ex.Mailbox);
+          Assert.AreEqual("NonExistent", ex.Mailbox);
+
+          Smdn.Net.TestUtils.SerializeBinary(ex, delegate(ImapMailboxNotFoundException deserialized) {
+            Assert.IsNotNull(deserialized.Mailbox);
+            Assert.AreEqual(ex.Mailbox, deserialized.Mailbox);
+          });
+        }
+
+        Assert.That(server.DequeueRequest(), Text.EndsWith("APPEND NonExistent {1}\r\n"));
+      });
     }
 
     [Test]
@@ -1395,7 +2042,7 @@ namespace Smdn.Net.Imap4.Client {
 
         var quotas = new List<ImapQuota>(mailbox.GetQuota());
 
-        Assert.That(server.DequeueRequest(), Text.EndsWith("GETQUOTAROOT \"INBOX\"\r\n"));
+        Assert.That(server.DequeueRequest(), Text.EndsWith("GETQUOTAROOT INBOX\r\n"));
 
         Assert.AreEqual(1, quotas.Count);
 

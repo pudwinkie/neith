@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -37,6 +37,7 @@ namespace Smdn.Net.Pop3 {
   //     PopCapability
   //       => handles capability constants
 
+  [Serializable]
   public abstract class PopStringEnum : IStringEnum, IEquatable<PopStringEnum> {
     public virtual string Value {
       get; private set;
@@ -46,8 +47,8 @@ namespace Smdn.Net.Pop3 {
     {
       if (@value == null)
         throw new ArgumentNullException("value");
-      if (@value.Length < 1)
-        throw new ArgumentException("length of value must be longer than 1", "value");
+      if (@value.Length == 0)
+        throw ExceptionUtils.CreateArgumentMustBeNonEmptyString("value");
 
       this.Value = @value;
     }
@@ -58,9 +59,9 @@ namespace Smdn.Net.Pop3 {
       return StringEnumUtils.GetDefinedConstants<TStringEnum>();
     }
 
-    protected static PopStringEnumList<TStringEnum> CreateDefinedConstantsList<TStringEnum>() where TStringEnum : PopStringEnum
+    protected static PopStringEnumSet<TStringEnum> CreateDefinedConstantsSet<TStringEnum>() where TStringEnum : PopStringEnum
     {
-      return new PopStringEnumList<TStringEnum>(true, GetDefinedConstants<TStringEnum>());
+      return new PopStringEnumSet<TStringEnum>(true, GetDefinedConstants<TStringEnum>());
     }
 #endregion
 

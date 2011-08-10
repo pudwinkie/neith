@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -38,11 +38,6 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
       this.credential = credential;
     }
 
-    protected override ProcessTransactionDelegate Reset()
-    {
-      return ProcessLogin;
-    }
-
     // 6.2.3. LOGIN Command
     //    Arguments:  user name
     //                password
@@ -50,12 +45,15 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     //    Result:     OK - login completed, now in authenticated state
     //                NO - login failure: user name or password rejected
     //                BAD - command unknown or arguments invalid
-    private void ProcessLogin()
+    protected override ImapCommand PrepareCommand()
     {
-      SendCommand("LOGIN",
-                  ProcessReceiveResponse,
-                  string.IsNullOrEmpty(credential.UserName) ? new ImapQuotedString(string.Empty) : new ImapString(credential.UserName),
-                  string.IsNullOrEmpty(credential.Password) ? new ImapQuotedString(string.Empty) : new ImapString(credential.Password));
+      return Connection.CreateCommand("LOGIN",
+                                      string.IsNullOrEmpty(credential.UserName)
+                                        ? ImapQuotedString.Empty
+                                        : new ImapString(credential.UserName),
+                                      string.IsNullOrEmpty(credential.Password)
+                                        ? ImapQuotedString.Empty
+                                        : new ImapString(credential.Password));
     }
 
     private NetworkCredential credential;

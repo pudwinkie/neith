@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -35,12 +35,12 @@ namespace Smdn.Net {
     }
 
     public override long Position {
-      get { throw new NotSupportedException(); }
-      set { throw new NotSupportedException(); }
+      get { throw ExceptionUtils.CreateNotSupportedSeekingStream(); }
+      set { throw ExceptionUtils.CreateNotSupportedSeekingStream(); }
     }
 
     public override long Length {
-      get { throw new NotSupportedException(); }
+      get { throw ExceptionUtils.CreateNotSupportedSeekingStream(); }
     }
 
     public LineOrientedBufferedStream(Stream stream)
@@ -56,12 +56,12 @@ namespace Smdn.Net {
 
     public override void SetLength(long value)
     {
-      throw new NotSupportedException();
+      throw ExceptionUtils.CreateNotSupportedSettingStreamLength();
     }
 
     public override long Seek(long offset, SeekOrigin origin)
     {
-      throw new NotSupportedException();
+      throw ExceptionUtils.CreateNotSupportedSeekingStream();
     }
 
     public override void Flush()
@@ -145,7 +145,7 @@ namespace Smdn.Net {
 
     public override void Write(byte[] src, int offset, int count)
     {
-      throw new NotSupportedException();
+      throw ExceptionUtils.CreateNotSupportedWritingStream();
     }
 
     private void RejectDisposed()

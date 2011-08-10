@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn-netfx2.0", "..\..\Smdn\Smdn-netfx2.0.csproj", "{9778FCEA-6A63-11DE-B228-0018F344D241}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Formats.Earthsoft.PV4.Tests-netfx2.0", "Smdn.Formats.Earthsoft.PV4.Tests-netfx2.0.csproj", "{39058A58-A448-4A33-9298-36F48348932A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Formats.Earthsoft.PV4-netfx2.0", "..\Smdn.Formats.Earthsoft.PV4-netfx2.0.csproj", "{34760F30-7F20-11DE-B228-0018F344D241}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Core.BinaryFormats-netfx2.0", "..\..\Smdn.Core.BinaryFormats\Smdn.Core.BinaryFormats-netfx2.0.csproj", "{EFCDB368-F7E4-11DE-9F78-0018F344D241}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{34760F30-7F20-11DE-B228-0018F344D241}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34760F30-7F20-11DE-B228-0018F344D241}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34760F30-7F20-11DE-B228-0018F344D241}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34760F30-7F20-11DE-B228-0018F344D241}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39058A58-A448-4A33-9298-36F48348932A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39058A58-A448-4A33-9298-36F48348932A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39058A58-A448-4A33-9298-36F48348932A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39058A58-A448-4A33-9298-36F48348932A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9778FCEA-6A63-11DE-B228-0018F344D241}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9778FCEA-6A63-11DE-B228-0018F344D241}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9778FCEA-6A63-11DE-B228-0018F344D241}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9778FCEA-6A63-11DE-B228-0018F344D241}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFCDB368-F7E4-11DE-9F78-0018F344D241}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFCDB368-F7E4-11DE-9F78-0018F344D241}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFCDB368-F7E4-11DE-9F78-0018F344D241}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFCDB368-F7E4-11DE-9F78-0018F344D241}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F465EB26-C325-4654-BB3A-5AB770CC0F83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F465EB26-C325-4654-BB3A-5AB770CC0F83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F465EB26-C325-4654-BB3A-5AB770CC0F83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F465EB26-C325-4654-BB3A-5AB770CC0F83}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Smdn.Formats.Earthsoft.PV4.Tests-netfx2.0.csproj
+	EndGlobalSection
+EndGlobal

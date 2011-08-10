@@ -11,9 +11,7 @@ namespace Smdn.Net.Imap4.Protocol.Client {
     [SetUp]
     public void Setup()
     {
-      baseStream = new MemoryStream();
-      stream = new LineOrientedBufferedStream(baseStream);
-      receiver = new ImapResponseReceiver(stream);
+      receiver = new ImapPseudoResponseReceiver();
     }
 
     [TearDown]
@@ -24,11 +22,7 @@ namespace Smdn.Net.Imap4.Protocol.Client {
 
     private ImapStatusResponse GetSingleStatusResponse(string response)
     {
-      var resp = Encoding.ASCII.GetBytes(response);
-
-      baseStream.Seek(0, SeekOrigin.Begin);
-      baseStream.Write(resp, 0, resp.Length);
-      baseStream.Seek(0, SeekOrigin.Begin);
+      receiver.SetResponse(response);
 
       var r = receiver.ReceiveResponse();
 
@@ -92,14 +86,14 @@ namespace Smdn.Net.Imap4.Protocol.Client {
 
       Assert.AreEqual(7, caps.Count);
 
-      Assert.IsTrue(caps.Has(ImapCapability.Imap4Rev1));
-      Assert.IsTrue(caps.Has(ImapCapability.Children));
+      Assert.IsTrue(caps.Contains(ImapCapability.Imap4Rev1));
+      Assert.IsTrue(caps.Contains(ImapCapability.Children));
       Assert.IsTrue(caps.IsCapable(ImapAuthenticationMechanism.CRAMMD5));
       Assert.IsTrue(caps.IsCapable(ImapAuthenticationMechanism.Plain));
 
-      Assert.IsTrue(caps.Has("THREAD=REFERENCES"));
-      Assert.IsTrue(caps.Has("X-EXTENSION1"));
-      Assert.IsTrue(caps.Has("X-EXTENSION2"));
+      Assert.IsTrue(caps.Contains("THREAD=REFERENCES"));
+      Assert.IsTrue(caps.Contains("X-EXTENSION1"));
+      Assert.IsTrue(caps.Contains("X-EXTENSION2"));
     }
 
     [Test]
@@ -116,10 +110,10 @@ namespace Smdn.Net.Imap4.Protocol.Client {
 
       Assert.IsNotNull(flags);
       Assert.AreEqual(4, flags.Count);
-      Assert.IsTrue(flags.Has(ImapMessageFlag.Deleted));
-      Assert.IsTrue(flags.Has(ImapMessageFlag.Seen));
-      Assert.IsTrue(flags.Has(ImapMessageFlag.AllowedCreateKeywords));
-      Assert.IsTrue(flags.Has("custom"));
+      Assert.IsTrue(flags.Contains(ImapMessageFlag.Deleted));
+      Assert.IsTrue(flags.Contains(ImapMessageFlag.Seen));
+      Assert.IsTrue(flags.Contains(ImapMessageFlag.AllowedCreateKeywords));
+      Assert.IsTrue(flags.Contains("custom"));
     }
 
 
@@ -330,8 +324,6 @@ namespace Smdn.Net.Imap4.Protocol.Client {
       Assert.AreEqual("on-the-road", ImapResponseTextConverter.FromUndefinedFilter(response.ResponseText));
     }
 
-    private ImapResponseReceiver receiver;
-    private MemoryStream baseStream;
-    private LineOrientedBufferedStream stream;
+    private ImapPseudoResponseReceiver receiver;
   }
 }

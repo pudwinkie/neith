@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@
 // THE SOFTWARE.
 
 using System;
+using System.Runtime.Remoting.Messaging;
 using System.Threading;
 
 using Smdn.Net.Pop3.Protocol.Client;
@@ -52,16 +53,34 @@ namespace Smdn.Net.Pop3.Client.Session {
       }
 
       public IPopTransaction Transaction { get { return transaction; } }
-      public IAsyncResult ProcessTransactionAsyncResult { get { return processTransactionAsyncResult; } }
+      public bool GetResultCalled { get { return processTransactionAsyncResult == null; } }
 
-      public TransactionAsyncResult(IPopTransaction transaction, IAsyncResult processTransactionAsyncResult)
+      public TransactionAsyncResult(IPopTransaction transaction, ProcessTransactionDelegate processTransactionProc)
       {
         this.transaction = transaction;
-        this.processTransactionAsyncResult = processTransactionAsyncResult;
+        this.processTransactionAsyncResult = (AsyncResult)processTransactionProc.BeginInvoke(transaction,
+                                                                                             null,
+                                                                                             null);
       }
 
-      private /*readonly*/ IPopTransaction transaction;
-      private /*readonly*/ IAsyncResult processTransactionAsyncResult;
+      public IPopTransaction GetResult()
+      {
+        try {
+          if (Runtime.IsRunningOnMono && !processTransactionAsyncResult.IsCompleted)
+            // XXX: mono 2.6.x bug?
+            processTransactionAsyncResult.AsyncWaitHandle.WaitOne();
+
+          var processTransactionProc = processTransactionAsyncResult.AsyncDelegate as ProcessTransactionDelegate;
+
+          return processTransactionProc.EndInvoke(processTransactionAsyncResult);
+        }
+        finally {
+          processTransactionAsyncResult = null;
+        }
+      }
+
+      private readonly IPopTransaction transaction;
+      private AsyncResult processTransactionAsyncResult;
     }
 
     private PopCommandResult ProcessTransaction(IPopTransaction t)
@@ -75,12 +94,14 @@ namespace Smdn.Net.Pop3.Client.Session {
         return PostProcessTransaction(t);
       }
       else {
-        var async = BeginProcessTransaction(t, handlesIncapableAsException);
+        var asyncResult = BeginProcessTransaction(t, handlesIncapableAsException);
 
-        if (async.AsyncWaitHandle.WaitOne(transactionTimeout, false)) {
-          return EndProcessTransaction(async);
+        if (asyncResult.IsCompleted ||
+            asyncResult.AsyncWaitHandle.WaitOne(transactionTimeout, false)) {
+          return EndProcessTransaction(asyncResult);
         }
         else {
+          // TODO: cleanup
           CloseConnection();
           throw new TimeoutException(string.Format("transaction timeout ({0})", t.GetType().FullName));
         }
@@ -91,26 +112,23 @@ namespace Smdn.Net.Pop3.Client.Session {
     {
       PreProcessTransaction(t, exceptionIfIncapable);
 
-      var processTransaction = new ProcessTransactionDelegate(ProcessTransactionInternal);
-
-      return new TransactionAsyncResult(t, processTransaction.BeginInvoke(t, null, null));
+      return new TransactionAsyncResult(t, ProcessTransactionInternal);
     }
 
     private PopCommandResult EndProcessTransaction(IAsyncResult asyncResult)
     {
+      if (asyncResult == null)
+        throw new ArgumentNullException("asyncResult");
+
       var ar = asyncResult as TransactionAsyncResult;
 
       if (ar == null)
-        throw new ArgumentException("invalid IAsyncResult", "asyncResult");
+        throw ExceptionUtils.CreateArgumentMustBeValidIAsyncResult("asyncResult");
 
-      var ptar = ar.ProcessTransactionAsyncResult as System.Runtime.Remoting.Messaging.AsyncResult;
-
-      if (ptar.EndInvokeCalled)
+      if (ar.GetResultCalled)
         throw new InvalidOperationException("EndProcessTransaction already called");
 
-      var processTransaction = ptar.AsyncDelegate as ProcessTransactionDelegate;
-
-      return PostProcessTransaction(processTransaction.EndInvoke(ptar));
+      return PostProcessTransaction(ar.GetResult());
     }
 
     private delegate IPopTransaction ProcessTransactionDelegate(IPopTransaction t);

@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -33,23 +33,6 @@ namespace Smdn.Net.Pop3.Client.Transaction.BuiltIn {
     {
     }
 
-    protected override ProcessTransactionDelegate Reset()
-    {
-#if DEBUG
-      if (!RequestArguments.ContainsKey("name") || !RequestArguments.ContainsKey("digest"))
-        return ProcessArgumentNotSetted;
-#endif
-
-      return ProcessApop;
-    }
-
-#if DEBUG
-    private void ProcessArgumentNotSetted()
-    {
-      FinishError(PopCommandResultCode.RequestError, "arguments 'name' and 'digest' must be setted");
-    }
-#endif
-
     /*
      * 7. Optional POP3 Commands
      * 
@@ -63,9 +46,18 @@ namespace Smdn.Net.Pop3.Client.Transaction.BuiltIn {
      *              may only be given in the AUTHORIZATION state after the POP3
      *              greeting or after an unsuccessful USER or PASS command
      */
-    private void ProcessApop()
+    protected override PopCommand PrepareCommand()
     {
-      SendCommand("APOP", ProcessReceiveResponse, RequestArguments["name"], RequestArguments["digest"]);
+#if DEBUG
+      if (!RequestArguments.ContainsKey("name") || !RequestArguments.ContainsKey("digest")) {
+        FinishError(PopCommandResultCode.RequestError, "arguments 'name' and 'digest' must be setted");
+        return null;
+      }
+      else
+#endif
+        return new PopCommand("APOP",
+                              RequestArguments["name"],
+                              RequestArguments["digest"]);
     }
   }
 }

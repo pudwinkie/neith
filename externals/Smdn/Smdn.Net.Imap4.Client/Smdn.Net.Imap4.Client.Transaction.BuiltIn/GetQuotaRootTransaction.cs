@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -35,31 +35,14 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
    * http://tools.ietf.org/html/rfc2087
    */
   internal sealed class GetQuotaRootTransaction : ImapTransactionBase<ImapCommandResult<IDictionary<string, ImapQuota[]>>>, IImapExtension {
-    ImapCapability IImapExtension.RequiredCapability {
-      get { return ImapCapability.Quota; }
+    IEnumerable<ImapCapability> IImapExtension.RequiredCapabilities {
+      get { yield return ImapCapability.Quota; }
     }
 
     public GetQuotaRootTransaction(ImapConnection connection)
       : base(connection)
     {
     }
-
-    protected override ProcessTransactionDelegate Reset()
-    {
-#if DEBUG
-      if (!RequestArguments.ContainsKey("mailbox name"))
-        return ProcessArgumentNotSetted;
-      else
-#endif
-        return ProcessGetQuotaRoot;
-    }
-
-#if DEBUG
-    private void ProcessArgumentNotSetted()
-    {
-      FinishError(ImapCommandResultCode.RequestError, "arguments 'mailbox name' must be setted");
-    }
-#endif
 
     /*
      * 4.3. GETQUOTAROOT Command
@@ -71,10 +54,18 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
      *                NO - getquota error: no such mailbox, permission denied
      *                BAD - command unknown or arguments invalid
      */
-    private void ProcessGetQuotaRoot()
+    protected override ImapCommand PrepareCommand()
     {
+#if DEBUG
+      if (!RequestArguments.ContainsKey("mailbox name")) {
+        FinishError(ImapCommandResultCode.RequestError, "arguments 'mailbox name' must be setted");
+        return null;
+      }
+#endif
+
       // GETQUOTAROOT
-      SendCommand("GETQUOTAROOT", ProcessReceiveResponse, RequestArguments["mailbox name"]);
+      return Connection.CreateCommand("GETQUOTAROOT",
+                                      RequestArguments["mailbox name"]);
     }
 
     protected override void OnDataResponseReceived(ImapDataResponse data)

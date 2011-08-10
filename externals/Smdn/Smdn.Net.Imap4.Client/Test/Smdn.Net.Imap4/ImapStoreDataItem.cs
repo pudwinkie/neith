@@ -7,7 +7,7 @@ namespace Smdn.Net.Imap4 {
     [Test, ExpectedException(typeof(ArgumentException))]
     public void TestConstructEmpty1()
     {
-      ImapStoreDataItem.ReplaceFlags(new ImapMessageFlagList());
+      ImapStoreDataItem.ReplaceFlags(new ImapMessageFlagSet());
     }
 
     [Test, ExpectedException(typeof(ArgumentException))]
@@ -29,7 +29,7 @@ namespace Smdn.Net.Imap4 {
                       ImapStoreDataItem.ReplaceFlags(new[] {"$label3"}, ImapMessageFlag.Flagged).ToString());
 
       Assert.AreEqual("FLAGS (\\Seen \\Draft $label1 $label2)",
-                      ImapStoreDataItem.ReplaceFlags(new ImapMessageFlagList(new[] {"$label1", "$label2"}, ImapMessageFlag.Seen, ImapMessageFlag.Draft)).ToString());
+                      ImapStoreDataItem.ReplaceFlags(new ImapMessageFlagSet(new[] {"$label1", "$label2"}, ImapMessageFlag.Seen, ImapMessageFlag.Draft)).ToString());
     }
 
     [Test]

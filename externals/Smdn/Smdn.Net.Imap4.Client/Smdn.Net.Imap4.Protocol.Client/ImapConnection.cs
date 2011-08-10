@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -29,9 +29,9 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Net.Security;
-using System.Threading;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 
 using Smdn.Net.Imap4.Client;
 
@@ -92,22 +92,10 @@ namespace Smdn.Net.Imap4.Protocol.Client {
       set { (Receiver as ImapResponseReceiver).ReceiveResponseAsUTF8 = value; }
     }
 
-    public ImapConnection(string host)
-      : this(host, -1, null)
-    {
-    }
-
-    public ImapConnection(string host, int port)
-      : this(host, port, null)
-    {
-    }
-
-    public ImapConnection(string host, UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
-      : this(host, -1, createAuthenticatedStreamCallback)
-    {
-    }
-
-    public ImapConnection(string host, int port, UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
+    public ImapConnection(string host,
+                          int port,
+                          int millisecondsTimeout,
+                          UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
       : base(imapConnectionTraceSource)
     {
       if (port == -1) {
@@ -117,7 +105,10 @@ namespace Smdn.Net.Imap4.Protocol.Client {
           port = ImapDefaultPorts.Imaps;
       }
 
-      Connect(host, port, createAuthenticatedStreamCallback);
+      Connect(host,
+              port,
+              millisecondsTimeout,
+              createAuthenticatedStreamCallback);
     }
 
     internal void SetIsIdling(bool isIdling)
@@ -255,6 +246,28 @@ namespace Smdn.Net.Imap4.Protocol.Client {
             throw exp;
           }
         }
+        catch (Exception ex) {
+          if (IsIdling && ex.GetType().FullName == "Mono.Security.Protocol.Tls.TlsException") {
+            // XXX: expected timeout (?)
+            /*
+             * Unhandled Exception: Smdn.Net.Imap4.ImapException: internal error ---> Mono.Security.Protocol.Tls.TlsException: Couldn't complete EndRead
+             *   at Mono.Security.Protocol.Tls.SslStreamBase.EndRead (IAsyncResult asyncResult) [0x00065] in /srv/files/build/mono/2.8.2/mono-2.8.2/mcs/class/Mono.Security/Mono.Security.Protocol.Tls/SslStreamBase.cs:888 
+             *   at System.Net.Security.SslStream.EndRead (IAsyncResult asyncResult) [0x00006] in /srv/files/build/mono/2.8.2/mono-2.8.2/mcs/class/System/System.Net.Security/SslStream.cs:530 
+             *   at System.Net.Security.SslStream.Read (System.Byte[] buffer, Int32 offset, Int32 count) [0x00000] in /srv/files/build/mono/2.8.2/mono-2.8.2/mcs/class/System/System.Net.Security/SslStream.cs:549 
+             *   at Smdn.Net.InterruptStream.Read (System.Byte[] dest, Int32 offset, Int32 count) [0x00019] in /srv/files/projects/TundereBird/core/Smdn.Net.MessageAccessProtocols/Smdn.Net/InterruptStream.cs:118 
+             *   at Smdn.IO.LineOrientedStream.FillBuffer () [0x00007] in /srv/files/projects/TundereBird/core/Smdn.Core.Standards/Smdn.IO/LineOrientedStream.cs:362 
+             *   at Smdn.IO.LineOrientedStream.ReadLine (Boolean keepEOL) [0x00006] in /srv/files/projects/TundereBird/core/Smdn.Core.Standards/Smdn.IO/LineOrientedStream.cs:161 
+             *   at (wrapper remoting-invoke-with-check) Smdn.IO.LineOrientedStream:ReadLine (bool)
+             *   at Smdn.Net.Imap4.Protocol.ImapReceiver.Receive () [0x00000] in /srv/files/projects/TundereBird/core/Smdn.Net.Imap4/Smdn.Net.Imap4.Protocol/ImapReceiver.cs:47 
+             *     :
+             */
+            Smdn.Net.Imap4.Client.Trace.Verbose("idling (Mono SslStream)");
+            continue;
+          }
+          else {
+            throw;
+          }
+        }
       }
 
       // return received response
@@ -274,7 +287,8 @@ namespace Smdn.Net.Imap4.Protocol.Client {
 
         default:
           // unexpected socket exception
-          return new ImapConnectionException("unexpected socket error", ex);
+          return new ImapConnectionException(string.Format("unexpected socket error ({0})", ex.SocketErrorCode),
+                                             ex);
       }
     }
 #endregion

@@ -1,0 +1,6 @@
+Name: Smdn.Media.Earthsoft.PV4.Multiplex-netfx4.0
+Description: Smdn.Media.Earthsoft.PV4.Multiplex-netfx4.0
+Version: 0.1
+
+Requires: 
+Libs: -r:@expanded_libdir@/@PACKAGE@/Smdn.Media.Earthsoft.PV4.Multiplex.dll

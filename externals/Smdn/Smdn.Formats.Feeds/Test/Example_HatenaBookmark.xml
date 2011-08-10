@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns="http://purl.org/rss/1.0/"
+ xmlns:content="http://purl.org/rss/1.0/modules/content/"
+ xmlns:taxo="http://purl.org/rss/1.0/modules/taxonomy/"
+ xmlns:opensearch="http://a9.com/-/spec/opensearchrss/1.0/"
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+ xmlns:hatena="http://www.hatena.ne.jp/info/xmlns#"
+ xmlns:media="http://search.yahoo.com/mrss"
+>
+  <channel rdf:about="http://b.hatena.ne.jp/bookmarklist?url=http%3A%2F%2Fsmdn.invisiblefulmoon.net%2F">
+    <title>はてなブックマーク - 新着ブックマーク - smdn.invisiblefulmoon.net</title>
+    <link>http://b.hatena.ne.jp/bookmarklist?url=http%3A%2F%2Fsmdn.invisiblefulmoon.net%2F</link>
+    <description>smdn.invisiblefulmoon.net の新着ブックマーク</description>
+
+    <items>
+      <rdf:Seq>
+        <rdf:li rdf:resource="http://b.hatena.ne.jp/Naruhodius/20091127#bookmark-17587144" />
+        <rdf:li rdf:resource="http://b.hatena.ne.jp/yuraurt/20091127#bookmark-17587144" />
+        <rdf:li rdf:resource="http://b.hatena.ne.jp/cotori0620/20091125#bookmark-12927534" />
+        <rdf:li rdf:resource="http://b.hatena.ne.jp/mi_kattun/20091124#bookmark-17525548" />
+        <rdf:li rdf:resource="http://b.hatena.ne.jp/youhey/20091124#bookmark-15524955" />
+        <rdf:li rdf:resource="http://b.hatena.ne.jp/babydaemons/20091123#bookmark-8712815" />
+        <rdf:li rdf:resource="http://b.hatena.ne.jp/yotena/20091119#bookmark-17295477" />
+        <rdf:li rdf:resource="http://b.hatena.ne.jp/H-1/20091116#bookmark-1923029" />
+        <rdf:li rdf:resource="http://b.hatena.ne.jp/pick_mugetu/20091112#bookmark-17306445" />
+        <rdf:li rdf:resource="http://b.hatena.ne.jp/yahihi/20091112#bookmark-17295477" />
+        <rdf:li rdf:resource="http://b.hatena.ne.jp/Naruhodius/20091112#bookmark-17295477" />
+        <rdf:li rdf:resource="http://b.hatena.ne.jp/just_facelock/20091112#bookmark-15894238" />
+        <rdf:li rdf:resource="http://b.hatena.ne.jp/H-1/20091112#bookmark-17295477" />
+        <rdf:li rdf:resource="http://b.hatena.ne.jp/arika_9513/20091111#bookmark-17268287" />
+        <rdf:li rdf:resource="http://b.hatena.ne.jp/jay777/20091110#bookmark-8093679" />
+        <rdf:li rdf:resource="http://b.hatena.ne.jp/jay777/20091109#bookmark-17230768" />
+        <rdf:li rdf:resource="http://b.hatena.ne.jp/Chiastolite/20091109#bookmark-8095024" />
+        <rdf:li rdf:resource="http://b.hatena.ne.jp/monday4692/20091109#bookmark-17217155" />
+        <rdf:li rdf:resource="http://b.hatena.ne.jp/youjo756/20091105#bookmark-8095024" />
+        <rdf:li rdf:resource="http://b.hatena.ne.jp/alfaladio/20091104#bookmark-17124230" />
+        <rdf:li rdf:resource="http://b.hatena.ne.jp/Shinnya/20091103#bookmark-14389506" />
+        <rdf:li rdf:resource="http://b.hatena.ne.jp/lycoris3/20091102#bookmark-16965502" />
+      </rdf:Seq>
+    </items>
+  </channel>
+  <item rdf:about="http://b.hatena.ne.jp/Naruhodius/20091127#bookmark-17587144">
+    <title>Ubuntu 9.10 Desktop 初期設定メモ - Softwares/Ubuntu - 総武ソフトウェア推進所</title>
+    <link>http://smdn.invisiblefulmoon.net/softwares/ubuntu/initialconfig_karmic_desktop/</link>
+    <description></description>
+    <content:encoded>&lt;blockquote cite=&quot;http://smdn.invisiblefulmoon.net/softwares/ubuntu/initialconfig_karmic_desktop/&quot; title=&quot;Ubuntu 9.10 Desktop 初期設定メモ - Softwares/Ubuntu - 総武ソフトウェア推進所&quot;&gt;&lt;cite&gt;&lt;img src=&quot;http://favicon.st-hatena.com/?url=http%3A%2F%2Fsmdn.invisiblefulmoon.net%2Fsoftwares%2Fubuntu%2Finitialconfig_karmic_desktop%2F&quot; alt=&quot;&quot; /&gt; &lt;a href=&quot;http://smdn.invisiblefulmoon.net/softwares/ubuntu/initialconfig_karmic_desktop/&quot;&gt;Ubuntu 9.10 Desktop 初期設定メモ - Softwares/Ubuntu - 総武ソフトウェア推進所&lt;/a&gt;&lt;/cite&gt;&lt;p&gt;Page statusmodified2009-11-01T18:21:19+09:00built2009-11-23T08:01:23+09:00statusTable of contentsインストール手順ブート画面[Ubuntu インストーラメインメニュー][ネットワークの設定][ディスクのパーティショニング][ベースシステムをインストールしています][ユーザとパス...&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://b.hatena.ne.jp/entry/http://smdn.invisiblefulmoon.net/softwares/ubuntu/initialconfig_karmic_desktop/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/entry/image/http://smdn.invisiblefulmoon.net/softwares/ubuntu/initialconfig_karmic_desktop/&quot; alt=&quot;はてなブックマーク - Ubuntu 9.10 Desktop 初期設定メモ - Softwares/Ubuntu - 総武ソフトウェア推進所&quot; title=&quot;はてなブックマーク - Ubuntu 9.10 Desktop 初期設定メモ - Softwares/Ubuntu - 総武ソフトウェア推進所&quot; border=&quot;0&quot; style=&quot;border: none&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://b.hatena.ne.jp/append?http://smdn.invisiblefulmoon.net/softwares/ubuntu/initialconfig_karmic_desktop/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/images/append.gif&quot; border=&quot;0&quot; alt=&quot;はてなブックマークに追加&quot; title=&quot;はてなブックマークに追加&quot; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;&lt;img src=&quot;http://www.st-hatena.com/users/Na/Naruhodius/profile_s.gif&quot; class=&quot;profile-image&quot; alt=&quot;Naruhodius&quot; title=&quot;Naruhodius&quot; width=&quot;16&quot; height=&quot;16&quot; /&gt; &lt;a href=&quot;http://b.hatena.ne.jp/Naruhodius/20091127#bookmark-17587144&quot;&gt;Naruhodius&lt;/a&gt;  &lt;/p&gt;</content:encoded>
+    <dc:creator>Naruhodius</dc:creator>
+    <dc:date>2009-11-27T13:35:37+09:00</dc:date>
+  </item>
+  <item rdf:about="http://b.hatena.ne.jp/yuraurt/20091127#bookmark-17587144">
+    <title>Ubuntu 9.10 Desktop 初期設定メモ - Softwares/Ubuntu - 総武ソフトウェア推進所</title>
+    <link>http://smdn.invisiblefulmoon.net/softwares/ubuntu/initialconfig_karmic_desktop/</link>
+    <description></description>
+    <content:encoded>&lt;blockquote cite=&quot;http://smdn.invisiblefulmoon.net/softwares/ubuntu/initialconfig_karmic_desktop/&quot; title=&quot;Ubuntu 9.10 Desktop 初期設定メモ - Softwares/Ubuntu - 総武ソフトウェア推進所&quot;&gt;&lt;cite&gt;&lt;img src=&quot;http://favicon.st-hatena.com/?url=http%3A%2F%2Fsmdn.invisiblefulmoon.net%2Fsoftwares%2Fubuntu%2Finitialconfig_karmic_desktop%2F&quot; alt=&quot;&quot; /&gt; &lt;a href=&quot;http://smdn.invisiblefulmoon.net/softwares/ubuntu/initialconfig_karmic_desktop/&quot;&gt;Ubuntu 9.10 Desktop 初期設定メモ - Softwares/Ubuntu - 総武ソフトウェア推進所&lt;/a&gt;&lt;/cite&gt;&lt;p&gt;Page statusmodified2009-11-01T18:21:19+09:00built2009-11-23T08:01:23+09:00statusTable of contentsインストール手順ブート画面[Ubuntu インストーラメインメニュー][ネットワークの設定][ディスクのパーティショニング][ベースシステムをインストールしています][ユーザとパス...&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://b.hatena.ne.jp/entry/http://smdn.invisiblefulmoon.net/softwares/ubuntu/initialconfig_karmic_desktop/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/entry/image/http://smdn.invisiblefulmoon.net/softwares/ubuntu/initialconfig_karmic_desktop/&quot; alt=&quot;はてなブックマーク - Ubuntu 9.10 Desktop 初期設定メモ - Softwares/Ubuntu - 総武ソフトウェア推進所&quot; title=&quot;はてなブックマーク - Ubuntu 9.10 Desktop 初期設定メモ - Softwares/Ubuntu - 総武ソフトウェア推進所&quot; border=&quot;0&quot; style=&quot;border: none&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://b.hatena.ne.jp/append?http://smdn.invisiblefulmoon.net/softwares/ubuntu/initialconfig_karmic_desktop/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/images/append.gif&quot; border=&quot;0&quot; alt=&quot;はてなブックマークに追加&quot; title=&quot;はてなブックマークに追加&quot; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;&lt;img src=&quot;http://www.st-hatena.com/users/yu/yuraurt/profile_s.gif&quot; class=&quot;profile-image&quot; alt=&quot;yuraurt&quot; title=&quot;yuraurt&quot; width=&quot;16&quot; height=&quot;16&quot; /&gt; &lt;a href=&quot;http://b.hatena.ne.jp/yuraurt/20091127#bookmark-17587144&quot;&gt;yuraurt&lt;/a&gt; &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/yuraurt/Ubuntu/&quot;&gt;Ubuntu&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/yuraurt/Karmic/&quot;&gt;Karmic&lt;/a&gt; &lt;/p&gt;</content:encoded>
+    <dc:creator>yuraurt</dc:creator>
+    <dc:date>2009-11-27T11:14:43+09:00</dc:date>
+    <dc:subject>Ubuntu</dc:subject>
+    <dc:subject>Karmic</dc:subject>
+    <taxo:topics>
+      <rdf:Bag>
+        <rdf:li resource="http://b.hatena.ne.jp/t/Ubuntu" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/Karmic" />
+      </rdf:Bag>
+    </taxo:topics>
+  </item>
+  <item rdf:about="http://b.hatena.ne.jp/cotori0620/20091125#bookmark-12927534">
+    <title>Smdn.Protocols.Pop3 - Works/Libraries - 総武ソフトウェア推進所</title>
+    <link>http://smdn.invisiblefulmoon.net/works/libs/Smdn.Protocols.Pop3/</link>
+    <description></description>
+    <content:encoded>&lt;blockquote cite=&quot;http://smdn.invisiblefulmoon.net/works/libs/Smdn.Protocols.Pop3/&quot; title=&quot;Smdn.Protocols.Pop3 - Works/Libraries - 総武ソフトウェア推進所&quot;&gt;&lt;cite&gt;&lt;img src=&quot;http://favicon.st-hatena.com/?url=http%3A%2F%2Fsmdn.invisiblefulmoon.net%2Fworks%2Flibs%2FSmdn.Protocols.Pop3%2F&quot; alt=&quot;&quot; /&gt; &lt;a href=&quot;http://smdn.invisiblefulmoon.net/works/libs/Smdn.Protocols.Pop3/&quot;&gt;Smdn.Protocols.Pop3 - Works/Libraries - 総武ソフトウェア推進所&lt;/a&gt;&lt;/cite&gt;&lt;p&gt;»サンプル本ライブラリを使用して、GMail POPサーバからメールをダウンロードして本文を表示したあと、サーバ上のメールを削除する例です。using System;using Smdn.Protocols.Pop3;using Smdn.Protocols.Pop3.Client;public class GmailRetrieveSample {public static void...&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://b.hatena.ne.jp/entry/http://smdn.invisiblefulmoon.net/works/libs/Smdn.Protocols.Pop3/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/entry/image/http://smdn.invisiblefulmoon.net/works/libs/Smdn.Protocols.Pop3/&quot; alt=&quot;はてなブックマーク - Smdn.Protocols.Pop3 - Works/Libraries - 総武ソフトウェア推進所&quot; title=&quot;はてなブックマーク - Smdn.Protocols.Pop3 - Works/Libraries - 総武ソフトウェア推進所&quot; border=&quot;0&quot; style=&quot;border: none&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://b.hatena.ne.jp/append?http://smdn.invisiblefulmoon.net/works/libs/Smdn.Protocols.Pop3/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/images/append.gif&quot; border=&quot;0&quot; alt=&quot;はてなブックマークに追加&quot; title=&quot;はてなブックマークに追加&quot; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;&lt;img src=&quot;http://www.st-hatena.com/users/co/cotori0620/profile_s.gif&quot; class=&quot;profile-image&quot; alt=&quot;cotori0620&quot; title=&quot;cotori0620&quot; width=&quot;16&quot; height=&quot;16&quot; /&gt; &lt;a href=&quot;http://b.hatena.ne.jp/cotori0620/20091125#bookmark-12927534&quot;&gt;cotori0620&lt;/a&gt; &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/cotori0620/C%23/&quot;&gt;C#&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/cotori0620/Gmail/&quot;&gt;Gmail&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/cotori0620/Programming/&quot;&gt;Programming&lt;/a&gt; &lt;/p&gt;</content:encoded>
+    <dc:creator>cotori0620</dc:creator>
+    <dc:date>2009-11-25T15:08:16+09:00</dc:date>
+    <dc:subject>C#</dc:subject>
+    <dc:subject>Gmail</dc:subject>
+    <dc:subject>Programming</dc:subject>
+    <taxo:topics>
+      <rdf:Bag>
+        <rdf:li resource="http://b.hatena.ne.jp/t/C%23" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/Gmail" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/Programming" />
+      </rdf:Bag>
+    </taxo:topics>
+  </item>
+  <item rdf:about="http://b.hatena.ne.jp/mi_kattun/20091124#bookmark-17525548">
+    <title>C#-Ruby比較早見表 - Programming/Ruby - 総武ソフトウェア推進所</title>
+    <link>http://smdn.invisiblefulmoon.net/programming/ruby/compare_with_cs/#section.1.3</link>
+    <description></description>
+    <content:encoded>&lt;blockquote cite=&quot;http://smdn.invisiblefulmoon.net/programming/ruby/compare_with_cs/#section.1.3&quot; title=&quot;C#-Ruby比較早見表 - Programming/Ruby - 総武ソフトウェア推進所&quot;&gt;&lt;cite&gt;&lt;img src=&quot;http://favicon.st-hatena.com/?url=http%3A%2F%2Fsmdn.invisiblefulmoon.net%2Fprogramming%2Fruby%2Fcompare_with_cs%2F%23section.1.3&quot; alt=&quot;&quot; /&gt; &lt;a href=&quot;http://smdn.invisiblefulmoon.net/programming/ruby/compare_with_cs/#section.1.3&quot;&gt;C#-Ruby比較早見表 - Programming/Ruby - 総武ソフトウェア推進所&lt;/a&gt;&lt;/cite&gt;&lt;p&gt;»C#-Ruby比較早見表C#とRubyの対比・比較表、いわゆるチートシートです。　「C#で言うところの…」と「Rubyで言うところの…」に対応する記述・クラス等を対比表としてまとめたものです。　Rubyスクリプトを書いているときに「C#で言うところのアレはRubyではどう書くんだっけ」ということが多いので、すぐに参照できるようよく使う部分を中心にまとめてあります。全般的なことすべてが完全に一...&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://b.hatena.ne.jp/entry/http://smdn.invisiblefulmoon.net/programming/ruby/compare_with_cs/%23section.1.3&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/entry/image/http://smdn.invisiblefulmoon.net/programming/ruby/compare_with_cs/%23section.1.3&quot; alt=&quot;はてなブックマーク - C#-Ruby比較早見表 - Programming/Ruby - 総武ソフトウェア推進所&quot; title=&quot;はてなブックマーク - C#-Ruby比較早見表 - Programming/Ruby - 総武ソフトウェア推進所&quot; border=&quot;0&quot; style=&quot;border: none&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://b.hatena.ne.jp/append?http://smdn.invisiblefulmoon.net/programming/ruby/compare_with_cs/%23section.1.3&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/images/append.gif&quot; border=&quot;0&quot; alt=&quot;はてなブックマークに追加&quot; title=&quot;はてなブックマークに追加&quot; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;&lt;img src=&quot;http://www.st-hatena.com/users/mi/mi_kattun/profile_s.gif&quot; class=&quot;profile-image&quot; alt=&quot;mi_kattun&quot; title=&quot;mi_kattun&quot; width=&quot;16&quot; height=&quot;16&quot; /&gt; &lt;a href=&quot;http://b.hatena.ne.jp/mi_kattun/20091124#bookmark-17525548&quot;&gt;mi_kattun&lt;/a&gt; &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/mi_kattun/reference/&quot;&gt;reference&lt;/a&gt; &lt;/p&gt;</content:encoded>
+    <dc:creator>mi_kattun</dc:creator>
+    <dc:date>2009-11-24T12:59:11+09:00</dc:date>
+    <dc:subject>reference</dc:subject>
+    <taxo:topics>
+      <rdf:Bag>
+        <rdf:li resource="http://b.hatena.ne.jp/t/reference" />
+      </rdf:Bag>
+    </taxo:topics>
+  </item>
+  <item rdf:about="http://b.hatena.ne.jp/youhey/20091124#bookmark-15524955">
+    <title>エクスプローラのオプションスイッチ - Programming/Tips - 総武ソフトウェア推進所</title>
+    <link>http://smdn.invisiblefulmoon.net/programming/tips/explorer_options/</link>
+    <description></description>
+    <content:encoded>&lt;blockquote cite=&quot;http://smdn.invisiblefulmoon.net/programming/tips/explorer_options/&quot; title=&quot;エクスプローラのオプションスイッチ - Programming/Tips - 総武ソフトウェア推進所&quot;&gt;&lt;cite&gt;&lt;img src=&quot;http://favicon.st-hatena.com/?url=http%3A%2F%2Fsmdn.invisiblefulmoon.net%2Fprogramming%2Ftips%2Fexplorer_options%2F&quot; alt=&quot;&quot; /&gt; &lt;a href=&quot;http://smdn.invisiblefulmoon.net/programming/tips/explorer_options/&quot;&gt;エクスプローラのオプションスイッチ - Programming/Tips - 総武ソフトウェア推進所&lt;/a&gt;&lt;/cite&gt;&lt;p&gt;»エクスプローラのオプションスイッチexplorer.exeを起動する際に引数を指定することで、様々な方法で起動することができる。　引数には次のようなものがある。　また、特殊なフォルダを開くこともできる。 explorer.exe [/n],[/e] [(,)/root,[object]] [/select,[object]]/n表示枠が 1 つの新しいウィンドウを開き，デフォルトの場所 ...&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://b.hatena.ne.jp/entry/http://smdn.invisiblefulmoon.net/programming/tips/explorer_options/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/entry/image/http://smdn.invisiblefulmoon.net/programming/tips/explorer_options/&quot; alt=&quot;はてなブックマーク - エクスプローラのオプションスイッチ - Programming/Tips - 総武ソフトウェア推進所&quot; title=&quot;はてなブックマーク - エクスプローラのオプションスイッチ - Programming/Tips - 総武ソフトウェア推進所&quot; border=&quot;0&quot; style=&quot;border: none&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://b.hatena.ne.jp/append?http://smdn.invisiblefulmoon.net/programming/tips/explorer_options/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/images/append.gif&quot; border=&quot;0&quot; alt=&quot;はてなブックマークに追加&quot; title=&quot;はてなブックマークに追加&quot; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;&lt;img src=&quot;http://www.st-hatena.com/users/yo/youhey/profile_s.gif&quot; class=&quot;profile-image&quot; alt=&quot;youhey&quot; title=&quot;youhey&quot; width=&quot;16&quot; height=&quot;16&quot; /&gt; &lt;a href=&quot;http://b.hatena.ne.jp/youhey/20091124#bookmark-15524955&quot;&gt;youhey&lt;/a&gt; &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/youhey/windows/&quot;&gt;windows&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/youhey/explorer/&quot;&gt;explorer&lt;/a&gt; &lt;/p&gt;</content:encoded>
+    <dc:creator>youhey</dc:creator>
+    <dc:date>2009-11-24T11:29:09+09:00</dc:date>
+    <dc:subject>windows</dc:subject>
+    <dc:subject>explorer</dc:subject>
+    <taxo:topics>
+      <rdf:Bag>
+        <rdf:li resource="http://b.hatena.ne.jp/t/windows" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/explorer" />
+      </rdf:Bag>
+    </taxo:topics>
+  </item>
+  <item rdf:about="http://b.hatena.ne.jp/babydaemons/20091123#bookmark-8712815">
+    <title>Linux - 総武ソフトウェア推進所</title>
+    <link>http://smdn.invisiblefulmoon.net/linux/</link>
+    <description></description>
+    <content:encoded>&lt;blockquote cite=&quot;http://smdn.invisiblefulmoon.net/linux/&quot; title=&quot;Linux - 総武ソフトウェア推進所&quot;&gt;&lt;cite&gt;&lt;img src=&quot;http://favicon.st-hatena.com/?url=http%3A%2F%2Fsmdn.invisiblefulmoon.net%2Flinux%2F&quot; alt=&quot;&quot; /&gt; &lt;a href=&quot;http://smdn.invisiblefulmoon.net/linux/&quot;&gt;Linux - 総武ソフトウェア推進所&lt;/a&gt;&lt;/cite&gt;&lt;p&gt;サーバ構築手順・初期設定、ツール類のインストール、環境設定などLinuxに関するメモ。»Linuxサーバ構築手順・初期設定、ツール類のインストール、環境設定などLinuxに関するメモ。LinuxCentOSlighttpd+PHPDebianinetd + svnserveinetd + telnetdTipsFedora/Fedora CoreMonoMySQLOpensSSHRedmin...&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://b.hatena.ne.jp/entry/http://smdn.invisiblefulmoon.net/linux/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/entry/image/http://smdn.invisiblefulmoon.net/linux/&quot; alt=&quot;はてなブックマーク - Linux - 総武ソフトウェア推進所&quot; title=&quot;はてなブックマーク - Linux - 総武ソフトウェア推進所&quot; border=&quot;0&quot; style=&quot;border: none&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://b.hatena.ne.jp/append?http://smdn.invisiblefulmoon.net/linux/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/images/append.gif&quot; border=&quot;0&quot; alt=&quot;はてなブックマークに追加&quot; title=&quot;はてなブックマークに追加&quot; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;&lt;img src=&quot;http://www.st-hatena.com/users/ba/babydaemons/profile_s.gif&quot; class=&quot;profile-image&quot; alt=&quot;babydaemons&quot; title=&quot;babydaemons&quot; width=&quot;16&quot; height=&quot;16&quot; /&gt; &lt;a href=&quot;http://b.hatena.ne.jp/babydaemons/20091123#bookmark-8712815&quot;&gt;babydaemons&lt;/a&gt; &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/babydaemons/Linux/&quot;&gt;Linux&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/babydaemons/ubuntu/&quot;&gt;ubuntu&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/babydaemons/tutorial/&quot;&gt;tutorial&lt;/a&gt; &lt;/p&gt;</content:encoded>
+    <dc:creator>babydaemons</dc:creator>
+    <dc:date>2009-11-23T00:43:23+09:00</dc:date>
+    <dc:subject>Linux</dc:subject>
+    <dc:subject>ubuntu</dc:subject>
+    <dc:subject>tutorial</dc:subject>
+    <taxo:topics>
+      <rdf:Bag>
+        <rdf:li resource="http://b.hatena.ne.jp/t/Linux" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/ubuntu" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/tutorial" />
+      </rdf:Bag>
+    </taxo:topics>
+  </item>
+  <item rdf:about="http://b.hatena.ne.jp/yotena/20091119#bookmark-17295477">
+    <title>Ubuntu 9.10 Server 初期設定メモ - Linux/Ubuntu - 総武ソフトウェア推進所</title>
+    <link>http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_server/</link>
+    <description>keymap属性</description>
+    <content:encoded>&lt;blockquote cite=&quot;http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_server/&quot; title=&quot;Ubuntu 9.10 Server 初期設定メモ - Linux/Ubuntu - 総武ソフトウェア推進所&quot;&gt;&lt;cite&gt;&lt;img src=&quot;http://favicon.st-hatena.com/?url=http%3A%2F%2Fsmdn.invisiblefulmoon.net%2Flinux%2Fubuntu%2Finitialconfig_karmic_server%2F&quot; alt=&quot;&quot; /&gt; &lt;a href=&quot;http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_server/&quot;&gt;Ubuntu 9.10 Server 初期設定メモ - Linux/Ubuntu - 総武ソフトウェア推進所&lt;/a&gt;&lt;/cite&gt;&lt;p&gt;»Ubuntu 9.10 Server 初期設定メモUbuntu 9.10 (Karmic Koala) server editionの初期設定メモ。このメモの目的と内容kvm仮想マシンを各種サーバとして使うための自分用メモインストールにはubuntu-9.10-server-i386を使用インストールするマシンとして、192MBのメモリと10GBのストレージ(qcow2/virtio)2台が...&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://b.hatena.ne.jp/entry/http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_server/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/entry/image/http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_server/&quot; alt=&quot;はてなブックマーク - Ubuntu 9.10 Server 初期設定メモ - Linux/Ubuntu - 総武ソフトウェア推進所&quot; title=&quot;はてなブックマーク - Ubuntu 9.10 Server 初期設定メモ - Linux/Ubuntu - 総武ソフトウェア推進所&quot; border=&quot;0&quot; style=&quot;border: none&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://b.hatena.ne.jp/append?http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_server/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/images/append.gif&quot; border=&quot;0&quot; alt=&quot;はてなブックマークに追加&quot; title=&quot;はてなブックマークに追加&quot; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;&lt;img src=&quot;http://www.st-hatena.com/users/yo/yotena/profile_s.gif&quot; class=&quot;profile-image&quot; alt=&quot;yotena&quot; title=&quot;yotena&quot; width=&quot;16&quot; height=&quot;16&quot; /&gt; &lt;a href=&quot;http://b.hatena.ne.jp/yotena/20091119#bookmark-17295477&quot;&gt;yotena&lt;/a&gt; &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/yotena/ubuntu/&quot;&gt;ubuntu&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/yotena/kvm/&quot;&gt;kvm&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/yotena/linux/&quot;&gt;linux&lt;/a&gt; keymap属性&lt;/p&gt;</content:encoded>
+    <dc:creator>yotena</dc:creator>
+    <dc:date>2009-11-19T23:04:13+09:00</dc:date>
+    <dc:subject>ubuntu</dc:subject>
+    <dc:subject>kvm</dc:subject>
+    <dc:subject>linux</dc:subject>
+    <taxo:topics>
+      <rdf:Bag>
+        <rdf:li resource="http://b.hatena.ne.jp/t/ubuntu" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/kvm" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/linux" />
+      </rdf:Bag>
+    </taxo:topics>
+  </item>
+  <item rdf:about="http://b.hatena.ne.jp/H-1/20091116#bookmark-1923029">
+    <title>smdn/プログラミングとか趣味のいろいろ</title>
+    <link>http://smdn.invisiblefulmoon.net/</link>
+    <description></description>
+    <content:encoded>&lt;blockquote cite=&quot;http://smdn.invisiblefulmoon.net/&quot; title=&quot;smdn/プログラミングとか趣味のいろいろ&quot;&gt;&lt;cite&gt;&lt;img src=&quot;http://favicon.st-hatena.com/?url=http%3A%2F%2Fsmdn.invisiblefulmoon.net%2F&quot; alt=&quot;&quot; /&gt; &lt;a href=&quot;http://smdn.invisiblefulmoon.net/&quot;&gt;smdn/プログラミングとか趣味のいろいろ&lt;/a&gt;&lt;/cite&gt;&lt;p&gt;総武ソフトウェア推進所へようこそ。総武ソフトウェア推進所はソフトウェアより推力を得、得た推力によりソフトウェアの開発を行うサイトです。»smdn:総武ソフトウェア推進所総武ソフトウェア推進所へようこそ。総武ソフトウェア推進所はソフトウェアより推力を得、得た推力によりソフトウェアの開発を行うサイトです。»コンテンツ当サイトの主なコンテンツです。　全てのコンテンツ一覧はサイトマップにあります。...&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://b.hatena.ne.jp/entry/http://smdn.invisiblefulmoon.net/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/entry/image/http://smdn.invisiblefulmoon.net/&quot; alt=&quot;はてなブックマーク - smdn/プログラミングとか趣味のいろいろ&quot; title=&quot;はてなブックマーク - smdn/プログラミングとか趣味のいろいろ&quot; border=&quot;0&quot; style=&quot;border: none&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://b.hatena.ne.jp/append?http://smdn.invisiblefulmoon.net/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/images/append.gif&quot; border=&quot;0&quot; alt=&quot;はてなブックマークに追加&quot; title=&quot;はてなブックマークに追加&quot; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;&lt;img src=&quot;http://www.st-hatena.com/users/H-/H-1/profile_s.gif&quot; class=&quot;profile-image&quot; alt=&quot;H-1&quot; title=&quot;H-1&quot; width=&quot;16&quot; height=&quot;16&quot; /&gt; &lt;a href=&quot;http://b.hatena.ne.jp/H-1/20091116#bookmark-1923029&quot;&gt;H-1&lt;/a&gt; &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/H-1/%E3%82%BD%E3%83%95%E3%83%88%E3%82%A6%E3%82%A7%E3%82%A2/&quot;&gt;ソフトウェア&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/H-1/%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0/&quot;&gt;プログラミング&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/H-1/tips/&quot;&gt;tips&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/H-1/programming/&quot;&gt;programming&lt;/a&gt; &lt;/p&gt;</content:encoded>
+    <dc:creator>H-1</dc:creator>
+    <dc:date>2009-11-16T10:54:23+09:00</dc:date>
+    <dc:subject>ソフトウェア</dc:subject>
+    <dc:subject>プログラミング</dc:subject>
+    <dc:subject>tips</dc:subject>
+    <dc:subject>programming</dc:subject>
+    <taxo:topics>
+      <rdf:Bag>
+        <rdf:li resource="http://b.hatena.ne.jp/t/%E3%82%BD%E3%83%95%E3%83%88%E3%82%A6%E3%82%A7%E3%82%A2" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%9F%E3%83%B3%E3%82%B0" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/tips" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/programming" />
+      </rdf:Bag>
+    </taxo:topics>
+  </item>
+  <item rdf:about="http://b.hatena.ne.jp/pick_mugetu/20091112#bookmark-17306445">
+    <title>クラス(Class) - Programming/Visual Basic .NET/言語の基礎 - 総武ソフトウェア推進所</title>
+    <link>http://smdn.invisiblefulmoon.net/programming/vb.net/basics/12_class/</link>
+    <description>VB.NET Class</description>
+    <content:encoded>&lt;blockquote cite=&quot;http://smdn.invisiblefulmoon.net/programming/vb.net/basics/12_class/&quot; title=&quot;クラス(Class) - Programming/Visual Basic .NET/言語の基礎 - 総武ソフトウェア推進所&quot;&gt;&lt;cite&gt;&lt;img src=&quot;http://favicon.st-hatena.com/?url=http%3A%2F%2Fsmdn.invisiblefulmoon.net%2Fprogramming%2Fvb.net%2Fbasics%2F12_class%2F&quot; alt=&quot;&quot; /&gt; &lt;a href=&quot;http://smdn.invisiblefulmoon.net/programming/vb.net/basics/12_class/&quot;&gt;クラス(Class) - Programming/Visual Basic .NET/言語の基礎 - 総武ソフトウェア推進所&lt;/a&gt;&lt;/cite&gt;&lt;p&gt;»クラス(Class)⇐アクセス修飾子(Public, Protected, Friend, Private) [12]言語の基礎⇑クラス(Class) [13/13]クラスとは、簡単に言うと構造体の様に任意数のデータ型を組み合わせた複合データ型で、それらのデータに対して処理を行う手続き(メソッド)を持つもの、それがクラスです。　クラス(Class)は「学級・教室」などの意味ではなく、「階...&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://b.hatena.ne.jp/entry/http://smdn.invisiblefulmoon.net/programming/vb.net/basics/12_class/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/entry/image/http://smdn.invisiblefulmoon.net/programming/vb.net/basics/12_class/&quot; alt=&quot;はてなブックマーク - クラス(Class) - Programming/Visual Basic .NET/言語の基礎 - 総武ソフトウェア推進所&quot; title=&quot;はてなブックマーク - クラス(Class) - Programming/Visual Basic .NET/言語の基礎 - 総武ソフトウェア推進所&quot; border=&quot;0&quot; style=&quot;border: none&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://b.hatena.ne.jp/append?http://smdn.invisiblefulmoon.net/programming/vb.net/basics/12_class/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/images/append.gif&quot; border=&quot;0&quot; alt=&quot;はてなブックマークに追加&quot; title=&quot;はてなブックマークに追加&quot; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;&lt;img src=&quot;http://www.st-hatena.com/users/pi/pick_mugetu/profile_s.gif&quot; class=&quot;profile-image&quot; alt=&quot;pick_mugetu&quot; title=&quot;pick_mugetu&quot; width=&quot;16&quot; height=&quot;16&quot; /&gt; &lt;a href=&quot;http://b.hatena.ne.jp/pick_mugetu/20091112#bookmark-17306445&quot;&gt;pick_mugetu&lt;/a&gt;  VB.NET Class&lt;/p&gt;</content:encoded>
+    <dc:creator>pick_mugetu</dc:creator>
+    <dc:date>2009-11-12T23:48:12+09:00</dc:date>
+  </item>
+  <item rdf:about="http://b.hatena.ne.jp/yahihi/20091112#bookmark-17295477">
+    <title>Ubuntu 9.10 Server 初期設定メモ - Linux/Ubuntu - 総武ソフトウェア推進所</title>
+    <link>http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_server/</link>
+    <description></description>
+    <content:encoded>&lt;blockquote cite=&quot;http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_server/&quot; title=&quot;Ubuntu 9.10 Server 初期設定メモ - Linux/Ubuntu - 総武ソフトウェア推進所&quot;&gt;&lt;cite&gt;&lt;img src=&quot;http://favicon.st-hatena.com/?url=http%3A%2F%2Fsmdn.invisiblefulmoon.net%2Flinux%2Fubuntu%2Finitialconfig_karmic_server%2F&quot; alt=&quot;&quot; /&gt; &lt;a href=&quot;http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_server/&quot;&gt;Ubuntu 9.10 Server 初期設定メモ - Linux/Ubuntu - 総武ソフトウェア推進所&lt;/a&gt;&lt;/cite&gt;&lt;p&gt;»Ubuntu 9.10 Server 初期設定メモUbuntu 9.10 (Karmic Koala) server editionの初期設定メモ。このメモの目的と内容kvm仮想マシンを各種サーバとして使うための自分用メモインストールにはubuntu-9.10-server-i386を使用インストールするマシンとして、192MBのメモリと10GBのストレージ(qcow2/virtio)2台が...&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://b.hatena.ne.jp/entry/http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_server/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/entry/image/http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_server/&quot; alt=&quot;はてなブックマーク - Ubuntu 9.10 Server 初期設定メモ - Linux/Ubuntu - 総武ソフトウェア推進所&quot; title=&quot;はてなブックマーク - Ubuntu 9.10 Server 初期設定メモ - Linux/Ubuntu - 総武ソフトウェア推進所&quot; border=&quot;0&quot; style=&quot;border: none&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://b.hatena.ne.jp/append?http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_server/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/images/append.gif&quot; border=&quot;0&quot; alt=&quot;はてなブックマークに追加&quot; title=&quot;はてなブックマークに追加&quot; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;&lt;img src=&quot;http://www.st-hatena.com/users/ya/yahihi/profile_s.gif&quot; class=&quot;profile-image&quot; alt=&quot;yahihi&quot; title=&quot;yahihi&quot; width=&quot;16&quot; height=&quot;16&quot; /&gt; &lt;a href=&quot;http://b.hatena.ne.jp/yahihi/20091112#bookmark-17295477&quot;&gt;yahihi&lt;/a&gt; &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/yahihi/ubuntu/&quot;&gt;ubuntu&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/yahihi/linux/&quot;&gt;linux&lt;/a&gt; &lt;/p&gt;</content:encoded>
+    <dc:creator>yahihi</dc:creator>
+    <dc:date>2009-11-12T21:29:10+09:00</dc:date>
+    <dc:subject>ubuntu</dc:subject>
+    <dc:subject>linux</dc:subject>
+    <taxo:topics>
+      <rdf:Bag>
+        <rdf:li resource="http://b.hatena.ne.jp/t/ubuntu" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/linux" />
+      </rdf:Bag>
+    </taxo:topics>
+  </item>
+  <item rdf:about="http://b.hatena.ne.jp/Naruhodius/20091112#bookmark-17295477">
+    <title>Ubuntu 9.10 Server 初期設定メモ - Linux/Ubuntu - 総武ソフトウェア推進所</title>
+    <link>http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_server/</link>
+    <description></description>
+    <content:encoded>&lt;blockquote cite=&quot;http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_server/&quot; title=&quot;Ubuntu 9.10 Server 初期設定メモ - Linux/Ubuntu - 総武ソフトウェア推進所&quot;&gt;&lt;cite&gt;&lt;img src=&quot;http://favicon.st-hatena.com/?url=http%3A%2F%2Fsmdn.invisiblefulmoon.net%2Flinux%2Fubuntu%2Finitialconfig_karmic_server%2F&quot; alt=&quot;&quot; /&gt; &lt;a href=&quot;http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_server/&quot;&gt;Ubuntu 9.10 Server 初期設定メモ - Linux/Ubuntu - 総武ソフトウェア推進所&lt;/a&gt;&lt;/cite&gt;&lt;p&gt;»Ubuntu 9.10 Server 初期設定メモUbuntu 9.10 (Karmic Koala) server editionの初期設定メモ。このメモの目的と内容kvm仮想マシンを各種サーバとして使うための自分用メモインストールにはubuntu-9.10-server-i386を使用インストールするマシンとして、192MBのメモリと10GBのストレージ(qcow2/virtio)2台が...&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://b.hatena.ne.jp/entry/http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_server/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/entry/image/http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_server/&quot; alt=&quot;はてなブックマーク - Ubuntu 9.10 Server 初期設定メモ - Linux/Ubuntu - 総武ソフトウェア推進所&quot; title=&quot;はてなブックマーク - Ubuntu 9.10 Server 初期設定メモ - Linux/Ubuntu - 総武ソフトウェア推進所&quot; border=&quot;0&quot; style=&quot;border: none&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://b.hatena.ne.jp/append?http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_server/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/images/append.gif&quot; border=&quot;0&quot; alt=&quot;はてなブックマークに追加&quot; title=&quot;はてなブックマークに追加&quot; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;&lt;img src=&quot;http://www.st-hatena.com/users/Na/Naruhodius/profile_s.gif&quot; class=&quot;profile-image&quot; alt=&quot;Naruhodius&quot; title=&quot;Naruhodius&quot; width=&quot;16&quot; height=&quot;16&quot; /&gt; &lt;a href=&quot;http://b.hatena.ne.jp/Naruhodius/20091112#bookmark-17295477&quot;&gt;Naruhodius&lt;/a&gt;  &lt;/p&gt;</content:encoded>
+    <dc:creator>Naruhodius</dc:creator>
+    <dc:date>2009-11-12T16:10:25+09:00</dc:date>
+  </item>
+  <item rdf:about="http://b.hatena.ne.jp/just_facelock/20091112#bookmark-15894238">
+    <title>プロシージャ(Sub, Function) - Programming/Visual Basic .NET/言語の基礎 - 総武ソフトウェア推進所</title>
+    <link>http://smdn.invisiblefulmoon.net/programming/vb.net/basics/07_procedure/</link>
+    <description></description>
+    <content:encoded>&lt;blockquote cite=&quot;http://smdn.invisiblefulmoon.net/programming/vb.net/basics/07_procedure/&quot; title=&quot;プロシージャ(Sub, Function) - Programming/Visual Basic .NET/言語の基礎 - 総武ソフトウェア推進所&quot;&gt;&lt;cite&gt;&lt;img src=&quot;http://favicon.st-hatena.com/?url=http%3A%2F%2Fsmdn.invisiblefulmoon.net%2Fprogramming%2Fvb.net%2Fbasics%2F07_procedure%2F&quot; alt=&quot;&quot; /&gt; &lt;a href=&quot;http://smdn.invisiblefulmoon.net/programming/vb.net/basics/07_procedure/&quot;&gt;プロシージャ(Sub, Function) - Programming/Visual Basic .NET/言語の基礎 - 総武ソフトウェア推進所&lt;/a&gt;&lt;/cite&gt;&lt;p&gt;»プロシージャ(Sub, Function)⇐算術演算 [7][9] モジュール(Module)⇒プロシージャ(Sub, Function) [8/13]プロシージャはC/C++言語で言う関数のことであり、 Pascalでは値を返さない関数を手続きと呼んでいます。　VB.NETのプロシージャは「手続き」という意味ですが、値を返すか返さないかに関わらずこのように呼ばれます。　また、モジュール...&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://b.hatena.ne.jp/entry/http://smdn.invisiblefulmoon.net/programming/vb.net/basics/07_procedure/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/entry/image/http://smdn.invisiblefulmoon.net/programming/vb.net/basics/07_procedure/&quot; alt=&quot;はてなブックマーク - プロシージャ(Sub, Function) - Programming/Visual Basic .NET/言語の基礎 - 総武ソフトウェア推進所&quot; title=&quot;はてなブックマーク - プロシージャ(Sub, Function) - Programming/Visual Basic .NET/言語の基礎 - 総武ソフトウェア推進所&quot; border=&quot;0&quot; style=&quot;border: none&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://b.hatena.ne.jp/append?http://smdn.invisiblefulmoon.net/programming/vb.net/basics/07_procedure/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/images/append.gif&quot; border=&quot;0&quot; alt=&quot;はてなブックマークに追加&quot; title=&quot;はてなブックマークに追加&quot; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;&lt;img src=&quot;http://www.st-hatena.com/users/ju/just_facelock/profile_s.gif&quot; class=&quot;profile-image&quot; alt=&quot;just_facelock&quot; title=&quot;just_facelock&quot; width=&quot;16&quot; height=&quot;16&quot; /&gt; &lt;a href=&quot;http://b.hatena.ne.jp/just_facelock/20091112#bookmark-15894238&quot;&gt;just_facelock&lt;/a&gt; &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/just_facelock/vb.net/&quot;&gt;vb.net&lt;/a&gt; &lt;/p&gt;</content:encoded>
+    <dc:creator>just_facelock</dc:creator>
+    <dc:date>2009-11-12T14:24:05+09:00</dc:date>
+    <dc:subject>vb.net</dc:subject>
+    <taxo:topics>
+      <rdf:Bag>
+        <rdf:li resource="http://b.hatena.ne.jp/t/vb.net" />
+      </rdf:Bag>
+    </taxo:topics>
+  </item>
+  <item rdf:about="http://b.hatena.ne.jp/H-1/20091112#bookmark-17295477">
+    <title>Ubuntu 9.10 Server 初期設定メモ - Linux/Ubuntu - 総武ソフトウェア推進所</title>
+    <link>http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_server/</link>
+    <description></description>
+    <content:encoded>&lt;blockquote cite=&quot;http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_server/&quot; title=&quot;Ubuntu 9.10 Server 初期設定メモ - Linux/Ubuntu - 総武ソフトウェア推進所&quot;&gt;&lt;cite&gt;&lt;img src=&quot;http://favicon.st-hatena.com/?url=http%3A%2F%2Fsmdn.invisiblefulmoon.net%2Flinux%2Fubuntu%2Finitialconfig_karmic_server%2F&quot; alt=&quot;&quot; /&gt; &lt;a href=&quot;http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_server/&quot;&gt;Ubuntu 9.10 Server 初期設定メモ - Linux/Ubuntu - 総武ソフトウェア推進所&lt;/a&gt;&lt;/cite&gt;&lt;p&gt;»Ubuntu 9.10 Server 初期設定メモUbuntu 9.10 (Karmic Koala) server editionの初期設定メモ。このメモの目的と内容kvm仮想マシンを各種サーバとして使うための自分用メモインストールにはubuntu-9.10-server-i386を使用インストールするマシンとして、192MBのメモリと10GBのストレージ(qcow2/virtio)2台が...&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://b.hatena.ne.jp/entry/http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_server/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/entry/image/http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_server/&quot; alt=&quot;はてなブックマーク - Ubuntu 9.10 Server 初期設定メモ - Linux/Ubuntu - 総武ソフトウェア推進所&quot; title=&quot;はてなブックマーク - Ubuntu 9.10 Server 初期設定メモ - Linux/Ubuntu - 総武ソフトウェア推進所&quot; border=&quot;0&quot; style=&quot;border: none&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://b.hatena.ne.jp/append?http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_server/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/images/append.gif&quot; border=&quot;0&quot; alt=&quot;はてなブックマークに追加&quot; title=&quot;はてなブックマークに追加&quot; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;&lt;img src=&quot;http://www.st-hatena.com/users/H-/H-1/profile_s.gif&quot; class=&quot;profile-image&quot; alt=&quot;H-1&quot; title=&quot;H-1&quot; width=&quot;16&quot; height=&quot;16&quot; /&gt; &lt;a href=&quot;http://b.hatena.ne.jp/H-1/20091112#bookmark-17295477&quot;&gt;H-1&lt;/a&gt; &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/H-1/ubuntu/&quot;&gt;ubuntu&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/H-1/server/&quot;&gt;server&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/H-1/linux/&quot;&gt;linux&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/H-1/%E3%82%BD%E3%83%95%E3%83%88%E3%82%A6%E3%82%A7%E3%82%A2/&quot;&gt;ソフトウェア&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/H-1/install/&quot;&gt;install&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/H-1/%E8%A8%AD%E5%AE%9A/&quot;&gt;設定&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/H-1/%E3%82%B5%E3%83%BC%E3%83%90/&quot;&gt;サーバ&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/H-1/ubutu9.10/&quot;&gt;ubutu9.10&lt;/a&gt; &lt;/p&gt;</content:encoded>
+    <dc:creator>H-1</dc:creator>
+    <dc:date>2009-11-12T13:41:32+09:00</dc:date>
+    <dc:subject>ubuntu</dc:subject>
+    <dc:subject>server</dc:subject>
+    <dc:subject>linux</dc:subject>
+    <dc:subject>ソフトウェア</dc:subject>
+    <dc:subject>install</dc:subject>
+    <dc:subject>設定</dc:subject>
+    <dc:subject>サーバ</dc:subject>
+    <dc:subject>ubutu9.10</dc:subject>
+    <taxo:topics>
+      <rdf:Bag>
+        <rdf:li resource="http://b.hatena.ne.jp/t/ubuntu" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/server" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/linux" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/%E3%82%BD%E3%83%95%E3%83%88%E3%82%A6%E3%82%A7%E3%82%A2" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/install" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/%E8%A8%AD%E5%AE%9A" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/%E3%82%B5%E3%83%BC%E3%83%90" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/ubutu9.10" />
+      </rdf:Bag>
+    </taxo:topics>
+  </item>
+  <item rdf:about="http://b.hatena.ne.jp/arika_9513/20091111#bookmark-17268287">
+    <title>System.Text.RegularExpressions - Programming/.NET Framework 2.0 - 総武ソフトウェア推進所</title>
+    <link>http://smdn.invisiblefulmoon.net/programming/netfx2/System.Text.RegularExpressions/</link>
+    <description> [正規表現]</description>
+    <content:encoded>&lt;blockquote cite=&quot;http://smdn.invisiblefulmoon.net/programming/netfx2/System.Text.RegularExpressions/&quot; title=&quot;System.Text.RegularExpressions - Programming/.NET Framework 2.0 - 総武ソフトウェア推進所&quot;&gt;&lt;cite&gt;&lt;img src=&quot;http://favicon.st-hatena.com/?url=http%3A%2F%2Fsmdn.invisiblefulmoon.net%2Fprogramming%2Fnetfx2%2FSystem.Text.RegularExpressions%2F&quot; alt=&quot;&quot; /&gt; &lt;a href=&quot;http://smdn.invisiblefulmoon.net/programming/netfx2/System.Text.RegularExpressions/&quot;&gt;System.Text.RegularExpressions - Programming/.NET Framework 2.0 - 総武ソフトウェア推進所&lt;/a&gt;&lt;/cite&gt;&lt;p&gt;»System.Text.RegularExpressionsSystem.Text.RegularExpressionsのクラスを使用した正規表現操作に関するTips・サンプルなど。　正規表現(System.Text.RegularExpressions)の更新版。MSDN.NET Framework の正規表現System.Text.RegularExpressions 名前空間Syste...&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://b.hatena.ne.jp/entry/http://smdn.invisiblefulmoon.net/programming/netfx2/System.Text.RegularExpressions/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/entry/image/http://smdn.invisiblefulmoon.net/programming/netfx2/System.Text.RegularExpressions/&quot; alt=&quot;はてなブックマーク - System.Text.RegularExpressions - Programming/.NET Framework 2.0 - 総武ソフトウェア推進所&quot; title=&quot;はてなブックマーク - System.Text.RegularExpressions - Programming/.NET Framework 2.0 - 総武ソフトウェア推進所&quot; border=&quot;0&quot; style=&quot;border: none&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://b.hatena.ne.jp/append?http://smdn.invisiblefulmoon.net/programming/netfx2/System.Text.RegularExpressions/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/images/append.gif&quot; border=&quot;0&quot; alt=&quot;はてなブックマークに追加&quot; title=&quot;はてなブックマークに追加&quot; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;&lt;img src=&quot;http://www.st-hatena.com/users/ar/arika_9513/profile_s.gif&quot; class=&quot;profile-image&quot; alt=&quot;arika_9513&quot; title=&quot;arika_9513&quot; width=&quot;16&quot; height=&quot;16&quot; /&gt; &lt;a href=&quot;http://b.hatena.ne.jp/arika_9513/20091111#bookmark-17268287&quot;&gt;arika_9513&lt;/a&gt; &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/arika_9513/VB.NET/&quot;&gt;VB.NET&lt;/a&gt;  [正規表現]&lt;/p&gt;</content:encoded>
+    <dc:creator>arika_9513</dc:creator>
+    <dc:date>2009-11-11T09:34:28+09:00</dc:date>
+    <dc:subject>VB.NET</dc:subject>
+    <taxo:topics>
+      <rdf:Bag>
+        <rdf:li resource="http://b.hatena.ne.jp/t/VB.NET" />
+      </rdf:Bag>
+    </taxo:topics>
+  </item>
+  <item rdf:about="http://b.hatena.ne.jp/jay777/20091110#bookmark-8093679">
+    <title>C#とRubyの対比表 - Programming/Ruby - 総武ソフトウェア推進所</title>
+    <link>http://smdn.invisiblefulmoon.net/programming/ruby/compare_with_cs/</link>
+    <description></description>
+    <content:encoded>&lt;blockquote cite=&quot;http://smdn.invisiblefulmoon.net/programming/ruby/compare_with_cs/&quot; title=&quot;C#とRubyの対比表 - Programming/Ruby - 総武ソフトウェア推進所&quot;&gt;&lt;cite&gt;&lt;img src=&quot;http://favicon.st-hatena.com/?url=http%3A%2F%2Fsmdn.invisiblefulmoon.net%2Fprogramming%2Fruby%2Fcompare_with_cs%2F&quot; alt=&quot;&quot; /&gt; &lt;a href=&quot;http://smdn.invisiblefulmoon.net/programming/ruby/compare_with_cs/&quot;&gt;C#とRubyの対比表 - Programming/Ruby - 総武ソフトウェア推進所&lt;/a&gt;&lt;/cite&gt;&lt;p&gt;»C#とRubyの対比表C#とRubyの対比・比較表です。　「C#で言うところの…」と「Rubyで言うところの…」に対応する記述を対比表としてまとめたものです。　Rubyスクリプトを書いているときに「C#で言うところのアレはRubyではどう書くんだっけ」ということが多いので、すぐに参照できるようよく使う部分を中心にまとめてあります。全般的なことすべてが完全に一致するものではなく、ある程度似た動...&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://b.hatena.ne.jp/entry/http://smdn.invisiblefulmoon.net/programming/ruby/compare_with_cs/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/entry/image/http://smdn.invisiblefulmoon.net/programming/ruby/compare_with_cs/&quot; alt=&quot;はてなブックマーク - C#とRubyの対比表 - Programming/Ruby - 総武ソフトウェア推進所&quot; title=&quot;はてなブックマーク - C#とRubyの対比表 - Programming/Ruby - 総武ソフトウェア推進所&quot; border=&quot;0&quot; style=&quot;border: none&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://b.hatena.ne.jp/append?http://smdn.invisiblefulmoon.net/programming/ruby/compare_with_cs/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/images/append.gif&quot; border=&quot;0&quot; alt=&quot;はてなブックマークに追加&quot; title=&quot;はてなブックマークに追加&quot; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;&lt;img src=&quot;http://www.st-hatena.com/users/ja/jay777/profile_s.gif&quot; class=&quot;profile-image&quot; alt=&quot;jay777&quot; title=&quot;jay777&quot; width=&quot;16&quot; height=&quot;16&quot; /&gt; &lt;a href=&quot;http://b.hatena.ne.jp/jay777/20091110#bookmark-8093679&quot;&gt;jay777&lt;/a&gt; &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/jay777/C%23/&quot;&gt;C#&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/jay777/ruby/&quot;&gt;ruby&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/jay777/%E3%81%BE%E3%81%A8%E3%82%81/&quot;&gt;まとめ&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/jay777/*tips/&quot;&gt;*tips&lt;/a&gt; &lt;/p&gt;</content:encoded>
+    <dc:creator>jay777</dc:creator>
+    <dc:date>2009-11-10T20:33:37+09:00</dc:date>
+    <dc:subject>C#</dc:subject>
+    <dc:subject>ruby</dc:subject>
+    <dc:subject>まとめ</dc:subject>
+    <dc:subject>*tips</dc:subject>
+    <taxo:topics>
+      <rdf:Bag>
+        <rdf:li resource="http://b.hatena.ne.jp/t/C%23" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/ruby" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/%E3%81%BE%E3%81%A8%E3%82%81" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/*tips" />
+      </rdf:Bag>
+    </taxo:topics>
+  </item>
+  <item rdf:about="http://b.hatena.ne.jp/jay777/20091109#bookmark-17230768">
+    <title>rsync - Linux/Fedora/Fedora Core - 総武ソフトウェア推進所</title>
+    <link>http://smdn.invisiblefulmoon.net/linux/fedora/rsync/</link>
+    <description></description>
+    <content:encoded>&lt;blockquote cite=&quot;http://smdn.invisiblefulmoon.net/linux/fedora/rsync/&quot; title=&quot;rsync - Linux/Fedora/Fedora Core - 総武ソフトウェア推進所&quot;&gt;&lt;cite&gt;&lt;img src=&quot;http://favicon.st-hatena.com/?url=http%3A%2F%2Fsmdn.invisiblefulmoon.net%2Flinux%2Ffedora%2Frsync%2F&quot; alt=&quot;&quot; /&gt; &lt;a href=&quot;http://smdn.invisiblefulmoon.net/linux/fedora/rsync/&quot;&gt;rsync - Linux/Fedora/Fedora Core - 総武ソフトウェア推進所&lt;/a&gt;&lt;/cite&gt;&lt;p&gt;»rsyncrsyncのインストールとxinetd経由での起動設定方法。⇑»インストール# インストールされているか確認rpm -qi rsync# インストールされていなければ、インストールyum install rsync⇑»xinetd経由でrsyncを起動する場合の設定xinetd経由でrsyncデーモンを起動させるための設定方法。　ここではローカルネットワーク内からの...&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://b.hatena.ne.jp/entry/http://smdn.invisiblefulmoon.net/linux/fedora/rsync/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/entry/image/http://smdn.invisiblefulmoon.net/linux/fedora/rsync/&quot; alt=&quot;はてなブックマーク - rsync - Linux/Fedora/Fedora Core - 総武ソフトウェア推進所&quot; title=&quot;はてなブックマーク - rsync - Linux/Fedora/Fedora Core - 総武ソフトウェア推進所&quot; border=&quot;0&quot; style=&quot;border: none&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://b.hatena.ne.jp/append?http://smdn.invisiblefulmoon.net/linux/fedora/rsync/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/images/append.gif&quot; border=&quot;0&quot; alt=&quot;はてなブックマークに追加&quot; title=&quot;はてなブックマークに追加&quot; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;&lt;img src=&quot;http://www.st-hatena.com/users/ja/jay777/profile_s.gif&quot; class=&quot;profile-image&quot; alt=&quot;jay777&quot; title=&quot;jay777&quot; width=&quot;16&quot; height=&quot;16&quot; /&gt; &lt;a href=&quot;http://b.hatena.ne.jp/jay777/20091109#bookmark-17230768&quot;&gt;jay777&lt;/a&gt; &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/jay777/linux/&quot;&gt;linux&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/jay777/rsync/&quot;&gt;rsync&lt;/a&gt; &lt;/p&gt;</content:encoded>
+    <dc:creator>jay777</dc:creator>
+    <dc:date>2009-11-09T18:53:06+09:00</dc:date>
+    <dc:subject>linux</dc:subject>
+    <dc:subject>rsync</dc:subject>
+    <taxo:topics>
+      <rdf:Bag>
+        <rdf:li resource="http://b.hatena.ne.jp/t/linux" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/rsync" />
+      </rdf:Bag>
+    </taxo:topics>
+  </item>
+  <item rdf:about="http://b.hatena.ne.jp/Chiastolite/20091109#bookmark-8095024">
+    <title>東方シリーズ音楽抜き出し機 - Works/Tools - 総武ソフトウェア推進所</title>
+    <link>http://smdn.invisiblefulmoon.net/works/tools/ThbgmExtractor/</link>
+    <description></description>
+    <content:encoded>&lt;blockquote cite=&quot;http://smdn.invisiblefulmoon.net/works/tools/ThbgmExtractor/&quot; title=&quot;東方シリーズ音楽抜き出し機 - Works/Tools - 総武ソフトウェア推進所&quot;&gt;&lt;cite&gt;&lt;img src=&quot;http://favicon.st-hatena.com/?url=http%3A%2F%2Fsmdn.invisiblefulmoon.net%2Fworks%2Ftools%2FThbgmExtractor%2F&quot; alt=&quot;&quot; /&gt; &lt;a href=&quot;http://smdn.invisiblefulmoon.net/works/tools/ThbgmExtractor/&quot;&gt;東方シリーズ音楽抜き出し機 - Works/Tools - 総武ソフトウェア推進所&lt;/a&gt;&lt;/cite&gt;&lt;p&gt;上海アリス幻樂団製作の東方シリーズの音楽を抜き出すためのツールです。　ループ回数やフェードアウトの設定ができます。　出力形式はWAV形式の他、mp3形式やogg形式への変換に対応しています。　本体とは別に曲目ファイルを用意することで、東方シリーズの各作品の音楽の抜き出しができます。version 1.3 パッケージ41.5kB[MD5] 09630da11b7a830c1131f412eb2...&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://b.hatena.ne.jp/entry/http://smdn.invisiblefulmoon.net/works/tools/ThbgmExtractor/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/entry/image/http://smdn.invisiblefulmoon.net/works/tools/ThbgmExtractor/&quot; alt=&quot;はてなブックマーク - 東方シリーズ音楽抜き出し機 - Works/Tools - 総武ソフトウェア推進所&quot; title=&quot;はてなブックマーク - 東方シリーズ音楽抜き出し機 - Works/Tools - 総武ソフトウェア推進所&quot; border=&quot;0&quot; style=&quot;border: none&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://b.hatena.ne.jp/append?http://smdn.invisiblefulmoon.net/works/tools/ThbgmExtractor/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/images/append.gif&quot; border=&quot;0&quot; alt=&quot;はてなブックマークに追加&quot; title=&quot;はてなブックマークに追加&quot; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;&lt;img src=&quot;http://www.st-hatena.com/users/Ch/Chiastolite/profile_s.gif&quot; class=&quot;profile-image&quot; alt=&quot;Chiastolite&quot; title=&quot;Chiastolite&quot; width=&quot;16&quot; height=&quot;16&quot; /&gt; &lt;a href=&quot;http://b.hatena.ne.jp/Chiastolite/20091109#bookmark-8095024&quot;&gt;Chiastolite&lt;/a&gt;  &lt;/p&gt;</content:encoded>
+    <dc:creator>Chiastolite</dc:creator>
+    <dc:date>2009-11-09T02:10:18+09:00</dc:date>
+  </item>
+  <item rdf:about="http://b.hatena.ne.jp/monday4692/20091109#bookmark-17217155">
+    <title>Visual Basic .NET - Programming - 総武ソフトウェア推進所</title>
+    <link>http://smdn.invisiblefulmoon.net/programming/vb.net/</link>
+    <description></description>
+    <content:encoded>&lt;blockquote cite=&quot;http://smdn.invisiblefulmoon.net/programming/vb.net/&quot; title=&quot;Visual Basic .NET - Programming - 総武ソフトウェア推進所&quot;&gt;&lt;cite&gt;&lt;img src=&quot;http://favicon.st-hatena.com/?url=http%3A%2F%2Fsmdn.invisiblefulmoon.net%2Fprogramming%2Fvb.net%2F&quot; alt=&quot;&quot; /&gt; &lt;a href=&quot;http://smdn.invisiblefulmoon.net/programming/vb.net/&quot;&gt;Visual Basic .NET - Programming - 総武ソフトウェア推進所&lt;/a&gt;&lt;/cite&gt;&lt;p&gt;»Visual Basic .NETVisual Basic .NET(7.0), Visual Basic .NET 2003(7.1)について。Visual Basic .NETMe, MyClass, MyBase 〜 MeとMyClassの違いVisual Basic .NET 2003での言語仕様の変更点イベントとデリゲート言語の基礎アクセス修飾子(Public, Protecte...&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://b.hatena.ne.jp/entry/http://smdn.invisiblefulmoon.net/programming/vb.net/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/entry/image/http://smdn.invisiblefulmoon.net/programming/vb.net/&quot; alt=&quot;はてなブックマーク - Visual Basic .NET - Programming - 総武ソフトウェア推進所&quot; title=&quot;はてなブックマーク - Visual Basic .NET - Programming - 総武ソフトウェア推進所&quot; border=&quot;0&quot; style=&quot;border: none&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://b.hatena.ne.jp/append?http://smdn.invisiblefulmoon.net/programming/vb.net/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/images/append.gif&quot; border=&quot;0&quot; alt=&quot;はてなブックマークに追加&quot; title=&quot;はてなブックマークに追加&quot; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;&lt;img src=&quot;http://www.st-hatena.com/users/mo/monday4692/profile_s.gif&quot; class=&quot;profile-image&quot; alt=&quot;monday4692&quot; title=&quot;monday4692&quot; width=&quot;16&quot; height=&quot;16&quot; /&gt; &lt;a href=&quot;http://b.hatena.ne.jp/monday4692/20091109#bookmark-17217155&quot;&gt;monday4692&lt;/a&gt; &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/monday4692/.net/&quot;&gt;.net&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/monday4692/VB/&quot;&gt;VB&lt;/a&gt; &lt;/p&gt;</content:encoded>
+    <dc:creator>monday4692</dc:creator>
+    <dc:date>2009-11-09T01:36:00+09:00</dc:date>
+    <dc:subject>.net</dc:subject>
+    <dc:subject>VB</dc:subject>
+    <taxo:topics>
+      <rdf:Bag>
+        <rdf:li resource="http://b.hatena.ne.jp/t/.net" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/VB" />
+      </rdf:Bag>
+    </taxo:topics>
+  </item>
+  <item rdf:about="http://b.hatena.ne.jp/youjo756/20091105#bookmark-8095024">
+    <title>東方シリーズ音楽抜き出し機 - Works/Tools - 総武ソフトウェア推進所</title>
+    <link>http://smdn.invisiblefulmoon.net/works/tools/ThbgmExtractor/</link>
+    <description></description>
+    <content:encoded>&lt;blockquote cite=&quot;http://smdn.invisiblefulmoon.net/works/tools/ThbgmExtractor/&quot; title=&quot;東方シリーズ音楽抜き出し機 - Works/Tools - 総武ソフトウェア推進所&quot;&gt;&lt;cite&gt;&lt;img src=&quot;http://favicon.st-hatena.com/?url=http%3A%2F%2Fsmdn.invisiblefulmoon.net%2Fworks%2Ftools%2FThbgmExtractor%2F&quot; alt=&quot;&quot; /&gt; &lt;a href=&quot;http://smdn.invisiblefulmoon.net/works/tools/ThbgmExtractor/&quot;&gt;東方シリーズ音楽抜き出し機 - Works/Tools - 総武ソフトウェア推進所&lt;/a&gt;&lt;/cite&gt;&lt;p&gt;上海アリス幻樂団製作の東方シリーズの音楽を抜き出すためのツールです。　ループ回数やフェードアウトの設定ができます。　出力形式はWAV形式の他、mp3形式やogg形式への変換に対応しています。　本体とは別に曲目ファイルを用意することで、東方シリーズの各作品の音楽の抜き出しができます。version 1.3 パッケージ41.5kB[MD5] 09630da11b7a830c1131f412eb2...&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://b.hatena.ne.jp/entry/http://smdn.invisiblefulmoon.net/works/tools/ThbgmExtractor/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/entry/image/http://smdn.invisiblefulmoon.net/works/tools/ThbgmExtractor/&quot; alt=&quot;はてなブックマーク - 東方シリーズ音楽抜き出し機 - Works/Tools - 総武ソフトウェア推進所&quot; title=&quot;はてなブックマーク - 東方シリーズ音楽抜き出し機 - Works/Tools - 総武ソフトウェア推進所&quot; border=&quot;0&quot; style=&quot;border: none&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://b.hatena.ne.jp/append?http://smdn.invisiblefulmoon.net/works/tools/ThbgmExtractor/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/images/append.gif&quot; border=&quot;0&quot; alt=&quot;はてなブックマークに追加&quot; title=&quot;はてなブックマークに追加&quot; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;&lt;img src=&quot;http://www.st-hatena.com/users/yo/youjo756/profile_s.gif&quot; class=&quot;profile-image&quot; alt=&quot;youjo756&quot; title=&quot;youjo756&quot; width=&quot;16&quot; height=&quot;16&quot; /&gt; &lt;a href=&quot;http://b.hatena.ne.jp/youjo756/20091105#bookmark-8095024&quot;&gt;youjo756&lt;/a&gt;  &lt;/p&gt;</content:encoded>
+    <dc:creator>youjo756</dc:creator>
+    <dc:date>2009-11-05T12:24:28+09:00</dc:date>
+  </item>
+  <item rdf:about="http://b.hatena.ne.jp/alfaladio/20091104#bookmark-17124230">
+    <title>Ubuntu 9.10 Desktop 初期設定メモ - Linux/Ubuntu - 総武ソフトウェア推進所</title>
+    <link>http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_desktop/</link>
+    <description></description>
+    <content:encoded>&lt;blockquote cite=&quot;http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_desktop/&quot; title=&quot;Ubuntu 9.10 Desktop 初期設定メモ - Linux/Ubuntu - 総武ソフトウェア推進所&quot;&gt;&lt;cite&gt;&lt;img src=&quot;http://favicon.st-hatena.com/?url=http%3A%2F%2Fsmdn.invisiblefulmoon.net%2Flinux%2Fubuntu%2Finitialconfig_karmic_desktop%2F&quot; alt=&quot;&quot; /&gt; &lt;a href=&quot;http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_desktop/&quot;&gt;Ubuntu 9.10 Desktop 初期設定メモ - Linux/Ubuntu - 総武ソフトウェア推進所&lt;/a&gt;&lt;/cite&gt;&lt;p&gt;»Ubuntu 9.10 Desktop 初期設定メモ †Ubuntu 9.10 (Karmic Koala) desktop editionの初期設定メモ。このメモの目的と内容デスクトップPCを開発機兼内向けサーバ機として使うための自分用メモインストールにはubuntu-9.10-rc-alternate-i386.isoを使用ubuntu-9.10-rc-desktop-i386.isoの...&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://b.hatena.ne.jp/entry/http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_desktop/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/entry/image/http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_desktop/&quot; alt=&quot;はてなブックマーク - Ubuntu 9.10 Desktop 初期設定メモ - Linux/Ubuntu - 総武ソフトウェア推進所&quot; title=&quot;はてなブックマーク - Ubuntu 9.10 Desktop 初期設定メモ - Linux/Ubuntu - 総武ソフトウェア推進所&quot; border=&quot;0&quot; style=&quot;border: none&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://b.hatena.ne.jp/append?http://smdn.invisiblefulmoon.net/linux/ubuntu/initialconfig_karmic_desktop/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/images/append.gif&quot; border=&quot;0&quot; alt=&quot;はてなブックマークに追加&quot; title=&quot;はてなブックマークに追加&quot; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;&lt;img src=&quot;http://www.st-hatena.com/users/al/alfaladio/profile_s.gif&quot; class=&quot;profile-image&quot; alt=&quot;alfaladio&quot; title=&quot;alfaladio&quot; width=&quot;16&quot; height=&quot;16&quot; /&gt; &lt;a href=&quot;http://b.hatena.ne.jp/alfaladio/20091104#bookmark-17124230&quot;&gt;alfaladio&lt;/a&gt;  &lt;/p&gt;</content:encoded>
+    <dc:creator>alfaladio</dc:creator>
+    <dc:date>2009-11-04T01:56:49+09:00</dc:date>
+  </item>
+  <item rdf:about="http://b.hatena.ne.jp/Shinnya/20091103#bookmark-14389506">
+    <title>bash - Linux/Tips - 総武ソフトウェア推進所</title>
+    <link>http://smdn.invisiblefulmoon.net/linux/tips/bash/</link>
+    <description></description>
+    <content:encoded>&lt;blockquote cite=&quot;http://smdn.invisiblefulmoon.net/linux/tips/bash/&quot; title=&quot;bash - Linux/Tips - 総武ソフトウェア推進所&quot;&gt;&lt;cite&gt;&lt;img src=&quot;http://favicon.st-hatena.com/?url=http%3A%2F%2Fsmdn.invisiblefulmoon.net%2Flinux%2Ftips%2Fbash%2F&quot; alt=&quot;&quot; /&gt; &lt;a href=&quot;http://smdn.invisiblefulmoon.net/linux/tips/bash/&quot;&gt;bash - Linux/Tips - 総武ソフトウェア推進所&lt;/a&gt;&lt;/cite&gt;&lt;p&gt;»bashbashの使い方あれこれ。⇑»bash tips(環境編)参考資料。bashの便利な機能を使いこなそう（2/2）⇑»ホームディレクトリに置かれる隠しファイルこれらの隠しファイルに環境設定用のコマンドなり記述しておけば、自動的に設定が行われる。.bashrcシェルが起動したときに実行される.bash_profileログインする時に実行される.bash_logout...&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://b.hatena.ne.jp/entry/http://smdn.invisiblefulmoon.net/linux/tips/bash/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/entry/image/http://smdn.invisiblefulmoon.net/linux/tips/bash/&quot; alt=&quot;はてなブックマーク - bash - Linux/Tips - 総武ソフトウェア推進所&quot; title=&quot;はてなブックマーク - bash - Linux/Tips - 総武ソフトウェア推進所&quot; border=&quot;0&quot; style=&quot;border: none&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://b.hatena.ne.jp/append?http://smdn.invisiblefulmoon.net/linux/tips/bash/&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/images/append.gif&quot; border=&quot;0&quot; alt=&quot;はてなブックマークに追加&quot; title=&quot;はてなブックマークに追加&quot; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;&lt;img src=&quot;http://www.st-hatena.com/users/Sh/Shinnya/profile_s.gif&quot; class=&quot;profile-image&quot; alt=&quot;Shinnya&quot; title=&quot;Shinnya&quot; width=&quot;16&quot; height=&quot;16&quot; /&gt; &lt;a href=&quot;http://b.hatena.ne.jp/Shinnya/20091103#bookmark-14389506&quot;&gt;Shinnya&lt;/a&gt; &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/Shinnya/bash/&quot;&gt;bash&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/Shinnya/Tips/&quot;&gt;Tips&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/Shinnya/Linux/&quot;&gt;Linux&lt;/a&gt; &lt;/p&gt;</content:encoded>
+    <dc:creator>Shinnya</dc:creator>
+    <dc:date>2009-11-03T10:28:15+09:00</dc:date>
+    <dc:subject>bash</dc:subject>
+    <dc:subject>Tips</dc:subject>
+    <dc:subject>Linux</dc:subject>
+    <taxo:topics>
+      <rdf:Bag>
+        <rdf:li resource="http://b.hatena.ne.jp/t/bash" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/Tips" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/Linux" />
+      </rdf:Bag>
+    </taxo:topics>
+  </item>
+  <item rdf:about="http://b.hatena.ne.jp/lycoris3/20091102#bookmark-16965502">
+    <title>DirectoryAnalyzer - Works/Tools - 総武ソフトウェア推進所</title>
+    <link>http://smdn.invisiblefulmoon.net/works/tools/DirectoryAnalyzer/#section.1.6</link>
+    <description></description>
+    <content:encoded>&lt;blockquote cite=&quot;http://smdn.invisiblefulmoon.net/works/tools/DirectoryAnalyzer/#section.1.6&quot; title=&quot;DirectoryAnalyzer - Works/Tools - 総武ソフトウェア推進所&quot;&gt;&lt;cite&gt;&lt;img src=&quot;http://favicon.st-hatena.com/?url=http%3A%2F%2Fsmdn.invisiblefulmoon.net%2Fworks%2Ftools%2FDirectoryAnalyzer%2F%23section.1.6&quot; alt=&quot;&quot; /&gt; &lt;a href=&quot;http://smdn.invisiblefulmoon.net/works/tools/DirectoryAnalyzer/#section.1.6&quot;&gt;DirectoryAnalyzer - Works/Tools - 総武ソフトウェア推進所&lt;/a&gt;&lt;/cite&gt;&lt;p&gt;»DirectoryAnalyzer⇑»概要DirectoryAnalyzerはフォルダやファイルの容量を、円グラフにして視覚的に見るためのツールです。　円グラフで表示するため、どのフォルダ・ファイルがどれくらいの容量を占めているかを簡単に把握することが出来ます。また、フォルダ階層に分けて表示するので親フォルダと子フォルダ・ファイルの容量の関係も把握することが出来ます。⇑»主な機能任...&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://b.hatena.ne.jp/entry/http://smdn.invisiblefulmoon.net/works/tools/DirectoryAnalyzer/%23section.1.6&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/entry/image/http://smdn.invisiblefulmoon.net/works/tools/DirectoryAnalyzer/%23section.1.6&quot; alt=&quot;はてなブックマーク - DirectoryAnalyzer - Works/Tools - 総武ソフトウェア推進所&quot; title=&quot;はてなブックマーク - DirectoryAnalyzer - Works/Tools - 総武ソフトウェア推進所&quot; border=&quot;0&quot; style=&quot;border: none&quot; /&gt;&lt;/a&gt; &lt;a href=&quot;http://b.hatena.ne.jp/append?http://smdn.invisiblefulmoon.net/works/tools/DirectoryAnalyzer/%23section.1.6&quot;&gt;&lt;img src=&quot;http://b.hatena.ne.jp/images/append.gif&quot; border=&quot;0&quot; alt=&quot;はてなブックマークに追加&quot; title=&quot;はてなブックマークに追加&quot; /&gt;&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;p&gt;&lt;img src=&quot;http://www.st-hatena.com/users/ly/lycoris3/profile_s.gif&quot; class=&quot;profile-image&quot; alt=&quot;lycoris3&quot; title=&quot;lycoris3&quot; width=&quot;16&quot; height=&quot;16&quot; /&gt; &lt;a href=&quot;http://b.hatena.ne.jp/lycoris3/20091102#bookmark-16965502&quot;&gt;lycoris3&lt;/a&gt; &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/lycoris3/%E3%83%84%E3%83%BC%E3%83%AB/&quot;&gt;ツール&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/lycoris3/Windows/&quot;&gt;Windows&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/lycoris3/%E8%A7%A3%E6%9E%90/&quot;&gt;解析&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/lycoris3/%E8%A6%96%E8%A6%9A%E5%8C%96/&quot;&gt;視覚化&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/lycoris3/%E3%82%B0%E3%83%A9%E3%83%95/&quot;&gt;グラフ&lt;/a&gt;, &lt;a rel=&quot;tag&quot; class=&quot;user-tag&quot; href=&quot;http://b.hatena.ne.jp/lycoris3/%E3%82%BD%E3%83%95%E3%83%88%E3%82%A6%E3%82%A7%E3%82%A2/&quot;&gt;ソフトウェア&lt;/a&gt; &lt;/p&gt;</content:encoded>
+    <dc:creator>lycoris3</dc:creator>
+    <dc:date>2009-11-02T21:58:42+09:00</dc:date>
+    <dc:subject>ツール</dc:subject>
+    <dc:subject>Windows</dc:subject>
+    <dc:subject>解析</dc:subject>
+    <dc:subject>視覚化</dc:subject>
+    <dc:subject>グラフ</dc:subject>
+    <dc:subject>ソフトウェア</dc:subject>
+    <taxo:topics>
+      <rdf:Bag>
+        <rdf:li resource="http://b.hatena.ne.jp/t/%E3%83%84%E3%83%BC%E3%83%AB" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/Windows" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/%E8%A7%A3%E6%9E%90" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/%E8%A6%96%E8%A6%9A%E5%8C%96" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/%E3%82%B0%E3%83%A9%E3%83%95" />
+        <rdf:li resource="http://b.hatena.ne.jp/t/%E3%82%BD%E3%83%95%E3%83%88%E3%82%A6%E3%82%A7%E3%82%A2" />
+      </rdf:Bag>
+    </taxo:topics>
+  </item>
+</rdf:RDF>

@@ -55,9 +55,7 @@
     <Compile Include="Smdn.Net.Pop3.Protocol\PopReceiver.cs" />
     <Compile Include="Smdn.Net.Pop3.Protocol\PopSender.cs" />
     <Compile Include="Smdn.Net.Pop3\PopSessionState.cs" />
-    <Compile Include="Smdn.Net.Pop3\PopStringEnumList.cs" />
     <Compile Include="Smdn.Net.Pop3\PopStringEnum.cs" />
-    <Compile Include="Smdn.Net.Pop3\PopCapabilityList.cs" />
     <Compile Include="Smdn.Net.Pop3\IPopExtension.cs" />
     <Compile Include="Smdn.Net.Pop3\PopAuthenticationMechanism.cs" />
     <Compile Include="Smdn.Net.Pop3\PopDropListing.cs" />
@@ -73,6 +71,8 @@
     <Compile Include="Smdn.Net.Pop3\PopUriBuilder.cs" />
     <Compile Include="Smdn.Net.Pop3.Protocol\PopFormatException.cs" />
     <Compile Include="Smdn.Net.Pop3.Protocol\PopDefaultPorts.cs" />
+    <Compile Include="Smdn.Net.Pop3\PopStringEnumSet.cs" />
+    <Compile Include="Smdn.Net.Pop3\PopCapabilitySet.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{33618EFA-9AA2-4354-9166-A55AEFF45E25}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AssemblyName>Smdn.Formats.Loliconvert.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <RootNamespace>Smdn.Formats.Loliconvert.Tests</RootNamespace>
+    <OutputPath>bin\</OutputPath>
+    <IntermediateOutputPath>obj\</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\netfx4.0\</OutputPath>
+    <IntermediateOutputPath>obj\Debug\netfx4.0\</IntermediateOutputPath>
+    <DefineConstants>NET_2_0;NET_3_5;NET_4_0;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>NET_2_0;NET_3_5;NET_4_0</DefineConstants>
+    <OutputPath>bin\Release\netfx4.0\</OutputPath>
+    <IntermediateOutputPath>obj\Release\netfx4.0\</IntermediateOutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Smdn.Formats.Loliconvert\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Smdn.Formats.Loliconvert\ToLoliTransform.cs" />
+    <Compile Include="Smdn.Formats.Loliconvert\FromLoliTransform.cs" />
+    <Compile Include="Smdn.Formats.Loliconvert\LoliStream.cs" />
+    <Compile Include="Smdn.Formats.Loliconvert\LoliFile.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Smdn.Formats.Loliconvert-netfx4.0.csproj">
+      <Project>{013F911E-850F-11DE-B228-0018F344D241}</Project>
+      <Name>Smdn.Formats.Loliconvert-netfx4.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Smdn\Smdn-netfx4.0.csproj">
+      <Project>{9778FCEA-6A63-11DE-B228-0018F344D241}</Project>
+      <Name>Smdn-netfx4.0</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="test.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="test.png.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="test.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="test.txt.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

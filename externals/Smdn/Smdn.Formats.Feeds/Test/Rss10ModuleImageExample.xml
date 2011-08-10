@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?> 
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+         xmlns:image="http://purl.org/rss/1.0/modules/image/"
+         xmlns:dc="http://purl.org/dc/elements/1.1/"
+         xmlns="http://purl.org/rss/1.0/"> 
+
+    <channel rdf:about="http://www.kuro5hin.org/backend.rdf">
+        <title>Example K5 Feed</title>
+        <link>http://www.kuro5hin.org</link>
+        <description>Simply for the purpose of demonstration.</description>
+        <dc:language>en-us</dc:language>
+        <dc:rights>Copyright 1999-2002 - Kuro5hin.org</dc:rights>
+        <dc:date>2002-07-31T08:00:01Z</dc:date>
+        <dc:publisher>Kuro5hin.org</dc:publisher>
+
+        <dc:creator>The readers of Kuro5hin.org</dc:creator>        
+
+        <items>
+            <rdf:Seq>
+                <rdf:li rdf:resource="http://www.kuro5hin.org/?op=displaystory;sid=2002/7/30/15328/1925"/>
+            </rdf:Seq>
+        </items>
+
+        <image:favicon rdf:about="http://www.kuro5hin.org/favicon.ico"
+                       image:size="small">
+
+            <dc:title>Kuro5hin</dc:title>
+
+        </image:favicon>
+
+    </channel>
+
+    <image rdf:about="http://www.kuro5hin.org/images/kuro5hin.png">
+        <title>kuro5hin.org</title>
+        <url>http://www.kuro5hin.org/images/kuro5hin.png</url>
+        <link>http://www.kuro5hin.org/</link>
+    </image>
+
+    <item rdf:about="http://www.kuro5hin.org/?op=displaystory;sid=2002/7/30/15328/1925">
+
+        <title>Another casualty to the new arms race: SUVs in America</title> 
+        <link>http://www.kuro5hin.org/?op=displaystory;sid=2002/7/30/15328/1925</link>
+
+        <description>
+            A good friend of mine was recently involved in a fairly nasty
+            accident while driving along a highway in her Honda Accord. She was
+            struck from behind by an SUV, spinning her out of control, leaving
+            her car lying horizontal in traffic. She was hit again by a pickup
+            truck, throwing her car into the median. Moments later, a small
+            convertible hit the pickup as it careened out of control across the
+            road. She escaped serious injury, as luckily did everyone else
+            involved in the accident. But something changed in my friend that
+            day, she was afraid to get back behind the wheel of a car and go
+            back onto the road. Afraid, until she joined the new "Arms Race":
+            SUVs in America.  
+        </description>
+
+        <image:item rdf:about="http://www.kuro5hin.org/images/topics/culture.jpg">
+
+            <dc:title>Culture</dc:title>
+
+            <image:width>80</image:width>
+            <image:height>50</image:height>
+
+        </image:item>
+
+    </item> 
+    
+</rdf:RDF>

@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2009-2010 smdn
+// Copyright (c) 2009-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -100,20 +100,20 @@ namespace Smdn.Media {
         case WAVE_FORMAT.WAVE_FORMAT_96S08: return CreateLinearPcmFormat(96000L,  8, 2);
         case WAVE_FORMAT.WAVE_FORMAT_96M16: return CreateLinearPcmFormat(96000L, 16, 1);
         case WAVE_FORMAT.WAVE_FORMAT_96S16: return CreateLinearPcmFormat(96000L, 16, 2);
-        default: throw new NotSupportedException("unsupported format");
+        default: throw ExceptionUtils.CreateNotSupportedEnumValue(format);
       }
     }
 
     public static WAVEFORMATEX CreateLinearPcmFormat(long samplesPerSec, int bitsPerSample, int channles)
     {
       if (samplesPerSec <= 0)
-        throw new ArgumentOutOfRangeException("samplesPerSec", samplesPerSec, "must be non-zero positive number");
+        throw ExceptionUtils.CreateArgumentMustBeNonZeroPositive("samplesPerSec", samplesPerSec);
       if (bitsPerSample <= 0)
-        throw new ArgumentOutOfRangeException("bitsPerSample", bitsPerSample, "must be non-zero positive number");
+        throw ExceptionUtils.CreateArgumentMustBeNonZeroPositive("bitsPerSample", bitsPerSample);
       if ((bitsPerSample & 0x7) != 0x0)
-        throw new ArgumentOutOfRangeException("bitsPerSample", bitsPerSample, "must be number of n * 8");
+        throw ExceptionUtils.CreateArgumentMustBeMultipleOf(8, "bitsPerSample");
       if (channles <= 0)
-        throw new ArgumentOutOfRangeException("channles", channles, "must be non-zero positive number");
+        throw ExceptionUtils.CreateArgumentMustBeNonZeroPositive("channles", channles);
 
       var format = new WAVEFORMATEX();
 

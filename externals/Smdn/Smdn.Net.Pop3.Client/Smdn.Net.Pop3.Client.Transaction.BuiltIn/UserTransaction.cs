@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -37,23 +37,6 @@ namespace Smdn.Net.Pop3.Client.Transaction.BuiltIn {
     {
     }
 
-    protected override ProcessTransactionDelegate Reset()
-    {
-#if DEBUG
-      if (!RequestArguments.ContainsKey("name"))
-        return ProcessArgumentNotSetted;
-#endif
-
-      return ProcessUser;
-    }
-
-#if DEBUG
-    private void ProcessArgumentNotSetted()
-    {
-      FinishError(PopCommandResultCode.RequestError, "arguments 'name' must be setted");
-    }
-#endif
-
     /*
      * 7. Optional POP3 Commands
      * USER name
@@ -67,9 +50,16 @@ namespace Smdn.Net.Pop3.Client.Transaction.BuiltIn {
      *        +OK name is a valid mailbox
      *        -ERR never heard of mailbox name
      */
-    private void ProcessUser()
+    protected override PopCommand PrepareCommand()
     {
-      SendCommand("USER", ProcessReceiveResponse, RequestArguments["name"]);
+#if DEBUG
+      if (!RequestArguments.ContainsKey("name")) {
+        FinishError(PopCommandResultCode.RequestError, "arguments 'name' must be setted");
+        return null;
+      }
+      else
+#endif
+        return new PopCommand("USER", RequestArguments["name"]);
     }
   }
 }

@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -46,8 +46,9 @@ namespace Smdn.Net.Imap4.Protocol {
   //     Protocol.ImapDataResponseType
   //       => handles server response types
 
+  [Serializable]
   public sealed class ImapResponseCode : ImapStringEnum, IEquatable<ImapResponseCode> {
-    public static readonly ImapStringEnumList<ImapResponseCode> AllCodes;
+    public static readonly ImapStringEnumSet<ImapResponseCode> AllCodes;
 
 #region "RFC 3501 INTERNET MESSAGE ACCESS PROTOCOL - VERSION 4rev1"
     /*
@@ -698,9 +699,30 @@ namespace Smdn.Net.Imap4.Protocol {
     public static readonly ImapResponseCode NonExistent = new ImapResponseCode("NONEXISTENT");
 #endregion
 
+#region "draft-ietf-morg-list-specialuse-06 - IMAP LIST extension for special-use mailboxes"
+    /*
+     * draft-ietf-morg-list-specialuse-06 - IMAP LIST extension for special-use mailboxes
+     * http://tools.ietf.org/html/draft-ietf-morg-list-specialuse-06
+     * 
+     * 3. Extension to IMAP CREATE command to set special-use attributes
+     */
+
+    /*
+     *    If the server can not create a mailbox with the designated special
+     *    use defined, for whatever reason, it MUST NOT create the mailbox, and
+     *    MUST respond to the CREATE command with a tagged NO response.  If the
+     *    reason for the failure is related to the special-use attribute (the
+     *    specified special use is not supported or cannot be assigned to the
+     *    specified mailbox), the server SHOULD include the new "USEATTR"
+     *    response code in the tagged response (see Section 5.3 for an
+     *    example).
+     */
+    public static readonly ImapResponseCode UseAttr = new ImapResponseCode("USEATTR");
+#endregion
+
     static ImapResponseCode()
     {
-      AllCodes = CreateDefinedConstantsList<ImapResponseCode>();
+      AllCodes = CreateDefinedConstantsSet<ImapResponseCode>();
     }
 
     public static ImapResponseCode GetKnownOrCreate(string code)
@@ -714,10 +736,12 @@ namespace Smdn.Net.Imap4.Protocol {
         ? code
         : string.Concat(code, " ", subcode.GetTextAsString());
 
-      if (AllCodes.Has(c))
-        return AllCodes[c];
-      else if (AllCodes.Has(code))
-        return AllCodes[code];
+      ImapResponseCode respCode;
+
+      if (AllCodes.TryGet(c, out respCode))
+        return respCode;
+      else if (AllCodes.TryGet(code, out respCode))
+        return respCode;
       else
         //Smdn.Net.Imap4.Client.Trace.Verbose("unknown response code: {0}", code);
         return new ImapResponseCode(code);

@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -41,7 +41,7 @@ namespace Smdn.Net.Pop3.WebClients {
       set
       {
         if (value < -1)
-          throw new ArgumentOutOfRangeException("Timeout", value, "must be greater than or equals to -1");
+          throw ExceptionUtils.CreateArgumentMustBeGreaterThanOrEqualTo(-1, "Timeout", value);
         timeout = value;
       }
     }
@@ -53,7 +53,7 @@ namespace Smdn.Net.Pop3.WebClients {
       set
       {
         if (value < -1)
-          throw new ArgumentOutOfRangeException("ReadWriteTimeout", value, "must be greater than or equals to -1");
+          throw ExceptionUtils.CreateArgumentMustBeGreaterThanOrEqualTo(-1, "ReadWriteTimeout", value);
         readWriteTimeout = value;
       }
     }

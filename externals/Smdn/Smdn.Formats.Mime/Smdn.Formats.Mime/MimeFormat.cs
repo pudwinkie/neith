@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,7 @@ namespace Smdn.Formats.Mime {
         if (readOnly)
           throw new InvalidOperationException("readonly");
         if (value < 0)
-          throw new ArgumentOutOfRangeException("Folding", value, "must be zero or positive number");
+          throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("Folding", value);
         folding = value;
       }
     }
@@ -80,7 +80,7 @@ namespace Smdn.Formats.Mime {
         case NewLine.CRLF:
           return new[] {Octets.CR, Octets.LF};
         default:
-          throw new NotSupportedException(string.Format("unsupported newline: {0}", newLine));
+          throw ExceptionUtils.CreateNotSupportedEnumValue(newLine);
       }
     }
 
@@ -94,7 +94,7 @@ namespace Smdn.Formats.Mime {
         case NewLine.CRLF:
           return new string(new[] {Chars.CR, Chars.LF});
         default:
-          throw new NotSupportedException(string.Format("unsupported newline: {0}", newLine));
+          throw ExceptionUtils.CreateNotSupportedEnumValue(newLine);
       }
     }
 
@@ -108,7 +108,7 @@ namespace Smdn.Formats.Mime {
         case NewLine.CRLF:
           return new string(new[] {Chars.CR, Chars.LF, Chars.HT});
         default:
-          throw new NotSupportedException(string.Format("unsupported newline: {0}", newLine));
+          throw ExceptionUtils.CreateNotSupportedEnumValue(newLine);
       }
     }
 

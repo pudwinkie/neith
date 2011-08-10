@@ -1,6 +1,10 @@
 Smdn.Net.Pop3/Smdn.Net.Pop3.csproj
+Smdn/Mono.Simd/SimdRuntime.cs
 Smdn/Smdn/Action.cs
+Smdn/Smdn/ExceptionUtils.cs
 Smdn/Smdn/Func.cs
+Smdn/Smdn/Runtime.cs
+Smdn/Smdn/RuntimeEnvironment.cs
 Smdn/Smdn.IO/StreamExtensions.cs
 Smdn/Smdn.IO/ChunkedMemoryStream.cs
 Smdn/Smdn.Collections/Enumerable.cs

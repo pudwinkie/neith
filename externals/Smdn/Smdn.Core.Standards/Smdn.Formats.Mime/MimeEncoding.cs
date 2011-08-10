@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -90,11 +90,11 @@ namespace Smdn.Formats.Mime {
         throw new ArgumentNullException("charset");
       if (doFold) {
         if (foldingLimit < 1)
-          throw new ArgumentOutOfRangeException("foldingLimit", foldingLimit, "must be greater than 1");
+          throw ExceptionUtils.CreateArgumentMustBeGreaterThanOrEqualTo(1, "foldingLimit", foldingLimit);
         if (foldingOffset < 0)
-          throw new ArgumentOutOfRangeException("foldingOffset", foldingOffset, "must be greater than zero");
+          throw ExceptionUtils.CreateArgumentMustBeGreaterThanOrEqualTo(0, "foldingOffset", foldingOffset);
         if (foldingLimit <= foldingOffset)
-          throw new ArgumentOutOfRangeException("foldingOffset", foldingOffset, "must be less than foldingLimit");
+          throw ExceptionUtils.CreateArgumentMustBeLessThan("'foldingLimit'", "foldingOffset", foldingOffset);
         if (foldingString == null)
           throw new ArgumentNullException("foldingString");
       }
@@ -112,13 +112,13 @@ namespace Smdn.Formats.Mime {
           encodingChar = 'q';
           break;
         default:
-          throw new System.ComponentModel.InvalidEnumArgumentException("encoding", (int)encoding, typeof(MimeEncodingMethod));
+          throw ExceptionUtils.CreateArgumentMustBeValidEnumValue("encoding", encoding);
       }
 
-      var preambleText = string.Format("=?{0}?{1}?", charset.BodyName, encodingChar);
+      var preambleText = string.Concat("=?", charset.BodyName, "?", encodingChar, "?");
 
       if (!doFold)
-        return preambleText + transform.TransformStringTo(str, charset) + "?=";
+        return string.Concat(preambleText, transform.TransformStringTo(str, charset), "?=");
 
       // folding
       var ret = new StringBuilder();
@@ -156,7 +156,8 @@ namespace Smdn.Formats.Mime {
         byte[] transformed = null;
 
         for (;;) {
-          var t = transform.TransformBytes(charset.GetBytes(inputCharBuffer, inputCharOffset, transformCharCount));
+          var bytes = charset.GetBytes(inputCharBuffer, inputCharOffset, transformCharCount);
+          var t = transform.TransformBytes(bytes, 0, bytes.Length);
 
           if (transformed == null || t.Length <= outputLimit) {
             transformed = t;
@@ -237,7 +238,8 @@ namespace Smdn.Formats.Mime {
       }
     }
 
-    private static readonly Regex mimeEncodedWordRegex = new Regex(@"\s*\=\?([^?]+)\?([^?]+)\?([^\?\s]+)\?\=\s*", RegexOptions.Singleline);
+    private static readonly Regex mimeEncodedWordRegex = new Regex(@"\s*=\?([^?]+)\?([^?]+)\?([^\?\s]+)\?=\s*",
+                                                                   RegexOptions.Singleline | RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
     public static string Decode(string str, out MimeEncodingMethod encoding, out Encoding charset)
     {

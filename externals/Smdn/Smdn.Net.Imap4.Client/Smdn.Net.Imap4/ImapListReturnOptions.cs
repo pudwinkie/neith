@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -44,12 +44,12 @@ namespace Smdn.Net.Imap4 {
   //     ImapStoreDataItem
   //       => handles 'message data item name' and 'value for message data item'
 
-  public sealed class ImapListReturnOptions : ImapCombinableDataItem, IImapMultipleExtension {
-    ImapCapability[] IImapMultipleExtension.RequiredCapabilities {
-      get { return requiredCapabilities.ToArray(); }
+  public sealed class ImapListReturnOptions : ImapCombinableDataItem, IImapExtension {
+    IEnumerable<ImapCapability> IImapExtension.RequiredCapabilities {
+      get { return this.requiredCapabilities; }
     }
 
-    internal List<ImapCapability> RequiredCapabilities {
+    internal ImapCapabilitySet RequiredCapabilities {
       get { return this.requiredCapabilities; }
     }
 
@@ -92,11 +92,13 @@ namespace Smdn.Net.Imap4 {
     }
 
     /*
-     * http://tools.ietf.org/html/draft-ietf-morg-list-specialuse-01
-     * draft-ietf-morg-list-specialuse-01 - IMAP LIST extension for special-use mailboxes
-     * 2. New mailbox flags identifying special-use mailboxes
+     * draft-ietf-morg-list-specialuse-06 - IMAP LIST extension for special-use mailboxes
+     * http://tools.ietf.org/html/draft-ietf-morg-list-specialuse-06
+     * 2. New mailbox attributes identifying special-use mailboxes
      */
-    public static readonly ImapListReturnOptions SpecialUse = new ImapListReturnOptions("SPECIAL-USE");
+    public static readonly ImapListReturnOptions SpecialUse =
+      new ImapListReturnOptions(new[] {ImapCapability.ListExtended, ImapCapability.SpecialUse},
+                                "SPECIAL-USE");
 
     public ImapListReturnOptions CombineWith(ImapListReturnOptions other)
     {
@@ -115,25 +117,27 @@ namespace Smdn.Net.Imap4 {
       if (y == null)
         throw new ArgumentNullException("y");
 
-      var requiredCapabilities = new List<ImapCapability>(x.requiredCapabilities);
+      var requiredCapabilities = new ImapCapabilitySet(x.requiredCapabilities);
 
-      foreach (var cap in y.requiredCapabilities) {
-        if (!requiredCapabilities.Contains(cap))
-          requiredCapabilities.Add(cap);
-      }
+      requiredCapabilities.UnionWith(y.requiredCapabilities);
 
       return new ImapListReturnOptions(requiredCapabilities, GetCombinedItems(x.Items, y.Items));
     }
 
     private ImapListReturnOptions(params ImapString[] items)
-      : this(new ImapCapability[] {ImapCapability.ListExtended}, items)
+      : this(new ImapCapabilitySet(new[] {ImapCapability.ListExtended}), items)
+    {
+    }
+  
+    private ImapListReturnOptions(ImapCapability[] requiredCapabilities, params ImapString[] items)
+      : this(new ImapCapabilitySet(requiredCapabilities), items)
     {
     }
 
-    private ImapListReturnOptions(IEnumerable<ImapCapability> requiredCapabilities, params ImapString[] items)
+    private ImapListReturnOptions(ImapCapabilitySet requiredCapabilities, params ImapString[] items)
       : base(items)
     {
-      this.requiredCapabilities = new List<ImapCapability>(requiredCapabilities);
+      this.requiredCapabilities = requiredCapabilities;
     }
 
     protected override ImapStringList GetCombined()
@@ -141,6 +145,6 @@ namespace Smdn.Net.Imap4 {
       return ToParenthesizedString();
     }
 
-    private List<ImapCapability> requiredCapabilities;
+    private readonly ImapCapabilitySet requiredCapabilities;
   }
 }

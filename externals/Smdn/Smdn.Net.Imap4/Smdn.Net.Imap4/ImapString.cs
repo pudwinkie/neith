@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -47,8 +47,9 @@ namespace Smdn.Net.Imap4 {
   //     ImapCombinableDataItem
   //       => combinable data item type
 
+  [Serializable]
   public class ImapString : IEquatable<ImapString>, IEquatable<string> {
-    protected internal string Value {
+    public string Value {
       get { return val; }
     }
 
@@ -65,17 +66,14 @@ namespace Smdn.Net.Imap4 {
       this.val = val;
     }
 
+    protected internal virtual string GetEscaped()
+    {
+      return val;
+    }
+
     public static implicit operator ImapString(string str)
     {
       return new ImapString(str);
-    }
-
-    public static explicit operator string(ImapString str)
-    {
-      if (str == null)
-        return null;
-      else
-        return str.ToString();
     }
 
     public override bool Equals(object obj)

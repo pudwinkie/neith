@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -46,25 +46,6 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     {
     }
 
-    protected override ProcessTransactionDelegate Reset()
-    {
-#if DEBUG
-      if (!RequestArguments.ContainsKey("mailbox-name"))
-        return ProcessArgumentNotSetted;
-      else if (!RequestArguments.ContainsKey("list of entry, values"))
-        return ProcessArgumentNotSetted;
-      else
-#endif
-        return ProcessSetMetadata;
-    }
-
-#if DEBUG
-    private void ProcessArgumentNotSetted()
-    {
-      FinishError(ImapCommandResultCode.RequestError, "arguments 'mailbox-name' and 'list of entry, values' must be setted");
-    }
-#endif
-
     /*
      * 4.3. SETMETADATA Command
      *        Arguments:  mailbox-name
@@ -77,13 +58,20 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
      *                         or annotation too big or too many
      *                    BAD - command unknown or arguments invalid
      */
-    private void ProcessSetMetadata()
+    protected override ImapCommand PrepareCommand()
     {
+#if DEBUG
+      if (!RequestArguments.ContainsKey("mailbox-name") ||
+          !RequestArguments.ContainsKey("list of entry, values")) {
+        FinishError(ImapCommandResultCode.RequestError, "arguments 'mailbox-name' and 'list of entry, values' must be setted");
+        return null;
+      }
+#endif
+
       // SETMETADATA
-      SendCommand("SETMETADATA",
-                  ProcessReceiveResponse,
-                  RequestArguments["mailbox-name"],
-                  RequestArguments["list of entry, values"]);
+      return Connection.CreateCommand("SETMETADATA",
+                                      RequestArguments["mailbox-name"],
+                                      RequestArguments["list of entry, values"]);
     }
   }
 }

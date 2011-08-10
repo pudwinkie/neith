@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -33,28 +33,32 @@ namespace Smdn.Net.Imap4.Protocol {
     }
 
     public override bool CanSeek {
-      get { CheckDisposed(); return false; }
+      get { return /*!IsClosed &&*/ false; }
     }
 
     public override bool CanRead {
-      get { CheckDisposed(); return innerStream.CanRead; }
+      get { return !IsClosed && innerStream.CanRead; }
     }
 
     public override bool CanWrite {
-      get { CheckDisposed(); return innerStream.CanWrite; }
+      get { return !IsClosed && innerStream.CanWrite; }
     }
 
     public override bool CanTimeout {
-      get { CheckDisposed(); return innerStream.CanTimeout; }
+      get { return !IsClosed && innerStream.CanTimeout; }
+    }
+
+    private bool IsClosed {
+      get { return innerStream == null; }
     }
 
     public override long Position {
-      get { throw new NotSupportedException(); }
-      set { throw new NotSupportedException(); }
+      get { throw ExceptionUtils.CreateNotSupportedSeekingStream(); }
+      set { throw ExceptionUtils.CreateNotSupportedSeekingStream(); }
     }
 
     public override long Length {
-      get { throw new NotSupportedException(); }
+      get { throw ExceptionUtils.CreateNotSupportedSeekingStream(); }
     }
 
     public ImapDeflateStream(Stream innerStream)
@@ -81,12 +85,12 @@ namespace Smdn.Net.Imap4.Protocol {
 
     public override void SetLength(long value)
     {
-      throw new NotSupportedException();
+      throw ExceptionUtils.CreateNotSupportedSettingStreamLength();
     }
 
     public override long Seek(long offset, SeekOrigin origin)
     {
-      throw new NotSupportedException();
+      throw ExceptionUtils.CreateNotSupportedSeekingStream();
     }
 
     public override void Flush()
@@ -104,7 +108,7 @@ namespace Smdn.Net.Imap4.Protocol {
         throw new ArgumentNullException("buffer");
 
       if (!CanRead)
-        throw new NotSupportedException("stream is not readable");
+        throw ExceptionUtils.CreateNotSupportedReadingStream();
 
 #if false
       //return readStream.Read(buffer, offset, count);
@@ -118,7 +122,7 @@ namespace Smdn.Net.Imap4.Protocol {
       CheckDisposed();
 
       if (!CanWrite)
-        throw new NotSupportedException("stream is not writable");
+        throw ExceptionUtils.CreateNotSupportedWritingStream();
 
 #if false
       using (var w = new DeflateStream(innerStream, CompressionMode.Compress, true)) {
@@ -131,7 +135,7 @@ namespace Smdn.Net.Imap4.Protocol {
 
     private void CheckDisposed()
     {
-      if (innerStream == null)
+      if (IsClosed)
         throw new ObjectDisposedException(GetType().FullName);
     }
 

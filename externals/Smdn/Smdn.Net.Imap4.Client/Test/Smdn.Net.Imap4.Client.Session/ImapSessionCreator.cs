@@ -114,6 +114,8 @@ namespace Smdn.Net.Imap4.Client.Session {
     {
       var prof = new Profile(new NetworkCredential("user", "pass"), "user", "imap.invalid");
 
+      prof.Timeout = -1;
+
       try {
         ImapSessionCreator.CreateSession(prof, null, null);
 

@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -39,7 +39,7 @@ namespace Smdn.Net.Imap4.WebClients {
   public abstract class ImapWebRequest : WebRequest, IImapSessionProfile {
     private ImapSessionManager sessionManager;
     private IAsyncResult asyncResult = null;
-    internal protected IAsyncResult beginAppendAsyncResult = null;
+    internal protected ImapSession.AppendContext appendContext = null;
 
     private ImapSession session = null;
 
@@ -89,7 +89,7 @@ namespace Smdn.Net.Imap4.WebClients {
       {
         CheckRequestStarted();
         if (value < -1)
-          throw new ArgumentOutOfRangeException("Timeout", value, "must be greater than or equals to -1");
+          throw ExceptionUtils.CreateArgumentMustBeGreaterThanOrEqualTo(-1, "Timeout", value);
         timeout = value;
       }
     }
@@ -102,7 +102,7 @@ namespace Smdn.Net.Imap4.WebClients {
       {
         CheckRequestStarted();
         if (value < -1)
-          throw new ArgumentOutOfRangeException("ReadWriteTimeout", value, "must be greater than or equals to -1");
+          throw ExceptionUtils.CreateArgumentMustBeGreaterThanOrEqualTo(-1, "ReadWriteTimeout", value);
         readWriteTimeout = value;
       }
     }
@@ -165,7 +165,7 @@ namespace Smdn.Net.Imap4.WebClients {
       {
         CheckRequestStarted();
         if (value <= 0)
-          throw new ArgumentOutOfRangeException("FetchBlockSize", value, "must be non-zero positive number");
+          throw ExceptionUtils.CreateArgumentMustBeNonZeroPositive("FetchBlockSize", value);
         fetchBlockSize = value;
       }
     }
@@ -242,7 +242,7 @@ namespace Smdn.Net.Imap4.WebClients {
       {
         CheckRequestStarted();
         if (value < 0)
-          throw new ArgumentOutOfRangeException("ContentLength", value, "must be zero or positive number");
+          throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("ContentLength", value);
         contentLength = value;
       }
     }
@@ -351,7 +351,7 @@ namespace Smdn.Net.Imap4.WebClients {
 
     public override IAsyncResult BeginGetResponse(AsyncCallback callback, object state)
     {
-      if (beginAppendAsyncResult == null)
+      if (appendContext == null)
         CheckRequestStarted();
 
       this.asyncResult = (new GetResponseDelegate(GetResponseProc)).BeginInvoke(callback, state);
@@ -361,10 +361,13 @@ namespace Smdn.Net.Imap4.WebClients {
 
     public override WebResponse EndGetResponse(IAsyncResult asyncResult)
     {
+      if (asyncResult == null)
+        throw new ArgumentNullException("asyncResult");
+
       var ar = asyncResult as System.Runtime.Remoting.Messaging.AsyncResult;
 
       if (ar != this.asyncResult)
-        throw new ArgumentException("invalid IAsyncResult", "asyncResult");
+        throw ExceptionUtils.CreateArgumentMustBeValidIAsyncResult("asyncResult");
 
       try {
         return (ar.AsyncDelegate as GetResponseDelegate).EndInvoke(ar);
@@ -381,7 +384,7 @@ namespace Smdn.Net.Imap4.WebClients {
       try {
         ImapCommandResult noopResult = null;
 
-        if (beginAppendAsyncResult == null)
+        if (appendContext == null)
           GetSession(out noopResult);
 
         ImapWebResponse response = null;
@@ -468,19 +471,19 @@ namespace Smdn.Net.Imap4.WebClients {
       return ImapStyleUriParser.GetMailbox(GetDestinationUri(ImapUriForm.ListMessages));
     }
 
-    protected ImapSearchCriteria GetSearchCriteria(ImapCapabilityList serverCapabilities)
+    protected ImapSearchCriteria GetSearchCriteria(ImapCapabilitySet serverCapabilities)
     {
       string discard;
 
       return GetSearchCriteria(serverCapabilities, false, out discard);
     }
 
-    protected ImapSearchCriteria GetSearchCriteria(ImapCapabilityList serverCapabilities, out string charset)
+    protected ImapSearchCriteria GetSearchCriteria(ImapCapabilitySet serverCapabilities, out string charset)
     {
       return GetSearchCriteria(serverCapabilities, true, out charset);
     }
 
-    private ImapSearchCriteria GetSearchCriteria(ImapCapabilityList serverCapabilities, bool splitCharset, out string charset)
+    private ImapSearchCriteria GetSearchCriteria(ImapCapabilitySet serverCapabilities, bool splitCharset, out string charset)
     {
       if (ImapStyleUriParser.GetUriForm(requestUri) != ImapUriForm.SearchMessages)
         throw new InvalidOperationException("request URI does not include query");
@@ -502,7 +505,7 @@ namespace Smdn.Net.Imap4.WebClients {
 
       var ret = ImapSearchCriteria.FromUri(requestUri, splitCharset, out containsLiteral, out charset);
 
-      if (!serverCapabilities.Has(ImapCapability.LiteralNonSync) && containsLiteral)
+      if (!serverCapabilities.Contains(ImapCapability.LiteralNonSync) && containsLiteral)
         throw new ImapIncapableException("query contains literal but LITERAL+ is incapable.");
 
       return ret;
@@ -620,7 +623,7 @@ namespace Smdn.Net.Imap4.WebClients {
 
     protected void CheckRequestStarted()
     {
-      if ((asyncResult != null && !asyncResult.IsCompleted) || beginAppendAsyncResult != null)
+      if ((asyncResult != null && !asyncResult.IsCompleted) || appendContext != null)
         throw new InvalidOperationException("request is in progress");
     }
   }

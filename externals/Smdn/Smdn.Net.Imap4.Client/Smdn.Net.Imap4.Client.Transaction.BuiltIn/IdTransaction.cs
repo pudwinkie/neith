@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -31,8 +31,8 @@ using Smdn.Net.Imap4.Protocol.Client;
 
 namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
   internal sealed class IdTransaction : ImapTransactionBase<ImapCommandResult<IDictionary<string, string>>>, IImapExtension {
-    ImapCapability IImapExtension.RequiredCapability {
-      get { return ImapCapability.ID; }
+    IEnumerable<ImapCapability> IImapExtension.RequiredCapabilities {
+      get { yield return ImapCapability.ID; }
     }
 
     public IdTransaction(ImapConnection connection)
@@ -40,24 +40,21 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     {
     }
 
-    protected override ProcessTransactionDelegate Reset()
-    {
-      return ProcessId;
-    }
-
     // 3.1. ID Command
     //    Arguments:  client parameter list or NIL
     //    Responses:  OPTIONAL untagged response: ID
     //    Result:     OK    identification information accepted
     //                BAD   command unknown or arguments invalid
-    private void ProcessId()
+    protected override ImapCommand PrepareCommand()
     {
       ImapString clientParameterList;
 
       if (RequestArguments.TryGetValue("client parameter list", out clientParameterList))
-        SendCommand("ID", ProcessReceiveResponse, clientParameterList);
+        return Connection.CreateCommand("ID",
+                                        clientParameterList);
       else
-        SendCommand("ID", ProcessReceiveResponse, new ImapNilString());
+        return Connection.CreateCommand("ID",
+                                        ImapNilString.Nil);
     }
 
     protected override void OnDataResponseReceived(ImapDataResponse data)

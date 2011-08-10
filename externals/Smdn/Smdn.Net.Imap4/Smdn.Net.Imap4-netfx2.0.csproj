@@ -54,7 +54,6 @@
     <Compile Include="Smdn.Net.Imap4\ImapString.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapNilString.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapStringEnum.cs" />
-    <Compile Include="Smdn.Net.Imap4\ImapStringEnumList.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapParenthesizedString.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapStringList.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapDateTimeFormat.cs" />
@@ -65,9 +64,7 @@
     <Compile Include="Smdn.Net.Imap4\ImapUriForm.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapCapability.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapAuthenticationMechanism.cs" />
-    <Compile Include="Smdn.Net.Imap4\ImapCapabilityList.cs" />
     <Compile Include="Smdn.Net.Imap4\IImapExtension.cs" />
-    <Compile Include="Smdn.Net.Imap4\IImapMultipleExtension.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapCompressionMechanism.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapThreadingAlgorithm.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapQuotedString.cs" />
@@ -84,9 +81,7 @@
     <Compile Include="Smdn.Net.Imap4.Protocol\ImapDataConverter.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapStatusAttributeList.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapMessageFlag.cs" />
-    <Compile Include="Smdn.Net.Imap4\ImapMessageFlagList.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapMailboxFlag.cs" />
-    <Compile Include="Smdn.Net.Imap4\ImapMailboxFlagList.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapThreadList.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapMailboxList.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapSequenceSet.cs" />
@@ -135,6 +130,10 @@
     <Compile Include="Smdn.Net.Imap4.Protocol\ImapFormatException.cs" />
     <Compile Include="Smdn.Net.Imap4.Protocol\ImapDefaultPorts.cs" />
     <Compile Include="Smdn.Net.Imap4.Protocol\ImapSecureConnectionException.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapStringEnumSet.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapCapabilitySet.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapMessageFlagSet.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapMailboxFlagSet.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -31,17 +31,16 @@ namespace Smdn.Formats.Ini {
     public string this[string entry] {
       get
       {
-        if (entries.ContainsKey(entry))
-          return entries[entry];
+        string val;
+
+        if (entries.TryGetValue(entry, out val))
+          return val;
         else
           return null;
       }
       set
       {
-        if (entries.ContainsKey(entry))
-          entries[entry] = value;
-        else
-          entries.Add(entry, value);
+        entries[entry] = value;
       }
     }
 
@@ -86,8 +85,10 @@ namespace Smdn.Formats.Ini {
       if (entry == null)
         throw new ArgumentNullException("entry");
 
-      if (entries.ContainsKey(entry))
-        return entries[entry];
+      string val;
+
+      if (entries.TryGetValue(entry, out val))
+        return val;
       else
         return defaultValue;
     }
@@ -105,8 +106,10 @@ namespace Smdn.Formats.Ini {
         throw new ArgumentNullException("convert");
 
       try {
-        if (entries.ContainsKey(entry))
-          return convert(entries[entry]);
+        string val;
+
+        if (entries.TryGetValue(entry, out val))
+          return convert(val);
         else
           return defaultValue;
       }
@@ -128,8 +131,10 @@ namespace Smdn.Formats.Ini {
       if (convert == null)
         throw new ArgumentNullException("convert");
 
-      if (entries.ContainsKey(entry))
-        return convert(entries[entry]);
+      string val;
+
+      if (entries.TryGetValue(entry, out val))
+        return convert(val);
       else
         return defaultValue;
     }

@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -71,10 +71,10 @@ namespace Smdn.Net.Pop3 {
 
       var userinfo = strong ? uri.UserInfo : GetUser(uri);
 
-      if (string.Empty.Equals(userinfo))
-        return string.Format("{0}:{1}", uri.Host, GetPort(uri));
+      if (userinfo.Length == 0)
+        return string.Concat(uri.Host, ":", GetPort(uri));
       else
-        return string.Format("{0}@{1}:{2}", userinfo, uri.Host, GetPort(uri));
+        return string.Concat(userinfo, "@", uri.Host, ":", GetPort(uri));
     }
 
     private static int GetPort(Uri uri)

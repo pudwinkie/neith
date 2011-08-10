@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@
 // THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 
 using Smdn.Net.Imap4.Protocol;
 using Smdn.Net.Imap4.Protocol.Client;
@@ -33,8 +34,12 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     IImapExtension
     where TMessageAttribute : ImapMessageAttributeBase
   {
-    ImapCapability IImapExtension.RequiredCapability {
-      get { return fetchModifiersCapabilityRequirement; }
+    IEnumerable<ImapCapability> IImapExtension.RequiredCapabilities {
+      get
+      {
+        if (fetchModifiersCapabilityRequirement != null)
+          yield return fetchModifiersCapabilityRequirement;
+      }
     }
 
     public FetchTransaction(ImapConnection connection, bool uid, ImapCapability fetchModifiersCapabilityRequirement)
@@ -43,25 +48,6 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
       this.uid = uid;
       this.fetchModifiersCapabilityRequirement = fetchModifiersCapabilityRequirement;
     }
-
-    protected override ProcessTransactionDelegate Reset()
-    {
-#if DEBUG
-      if (!RequestArguments.ContainsKey("sequence set"))
-        return ProcessArgumentNotSetted;
-      else if (!RequestArguments.ContainsKey("message data item names or macro"))
-        return ProcessArgumentNotSetted;
-      else
-#endif
-        return ProcessFetch;
-    }
-
-#if DEBUG
-    private void ProcessArgumentNotSetted()
-    {
-      FinishError(ImapCommandResultCode.RequestError, "arguments 'sequence set' and 'message data item names or macro' must be setted");
-    }
-#endif
 
     // RFC 4466 - Collected Extensions to IMAP4 ABNF
     // http://tools.ietf.org/html/rfc4466
@@ -73,22 +59,28 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     //    Result:     OK - fetch completed
     //                NO - fetch error: cannot fetch that data
     //                BAD - command unknown or arguments invalid
-    private void ProcessFetch()
+    protected override ImapCommand PrepareCommand()
     {
+#if DEBUG
+      if (!RequestArguments.ContainsKey("sequence set") ||
+          !RequestArguments.ContainsKey("message data item names or macro")) {
+        FinishError(ImapCommandResultCode.RequestError, "arguments 'sequence set' and 'message data item names or macro' must be setted");
+        return null;
+      }
+#endif
+
       // FETCH / UID FETCH
       ImapString fetchModifiers;
 
       if (RequestArguments.TryGetValue("fetch modifiers", out fetchModifiers))
-        SendCommand(uid ? "UID FETCH" : "FETCH",
-                    ProcessReceiveResponse,
-                    RequestArguments["sequence set"],
-                    RequestArguments["message data item names or macro"],
-                    fetchModifiers);
+        return Connection.CreateCommand(uid ? "UID FETCH" : "FETCH",
+                                        RequestArguments["sequence set"],
+                                        RequestArguments["message data item names or macro"],
+                                        fetchModifiers);
       else
-        SendCommand(uid ? "UID FETCH" : "FETCH",
-                    ProcessReceiveResponse,
-                    RequestArguments["sequence set"],
-                    RequestArguments["message data item names or macro"]);
+        return Connection.CreateCommand(uid ? "UID FETCH" : "FETCH",
+                                        RequestArguments["sequence set"],
+                                        RequestArguments["message data item names or macro"]);
     }
 
     protected override void OnTaggedStatusResponseReceived(ImapTaggedStatusResponse tagged)

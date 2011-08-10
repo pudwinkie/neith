@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2009-2010 smdn
+// Copyright (c) 2009-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -41,12 +41,19 @@ namespace Smdn.Formats {
       if (encoding == null)
         throw new ArgumentNullException("encoding");
 
-      return GetEncodedString(encoding.GetBytes(str));
+      var bytes = encoding.GetBytes(str);
+
+      return GetEncodedString(bytes, 0, bytes.Length);
     }
 
     public static string GetEncodedString(byte[] bytes)
     {
       return System.Convert.ToBase64String(bytes, Base64FormattingOptions.None);
+    }
+
+    public static string GetEncodedString(byte[] bytes, int offset, int count)
+    {
+      return System.Convert.ToBase64String(bytes, offset, count, Base64FormattingOptions.None);
     }
 
     public static byte[] Encode(string str)
@@ -59,12 +66,24 @@ namespace Smdn.Formats {
       if (encoding == null)
         throw new ArgumentNullException("encoding");
 
-      return Encode(encoding.GetBytes(str));
+      var bytes = encoding.GetBytes(str);
+
+      return Encode(bytes, 0, bytes.Length);
     }
 
     public static byte[] Encode(byte[] bytes)
     {
-      return ICryptoTransformExtensions.TransformBytes(new ToBase64Transform(), bytes);
+      if (bytes == null)
+        throw new ArgumentNullException("bytes");
+
+      return Encode(bytes, 0, bytes.Length);
+    }
+
+    public static byte[] Encode(byte[] bytes, int offset, int count)
+    {
+      using (var transform = new ToBase64Transform()) {
+        return ICryptoTransformExtensions.TransformBytes(transform, bytes, offset, count);
+      }
     }
 
     public static string GetDecodedString(string str)
@@ -82,7 +101,15 @@ namespace Smdn.Formats {
 
     public static string GetDecodedString(byte[] bytes)
     {
-      return Encoding.ASCII.GetString(Decode(bytes));
+      if (bytes == null)
+        throw new ArgumentNullException("bytes");
+
+      return GetDecodedString(bytes, 0, bytes.Length);
+    }
+
+    public static string GetDecodedString(byte[] bytes, int offset, int count)
+    {
+      return Encoding.ASCII.GetString(Decode(bytes, offset, count));
     }
 
     public static byte[] Decode(string str)
@@ -92,7 +119,17 @@ namespace Smdn.Formats {
 
     public static byte[] Decode(byte[] bytes)
     {
-      return ICryptoTransformExtensions.TransformBytes(new FromBase64Transform(FromBase64TransformMode.IgnoreWhiteSpaces), bytes);
+      if (bytes == null)
+        throw new ArgumentNullException("bytes");
+
+      return Decode(bytes, 0, bytes.Length);
+    }
+
+    public static byte[] Decode(byte[] bytes, int offset, int count)
+    {
+      using (var transform = new FromBase64Transform(FromBase64TransformMode.IgnoreWhiteSpaces)) {
+        return ICryptoTransformExtensions.TransformBytes(transform, bytes, offset, count);
+      }
     }
 
     public static Stream CreateEncodingStream(Stream stream)

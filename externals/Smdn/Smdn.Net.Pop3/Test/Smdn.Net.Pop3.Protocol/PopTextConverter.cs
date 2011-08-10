@@ -8,11 +8,11 @@ namespace Smdn.Net.Pop3.Protocol {
     public void TestToCapability()
     {
       Assert.AreEqual(PopCapability.Top, PopTextConverter.ToCapability(new[] {
-        new ByteString("TOP"),
+        ByteString.CreateImmutable("TOP"),
       }));
       Assert.AreEqual(new PopCapability("LOGIN-DELAY", "900"), PopTextConverter.ToCapability(new[] {
-        new ByteString("LOGIN-DELAY"),
-        new ByteString("900")
+        ByteString.CreateImmutable("LOGIN-DELAY"),
+        ByteString.CreateImmutable("900")
       }));
     }
 
@@ -20,9 +20,9 @@ namespace Smdn.Net.Pop3.Protocol {
     public void TestToDropListing()
     {
       var dropListing = PopTextConverter.ToDropListing(new[] {
-        new ByteString("2"),
-        new ByteString("320"),
-        new ByteString("undocumented-extension-value"),
+        ByteString.CreateImmutable("2"),
+        ByteString.CreateImmutable("320"),
+        ByteString.CreateImmutable("undocumented-extension-value"),
       });
 
       Assert.AreEqual(2L, dropListing.MessageCount);
@@ -30,7 +30,7 @@ namespace Smdn.Net.Pop3.Protocol {
 
       try {
         PopTextConverter.ToDropListing(new[] {
-          new ByteString("2"),
+          ByteString.CreateImmutable("2"),
         });
         Assert.Fail("PopMalformedTextException not thrown");
       }
@@ -42,9 +42,9 @@ namespace Smdn.Net.Pop3.Protocol {
     public void TestToScanListing()
     {
       var scanListing = PopTextConverter.ToScanListing(new[] {
-        new ByteString("1"),
-        new ByteString("120"),
-        new ByteString("undocumented-extension-value"),
+        ByteString.CreateImmutable("1"),
+        ByteString.CreateImmutable("120"),
+        ByteString.CreateImmutable("undocumented-extension-value"),
       });
 
       Assert.AreEqual(1L, scanListing.MessageNumber);
@@ -52,7 +52,7 @@ namespace Smdn.Net.Pop3.Protocol {
 
       try {
         PopTextConverter.ToDropListing(new[] {
-          new ByteString("1"),
+          ByteString.CreateImmutable("1"),
         });
         Assert.Fail("PopMalformedTextException not thrown");
       }
@@ -64,9 +64,9 @@ namespace Smdn.Net.Pop3.Protocol {
     public void TestToUniqueIdListing()
     {
       var uniqueIdListing = PopTextConverter.ToUniqueIdListing(new[] {
-        new ByteString("1"),
-        new ByteString("whqtswO00WBw418f9t5JxYwZ"),
-        new ByteString("undocumented-extension-value"),
+        ByteString.CreateImmutable("1"),
+        ByteString.CreateImmutable("whqtswO00WBw418f9t5JxYwZ"),
+        ByteString.CreateImmutable("undocumented-extension-value"),
       });
 
       Assert.AreEqual(1L, uniqueIdListing.MessageNumber);
@@ -74,7 +74,7 @@ namespace Smdn.Net.Pop3.Protocol {
 
       try {
         PopTextConverter.ToDropListing(new[] {
-          new ByteString("1"),
+          ByteString.CreateImmutable("1"),
         });
         Assert.Fail("PopMalformedTextException not thrown");
       }
@@ -85,11 +85,11 @@ namespace Smdn.Net.Pop3.Protocol {
     [Test]
     public void TestToMessageNumber()
     {
-      Assert.AreEqual(1L, PopTextConverter.ToMessageNumber(new ByteString("1")));
+      Assert.AreEqual(1L, PopTextConverter.ToMessageNumber(ByteString.CreateImmutable("1")));
       Assert.AreEqual(1L, PopTextConverter.ToMessageNumber("1"));
 
       try {
-        PopTextConverter.ToMessageNumber(new ByteString("0"));
+        PopTextConverter.ToMessageNumber(ByteString.CreateImmutable("0"));
         Assert.Fail("PopMalformedTextException not thrown");
       }
       catch (PopMalformedTextException) {
@@ -106,14 +106,14 @@ namespace Smdn.Net.Pop3.Protocol {
     [Test]
     public void TestToNumber()
     {
-      Assert.AreEqual(1L, PopTextConverter.ToNumber(new ByteString("1")));
-      Assert.AreEqual(1234567890L, PopTextConverter.ToNumber(new ByteString("1234567890")));
+      Assert.AreEqual(1L, PopTextConverter.ToNumber(ByteString.CreateImmutable("1")));
+      Assert.AreEqual(1234567890L, PopTextConverter.ToNumber(ByteString.CreateImmutable("1234567890")));
 
       Assert.AreEqual(1L, PopTextConverter.ToNumber("1"));
       Assert.AreEqual(1234567890L, PopTextConverter.ToNumber("1234567890"));
 
       try {
-        PopTextConverter.ToNumber(new ByteString("123a"));
+        PopTextConverter.ToNumber(ByteString.CreateImmutable("123a"));
         Assert.Fail("PopMalformedTextException not thrown");
       }
       catch (PopMalformedTextException) {

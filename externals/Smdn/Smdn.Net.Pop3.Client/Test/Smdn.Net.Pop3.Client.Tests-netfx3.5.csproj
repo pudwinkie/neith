@@ -110,5 +110,13 @@
     <Compile Include="Smdn.Net.Pop3.Client.Session\PopSessionTestsBase.cs" />
     <Compile Include="Smdn.Net.Pop3.Client.Session\PopSessionCommandsAuthorizationState.cs" />
     <Compile Include="Smdn.Net.Pop3.Client.Session\PopSessionCommandsTransactionState.cs" />
+    <Compile Include="Smdn.Net.Pop3.Client\PopClientOperations.cs" />
+    <Compile Include="Smdn.Net.Pop3.Client\PopClientOperationsDownload.cs" />
+    <Compile Include="Smdn.Net.Pop3.Protocol.Client\PopCommandResult.cs" />
+    <Compile Include="Smdn.Net.Pop3.Protocol.Client\PopContinuationRequest.cs" />
+    <Compile Include="Smdn.Net.Pop3.Protocol.Client\PopFollowingResponse.cs" />
+    <Compile Include="Smdn.Net.Pop3.Protocol.Client\PopStatusResponse.cs" />
+    <Compile Include="Smdn.Net.Pop3.Protocol.Client\PopTerminationResponse.cs" />
+    <Compile Include="Smdn.Net.Pop3.Protocol.Client\PopPseudoResponseReceiver.cs" />
   </ItemGroup>
 </Project>

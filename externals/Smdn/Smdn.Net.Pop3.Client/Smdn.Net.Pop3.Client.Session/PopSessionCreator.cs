@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -72,14 +72,13 @@ namespace Smdn.Net.Pop3.Client.Session {
       session = new PopSession(authority.Host,
                                authority.Port,
                                profile.Timeout,
+                               profile.SendTimeout,
+                               profile.ReceiveTimeout,
                                securePort
                                  ? createSslStreamCallback
                                  : null);
 
       session.HandlesIncapableAsException = false;
-      session.TransactionTimeout  = profile.Timeout;
-      session.SendTimeout         = profile.SendTimeout;
-      session.ReceiveTimeout      = profile.ReceiveTimeout;
 
       // try querying server capability (ignore error; POP3 Extension Mechanism might not supported)
       session.Capa();

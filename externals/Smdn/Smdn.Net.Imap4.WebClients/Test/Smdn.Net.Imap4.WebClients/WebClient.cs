@@ -367,7 +367,7 @@ Date: Sat, 16 Jan 2010 00:41:20 +0900
 
       var appendRequest = server.DequeueRequest();
 
-      StringAssert.StartsWith("0001 APPEND \"INBOX\"", appendRequest);
+      StringAssert.StartsWith("0001 APPEND INBOX", appendRequest);
       StringAssert.EndsWith(string.Format(" {{{0}}}\r\n", Encoding.ASCII.GetByteCount(message)), appendRequest);
 
       StringAssert.StartsWith(message, server.DequeueAll());

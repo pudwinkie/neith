@@ -45,5 +45,29 @@ namespace Smdn.Net.Imap4.Client {
       Assert.AreEqual(original.Authority, cloned.Authority);
       Assert.IsNull(cloned.UsingSaslMechanisms);
     }
+
+    [Test]
+    public void TestSerializeBinary()
+    {
+      var original = new ImapClientProfile(new Uri("imap://user@localhost/"));
+
+      original.Timeout = 1;
+      original.ReceiveTimeout = 2;
+      original.SendTimeout = 3;
+      original.UseTlsIfAvailable = false;
+      original.UsingSaslMechanisms = new string[] {"X-SASL-EXT"};
+      original.AllowInsecureLogin = true;
+
+      Smdn.Net.TestUtils.SerializeBinary(original, delegate(ImapClientProfile deserialized) {
+        Assert.AreEqual(original.Authority, deserialized.Authority);
+        Assert.AreEqual(1, deserialized.Timeout);
+        Assert.AreEqual(2, deserialized.ReceiveTimeout);
+        Assert.AreEqual(3, deserialized.SendTimeout);
+        Assert.IsFalse(deserialized.UseTlsIfAvailable);
+        Assert.AreNotSame(original.UsingSaslMechanisms, deserialized.UsingSaslMechanisms);
+        CollectionAssert.AreEqual(original.UsingSaslMechanisms, deserialized.UsingSaslMechanisms);
+        Assert.IsTrue(deserialized.AllowInsecureLogin);
+      });
+    }
   }
 }

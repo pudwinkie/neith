@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -36,14 +36,14 @@ namespace Smdn.Net.Pop3.Protocol.Client {
     }
 
     public PopCommand(string command)
-      : this(command, new string[] {})
+      : this(command, new string[0])
     {
     }
 
-    public PopCommand(string command, string[] parameters)
+    public PopCommand(string command, params string[] parameters)
     {
       this.Command = command;
-      this.Parameters = parameters;
+      this.Parameters = parameters ?? new string[0];
     }
 
     public override string ToString()

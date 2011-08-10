@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -81,7 +81,7 @@ namespace Smdn.Security.Authentication.Sasl.Client {
           type1.Host = TargetHost ?? string.Empty; // ?
           type1.Domain = Credential.Domain ?? string.Empty;
 
-          clientResponse = new ByteString(type1.GetBytes());
+          clientResponse = ByteString.CreateImmutable(type1.GetBytes());
 
           step++;
 
@@ -92,7 +92,7 @@ namespace Smdn.Security.Authentication.Sasl.Client {
           if (string.IsNullOrEmpty(Credential.UserName) || string.IsNullOrEmpty(Credential.Password))
             return SaslExchangeStatus.Failed;
 
-          var type2 = new Type2Message(serverChallenge.ByteArray);
+          var type2 = new Type2Message(serverChallenge.ToArray());
           var type3 = new Type3Message();
 
           type3.Flags = NtlmFlags.NegotiateNtlm | NtlmFlags.NegotiateUnicode; // XXX
@@ -103,7 +103,7 @@ namespace Smdn.Security.Authentication.Sasl.Client {
           type3.Password = Credential.Password;
           type3.Username = Credential.UserName;
 
-          clientResponse = new ByteString(type3.GetBytes());
+          clientResponse = ByteString.CreateImmutable(type3.GetBytes());
 
           step++;
 

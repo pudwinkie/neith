@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,8 @@ using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
+
+using Smdn.Formats;
 
 namespace Smdn.Security.Authentication.Sasl.Client {
   /*
@@ -136,7 +138,7 @@ namespace Smdn.Security.Authentication.Sasl.Client {
       if (!pairs.TryGetValue("qop", out qop))
         return SaslExchangeStatus.Failed;
 
-      qop = new ByteString("auth"); // ignore qop-options
+      qop = ByteString.CreateImmutable("auth"); // ignore qop-options
 
       /*
        * 2.1.2 Step Two
@@ -145,7 +147,7 @@ namespace Smdn.Security.Authentication.Sasl.Client {
 
       //    cnonce
       //       It is RECOMMENDED that it contain at least 64 bits of entropy.
-      var cnonce = new ByteString(Cnonce ?? Nonce.Generate(64, true));
+      var cnonce = ByteString.CreateImmutable(Cnonce ?? Nonce.Generate(64, true));
 
       //    nonce-count
       //       The nc-value is the hexadecimal count of the number of requests
@@ -153,7 +155,7 @@ namespace Smdn.Security.Authentication.Sasl.Client {
       //       nonce value in this request.  For example, in the first request
       //       sent in response to a given nonce value, the client sends
       //       "nc=00000001"
-      var nc = new ByteString((1).ToString("X8"));
+      var nc = ByteString.CreateImmutable((1).ToString("X8"));
 
       //    digest-uri
       //       Indicates the principal name of the service with which the client
@@ -162,7 +164,7 @@ namespace Smdn.Security.Authentication.Sasl.Client {
       //       "digest-uri" value of "ftp/ftp.example.com"; the SMTP server from
       //       the example above would have a "digest-uri" value of
       //       "smtp/mail3.example.com/example.com".
-      var digestUri = new ByteString(string.Format("{0}/{1}", ServiceName, Credential.Domain ?? string.Empty));
+      var digestUri = ByteString.CreateImmutable(string.Concat(ServiceName, "/", Credential.Domain));
 
       //       response-value  =
       //          HEX( KD ( HEX(H(A1)),
@@ -200,7 +202,7 @@ namespace Smdn.Security.Authentication.Sasl.Client {
 
       step = 3;
 
-      clientResponse = responseBuilder.ToByteString();
+      clientResponse = responseBuilder.ToByteString(false);
 
       return SaslExchangeStatus.Continuing;
     }
@@ -220,7 +222,7 @@ namespace Smdn.Security.Authentication.Sasl.Client {
 
       a1.Append(h.ComputeHash(ArrayExtensions.Concat(charset.GetBytes(username),
                                                      new byte[] {0x3a},
-                                                     realm.ByteArray,
+                                                     realm.ToArray(),
                                                      new byte[] {0x3a},
                                                      charset.GetBytes(password))));
       a1.Append(0x3a);
@@ -233,7 +235,7 @@ namespace Smdn.Security.Authentication.Sasl.Client {
         a1.Append(authzid);
       }
 
-      return HexH(h, a1.ToByteString());
+      return HexH(h, a1.GetSegment());
     }
 
     private static ByteString HexHA2(MD5 h, ByteString qop, ByteString digestUri)
@@ -254,7 +256,7 @@ namespace Smdn.Security.Authentication.Sasl.Client {
       if (qop.EqualsIgnoreCase("auth-int") || qop.EqualsIgnoreCase("auth-conf"))
         a2.Append(":00000000000000000000000000000000");
 
-      return HexH(h, a2.ToByteString());
+      return HexH(h, a2.GetSegment());
     }
 
     private static ByteString HexKD(MD5 h, ByteString hexHA1, ByteString nonce, ByteString nc, ByteString cnonce, ByteString qop, ByteString hexHA2)
@@ -280,17 +282,19 @@ namespace Smdn.Security.Authentication.Sasl.Client {
       tmp.Append(0x3a);
       tmp.Append(hexHA2);
 
-      return HexH(h, tmp.ToByteString());
+      return HexH(h, tmp.GetSegment());
     }
 
-    private static ByteString HexH(MD5 h, ByteString s)
+    private static ByteString HexH(MD5 h, ArraySegment<byte> s)
     {
       //    Let H(s) be the 16 octet MD5 hash [RFC 1321] of the octet string s.
 
       //    Let HEX(n) be the representation of the 16 octet MD5 hash n as a
       //    string of 32 hex digits (with alphabetic characters always in lower
       //    case, since MD5 is case sensitive).
-      return new ByteString(Smdn.Formats.Hexadecimals.ToLowerByteArray(h.ComputeHash(s.ByteArray)));
+      return ByteString.CreateMutable(Hexadecimals.ToLowerByteArray(h.ComputeHash(s.Array,
+                                                                                  s.Offset,
+                                                                                  s.Count)));
     }
 
     private static Dictionary<string, ByteString> ParseChallenge(ByteString str)
@@ -326,13 +330,13 @@ namespace Smdn.Security.Authentication.Sasl.Client {
 
       foreach (var p in Array.ConvertAll(pairs, delegate(ByteString pair) {
         var delim = pair.IndexOf('=');
-        var dequote = (pair[delim + 1] == '\"') && pair.EndsWith("\"");
+        var dequote = (pair[delim + 1] == '\"') && (pair[pair.Length - 1] == '\"');
 
         if (dequote)
-          return new KeyValuePair<string, ByteString>(pair.Substring(0, delim).ToString(),
+          return new KeyValuePair<string, ByteString>(pair.ToString(0, delim),
                                                       pair.Substring(delim + 2, pair.Length - (delim + 3)));
         else
-          return new KeyValuePair<string, ByteString>(pair.Substring(0, delim).ToString(),
+          return new KeyValuePair<string, ByteString>(pair.ToString(0, delim),
                                                       pair.Substring(delim + 1));
       })) {
         // TODO: quoted-pair

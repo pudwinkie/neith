@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -30,8 +30,12 @@ using Smdn.Net.Imap4.Protocol.Client;
 
 namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
   internal sealed class AppendTransaction : ImapTransactionBase<ImapCommandResult<ImapAppendedUidSet>>, IImapExtension {
-    ImapCapability IImapExtension.RequiredCapability {
-      get { return multiple ? ImapCapability.MultiAppend : null; }
+    IEnumerable<ImapCapability> IImapExtension.RequiredCapabilities {
+      get
+      {
+        if (multiple)
+          yield return ImapCapability.MultiAppend;
+      }
     }
 
     public AppendTransaction(ImapConnection connection, bool multiple)
@@ -39,25 +43,6 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     {
       this.multiple = multiple;
     }
-
-    protected override ProcessTransactionDelegate Reset()
-    {
-#if DEBUG
-      if (!RequestArguments.ContainsKey("mailbox name"))
-        return ProcessArgumentNotSetted;
-      else if (!RequestArguments.ContainsKey("messages to upload"))
-        return ProcessArgumentNotSetted;
-      else
-#endif
-        return ProcessAppend;
-    }
-
-#if DEBUG
-    private void ProcessArgumentNotSetted()
-    {
-      FinishError(ImapCommandResultCode.RequestError, "arguments 'mailbox name' and 'messages to upload' must be setted");
-    }
-#endif
 
     // 6.3.11. APPEND Command
     //    Arguments:  mailbox name
@@ -84,12 +69,19 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     //                     in flags or date/time or message text,
     //                     append cancelled
     //                BAD - command unknown or arguments invalid
-    private void ProcessAppend()
+    protected override ImapCommand PrepareCommand()
     {
-      SendCommand("APPEND",
-                  ProcessReceiveResponse,
-                  RequestArguments["mailbox name"],
-                  RequestArguments["messages to upload"]);
+#if DEBUG
+      if (!RequestArguments.ContainsKey("mailbox name") ||
+          !RequestArguments.ContainsKey("messages to upload")) {
+        FinishError(ImapCommandResultCode.RequestError, "arguments 'mailbox name' and 'messages to upload' must be setted");
+        return null;
+      }
+#endif
+
+      return Connection.CreateCommand("APPEND",
+                                      RequestArguments["mailbox name"],
+                                      RequestArguments["messages to upload"]);
     }
 
     protected override void OnTaggedStatusResponseReceived(ImapTaggedStatusResponse tagged)

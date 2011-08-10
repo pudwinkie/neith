@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -78,7 +78,7 @@ namespace Smdn.Net.Pop3.Client.Session {
       RejectNonTransactionState();
 
       if (messageNumber.HasValue && messageNumber.Value <= 0L)
-        throw new ArgumentOutOfRangeException("messageNumber", messageNumber.Value, "must be non-zero positive number");
+        throw ExceptionUtils.CreateArgumentMustBeNonZeroPositive("messageNumber", messageNumber.Value);
 
       scanListings = null;
 
@@ -98,7 +98,7 @@ namespace Smdn.Net.Pop3.Client.Session {
     public PopCommandResult Retr(long messageNumber, out Stream messageStream)
     {
       if (messageNumber <= 0L)
-        throw new ArgumentOutOfRangeException("messageNumber", messageNumber, "must be non-zero positive number");
+        throw ExceptionUtils.CreateArgumentMustBeNonZeroPositive("messageNumber", messageNumber);
 
       RejectNonTransactionState();
 
@@ -119,7 +119,7 @@ namespace Smdn.Net.Pop3.Client.Session {
     public PopCommandResult Dele(long messageNumber)
     {
       if (messageNumber <= 0L)
-        throw new ArgumentOutOfRangeException("messageNumber", messageNumber, "must be non-zero positive number");
+        throw ExceptionUtils.CreateArgumentMustBeNonZeroPositive("messageNumber", messageNumber);
 
       RejectNonTransactionState();
 
@@ -157,9 +157,9 @@ namespace Smdn.Net.Pop3.Client.Session {
     public PopCommandResult Top(long messageNumber, int lines, out Stream messageStream)
     {
       if (messageNumber <= 0L)
-        throw new ArgumentOutOfRangeException("messageNumber", messageNumber, "must be non-zero positive number");
+        throw ExceptionUtils.CreateArgumentMustBeNonZeroPositive("messageNumber", messageNumber);
       if (lines < 0)
-        throw new ArgumentOutOfRangeException("lines", lines, "must be zero or positive number");
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("lines", lines);
 
       RejectNonTransactionState();
 
@@ -204,7 +204,7 @@ namespace Smdn.Net.Pop3.Client.Session {
       RejectNonTransactionState();
 
       if (messageNumber.HasValue && messageNumber.Value <= 0L)
-        throw new ArgumentOutOfRangeException("messageNumber", messageNumber.Value, "must be non-zero positive number");
+        throw ExceptionUtils.CreateArgumentMustBeNonZeroPositive("messageNumber", messageNumber.Value);
 
       uniqueIdListings = null;
 

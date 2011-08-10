@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -106,7 +106,8 @@ namespace Smdn.Formats.Mime {
       switch (disposition) {
         case MimeMessageDisposition.Inline: fragments.Add(new MimeHeaderFragment("inline")); break;
         case MimeMessageDisposition.Attachment: fragments.Add(new MimeHeaderFragment("attachment")); break;
-        default: throw new ArgumentException("disposition must be inline or attachment", "disposition");
+        default:
+          throw ExceptionUtils.CreateArgumentMustBeValidEnumValue("disposition", disposition, "must be inline or attachment");
       }
 
       if (!string.IsNullOrEmpty(filename))
@@ -174,8 +175,8 @@ namespace Smdn.Formats.Mime {
     {
       if (name == null)
         throw new ArgumentNullException("name");
-      else if (name.Length == 0)
-        throw new ArgumentException("length of name is zero", "name");
+      if (name.Length == 0)
+        throw ExceptionUtils.CreateArgumentMustBeNonEmptyString("name");
 
       // TODO: check name
       // field-name  =  1*<any CHAR, excluding CTLs, SPACE, and ":">
@@ -256,7 +257,7 @@ namespace Smdn.Formats.Mime {
 
     public bool IsNameEquals(string name)
     {
-      return string.Equals(this.name, name, StringComparison.InvariantCultureIgnoreCase);
+      return string.Equals(this.name, name, StringComparison.OrdinalIgnoreCase);
     }
 
     public string GetParameter(string name)
@@ -274,7 +275,7 @@ namespace Smdn.Formats.Mime {
 
       name = name.ToLowerInvariant();
 
-      var paramStarts = Value.IndexOf(name + "=", StringComparison.InvariantCultureIgnoreCase);
+      var paramStarts = Value.IndexOf(name + "=", StringComparison.OrdinalIgnoreCase);
 
       if (paramStarts < 0)
         return null;

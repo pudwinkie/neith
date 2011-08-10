@@ -44,6 +44,37 @@ namespace Smdn.Net {
       }
     }
 
+    [Test]
+    public void TestClose()
+    {
+      var innerStream = new MemoryStream(8);
+
+      using (var stream = new InterruptStream(innerStream)) {
+        stream.Close();
+
+        Assert.IsFalse(stream.CanRead, "CanRead");
+        Assert.IsFalse(stream.CanWrite, "CanWrite");
+        Assert.IsFalse(stream.CanSeek, "CanSeek");
+        Assert.IsFalse(stream.CanTimeout, "CanTimeout");
+
+        try {
+          stream.ReadByte();
+          Assert.Fail("ObjectDisposedException not thrown");
+        }
+        catch (ObjectDisposedException) {
+        }
+
+        try {
+          stream.WriteByte(0x00);
+          Assert.Fail("ObjectDisposedException not thrown");
+        }
+        catch (ObjectDisposedException) {
+        }
+
+        stream.Close();
+      }
+    }
+
     private class InterruptContext {
       public string Context;
     }

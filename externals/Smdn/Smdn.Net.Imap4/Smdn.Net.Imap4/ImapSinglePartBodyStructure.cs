@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -122,9 +122,9 @@ namespace Smdn.Net.Imap4 {
       if (mediaType == null)
         throw new ArgumentNullException("mediaType");
       if (size < 0)
-        throw new ArgumentOutOfRangeException("size", size, "must be zero or positive number");
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("size", size);
       if (lineCount < 0)
-        throw new ArgumentOutOfRangeException("lineCount", lineCount, "must be zero or positive number");
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("lineCount", lineCount);
 
       this.Section        = section;
       this.MediaType      = mediaType;

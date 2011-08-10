@@ -109,6 +109,8 @@ namespace Smdn.Net.Pop3.Client.Session {
     {
       var prof = new Profile(new NetworkCredential("user", "pass"), "user", "pop.invalid");
 
+      prof.Timeout = -1;
+
       try {
         PopSessionCreator.CreateSession(prof, null, null);
 

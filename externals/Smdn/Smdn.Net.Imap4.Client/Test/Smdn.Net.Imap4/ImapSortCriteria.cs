@@ -11,11 +11,10 @@ namespace Smdn.Net.Imap4 {
 
       Assert.AreEqual("(DATE DISPLAYFROM)", criteria.ToString());
 
-      var requiredCapabilities = (criteria as IImapMultipleExtension).RequiredCapabilities;
+      var requiredCapabilities = (criteria as IImapExtension).RequiredCapabilities;
 
-      Assert.AreEqual(2, requiredCapabilities.Length);
-      CollectionAssert.Contains(requiredCapabilities, ImapCapability.Sort);
-      CollectionAssert.Contains(requiredCapabilities, ImapCapability.SortDisplay);
+      CollectionAssert.AreEquivalent(new[] {ImapCapability.Sort, ImapCapability.SortDisplay},
+                                     requiredCapabilities);
     }
   }
 }

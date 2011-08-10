@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -35,8 +35,12 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
       get { return resultSpecifierCapabilityRequirement; }
     }
 
-    ImapCapability IImapExtension.RequiredCapability {
-      get { return RequiredCapability; }
+    IEnumerable<ImapCapability> IImapExtension.RequiredCapabilities {
+      get
+      {
+        if (RequiredCapability != null)
+          yield return RequiredCapability;
+      }
     }
 
     protected SearchTransactionBase(ImapConnection connection, bool uid, ImapCapability resultSpecifierCapabilityRequirement)
@@ -45,41 +49,6 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
       this.uid = uid;
       this.resultSpecifierCapabilityRequirement = resultSpecifierCapabilityRequirement;
     }
-
-    protected override ProcessTransactionDelegate Reset()
-    {
-#if DEBUG
-      if (!RequestArguments.ContainsKey("searching criteria"))
-        return ProcessArgumentNotSetted;
-#endif
-
-      if (this is SearchTransaction) {
-        return ProcessSearch;
-      }
-      else {
-#if DEBUG
-        // http://tools.ietf.org/html/rfc5256
-        // BASE.6.4.SORT. SORT Command
-        //   The charset argument is mandatory (unlike SEARCH)
-        if (!RequestArguments.ContainsKey("charset specification"))
-          return ProcessArgumentNotSetted;
-        if (!RequestArguments.ContainsKey("sort criteria"))
-          return ProcessArgumentNotSetted;
-#endif
-
-        return ProcessSearch;
-      }
-    }
-
-#if DEBUG
-    private void ProcessArgumentNotSetted()
-    {
-      if (this is SearchTransaction)
-        FinishError(ImapCommandResultCode.RequestError, "arguments 'searching criteria' must be setted");
-      else
-        FinishError(ImapCommandResultCode.RequestError, "arguments 'sort criteria', 'charset specification' and 'searching criteria' must be setted");
-    }
-#endif
 
     // RFC 4466 - Collected Extensions to IMAP4 ABNF
     // http://tools.ietf.org/html/rfc4466
@@ -104,8 +73,26 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     //                NO - sort error: can't sort that charset or
     //                     criteria
     //                BAD - command unknown or arguments invalid
-    private void ProcessSearch()
+    protected override ImapCommand PrepareCommand()
     {
+#if DEBUG
+      if (!RequestArguments.ContainsKey("searching criteria")) {
+        FinishError(ImapCommandResultCode.RequestError, "arguments 'searching criteria' must be setted");
+        return null;
+      }
+
+      if (this is SortTransaction) {
+        // http://tools.ietf.org/html/rfc5256
+        // BASE.6.4.SORT. SORT Command
+        //   The charset argument is mandatory (unlike SEARCH)
+        if (!RequestArguments.ContainsKey("charset specification") ||
+            !RequestArguments.ContainsKey("sort criteria")) {
+          FinishError(ImapCommandResultCode.RequestError, "arguments 'sort criteria', and 'charset specification' must be setted");
+          return null;
+        }
+      }
+#endif
+
       if (this is SearchTransaction) {
         // SEARCH / UID SEARCH
         var args = new List<ImapString>();
@@ -122,28 +109,25 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
 
         args.Add(RequestArguments["searching criteria"]);
 
-        SendCommand(uid ? "UID SEARCH" : "SEARCH",
-                    ProcessReceiveResponse,
-                    args.ToArray());
+        return Connection.CreateCommand(uid ? "UID SEARCH" : "SEARCH",
+                                        args.ToArray());
       }
       else {
         // SORT / UID SORT
         ImapString resultSpecifier;
 
         if (RequestArguments.TryGetValue("result specifier", out resultSpecifier))
-          SendCommand(uid ? "UID SORT" : "SORT",
-                      ProcessReceiveResponse,
-                      "RETURN",
-                      resultSpecifier,
-                      RequestArguments["sort criteria"],
-                      RequestArguments["charset specification"],
-                      RequestArguments["searching criteria"]);
+          return Connection.CreateCommand(uid ? "UID SORT" : "SORT",
+                                          "RETURN",
+                                          resultSpecifier,
+                                          RequestArguments["sort criteria"],
+                                          RequestArguments["charset specification"],
+                                          RequestArguments["searching criteria"]);
         else
-          SendCommand(uid ? "UID SORT" : "SORT",
-                      ProcessReceiveResponse,
-                      RequestArguments["sort criteria"],
-                      RequestArguments["charset specification"],
-                      RequestArguments["searching criteria"]);
+          return Connection.CreateCommand(uid ? "UID SORT" : "SORT",
+                                          RequestArguments["sort criteria"],
+                                          RequestArguments["charset specification"],
+                                          RequestArguments["searching criteria"]);
       }
     }
 

@@ -56,12 +56,9 @@
     <Compile Include="Smdn.Net.Imap4.Protocol\ImapReceiver.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapMetadata.cs" />
     <Compile Include="Smdn.Net.Imap4.Protocol\ImapResponseCode.cs" />
-    <Compile Include="Smdn.Net.Imap4\ImapCapabilityList.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapStringEnum.cs" />
     <Compile Include="Smdn.Net.Imap4.Protocol\ImapData.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapUriBuilder.cs" />
-    <Compile Include="Smdn.Net.Imap4\ImapMessageFlagList.cs" />
-    <Compile Include="Smdn.Net.Imap4\ImapMailboxFlagList.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapBodyDisposition.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapBodyStructureUtils.cs" />
     <Compile Include="Smdn.Net.Imap4\IImapBodyStructure.cs" />
@@ -73,6 +70,10 @@
     <Compile Include="Smdn.Net.Imap4.Protocol\ImapMalformedDataException.cs" />
     <Compile Include="Smdn.Net.Imap4.Protocol\ImapFormatException.cs" />
     <Compile Include="Smdn.Net.Imap4\ImapString.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapCapabilitySet.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapMailboxFlagSet.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapMessageFlagSet.cs" />
+    <Compile Include="Smdn.Net.Imap4\ImapCapability.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

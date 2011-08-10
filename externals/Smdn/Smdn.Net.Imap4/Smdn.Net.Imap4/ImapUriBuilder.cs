@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -64,7 +64,7 @@ namespace Smdn.Net.Imap4 {
       set
       {
         if (value < -1)
-          throw new ArgumentOutOfRangeException("Port", value, "must be zero or positive number");
+          throw ExceptionUtils.CreateArgumentMustBeGreaterThanOrEqualTo(-1, "Port", value);
 
         port = value;
         uri = null;
@@ -107,7 +107,7 @@ namespace Smdn.Net.Imap4 {
       set
       {
         if (value < 0L)
-          throw new ArgumentOutOfRangeException("UidValidity", value, "must be zero or positive number");
+          throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("UidValidity", value);
         uidValidity = value;
         uri = null;
       }
@@ -120,7 +120,7 @@ namespace Smdn.Net.Imap4 {
       set
       {
         if (value < 0L)
-          throw new ArgumentOutOfRangeException("Uid", value, "must be zero or positive number");
+          throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("Uid", value);
         uid = value;
         uri = null;
       }
@@ -415,7 +415,7 @@ namespace Smdn.Net.Imap4 {
       var cloned = MemberwiseClone() as ImapUriBuilder;
 
       if (this.authType != null)
-        cloned.authType = ImapAuthenticationMechanism.GetKnownOrCreate((string)this.authType);
+        cloned.authType = ImapAuthenticationMechanism.GetKnownOrCreate(this.authType.Value);
 
       return cloned;
     }
@@ -472,7 +472,7 @@ namespace Smdn.Net.Imap4 {
         if (authType == ImapAuthenticationMechanism.SelectAppropriate)
           sb.Append(authType);
         else
-          sb.Append(PercentEncoding.GetEncodedString((string)authType,
+          sb.Append(PercentEncoding.GetEncodedString(authType.Value,
                                                      ToPercentEncodedTransformMode.Rfc5092Uri));
       }
 
@@ -529,7 +529,7 @@ namespace Smdn.Net.Imap4 {
         }
 
         if (@partial != null)
-          sb.Append(@partial.Value.ToString("u"));
+          sb.Append(@partial.Value.ToString("u", null));
       }
       else if (searchCriteria != null) {
         sb.Append('?');

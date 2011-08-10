@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -99,7 +99,7 @@ namespace Smdn.Net.Pop3.Client {
     public PopMessageInfo GetMessage(long messageNumber, bool getUniqueId)
     {
       if (messageNumber <= 0L)
-        throw new ArgumentOutOfRangeException("messageNumber", messageNumber, "must be non-zero positive number");
+        throw ExceptionUtils.CreateArgumentMustBeNonZeroPositive("messageNumber", messageNumber);
 
       /*
        * find exist
@@ -109,7 +109,7 @@ namespace Smdn.Net.Pop3.Client {
       if (message != null) {
         message.ThrowIfMakredAsDeleted();
 
-        if (!getUniqueId || message.UniqueIdList != null)
+        if (!getUniqueId || message.UniqueIdList.HasValue)
           return message;
       }
 
@@ -272,8 +272,8 @@ namespace Smdn.Net.Pop3.Client {
     {
       if (uniqueId == null)
         throw new ArgumentNullException("uniqueId");
-      else if (uniqueId.Length == 0)
-        throw new ArgumentException("must be non-empty string", "uniqueId");
+      if (uniqueId.Length == 0)
+        throw ExceptionUtils.CreateArgumentMustBeNonEmptyString("uniqueId");
 
       return uniqueId;
     }

@@ -1,0 +1,43 @@
+#「東方妖々夢　～ Perfect Cherry Blossom.」 製品版曲データ (written by santa marta)
+#デフォルトのパスと製品名
+@東方妖々夢\thbgm.dat,東方妖々夢　～ Perfect Cherry Blossom.
+#原作者名
+#=ProductInfo,Creator,上海アリス幻樂団
+#製品略称
+#=ProductInfo,Prefix,th07
+#=ProductInfo,ShortName,東方妖々夢
+#=ProductInfo,AbbreviatedShortName,妖々夢
+#=ProductInfo,ShortestName,妖
+#頒布年月日
+#=ProductInfo,ReleaseDate,2003-08-17
+#thbgm.datのサイズ(バイト単位)
+#=ProductInfo,BgmSourceLength,444516656
+#thbgm.datのハッシュ値(MD5)
+#=ProductInfo,BgmSourceHash,MD5Sum,722559169afa5ab31bd2fbf21fc0851c
+#thbgm.datの識別用ハッシュ値(末尾4MBのハッシュ)
+#=ProductInfo,BgmSourceIdentificationHash,MD5Sum,c8f30b9ade46b7f27ebf2b18e0335265
+#THxxBGM製品識別用GUID
+#=ProductInfo,THxxBGMProductGuid,881949A2-B453-A741-E8CD-72D1A5741E0F
+#曲データ
+#開始位置[Bytes]、イントロ部の長さ[Bytes]、ループ部の長さ[Bytes]、曲名
+#位置・長さは16進値として記述する
+00000010,00129300,00e9e420,妖々夢　～ Snow or Cherry Petal
+00fc7730,002b9f80,00c0e080,無何有の郷　～ Deep Mountain
+01e8f730,001d2ea0,009e515c,クリスタライズシルバー
+02a4772c,00406c58,01378e34,遠野幻想物語
+041c71b8,0009de28,008d97d0,ティアオイエツォン(withered leaf)
+04b3e7b0,00156e00,013a8c00,ブクレシュティの人形師
+0603e1b0,004c9800,0196e800,人形裁判　～ 人の形弄びし少女
+07e761b0,0015e180,027d3280,天空の花の都
+0a7a75b0,000b6300,01708c00,幽霊楽団　～ Phantom Ensemble
+0bf664b0,001a5400,01764800,東方妖々夢　～ Ancient Temple
+0d8700b0,00121c00,011b6000,広有射怪鳥事　～ Till When？
+0eb47cb0,00078800,00932c00,アルティメットトゥルース
+0f4f30b0,002e9e00,01552600,幽雅に咲かせ、墨染の桜　～ Border of Life
+10d2f4b0,00b1c400,00440900,ボーダーオブライフ
+137ce2b0,000f8c00,01709300,妖々跋扈
+14fd01b0,0003ef00,023b3980,少女幻葬　～ Necro-Fantasy
+173c2a30,000f8c00,01709300,妖々跋扈　～ Who done it!
+18bc4930,00055500,01bd2b00,ネクロファンタジア
+11c8c1b0,000ca100,00a18000,春風の夢
+1276e2b0,00500b00,00b5f500,さくらさくら　～ Japanize Dream...

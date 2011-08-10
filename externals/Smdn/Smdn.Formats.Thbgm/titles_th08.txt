@@ -1,0 +1,44 @@
+#「東方永夜抄　～ Imperishable Night.」 製品版曲データ (written by santa marta)
+#デフォルトのパスと製品名
+@東方永夜抄\thbgm.dat,東方永夜抄　～ Imperishable Night.
+#原作者名
+#=ProductInfo,Creator,上海アリス幻樂団
+#製品略称
+#=ProductInfo,Prefix,th08
+#=ProductInfo,ShortName,東方永夜抄
+#=ProductInfo,AbbreviatedShortName,永夜抄
+#=ProductInfo,ShortestName,永
+#頒布年月日
+#=ProductInfo,ReleaseDate,2004-08-15
+#thbgm.datのサイズ(バイト単位)
+#=ProductInfo,BgmSourceLength,449961024
+#thbgm.datのハッシュ値(MD5)
+#=ProductInfo,BgmSourceHash,MD5Sum,38d3aeac961e93014643b064dcb30e3f
+#thbgm.datの識別用ハッシュ値(末尾4MBのハッシュ)
+#=ProductInfo,BgmSourceIdentificationHash,MD5Sum,6198ac09d529be7bc285459ca490dc93
+#THxxBGM製品識別用GUID
+#=ProductInfo,THxxBGMProductGuid,881949A4-B453-A741-E8CD-72D1A5741E0F
+#曲データ
+#開始位置[Bytes]、イントロ部の長さ[Bytes]、ループ部の長さ[Bytes]、曲名
+#位置・長さは16進値として記述する
+00000010,000f1ac0,00b2ed40,永夜抄　～ Eastern Night.
+00c20810,000aae00,01563b00,幻視の夜　～ Ghostly Eyes
+0222f110,002a8000,00a78000,蠢々秋月　～ Mooned Insect
+02f4f110,00077400,018b5c00,夜雀の歌声　～ Night Bird
+0487c110,0044d680,00be3a80,もう歌しか聞こえない
+058ad210,0029d200,00ceae00,懐かしき東方の血　～ Old World
+06835210,0048a600,00eb8400,プレインエイジア
+07b77c10,00165200,00ea2e00,永夜の報い　～ Imperishable Night.
+08b7fc10,0023acc0,0195d340,少女綺想曲　～ Dream Battle
+0a717c10,001bbc40,013963c0,恋色マスタースパーク
+0bc69c10,0011f000,01c3b900,シンデレラケージ　～ Kagome-Kagome
+0d9c4510,00082200,013b5c00,狂気の瞳　～ Invisible Full Moon
+0edfc310,00197000,00cf4500,ヴォヤージュ1969
+0fc87810,0012d180,01ccb280,千年幻想郷　～ History of the Moon
+12847810,0065ea00,017e8600,竹取飛翔　～ Lunatic Princess
+11a7fc10,00bc9500,001fe700,ヴォヤージュ1970
+16763f10,000d7600,019e0700,エクステンドアッシュ　～ 蓬莱人
+1821bc10,00145800,01c77f00,月まで届け、不死の煙
+1468e810,002f2200,00c26000,月見草
+155a6a10,00347e00,00e75700,Eternal Dream　～ 幽玄の槭樹
+19fd9310,0010e200,00c36700,東方妖怪小町

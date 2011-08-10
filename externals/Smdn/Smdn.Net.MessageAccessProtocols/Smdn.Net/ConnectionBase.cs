@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +28,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Net.Security;
 using System.IO;
+using System.Runtime.Remoting.Messaging;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
@@ -36,8 +37,6 @@ using Smdn.Net.MessageAccessProtocols.Diagnostics;
 
 namespace Smdn.Net {
   public abstract class ConnectionBase : IDisposable, IConnectionInfo {
-    public static readonly int DefaultTimeoutMilliseconds = 16000;
-
     private static int connectionIdCount = 0;
 
     internal readonly TraceSource traceSource;
@@ -67,13 +66,21 @@ namespace Smdn.Net {
     }
 
     public int SendTimeout {
-      get { return Socket.SendTimeout; }
-      set { Socket.SendTimeout = value; }
+      get { CheckConnected(); return sendTimeout; }
+      set
+      {
+        Socket.SendTimeout = (value == 0) ? 1 : value;
+        sendTimeout = value;
+      }
     }
 
     public int ReceiveTimeout {
-      get { return Socket.ReceiveTimeout; }
-      set { Socket.ReceiveTimeout = value; }
+      get { CheckConnected(); return receiveTimeout; }
+      set
+      {
+        Socket.ReceiveTimeout = (value == 0) ? 1 : value;
+        receiveTimeout = value;
+      }
     }
 
     public bool IsSecurePortConnection {
@@ -105,7 +112,7 @@ namespace Smdn.Net {
     }
 
     protected Socket Socket {
-      get { CheckConnected(); return client.Client; }
+      get { CheckConnected(); return client; }
     }
 
     protected ConnectionBase(TraceSource traceSource)
@@ -136,48 +143,52 @@ namespace Smdn.Net {
     protected virtual void Dispose(bool disposing)
     {
       if (disposing) {
-        try {
-          if (client != null) {
-            client.Close();
-
-            ConnectionTrace.Log(this, "disconnected: {0} ({1})", remoteEndPoint, host);
-          }
-        }
-        finally {
-          client = null;
+        if (stream != null) {
+          stream.Close();
           stream = null;
+        }
+
+        if (client != null) {
+          client.Close();
+          client = null;
+
+          ConnectionTrace.Log(this, "disconnected: {0} ({1})", remoteEndPoint, host);
         }
       }
     }
 
-    protected virtual void Connect(string host, int port, UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
+    protected virtual void Connect(string host,
+                                   int port,
+                                   int millisecondsTimeout,
+                                   UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
     {
       if (host == null)
         throw new ArgumentNullException("host");
       if (port < IPEndPoint.MinPort || IPEndPoint.MaxPort < port)
-        throw new ArgumentOutOfRangeException("port", port, "out of range");
+        throw ExceptionUtils.CreateArgumentMustBeInRange(IPEndPoint.MinPort, IPEndPoint.MaxPort, "port", port);
+      if (millisecondsTimeout < -1)
+        throw ExceptionUtils.CreateArgumentMustBeGreaterThanOrEqualTo(-1, "millisecondsTimeout", millisecondsTimeout);
 
       if (client != null)
         throw new InvalidOperationException("already connected");
 
-      TcpClient c = null;
+      Socket c = null;
 
       try {
-
-        c = new TcpClient();
-
-        c.ReceiveTimeout = DefaultTimeoutMilliseconds;
-        c.SendTimeout    = DefaultTimeoutMilliseconds;
-
         ConnectionTrace.Log(this, "connecting to {0}:{1}", host, port);
 
-        c.Connect(host, port);
+        c = (new Connector()).Connect(host, port, millisecondsTimeout);
+
+        if (c == null)
+          throw new TimeoutException("connect timeout");
 
         this.host = host;
         this.client = c;
-        this.remoteEndPoint = c.Client.RemoteEndPoint as IPEndPoint;
-        this.localEndPoint  = c.Client.LocalEndPoint as IPEndPoint;
-        this.stream = CreateBufferedStream(ConnectionTrace.CreateTracingStream(this, client.GetStream()));
+        this.remoteEndPoint = c.RemoteEndPoint as IPEndPoint;
+        this.localEndPoint  = c.LocalEndPoint as IPEndPoint;
+        this.SendTimeout = Timeout.Infinite;
+        this.ReceiveTimeout = Timeout.Infinite;
+        this.stream = CreateBufferedStream(ConnectionTrace.CreateTracingStream(this, new NetworkStream(c, false)));
 
         ConnectionTrace.Log(this, "connected: {0} ({1})", remoteEndPoint, host);
       }
@@ -187,9 +198,10 @@ namespace Smdn.Net {
         if (c != null)
           c.Close();
 
+        this.stream = null;
         this.client = null;
 
-        throw new ConnectionException("connect failed", ex);
+        throw CreateConnectException("connect failed", ex);
       }
 
       try {
@@ -200,11 +212,79 @@ namespace Smdn.Net {
         }
       }
       catch {
+        this.stream.Close();
+        this.stream = null;
+
         this.client.Close();
         this.client = null;
 
         throw;
       }
+    }
+
+    private class Connector {
+      public Socket Connect(string host, int port, int millisecondsTimeout)
+      {
+        socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+        if (millisecondsTimeout == Timeout.Infinite) {
+          socket.Connect(host, port);
+
+          return socket;
+        }
+
+        // use Connect+BeginInvoke instead of BeginConnect
+        Action<string, int> asyncConnect = new Action<string, int>(socket.Connect);
+
+        asyncResult = asyncConnect.BeginInvoke(host, port, null, null);
+
+        if (asyncResult.IsCompleted ||
+            asyncResult.AsyncWaitHandle.WaitOne(millisecondsTimeout, false)) {
+          asyncConnect.EndInvoke(asyncResult);
+
+          return socket;
+        }
+        else {
+          cleanupWaitHandle = ThreadPool.RegisterWaitForSingleObject(asyncResult.AsyncWaitHandle,
+                                                                     CleanUp,
+                                                                     this,
+                                                                     Timeout.Infinite,
+                                                                     true);
+
+          return null;
+        }
+      }
+
+      private static void CleanUp(object state, bool timedOut)
+      {
+        var c = state as Connector;
+
+        try {
+          var asyncConnect = (Action<string, int>)(c.asyncResult as AsyncResult).AsyncDelegate;
+
+          asyncConnect.EndInvoke(c.asyncResult);
+
+          c.asyncResult = null;
+        }
+        catch {
+          // ignore exceptions
+        }
+
+        try {
+          if (c.socket != null)
+            c.socket.Close();
+        }
+        catch {
+          // ignore exceptions
+        }
+
+        if (c.cleanupWaitHandle != null)
+          c.cleanupWaitHandle.Unregister(null);
+      }
+
+      private Socket socket;
+      private IAsyncResult asyncResult;
+      private RegisteredWaitHandle cleanupWaitHandle;
     }
 
     public static Stream CreateClientSslStream(ConnectionBase connection,
@@ -255,12 +335,16 @@ namespace Smdn.Net {
       catch (AuthenticationException ex) {
         ConnectionTrace.Log(this, ex);
 
-        throw new ConnectionException(string.Format("upgrading stream failed (callback: {0})", upgradeStreamCallback.Method), ex);
+        throw CreateUpgradeStreamException(string.Format("upgrading stream failed (callback: {0})",
+                                                         upgradeStreamCallback.Method),
+                                           ex);
       }
       catch (IOException ex) {
         ConnectionTrace.Log(this, ex);
 
-        throw new ConnectionException(string.Format("upgrading stream failed (callback: {0})", upgradeStreamCallback.Method), ex);
+        throw CreateUpgradeStreamException(string.Format("upgrading stream failed (callback: {0})",
+                                                         upgradeStreamCallback.Method),
+                                           ex);
       }
     }
 
@@ -268,6 +352,9 @@ namespace Smdn.Net {
     {
       return new LineOrientedBufferedStream(stream);
     }
+
+    protected abstract Exception CreateConnectException(string message, Exception innerException);
+    protected abstract Exception CreateUpgradeStreamException(string message, Exception innerException);
 
     public override string ToString()
     {
@@ -291,9 +378,11 @@ namespace Smdn.Net {
     private string host = null;
     private IPEndPoint remoteEndPoint;
     private IPEndPoint localEndPoint;
+    private int sendTimeout = Timeout.Infinite;
+    private int receiveTimeout = Timeout.Infinite;
     private bool isSecurePortConnection;
     private bool isSecureConnection;
-    private TcpClient client = null;
+    private Socket client = null;
     private LineOrientedBufferedStream stream = null;
   }
 }

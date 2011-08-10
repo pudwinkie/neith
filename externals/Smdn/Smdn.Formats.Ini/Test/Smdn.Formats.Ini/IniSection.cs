@@ -115,5 +115,24 @@ keyDouble = 3.14
       catch (FormatException) {
       }
     }
+
+    [Test]
+    public void TestSet()
+    {
+      var document = new IniDocument();
+      var section = document.DefaultSection;
+
+      Assert.AreEqual(0, section.Entries.Count);
+
+      section["sec"] = "hoge";
+
+      Assert.AreEqual(1, section.Entries.Count);
+      Assert.AreEqual("hoge", section["sec"]);
+
+      section["sec"] = "hoge";
+
+      Assert.AreEqual(1, section.Entries.Count);
+      Assert.AreEqual("hoge", section["sec"]);
+    }
   }
 }

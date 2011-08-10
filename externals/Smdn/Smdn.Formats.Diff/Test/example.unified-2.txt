@@ -1,0 +1,47 @@
+Index: Test/Smdn.Formats.Diff.Tests.csproj
+===================================================================
+--- Test/Smdn.Formats.Diff.Tests.csproj	(リビジョン 3014)
++++ Test/Smdn.Formats.Diff.Tests.csproj	(作業コピー)
+@@ -58,4 +58,15 @@
+       <Name>Smdn.Formats.Diff</Name>
+     </ProjectReference>
+   </ItemGroup>
++  <ItemGroup>
++    <None Include="example.unified-1.txt">
++      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
++    </None>
++  </ItemGroup>
++  <ItemGroup>
++    <Folder Include="Smdn.Formats.Diff\" />
++  </ItemGroup>
++  <ItemGroup>
++    <Compile Include="Smdn.Formats.Diff\Parser.cs" />
++  </ItemGroup>
+ </Project>
+
+Index: Smdn.Formats.Diff.csproj
+===================================================================
+--- Smdn.Formats.Diff.csproj	(リビジョン 3014)
++++ Smdn.Formats.Diff.csproj	(作業コピー)
+@@ -42,6 +42,13 @@
+   -->
+   <ItemGroup>
+     <Compile Include="AssemblyInfo.cs" />
++    <Compile Include="Smdn.Formats.Diff\DiffDocument.cs" />
++    <Compile Include="Smdn.Formats.Diff\DiffEntry.cs" />
++    <Compile Include="Smdn.Formats.Diff\DiffFormat.cs" />
++    <Compile Include="Smdn.Formats.Diff\DiffHunk.cs" />
++    <Compile Include="Smdn.Formats.Diff\Parser.cs" />
++    <Compile Include="Smdn.Formats.Diff\IDiffEntity.cs" />
++    <Compile Include="Smdn.Formats.Diff\DiffHunkRange.cs" />
+   </ItemGroup>
+   <ItemGroup>
+     <Reference Include="System" />
+@@ -62,4 +69,7 @@
+       <Name>Smdn</Name>
+     </ProjectReference>
+   </ItemGroup>
++  <ItemGroup>
++    <Folder Include="Smdn.Formats.Diff\" />
++  </ItemGroup>
+ </Project>

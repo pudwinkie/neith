@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -34,25 +34,6 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     {
     }
 
-    protected override ProcessTransactionDelegate Reset()
-    {
-#if DEBUG
-      if (!RequestArguments.ContainsKey("mailbox name"))
-        return ProcessArgumentNotSetted;
-      else if (!RequestArguments.ContainsKey("status data item names"))
-        return ProcessArgumentNotSetted;
-      else
-#endif
-       return ProcessStatus;
-    }
-
-#if DEBUG
-    private void ProcessArgumentNotSetted()
-    {
-      FinishError(ImapCommandResultCode.RequestError, "arguments 'mailbox name' and 'status data item names' must be setted");
-    }
-#endif
-
     // 6.3.10. STATUS Command
     //    Arguments:  mailbox name
     //                status data item names
@@ -60,12 +41,19 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     //    Result:     OK - status completed
     //                NO - status failure: no status for that name
     //                BAD - command unknown or arguments invalid
-    private void ProcessStatus()
+    protected override ImapCommand PrepareCommand()
     {
-      SendCommand("STATUS",
-                  ProcessReceiveResponse,
-                  RequestArguments["mailbox name"],
-                  RequestArguments["status data item names"]);
+#if DEBUG
+      if (!RequestArguments.ContainsKey("mailbox name") ||
+          !RequestArguments.ContainsKey("status data item names")) {
+        FinishError(ImapCommandResultCode.RequestError, "arguments 'mailbox name' and 'status data item names' must be setted");
+        return null;
+      }
+#endif
+
+      return Connection.CreateCommand("STATUS",
+                                      RequestArguments["mailbox name"],
+                                      RequestArguments["status data item names"]);
     }
 
     protected override void OnDataResponseReceived(ImapDataResponse data)

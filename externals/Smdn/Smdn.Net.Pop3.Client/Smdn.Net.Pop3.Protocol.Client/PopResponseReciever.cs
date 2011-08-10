@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -68,11 +68,11 @@ namespace Smdn.Net.Pop3.Protocol.Client {
       }
     }
 
-    private static readonly ByteString PositiveStatusIndicator = new ByteString("+OK");
-    private static readonly ByteString NegativeStatusIndicator = new ByteString("-ERR");
-    private static readonly ByteString ContinueRequestMark = new ByteString((byte)'+', Octets.SP);
-    private static readonly ByteString ContinueRequestLine = new ByteString((byte)'+', Octets.CR, Octets.LF);
-    private static readonly ByteString TerminationMark = new ByteString(PopOctets.Period, Octets.CR, Octets.LF);
+    private static readonly ByteString PositiveStatusIndicator = ByteString.CreateImmutable("+OK");
+    private static readonly ByteString NegativeStatusIndicator = ByteString.CreateImmutable("-ERR");
+    private static readonly ByteString ContinueRequestMark = ByteString.CreateImmutable((byte)'+', Octets.SP);
+    private static readonly ByteString ContinueRequestLine = ByteString.CreateImmutable((byte)'+', Octets.CR, Octets.LF);
+    private static readonly ByteString TerminationMark = ByteString.CreateImmutable(PopOctets.Period, Octets.CR, Octets.LF);
 
     private PopResponse ParseResponce(byte[] line)
     {
@@ -82,9 +82,9 @@ namespace Smdn.Net.Pop3.Protocol.Client {
       if (HandleAsMultiline) {
         if (line[0] == PopOctets.Period)
           // byte-stutted
-          return new PopFollowingResponse(new ByteString(line, 1, line.Length - 3/*'.' + CRLF*/));
+          return new PopFollowingResponse(ByteString.CreateImmutable(line, 1, line.Length - 3/*'.' + CRLF*/));
         else
-          return new PopFollowingResponse(new ByteString(line, 0, line.Length - 2/*CRLF*/));
+          return new PopFollowingResponse(ByteString.CreateImmutable(line, 0, line.Length - 2/*CRLF*/));
       }
       else {
         // There are currently two status
@@ -98,12 +98,12 @@ namespace Smdn.Net.Pop3.Protocol.Client {
                                        ParseText(line, NegativeStatusIndicator.Length));
         else if (ContinueRequestMark.IsPrefixOf(line))
           // continue-req     = "+" SP [base64] CRLF
-          return new PopContinuationRequest(new ByteString(line, 2, line.Length - 4/*+, SP, CRLF*/));
+          return new PopContinuationRequest(ByteString.CreateImmutable(line, 2, line.Length - 4/*+, SP, CRLF*/));
         else if (ContinueRequestLine.Equals(line))
           // XXX: dovecot specific? '+CRLF'
           return new PopContinuationRequest(ByteString.CreateEmpty());
         else
-          return new PopFollowingResponse(new ByteString(line, 0, line.Length - 2/*CRLF*/));
+          return new PopFollowingResponse(ByteString.CreateImmutable(line, 0, line.Length - 2/*CRLF*/));
       }
     }
 
@@ -122,12 +122,29 @@ namespace Smdn.Net.Pop3.Protocol.Client {
        *       rchar        =  %x21-2E / %x30-5C / %x5E-7F
        *                           ;printable ASCII, excluding "/" and "]"
        */
-      if (line.Length - 2 == posStatusEnd)
-        return new PopResponseText();
+
+      /*
+       * RFC 1957 - Some Observations on Implementations of the Post Office Protocol (POP3)
+       * http://tools.ietf.org/html/rfc1957
+       *    Sometimes an implementation is mistaken for a standard.  POP3 servers
+       *    and clients are no exception.  The widely-used UCB POP3 server,
+       *    popper, which has been further developed by Qualcomm, always has
+       *    additional information following the status indicator.  So, the
+       *    status indicator always has a space following it.  Two POP3 clients
+       *    have been observed to expect that space, and fail when it has not
+       *    been found.  The RFC does not require the space, hence this memo.
+       */
+      var len = line.Length - 2/*CRLF*/;
+
+      if (len == posStatusEnd)
+        return new PopResponseText(); // 'status CRLF'
 
       posStatusEnd++; // SP
 
-      var text = new ByteString(line, posStatusEnd, line.Length - (posStatusEnd + 2/*CRLF*/));
+      if (len == posStatusEnd)
+        return new PopResponseText(); // 'status SP CRLF'
+
+      var text = ByteString.CreateImmutable(line, posStatusEnd, len - posStatusEnd);
 
       if (text[0] != PopOctets.OpenBracket)
         return new PopResponseText(null, text);
@@ -137,7 +154,7 @@ namespace Smdn.Net.Pop3.Protocol.Client {
       if (respCodeEnd < 0)
         return new PopResponseText(null, text);
       else
-        return new PopResponseText(PopResponseCode.GetKnownOrCreate(text.Substring(1/*'['*/, respCodeEnd - 1).ToString()),
+        return new PopResponseText(PopResponseCode.GetKnownOrCreate(text.ToString(1/*'['*/, respCodeEnd - 1)),
                                    text.Substring(respCodeEnd + 1).TrimStart());
     }
   }

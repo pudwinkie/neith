@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -47,7 +47,7 @@ namespace Smdn.Net.Imap4 {
 
   // 6.4.4. SEARCH Command
   //   searching criteria
-  public sealed class ImapSearchCriteria : ImapCombinableDataItem, IImapMultipleExtension, IImapUrlSearchQuery {
+  public sealed class ImapSearchCriteria : ImapCombinableDataItem, IImapExtension, IImapUrlSearchQuery {
     //  <sequence set>
     //     Messages with message sequence numbers corresponding to the
     //     specified message sequence number set.
@@ -220,7 +220,7 @@ namespace Smdn.Net.Imap4 {
     public static ImapSearchCriteria Larger(long size)
     {
       if (size < 0L)
-        throw new ArgumentOutOfRangeException("size", size, "must be zero or positive number");
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("size", size);
 
       return new ImapSearchCriteria("LARGER", size.ToString());
     }
@@ -294,7 +294,7 @@ namespace Smdn.Net.Imap4 {
     public static ImapSearchCriteria Smaller(long size)
     {
       if (size < 0L)
-        throw new ArgumentOutOfRangeException("size", size, "must be zero or positive number");
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("size", size);
 
       return new ImapSearchCriteria("SMALLER", size.ToString());
     }
@@ -493,7 +493,7 @@ namespace Smdn.Net.Imap4 {
       else
         return new ImapSearchCriteria(new[] {ImapCapability.CondStore},
                                       "MODSEQ",
-                                      new ImapQuotedString(string.Format("/flags/{0}", entryFlagName.ToString())),
+                                      new ImapQuotedString(string.Concat("/flags/", entryFlagName.ToString())),
                                       entryType,
                                       modSequenceValzer.ToString());
     }
@@ -517,7 +517,7 @@ namespace Smdn.Net.Imap4 {
     public static ImapSearchCriteria Older(long intervalSeconds)
     {
       if (intervalSeconds <= 0L)
-        throw new ArgumentOutOfRangeException("intervalSeconds", intervalSeconds, "must be non-zero positive number");
+        throw ExceptionUtils.CreateArgumentMustBeNonZeroPositive("intervalSeconds", intervalSeconds);
 
       return new ImapSearchCriteria(new[] {ImapCapability.Within}, "OLDER", intervalSeconds.ToString());
     }
@@ -530,7 +530,7 @@ namespace Smdn.Net.Imap4 {
     public static ImapSearchCriteria Younger(long intervalSeconds)
     {
       if (intervalSeconds <= 0L)
-        throw new ArgumentOutOfRangeException("intervalSeconds", intervalSeconds, "must be non-zero positive number");
+        throw ExceptionUtils.CreateArgumentMustBeNonZeroPositive("intervalSeconds", intervalSeconds);
 
       return new ImapSearchCriteria(new[] {ImapCapability.Within}, "YOUNGER", intervalSeconds.ToString());
     }
@@ -638,7 +638,7 @@ namespace Smdn.Net.Imap4 {
       return FromUri(uri, true, false, splitcCharset, out containsLiteral, out charset);
     }
 
-    private static ByteString charsetSpecification = new ByteString("CHARSET ");
+    private static readonly ByteString charsetSpecification = ByteString.CreateImmutable("CHARSET ");
 
     private static ImapSearchCriteria FromUri(Uri uri,
                                               bool convertLiteral,
@@ -674,9 +674,10 @@ namespace Smdn.Net.Imap4 {
       var query = PercentEncoding.Decode(q.Substring(1), false);
       var len = query.Length;
       var convertedQuery = new ByteStringBuilder(len);
+      var queryStartIndex = 0;
 
       if (splitCharset) {
-        var queryString = new ByteString(query);
+        var queryString = ByteString.CreateImmutable(query);
 
         if (queryString.StartsWithIgnoreCase(charsetSpecification)) {
           // CHARSET<SP>astring<SP>
@@ -686,16 +687,16 @@ namespace Smdn.Net.Imap4 {
             throw new ArgumentException("search criteria contains invalid charset specification", "uri");
           }
           else {
-            charset = queryString.Substring(charsetSpecification.Length,
-                                            posEndOfCharset - charsetSpecification.Length).ToString();
+            charset = queryString.ToString(charsetSpecification.Length,
+                                           posEndOfCharset - charsetSpecification.Length);
 
-            query = queryString.Substring(posEndOfCharset + 1).ByteArray;
+            queryStartIndex = posEndOfCharset + 1;
             len = query.Length;
           }
         }
       }
 
-      for (var i = 0; i < len;) {
+      for (var i = queryStartIndex; i < len;) {
         if (query[i] == ImapOctets.DQuote) {
           /*
            * quoted
@@ -763,9 +764,9 @@ namespace Smdn.Net.Imap4 {
 
           if (convertLiteral) {
             if (synchronizedLiteral)
-              convertedQuery.Append(string.Format("{{{0}}}\x0d\x0a", literalLength));
+              convertedQuery.Append(string.Concat("{", literalLength, "}\x0d\x0a"));
             else
-              convertedQuery.Append(string.Format("{{{0}+}}\x0d\x0a", literalLength));
+              convertedQuery.Append(string.Concat("{", literalLength, "+}\x0d\x0a"));
 
             convertedQuery.Append(query, i, literalLength);
           }
@@ -789,35 +790,37 @@ namespace Smdn.Net.Imap4 {
       return new ImapSearchCriteria(new ImapPreformattedString(convertedQuery.ToByteArray()));
     }
 
-    private static IEnumerable<ImapCapability> MergeRequiredCapabilities(ImapSearchCriteria x, ImapSearchCriteria y)
+    private static ImapCapabilitySet MergeRequiredCapabilities(ImapSearchCriteria x, ImapSearchCriteria y)
     {
-      var requiredCapabilities = new List<ImapCapability>(x.requiredCapabilities);
+      var requiredCapabilities = new ImapCapabilitySet(x.requiredCapabilities);
 
-      foreach (var cap in y.requiredCapabilities) {
-        if (!requiredCapabilities.Contains(cap))
-          requiredCapabilities.Add(cap);
-      }
+      requiredCapabilities.UnionWith(y.requiredCapabilities);
 
       return requiredCapabilities;
     }
 
-    ImapCapability[] IImapMultipleExtension.RequiredCapabilities {
-      get { return requiredCapabilities.ToArray(); }
+    IEnumerable<ImapCapability> IImapExtension.RequiredCapabilities {
+      get { return this.requiredCapabilities; }
     }
 
-    internal List<ImapCapability> RequiredCapabilities {
-      get { return requiredCapabilities; }
+    internal ImapCapabilitySet RequiredCapabilities {
+      get { return this.requiredCapabilities; }
     }
 
     private ImapSearchCriteria(params ImapString[] items)
-      : this(new ImapCapability[] {}, items)
+      : this(new ImapCapabilitySet(), items)
     {
     }
 
-    private ImapSearchCriteria(IEnumerable<ImapCapability> requiredCapabilities, params ImapString[] items)
+    private ImapSearchCriteria(ImapCapability[] requiredCapabilities, params ImapString[] items)
+      : this(new ImapCapabilitySet(requiredCapabilities), items)
+    {
+    }
+
+    private ImapSearchCriteria(ImapCapabilitySet requiredCapabilities, params ImapString[] items)
       : base(items)
     {
-      this.requiredCapabilities.AddRange(requiredCapabilities);
+      this.requiredCapabilities = requiredCapabilities;
     }
 
 #region "IImapUrlSearchQuery"
@@ -848,19 +851,20 @@ namespace Smdn.Net.Imap4 {
 
       private byte[] EncodeCriteria(ImapSearchCriteria criteria)
       {
-        Enqueue(new[] {criteria});
-        Enqueue(Octets.CRLF);
+        Enqueue(true, new[] {criteria});
 
         Send();
 
         try {
           var innerStream = Stream.InnerStream as MemoryStream;
 
+          var ret = new byte[innerStream.Length - 2 /*CRLF*/];
+
+          Buffer.BlockCopy(innerStream.GetBuffer(), 0, ret, 0, ret.Length);
+
           innerStream.Close();
 
-          var ret = new ByteString(innerStream.ToArray());
-
-          return ret.Substring(0, ret.Length - 2 /*CRLF*/).ByteArray;
+          return ret;
         }
         finally {
           Stream.Close();
@@ -890,6 +894,6 @@ namespace Smdn.Net.Imap4 {
       return ToStringList();
     }
 
-    private /*readonly*/ List<ImapCapability> requiredCapabilities = new List<ImapCapability>();
+    private readonly ImapCapabilitySet requiredCapabilities;
   }
 }

@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -59,12 +59,14 @@ namespace Smdn.Net.Imap4.Client {
     /*
      * operations
      */
-    public void AddFlags(ImapMessageFlag flag, params ImapMessageFlag[] flags)
+    public void AddFlags(ImapMessageFlag flag,
+                         params ImapMessageFlag[] flags)
     {
       Store(ImapStoreDataItem.AddFlags(flag, flags));
     }
 
-    public void AddKeywords(string keyword, params string[] keywords)
+    public void AddKeywords(string keyword,
+                            params string[] keywords)
     {
       Store(ImapStoreDataItem.AddFlags(keyword, keywords));
     }
@@ -74,12 +76,14 @@ namespace Smdn.Net.Imap4.Client {
       Store(ImapStoreDataItem.AddFlags(flagsAndKeywords));
     }
 
-    public void RemoveFlags(ImapMessageFlag flag, params ImapMessageFlag[] flags)
+    public void RemoveFlags(ImapMessageFlag flag,
+                            params ImapMessageFlag[] flags)
     {
       Store(ImapStoreDataItem.RemoveFlags(flag, flags));
     }
 
-    public void RemoveKeywords(string keyword, params string[] keywords)
+    public void RemoveKeywords(string keyword,
+                               params string[] keywords)
     {
       Store(ImapStoreDataItem.RemoveFlags(keyword, keywords));
     }
@@ -89,12 +93,14 @@ namespace Smdn.Net.Imap4.Client {
       Store(ImapStoreDataItem.RemoveFlags(flagsAndKeywords));
     }
 
-    public void ReplaceFlags(ImapMessageFlag flag, params ImapMessageFlag[] flags)
+    public void ReplaceFlags(ImapMessageFlag flag,
+                             params ImapMessageFlag[] flags)
     {
       Store(ImapStoreDataItem.ReplaceFlags(flag, flags));
     }
 
-    public void ReplaceKeywords(string keyword, params string[] keywords)
+    public void ReplaceKeywords(string keyword,
+                                params string[] keywords)
     {
       Store(ImapStoreDataItem.ReplaceFlags(keyword, keywords));
     }
@@ -121,7 +127,8 @@ namespace Smdn.Net.Imap4.Client {
       return sequenceOrUidSet;
     }
 
-    private void StoreCore(ImapSequenceSet sequenceOrUidSet, ImapStoreDataItem storeDataItem)
+    private void StoreCore(ImapSequenceSet sequenceOrUidSet,
+                           ImapStoreDataItem storeDataItem)
     {
       if (sequenceOrUidSet.IsEmpty)
         return; // do nothing
@@ -155,7 +162,7 @@ namespace Smdn.Net.Imap4.Client {
       if (sequenceOrUidSet.IsEmpty)
         return; // do nothing
 
-      if (sequenceOrUidSet.IsUidSet && Client.ServerCapabilities.Has(ImapCapability.UidPlus))
+      if (sequenceOrUidSet.IsUidSet && Client.ServerCapabilities.Contains(ImapCapability.UidPlus))
         Mailbox.ProcessResult(Client.Session.UidExpunge(sequenceOrUidSet));
       else
         Mailbox.ProcessResult(Client.Session.Expunge());
@@ -163,15 +170,15 @@ namespace Smdn.Net.Imap4.Client {
 
     public void CopyTo(ImapMailboxInfo destinationMailbox)
     {
+      if (destinationMailbox == null)
+        throw new ArgumentNullException("destinationMailbox");
+
       CopyToCore(destinationMailbox);
     }
 
     private ImapSequenceSet CopyToCore(ImapMailboxInfo destinationMailbox)
     {
-      if (destinationMailbox == null)
-        throw new ArgumentNullException("destinationMailbox");
-      if (!destinationMailbox.Exists)
-        throw new ImapProtocolViolationException("destination mailbox is not existent");
+      destinationMailbox.ThrowIfNonExistentOrUnselectable();
 
       var sequenceOrUidSet = GetSequenceOrUidSet();
 
@@ -183,13 +190,37 @@ namespace Smdn.Net.Imap4.Client {
 
       PrepareOperation();
 
-      Mailbox.ProcessResult(Client.Session.Copy(sequenceOrUidSet, destinationMailbox.Mailbox));
+      if (destinationMailbox.Client == this.Client) {
+        Mailbox.ProcessResult(Client.Session.Copy(sequenceOrUidSet, destinationMailbox.Mailbox));
+      }
+      else {
+        var appendMessage = this as ImapMessageInfo;
+
+        if (appendMessage == null) {
+          var appendMessages = new ImapMessageInfoList(Mailbox,
+                                                       ImapMessageFetchAttributeOptions.None,
+                                                       sequenceOrUidSet);
+
+          foreach (var message in appendMessages) {
+            destinationMailbox.AppendMessageInternal(message);
+          }
+        }
+        else {
+          destinationMailbox.AppendMessageInternal(appendMessage);
+        }
+      }
 
       return sequenceOrUidSet;
     }
 
     public void MoveTo(ImapMailboxInfo destinationMailbox)
     {
+      if (destinationMailbox == null)
+        throw new ArgumentNullException("destinationMailbox");
+
+      if (Mailbox.Mailbox.NameEquals(destinationMailbox.Mailbox))
+        return; // do nothing
+
       StoreCore(CopyToCore(destinationMailbox), markAsDeletedStoreDataItem);
     }
 
@@ -199,17 +230,24 @@ namespace Smdn.Net.Imap4.Client {
     }
 
     /// <returns>The mailbox if created, otherwise null.</returns>
-    public ImapMailboxInfo CopyTo(string destinationMailboxName, bool tryCreate)
+    public ImapMailboxInfo CopyTo(string destinationMailboxName,
+                                  bool tryCreate)
     {
       ImapMailboxInfo createdMailboxInfo;
 
-      CopyToCore(destinationMailboxName, tryCreate, out createdMailboxInfo);
+      CopyToCore(destinationMailboxName,
+                 tryCreate,
+                 out createdMailboxInfo);
 
       return createdMailboxInfo;
     }
 
-    private ImapSequenceSet CopyToCore(string destinationMailboxName, bool tryCreate, out ImapMailboxInfo createdMailboxInfo)
+    private ImapSequenceSet CopyToCore(string destinationMailboxName,
+                                       bool tryCreate,
+                                       out ImapMailboxInfo createdMailboxInfo)
     {
+      ImapClient.GetValidatedMailboxName(destinationMailboxName);
+
       var sequenceOrUidSet = GetSequenceOrUidSet();
 
       createdMailboxInfo = null;
@@ -226,12 +264,12 @@ namespace Smdn.Net.Imap4.Client {
 
       if (tryCreate) {
         Mailbox.ProcessResult(Client.Session.Copy(sequenceOrUidSet,
-                                                  ImapClient.GetValidatedMailboxName(destinationMailboxName),
+                                                  destinationMailboxName,
                                                   out createdMailbox));
       }
       else {
         Mailbox.ProcessResult(Client.Session.Copy(sequenceOrUidSet,
-                                                  ImapClient.GetValidatedMailboxName(destinationMailboxName)),
+                                                  destinationMailboxName),
                               delegate(ImapResponseCode code) {
                                 if (code == ImapResponseCode.TryCreate)
                                   throw new ImapMailboxNotFoundException(destinationMailboxName);
@@ -240,12 +278,8 @@ namespace Smdn.Net.Imap4.Client {
                               });
       }
 
-      if (createdMailbox != null) {
-        // retrieve mailbox flags
-        ImapClient.ThrowIfError(Client.Session.List(createdMailbox));
-
-        createdMailboxInfo = new ImapMailboxInfo(Client, createdMailbox);
-      }
+      if (createdMailbox != null)
+        createdMailboxInfo = Client.CreateFlagsRetrieved(createdMailbox);
 
       return sequenceOrUidSet;
     }
@@ -256,11 +290,18 @@ namespace Smdn.Net.Imap4.Client {
     }
 
     /// <returns>The mailbox if created, otherwise null.</returns>
-    public ImapMailboxInfo MoveTo(string destinationMailboxName, bool tryCreate)
+    public ImapMailboxInfo MoveTo(string destinationMailboxName,
+                                  bool tryCreate)
     {
+      if (Mailbox.Mailbox.NameEquals(destinationMailboxName))
+        return null; // do nothing
+
       ImapMailboxInfo createdMailboxInfo;
 
-      StoreCore(CopyToCore(destinationMailboxName, tryCreate, out createdMailboxInfo), markAsDeletedStoreDataItem);
+      StoreCore(CopyToCore(destinationMailboxName,
+                           tryCreate,
+                           out createdMailboxInfo),
+                markAsDeletedStoreDataItem);
 
       return createdMailboxInfo;
     }

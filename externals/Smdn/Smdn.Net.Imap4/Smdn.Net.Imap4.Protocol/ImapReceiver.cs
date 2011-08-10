@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -49,7 +49,7 @@ namespace Smdn.Net.Imap4.Protocol {
       if (line == null)
         throw new ImapConnectionException("stream closed");
 
-      return new ByteString(line);
+      return ByteString.CreateImmutable(line);
     }
 
     protected interface IParsingContext {
@@ -104,14 +104,14 @@ namespace Smdn.Net.Imap4.Protocol {
       }
     }
 
-    private static readonly ByteString nil = new ByteString("NIL");
-    private static readonly ByteString crlf = new ByteString(Octets.CRLF);
+    private static readonly ByteString nil = ByteString.CreateImmutable("NIL");
+    private static readonly ByteString crlf = ByteString.CreateImmutable(Octets.GetCRLF());
 
     protected ImapData[] ParseDataNonTerminatedText(ByteString text, int offset)
     {
       IParsingContext discard = null;
 
-      return ParseData(text + crlf, offset, ref discard);
+      return ParseData(ByteString.ConcatImmutable(text, crlf), offset, ref discard);
     }
 
     protected ImapData[] ParseData(ByteString line, int offset, ref IParsingContext context)
@@ -138,14 +138,12 @@ namespace Smdn.Net.Imap4.Protocol {
         }
       }
 
-      var bytes = line.ByteArray;
-
       for (;;) {
-        if (bytes[index] == Octets.SP)
+        if (line[index] == Octets.SP)
           // skip SP
           index = line.IndexOfNot(Octets.SP, index);
 
-        switch (bytes[index]) {
+        switch (line[index]) {
           case ImapOctets.DQuote: {
             // quoted
             c.AddData(ImapData.CreateTextData(ParseQuotedString(line, ref index)));
@@ -171,7 +169,7 @@ namespace Smdn.Net.Imap4.Protocol {
             // literal/literal8
             ImapData parsed;
 
-            var isLiteral = ParseLiteral((bytes[index] == ImapOctets.Tilde), line, ref index, out parsed);
+            var isLiteral = ParseLiteral((line[index] == ImapOctets.Tilde), line, ref index, out parsed);
 
             c.AddData(parsed);
 
@@ -205,7 +203,7 @@ namespace Smdn.Net.Imap4.Protocol {
           }
         }
         else {
-          if (bytes[index] == Octets.SP)
+          if (line[index] == Octets.SP)
             index++;
         }
       } // for
@@ -219,8 +217,6 @@ namespace Smdn.Net.Imap4.Protocol {
       // number          = 1*DIGIT
       //                     ; Unsigned 32-bit integer
       //                     ; (0 <= n < 4,294,967,296)
-      var bytes = line.ByteArray;
-
       if (literal8) {
         /*
          * RFC 3516 - IMAP4 Binary Content Extension
@@ -230,7 +226,7 @@ namespace Smdn.Net.Imap4.Protocol {
          *                       ; <number> represents the number of OCTETs
          *                       ; in the response string.
          */
-        if (bytes[index + 1] != ImapOctets.OpenBrace) {
+        if (line[index + 1] != ImapOctets.OpenBrace) {
           // not literal8
           parsed = ImapData.CreateTextData(ParseNonQuotedString(line, ref index));
           return false;
@@ -244,12 +240,12 @@ namespace Smdn.Net.Imap4.Protocol {
       var number = 0L;
 
       for (;;) {
-        var num = bytes[index] - 0x30; // '0'
+        var o = line[index];
 
-        if (0 <= num && num <= 9)
+        if (0x30 <= o && o <= 0x39)
           // number
-          number = checked((number * 10L) + num);
-        else if (bytes[index] == ImapOctets.CloseBrace)
+          number = checked((number * 10L) + (o - 0x30 /* '0' */));
+        else if (o == ImapOctets.CloseBrace)
           break; // '}'
         else
           throw new ImapMalformedDataException("malformed literal (invalid number)");
@@ -257,7 +253,7 @@ namespace Smdn.Net.Imap4.Protocol {
         index++;
       }
 
-      if (bytes.Length - ++index != 2/*CRLF*/)
+      if (line.Length - ++index != 2/*CRLF*/)
         throw new ImapMalformedDataException("malformed literal (extra data before CRLF)");
 
       /*
@@ -274,7 +270,7 @@ namespace Smdn.Net.Imap4.Protocol {
         if (stream.Read(literal, 0, (int)number) != literal.Length)
           throw new ImapMalformedDataException("unexpected EOF");
 
-        parsed = ImapData.CreateTextData(new ByteString(literal));
+        parsed = ImapData.CreateTextData(ByteString.CreateImmutable(literal));
       }
       else {
         var literal = new ChunkedMemoryStream();
@@ -303,28 +299,30 @@ namespace Smdn.Net.Imap4.Protocol {
 
       index++; // DQUOTE
 
-      var bytes = line.ByteArray;
+      var bytes = line.Segment.Array;
+      var offset = line.Segment.Offset + index;
       var dequoted = new byte[bytes.Length];
       var len = 0;
 
       for (;;) {
-        var escape = (bytes[index] == ImapOctets.BackSlash);
+        var escape = (bytes[offset] == ImapOctets.BackSlash);
 
         if (escape)
-          index++; // skip quoted-specials
+          offset++; // skip quoted-specials
 
-        if (bytes[index] == Octets.CR) {
-          return new ByteString(dequoted, 0, len);
+        if (bytes[offset] == Octets.CR) {
+          index = (offset - line.Segment.Offset);
+          return ByteString.CreateImmutable(dequoted, 0, len);
         }
-        else if (!escape && bytes[index] == ImapOctets.DQuote) {
-          index++; // DQUOTE
-          return new ByteString(dequoted, 0, len);
+        else if (!escape && bytes[offset] == ImapOctets.DQuote) {
+          index = (offset - line.Segment.Offset) + 1/*DQUOTE*/;
+          return ByteString.CreateImmutable(dequoted, 0, len);
         }
         else {
-          dequoted[len++] = bytes[index]; // QUOTED-CHAR
+          dequoted[len++] = bytes[offset]; // QUOTED-CHAR
         }
 
-        index++;
+        offset++;
       }
     }
 
@@ -348,26 +346,31 @@ namespace Smdn.Net.Imap4.Protocol {
       // section-spec    = section-msgtext / (section-part ["." section-text])
       // section-text    = section-msgtext / "MIME"
       //                     ; text other than actual body part (headers, etc.)
-      var bytes = line.ByteArray;
+      var bytes = line.Segment.Array;
+      var offset = line.Segment.Offset + index;
       var start = index;
 
       for (;;) {
-        if (bytes[index] == Octets.SP ||
-            bytes[index] == Octets.CR ||
-            bytes[index] == ImapOctets.CloseParen) {
-          return new ByteString(bytes, start, index - start);
+        if (bytes[offset] == Octets.SP ||
+            bytes[offset] == Octets.CR ||
+            bytes[offset] == ImapOctets.CloseParen) {
+          return line.Substring(start, index - start);
         }
-        else if (bytes[index] == ImapOctets.OpenBracket) {
+        else if (bytes[offset] == ImapOctets.OpenBracket) {
           // skip section
           for (;;) {
-            if (++index == bytes.Length)
+            index++;
+            offset++;
+
+            if (index == line.Length)
               throw new ImapMalformedDataException("unclosed section bracket");
-            else if (bytes[index] == ImapOctets.CloseBracket)
+            else if (bytes[offset] == ImapOctets.CloseBracket)
               break;
           }
         }
 
         index++;
+        offset++;
       }
     }
   }

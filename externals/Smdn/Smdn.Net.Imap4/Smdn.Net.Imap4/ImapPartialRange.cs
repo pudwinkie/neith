@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -100,28 +100,23 @@ namespace Smdn.Net.Imap4 {
 
     public string ToString(string format, IFormatProvider formatProvider)
     {
-      bool checkLength;
       string open = "<";
       string close = ">";
 
       switch (format) {
         case "u": // IMAP-URL style
-          checkLength = false;
           open = "/;PARTIAL=";
           close = null;
           break;
 
         case "f": // fetch-att style
-          checkLength = true;
+          if (!length.HasValue)
+            throw new FormatException("length must be specified");
           break;
 
         default:
-          checkLength = false;
           break;
       }
-
-      if (checkLength && !length.HasValue)
-        throw new FormatException("length must be specified");
 
       var sb = new StringBuilder(64);
 

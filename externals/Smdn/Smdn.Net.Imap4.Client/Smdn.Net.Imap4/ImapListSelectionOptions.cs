@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@
 // THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 
 namespace Smdn.Net.Imap4 {
   // combinable data item types:
@@ -44,8 +45,8 @@ namespace Smdn.Net.Imap4 {
   //       => handles 'message data item name' and 'value for message data item'
 
   public sealed class ImapListSelectionOptions : ImapCombinableDataItem, IImapExtension {
-    ImapCapability IImapExtension.RequiredCapability {
-      get { return ImapCapability.ListExtended; }
+    IEnumerable<ImapCapability> IImapExtension.RequiredCapabilities {
+      get { return this.requiredCapabilities; }
     }
 
     public static readonly ImapListSelectionOptions Empty = new ImapListSelectionOptions(new ImapString[] {});
@@ -83,6 +84,15 @@ namespace Smdn.Net.Imap4 {
      */
     public static readonly ImapListSelectionOptions RecursiveMatch = new ImapListSelectionOptions("RECURSIVEMATCH");
 
+    /*
+     * draft-ietf-morg-list-specialuse-06 - IMAP LIST extension for special-use mailboxes
+     * http://tools.ietf.org/html/draft-ietf-morg-list-specialuse-06
+     * 2. New mailbox attributes identifying special-use mailboxes
+     */
+    public static readonly ImapListSelectionOptions SpecialUse =
+      new ImapListSelectionOptions(new[] {ImapCapability.ListExtended, ImapCapability.SpecialUse},
+                                   "SPECIAL-USE");
+
     public ImapListSelectionOptions CombineWith(ImapListSelectionOptions other)
     {
       return this + other;
@@ -100,17 +110,34 @@ namespace Smdn.Net.Imap4 {
       if (y == null)
         throw new ArgumentNullException("y");
 
-      return new ImapListSelectionOptions(GetCombinedItems(x.Items, y.Items));
+      var requiredCapabilities = new ImapCapabilitySet(x.requiredCapabilities);
+
+      requiredCapabilities.UnionWith(y.requiredCapabilities);
+
+      return new ImapListSelectionOptions(requiredCapabilities, GetCombinedItems(x.Items, y.Items));
     }
 
     private ImapListSelectionOptions(params ImapString[] items)
+      : this(new ImapCapabilitySet(new[] {ImapCapability.ListExtended}), items)
+    {
+    }
+  
+    private ImapListSelectionOptions(ImapCapability[] requiredCapabilities, params ImapString[] items)
+      : this(new ImapCapabilitySet(requiredCapabilities), items)
+    {
+    }
+
+    private ImapListSelectionOptions(ImapCapabilitySet requiredCapabilities, params ImapString[] items)
       : base(items)
     {
+      this.requiredCapabilities = requiredCapabilities;
     }
 
     protected override ImapStringList GetCombined()
     {
       return ToParenthesizedString();
     }
+
+    private readonly ImapCapabilitySet requiredCapabilities;
   }
 }

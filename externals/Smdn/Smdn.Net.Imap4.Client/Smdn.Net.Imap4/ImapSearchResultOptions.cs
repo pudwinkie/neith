@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -40,12 +40,12 @@ namespace Smdn.Net.Imap4 {
   //     ImapStoreDataItem
   //       => handles 'message data item name' and 'value for message data item'
 
-  public class ImapSearchResultOptions : ImapCombinableDataItem, IImapMultipleExtension {
-    ImapCapability[] IImapMultipleExtension.RequiredCapabilities {
-      get { return requiredCapabilities.ToArray(); }
+  public class ImapSearchResultOptions : ImapCombinableDataItem, IImapExtension {
+    IEnumerable<ImapCapability> IImapExtension.RequiredCapabilities {
+      get { return this.requiredCapabilities; }
     }
 
-    internal List<ImapCapability> RequiredCapabilities {
+    internal ImapCapabilitySet RequiredCapabilities {
       get { return this.requiredCapabilities; }
     }
 
@@ -144,20 +144,22 @@ namespace Smdn.Net.Imap4 {
       if (y == null)
         throw new ArgumentNullException("y");
 
-      var requiredCapabilities = new List<ImapCapability>(x.requiredCapabilities);
+      var requiredCapabilities = new ImapCapabilitySet(x.requiredCapabilities);
 
-      foreach (var cap in y.requiredCapabilities) {
-        if (!requiredCapabilities.Contains(cap))
-          requiredCapabilities.Add(cap);
-      }
+      requiredCapabilities.UnionWith(y.requiredCapabilities);
 
       return new ImapSearchResultOptions(requiredCapabilities, GetCombinedItems(x.Items, y.Items));
     }
 
-    private ImapSearchResultOptions(IEnumerable<ImapCapability> requiredCapabilities, params ImapString[] items)
+    private ImapSearchResultOptions(ImapCapability[] requiredCapabilities, params ImapString[] items)
+      : this(new ImapCapabilitySet(requiredCapabilities), items)
+    {
+    }
+
+    private ImapSearchResultOptions(ImapCapabilitySet requiredCapabilities, params ImapString[] items)
       : base(items)
     {
-      this.requiredCapabilities.AddRange(requiredCapabilities);
+      this.requiredCapabilities = requiredCapabilities;
     }
 
     protected override ImapStringList GetCombined()
@@ -165,6 +167,6 @@ namespace Smdn.Net.Imap4 {
       return ToParenthesizedString();
     }
 
-    private /*readonly*/ List<ImapCapability> requiredCapabilities = new List<ImapCapability>();
+    private readonly ImapCapabilitySet requiredCapabilities;
   }
 }

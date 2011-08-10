@@ -5,99 +5,99 @@ using NUnit.Framework;
 
 namespace Smdn.Net.Imap4.Client.Session {
   [TestFixture]
-  public class ImapSessionCommandsAppend : ImapSessionTestsBase {
+  public class ImapSessionCommandsAppendTests : ImapSessionTestsBase {
     [Test]
     public void TestAppend()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // APPEND transaction
         server.EnqueueResponse("+ OK continue\r\n");
         server.EnqueueResponse("0004 OK APPEND completed\r\n");
-  
+
         var message = new ImapAppendMessage(Encoding.ASCII.GetBytes("MIME-Version: 1.0\r\n\r\ntest message"),
-                                            new ImapMessageFlagList(ImapMessageFlag.Seen));
-  
+                                            new ImapMessageFlagSet(ImapMessageFlag.Seen));
+
         Assert.IsTrue((bool)session.Append(message, "INBOX"));
 
-        Assert.AreEqual("0004 APPEND \"INBOX\" (\\Seen) {33}\r\n" +
+        Assert.AreEqual("0004 APPEND INBOX (\\Seen) {33}\r\n" +
                         "MIME-Version: 1.0\r\n" +
                         "\r\n" +
                         "test message\r\n",
                         server.DequeueAll());
-  
-        CloseMailbox(session);
-      }
+
+        return 1;
+      });
     }
 
     [Test]
     public void TestAppendNonSynchronizedLiterals()
     {
-      using (var session = SelectMailbox("LITERAL+")) {
+      SelectMailbox(new[] {"LITERAL+"}, delegate(ImapSession session, ImapPseudoServer server) {
         // APPEND transaction
         server.EnqueueResponse("0004 OK APPEND completed\r\n");
-  
+
         var message = new ImapAppendMessage(Encoding.ASCII.GetBytes("MIME-Version: 1.0\r\n\r\ntest message"),
-                                            new ImapMessageFlagList(ImapMessageFlag.Seen));
-  
+                                            new ImapMessageFlagSet(ImapMessageFlag.Seen));
+
         Assert.IsTrue((bool)session.Append(message, "INBOX"));
-  
-        Assert.AreEqual("0004 APPEND \"INBOX\" (\\Seen) {33+}\r\n" +
+
+        Assert.AreEqual("0004 APPEND INBOX (\\Seen) {33+}\r\n" +
                         "MIME-Version: 1.0\r\n" +
                         "\r\n" +
                         "test message\r\n",
                         server.DequeueAll());
-  
-        CloseMailbox(session);
-      }
+
+        return 1;
+      });
     }
 
     [Test]
     public void TestAppendTryCreate()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server, Uri expectedAuthority) {
         // APPEND transaction
         server.EnqueueResponse("0004 NO [TRYCREATE] Mailbox doesn't exist: INBOX.appendto\r\n");
         server.EnqueueResponse("0005 OK CREATE completed\r\n");
         server.EnqueueResponse("+ OK continue\r\n");
         server.EnqueueResponse("0006 OK APPEND completed\r\n");
-  
+
         var message = new ImapAppendMessage(Encoding.ASCII.GetBytes("MIME-Version: 1.0\r\n\r\ntest message"),
-                                            new ImapMessageFlagList(new[] {"$label2"}, ImapMessageFlag.Draft));
-  
+                                            new ImapMessageFlagSet(new[] {"$label2"}, ImapMessageFlag.Draft));
+
         ImapMailbox created;
-  
+
         Assert.IsTrue((bool)session.Append(message, "INBOX.appendto", out created));
-  
+
         Assert.AreEqual("INBOX.appendto", created.Name);
-        Assert.AreEqual(new Uri(uri, "./INBOX.appendto"), created.Url);
+        Assert.AreEqual(new Uri(expectedAuthority, "./INBOX.appendto"), created.Url);
         Assert.IsNotNull(created.Flags);
         Assert.IsNotNull(created.ApplicableFlags);
         Assert.IsNotNull(created.PermanentFlags);
 
-        Assert.AreEqual("0004 APPEND \"INBOX.appendto\" (\\Draft $label2) {33}\r\n",
+        Assert.AreEqual("0004 APPEND INBOX.appendto (\\Draft $label2) {33}\r\n",
                         server.DequeueRequest());
-        Assert.AreEqual("0005 CREATE \"INBOX.appendto\"\r\n",
+        Assert.AreEqual("0005 CREATE INBOX.appendto\r\n",
                         server.DequeueRequest());
 
-        Assert.AreEqual("0006 APPEND \"INBOX.appendto\" (\\Draft $label2) {33}\r\n" +
+        Assert.AreEqual("0006 APPEND INBOX.appendto (\\Draft $label2) {33}\r\n" +
                         "MIME-Version: 1.0\r\n" +
                         "\r\n" +
                         "test message\r\n",
                         server.DequeueAll());
-  
-        CloseMailbox(session, "0007");
-      }
+
+        return 3;
+      });
     }
 
     [Test]
     public void TestAppendTryCreateNoReferralResponseCode()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // APPEND transaction
         server.EnqueueResponse("0004 NO [REFERRAL IMAP://user;AUTH=*@SERVER2/SHARED/FOO] Remote mailbox. Try SERVER2.\r\n");
 
         var message = new ImapAppendMessage(Encoding.ASCII.GetBytes("MIME-Version: 1.0\r\n\r\ntest message"),
-                                            new ImapMessageFlagList(new[] {"$label2"}, ImapMessageFlag.Draft));
+                                            new ImapMessageFlagSet(new[] {"$label2"}, ImapMessageFlag.Draft));
 
         ImapMailbox created;
 
@@ -105,73 +105,75 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         Assert.IsNull(created);
 
-        Assert.AreEqual("0004 APPEND \"SHARED/FOO\" (\\Draft $label2) {33}\r\n",
+        Assert.AreEqual("0004 APPEND SHARED/FOO (\\Draft $label2) {33}\r\n",
                         server.DequeueRequest());
-      }
+
+        return 1;
+      });
     }
 
     [Test]
     public void TestAppendDontTryCreate()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // APPEND transaction
         server.EnqueueResponse("0004 NO [TRYCREATE] Mailbox doesn't exist: INBOX.appendto\r\n");
-  
+
         var message = new ImapAppendMessage(Encoding.ASCII.GetBytes("MIME-Version: 1.0\r\n\r\ntest message"),
                                             new DateTimeOffset(2008, 2, 25, 15, 1, 12, new TimeSpan(+9, 0, 0)));
-  
+
         var internalDate = "\"25-Feb-2008 15:01:12 +0900\"";
-  
+
         Assert.IsFalse((bool)session.Append(message, "INBOX.appendto"));
-  
-        Assert.AreEqual("0004 APPEND \"INBOX.appendto\" " + internalDate + " {33}\r\n",
+
+        Assert.AreEqual("0004 APPEND INBOX.appendto " + internalDate + " {33}\r\n",
                         server.DequeueRequest());
-  
-        CloseMailbox(session);
-      }
+
+        return 1;
+      });
     }
 
     [Test]
     public void TestAppendRemoveNonApplicableFlags()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // APPEND transaction
         server.EnqueueResponse("+ OK continue\r\n");
         server.EnqueueResponse("0004 OK APPEND completed\r\n");
-  
+
         var message = new ImapAppendMessage(Encoding.ASCII.GetBytes("MIME-Version: 1.0\r\n\r\ntest message"),
-                                            new ImapMessageFlagList(ImapMessageFlag.Seen,
+                                            new ImapMessageFlagSet(ImapMessageFlag.Seen,
                                                                     ImapMessageFlag.Recent,
                                                                     ImapMessageFlag.AllowedCreateKeywords));
-  
+
         Assert.IsTrue((bool)session.Append(message, "INBOX"));
-  
-        Assert.AreEqual("0004 APPEND \"INBOX\" (\\Seen) {33}\r\n" +
+
+        Assert.AreEqual("0004 APPEND INBOX (\\Seen) {33}\r\n" +
                         "MIME-Version: 1.0\r\n" +
                         "\r\n" +
                         "test message\r\n",
                         server.DequeueAll());
-  
-        CloseMailbox(session);
-      }
+
+        return 1;
+      });
     }
 
     [Test]
     public void TestAppendWithAppendUidResponseCode()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // APPEND transaction
         server.EnqueueResponse("+ OK continue\r\n");
         server.EnqueueResponse("0004 OK [APPENDUID 38505 3955] APPEND completed\r\n");
-  
+
         var message = new ImapAppendMessage(Encoding.ASCII.GetBytes("MIME-Version: 1.0\r\n\r\ntest message"),
-                                            new ImapMessageFlagList(ImapMessageFlag.Seen));
-  
+                                            new ImapMessageFlagSet(ImapMessageFlag.Seen));
+
         ImapAppendedUidSet appended;
 
         Assert.IsTrue((bool)session.Append(message, "INBOX", out appended));
 
-        Assert.AreEqual("0004 APPEND \"INBOX\" (\\Seen) {33}\r\n" +
+        Assert.AreEqual("0004 APPEND INBOX (\\Seen) {33}\r\n" +
                         "MIME-Version: 1.0\r\n" +
                         "\r\n" +
                         "test message\r\n",
@@ -181,23 +183,36 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual(38505L, appended.UidValidity);
         Assert.AreEqual(3955L, appended.ToNumber());
         Assert.AreEqual("3955", appended.ToString());
-        CloseMailbox(session);
-      }
+
+        return 1;
+      });
     }
 
     [Test]
-    public void TestAppendBeginAppendEndAppend()
+    public void TestPrepareAppend()
     {
-      AppendBeginAppendEndAppend(false);
+      PrepareAppend(false, false);
     }
 
     [Test]
-    public void TestAppendBeginAppendEndAppendNonSynchronizedLiterals()
+    public void TestPrepareAppendLengthSpecified()
     {
-      AppendBeginAppendEndAppend(false);
+      PrepareAppend(false, true);
     }
 
-    private void AppendBeginAppendEndAppend(bool nonSynchronizedLiterals)
+    [Test]
+    public void TestPrepareAppendNonSynchronizedLiterals()
+    {
+      PrepareAppend(true, false);
+    }
+
+    [Test]
+    public void TestPrepareAppendLengthSpecifiedNonSynchronizedLiterals()
+    {
+      PrepareAppend(true, true);
+    }
+
+    private void PrepareAppend(bool nonSynchronizedLiterals, bool specifyLength)
     {
       var messageBody = @"Date: Mon, 7 Feb 1994 21:52:25 -0800 (PST)
 From: Fred Foobar <foobar@Blurdybloop.example.COM>
@@ -214,30 +229,37 @@ Hello Joe, do you think we can meet at 3:30 tomorrow?
         ? new[] {"IMAP4REV1", "LITERAL+"}
         : new[] {"IMAP4REV1"};
 
-      using (var session = Authenticate(caps)) {
-        var messageBodyStream = new MemoryStream(NetworkTransferEncoding.Transfer8Bit.GetBytes(messageBody));
+      Authenticate(caps, delegate(ImapSession session, ImapPseudoServer server) {
+        var messageBodyBytes = NetworkTransferEncoding.Transfer7Bit.GetBytes(messageBody);
+        var length = specifyLength ? (long?)messageBodyBytes.Length : null;
+        var appendContext = session.PrepareAppend(length, null,  null, "INBOX");
 
-        var asyncResult = session.BeginAppend(messageBodyStream, null, null, "INBOX");
-
-        Assert.IsNotNull(asyncResult);
-        Assert.IsFalse(asyncResult.IsCompleted);
+        Assert.IsNotNull(appendContext);
+        Assert.IsNotNull(appendContext.WriteStream);
         Assert.IsTrue(session.IsTransactionProceeding);
 
         server.EnqueueResponse("+ OK continue\r\n");
+        server.EnqueueResponse(string.Empty);
         server.EnqueueResponse("0002 OK [APPENDUID 38505 3955] APPEND completed\r\n");
 
-        if (!asyncResult.AsyncWaitHandle.WaitOne(1000))
-          Assert.Fail("append timed out");
+        appendContext.WriteStream.Write(messageBodyBytes,
+                                        0,
+                                        messageBodyBytes.Length);
 
-        Assert.IsTrue(asyncResult.IsCompleted);
+        System.Threading.Thread.Sleep(250);
+
+        if (specifyLength)
+          Assert.IsFalse(session.IsTransactionProceeding);
+        else
+          Assert.IsTrue(session.IsTransactionProceeding);
 
         ImapAppendedUidSet appendedUid;
 
-        Assert.IsTrue((bool)session.EndAppend(asyncResult, out appendedUid));
+        Assert.IsTrue((bool)appendContext.GetResult(out appendedUid));
         Assert.IsFalse(session.IsTransactionProceeding);
 
         var expected =
-          string.Format("0002 APPEND \"INBOX\" {{{0}}}\r\n", messageBodyStream.Length) +
+          string.Format("0002 APPEND INBOX {{{0}}}\r\n", messageBodyBytes.Length) +
           messageBody +
           "\r\n";
 
@@ -246,23 +268,215 @@ Hello Joe, do you think we can meet at 3:30 tomorrow?
         Assert.IsNotNull(appendedUid);
         Assert.AreEqual(38505L, appendedUid.UidValidity);
         Assert.AreEqual(3955L, appendedUid.ToNumber());
-      }
+      });
     }
 
     [Test]
-    public void TestAppendBeginAppendNestedCall()
+    public void TestPrepareAppendAppendContextWriteStream()
     {
-      using (var session = Authenticate()) {
-        var messageBodyStream = new MemoryStream(Encoding.ASCII.GetBytes("message"));
+      Authenticate(delegate(ImapSession session, ImapPseudoServer server) {
+        var appendContext = session.PrepareAppend(null, null,  null, "INBOX");
 
-        var asyncResult = session.BeginAppend(messageBodyStream, null, null, "INBOX");
+        Assert.IsNotNull(appendContext);
+        Assert.IsNotNull(appendContext.WriteStream);
 
-        Assert.IsNotNull(asyncResult);
-        Assert.IsFalse(asyncResult.IsCompleted);
+        var writeStream = appendContext.WriteStream;
+
+        try {
+          writeStream.Position = 0L;
+          Assert.Fail("NotSupportedException not thrown (set_Position)");
+        }
+        catch (NotSupportedException) {
+        }
+
+        try {
+          Assert.Fail("NotSupportedException not thrown (get_Position; {0})",
+                      writeStream.Position);
+        }
+        catch (NotSupportedException) {
+        }
+
+        try {
+          Assert.Fail("NotSupportedException not thrown (get_Length; {0})",
+                      writeStream.Length);
+        }
+        catch (NotSupportedException) {
+        }
+
+        try {
+          writeStream.Seek(0L, SeekOrigin.Begin);
+          Assert.Fail("NotSupportedException not thrown (Seek)");
+        }
+        catch (NotSupportedException) {
+        }
+
+        try {
+          var buffer = new byte[8];
+
+          writeStream.Read(buffer, 0, buffer.Length);
+
+          Assert.Fail("NotSupportedException not thrown (Read)");
+        }
+        catch (NotSupportedException) {
+        }
+
+        Assert.IsTrue(session.IsTransactionProceeding);
+
+        server.EnqueueResponse("+ OK continue\r\n");
+        server.EnqueueResponse(string.Empty);
+        server.EnqueueResponse("0002 OK APPEND completed\r\n");
+
+        writeStream.Close();
+
+        Assert.IsNull(appendContext.WriteStream);
+
+        System.Threading.Thread.Sleep(250);
+
         Assert.IsTrue(session.IsTransactionProceeding);
 
         try {
-          session.BeginAppend(messageBodyStream, null, null, "INBOX");
+          writeStream.WriteByte(0);
+          Assert.Fail("ObjectDisposedException not thrown");
+        }
+        catch (ObjectDisposedException) {
+        }
+
+        writeStream.Close(); // call Close() again
+
+        ImapAppendedUidSet appendedUid;
+
+        Assert.IsTrue((bool)appendContext.GetResult(out appendedUid));
+        Assert.IsFalse(session.IsTransactionProceeding);
+
+        Assert.AreEqual("0002 APPEND INBOX {0}\r\n\r\n", server.DequeueAll());
+
+        Assert.IsNull(appendedUid);
+      });
+    }
+
+    [Test]
+    public void TestPrepareAppendAppendContextWriteStreamBufferUnderrun()
+    {
+      Authenticate(delegate(ImapSession session, ImapPseudoServer server) {
+        session.SendTimeout = 500;
+        session.ReceiveTimeout = 500;
+
+        var appendContext = session.PrepareAppend(null, null, null, "INBOX");
+
+        Assert.IsNotNull(appendContext);
+        Assert.IsNotNull(appendContext.WriteStream);
+        Assert.IsTrue(session.IsTransactionProceeding);
+
+        server.EnqueueResponse("+ OK continue\r\n");
+
+        System.Threading.Thread.Sleep(250);
+
+        Assert.IsTrue(session.IsTransactionProceeding);
+
+        ImapAppendedUidSet appendedUid;
+
+        try {
+          appendContext.GetResult(out appendedUid);
+          Assert.Fail("TimeoutException not thrown");
+        }
+        catch (TimeoutException) {
+        }
+
+        Assert.IsFalse(session.IsTransactionProceeding);
+      });
+    }
+
+    [Test]
+    public void TestPrepareAppendAppendContextWriteStreamWriteOverSpecifiedLength()
+    {
+      Authenticate(delegate(ImapSession session, ImapPseudoServer server) {
+        var messageBody = "message";
+        var messageBodyBytes = NetworkTransferEncoding.Transfer7Bit.GetBytes(messageBody);
+
+        var appendContext = session.PrepareAppend(messageBodyBytes.Length, null, null, "INBOX");
+
+        Assert.IsNotNull(appendContext);
+        Assert.IsNotNull(appendContext.WriteStream);
+        Assert.IsTrue(session.IsTransactionProceeding);
+
+        server.EnqueueResponse("+ OK continue\r\n");
+
+        appendContext.WriteStream.Write(messageBodyBytes,
+                                        0,
+                                        messageBodyBytes.Length);
+
+        // extra data
+        appendContext.WriteStream.WriteByte(0x40);
+        appendContext.WriteStream.WriteByte(0x40);
+        appendContext.WriteStream.WriteByte(0x40);
+        appendContext.WriteStream.WriteByte(0x40);
+
+        server.EnqueueResponse(string.Empty);
+        server.EnqueueResponse("0002 OK APPEND completed\r\n");
+
+        Assert.IsTrue(session.IsTransactionProceeding);
+
+        ImapAppendedUidSet appendedUid;
+
+        Assert.IsTrue((bool)appendContext.GetResult(out appendedUid));
+        Assert.IsFalse(session.IsTransactionProceeding);
+
+        var expected =
+          string.Format("0002 APPEND INBOX {{{0}}}\r\n", messageBodyBytes.Length) +
+          messageBody +
+          "\r\n";
+
+        Assert.AreEqual(expected, server.DequeueAll());
+      });
+    }
+
+    [Test]
+    public void TestPrepareAppendAppendContextWriteStreamWriteShortageSpecifiedLength()
+    {
+      Authenticate(delegate(ImapSession session, ImapPseudoServer server) {
+        const int shortage = 8;
+
+        var messageBody = "message";
+        var messageBodyBytes = NetworkTransferEncoding.Transfer7Bit.GetBytes(messageBody);
+
+        session.SendTimeout = 500;
+        session.ReceiveTimeout = 500;
+
+        var appendContext = session.PrepareAppend(messageBodyBytes.Length + shortage, null, null, "INBOX");
+
+        Assert.IsNotNull(appendContext);
+        Assert.IsNotNull(appendContext.WriteStream);
+        Assert.IsTrue(session.IsTransactionProceeding);
+
+        server.EnqueueResponse("+ OK continue\r\n");
+
+        appendContext.WriteStream.Write(messageBodyBytes,
+                                        0,
+                                        messageBodyBytes.Length);
+
+        ImapAppendedUidSet appendedUid;
+
+        try {
+          appendContext.GetResult(out appendedUid);
+          Assert.Fail("TimeoutException not thrown");
+        }
+        catch (TimeoutException) {
+        }
+      });
+    }
+
+    [Test]
+    public void TestPrepareAppendNestedCall()
+    {
+      Authenticate(delegate(ImapSession session, ImapPseudoServer server) {
+        var appendContext = session.PrepareAppend(null, null, null, "INBOX");
+
+        Assert.IsNotNull(appendContext);
+        Assert.IsNotNull(appendContext.WriteStream);
+        Assert.IsTrue(session.IsTransactionProceeding);
+
+        try {
+          session.PrepareAppend(null, null, null, "INBOX");
           Assert.Fail("InvalidOperationException not thrown");
         }
         catch (InvalidOperationException) {
@@ -271,59 +485,133 @@ Hello Joe, do you think we can meet at 3:30 tomorrow?
         server.EnqueueResponse("+ OK continue\r\n");
         server.EnqueueResponse("0002 OK APPEND completed\r\n");
 
-        if (!asyncResult.AsyncWaitHandle.WaitOne(1000))
-          Assert.Fail("append timed out");
+        var messageBodyBytes = NetworkTransferEncoding.Transfer7Bit.GetBytes("message");
 
-        Assert.IsTrue(asyncResult.IsCompleted);
+        appendContext.WriteStream.Write(messageBodyBytes,
+                                        0,
+                                        messageBodyBytes.Length);
+
+        System.Threading.Thread.Sleep(250);
+
+        Assert.IsTrue(session.IsTransactionProceeding);
 
         ImapAppendedUidSet appendedUid;
 
-        Assert.IsTrue((bool)session.EndAppend(asyncResult, out appendedUid));
+        Assert.IsTrue((bool)appendContext.GetResult(out appendedUid));
+        Assert.IsFalse(session.IsTransactionProceeding);
 
-        Assert.AreEqual("0002 APPEND \"INBOX\" {7}\r\nmessage\r\n",
+        Assert.AreEqual("0002 APPEND INBOX {7}\r\nmessage\r\n",
                                    server.DequeueAll());
 
         Assert.IsNull(appendedUid);
-      }
+      });
     }
 
     [Test]
-    public void TestAppendBeginAppendContinuationNo()
+    public void TestPrepareAppendGetResultAlreadyFinished()
     {
-      using (var session = Authenticate()) {
-        var messageBodyStream = new MemoryStream(Encoding.ASCII.GetBytes("message"));
+      Authenticate(delegate(ImapSession session, ImapPseudoServer server) {
+        var appendContext = session.PrepareAppend(null, null, null, "INBOX");
 
-        var asyncResult = session.BeginAppend(messageBodyStream, null, null, "INBOX");
+        Assert.IsNotNull(appendContext);
+        Assert.IsNotNull(appendContext.WriteStream);
+        Assert.IsTrue(session.IsTransactionProceeding);
 
-        Assert.IsNotNull(asyncResult);
-        Assert.IsFalse(asyncResult.IsCompleted);
+        server.EnqueueResponse("+ OK continue\r\n");
+        server.EnqueueResponse("0002 OK APPEND completed\r\n");
+
+        appendContext.WriteStream.WriteByte(0x40);
+        appendContext.WriteStream.Close();
+
+        System.Threading.Thread.Sleep(250);
+
+        Assert.IsFalse(session.IsTransactionProceeding);
+
+        ImapAppendedUidSet appendedUid;
+
+        Assert.IsTrue((bool)appendContext.GetResult(out appendedUid));
+        Assert.IsFalse(session.IsTransactionProceeding);
+
+        Assert.AreEqual("0002 APPEND INBOX {1}\r\n@\r\n",
+                                   server.DequeueAll());
+
+        Assert.IsNull(appendedUid);
+
+        try {
+          appendContext.GetResult(out appendedUid);
+          Assert.Fail("InvalidOperationException not thrown");
+        }
+        catch (InvalidOperationException) {
+        }
+      });
+    }
+
+    [Test]
+    public void TestPrepareAppendContinuationNo1()
+    {
+      Authenticate(delegate(ImapSession session, ImapPseudoServer server) {
+        var appendContext = session.PrepareAppend(null, null, null, "INBOX");
+
+        Assert.IsNotNull(appendContext);
+        Assert.IsNotNull(appendContext.WriteStream);
         Assert.IsTrue(session.IsTransactionProceeding);
 
         server.EnqueueResponse("0002 NO APPEND failed\r\n");
 
-        if (!asyncResult.AsyncWaitHandle.WaitOne(1000))
-          Assert.Fail("append timed out");
+        System.Threading.Thread.Sleep(250);
 
-        Assert.IsTrue(asyncResult.IsCompleted);
+        Assert.IsTrue(session.IsTransactionProceeding);
 
-        Assert.IsFalse((bool)session.EndAppend(asyncResult));
+        var messageBodyBytes = NetworkTransferEncoding.Transfer7Bit.GetBytes("message");
 
-        Assert.AreEqual("0002 APPEND \"INBOX\" {7}\r\n",
+        appendContext.WriteStream.Write(messageBodyBytes,
+                                        0,
+                                        messageBodyBytes.Length);
+
+        System.Threading.Thread.Sleep(250);
+
+        Assert.IsTrue(session.IsTransactionProceeding);
+
+        ImapAppendedUidSet appendedUid;
+
+        Assert.IsFalse((bool)appendContext.GetResult(out appendedUid));
+        Assert.IsFalse(session.IsTransactionProceeding);
+
+        Assert.AreEqual("0002 APPEND INBOX {7}\r\n",
                         server.DequeueAll());
-      }
+      });
     }
 
     [Test]
-    public void TestAppendEndAppendInvalidAsyncResult()
+    public void TestPrepareAppendContinuationNo2()
     {
-      using (var session = Authenticate()) {
-        try {
-          session.EndAppend(null);
-          Assert.Fail("ArgumentException not thrown");
-        }
-        catch (ArgumentException) {
-        }
-      }
+      Authenticate(delegate(ImapSession session, ImapPseudoServer server) {
+        var appendContext = session.PrepareAppend(null, null, null, "INBOX");
+
+        Assert.IsNotNull(appendContext);
+        Assert.IsNotNull(appendContext.WriteStream);
+        Assert.IsTrue(session.IsTransactionProceeding);
+
+        server.EnqueueResponse("0002 NO APPEND failed\r\n");
+
+        System.Threading.Thread.Sleep(250);
+
+        Assert.IsTrue(session.IsTransactionProceeding);
+
+        appendContext.WriteStream.Close();
+
+        System.Threading.Thread.Sleep(250);
+
+        Assert.IsFalse(session.IsTransactionProceeding);
+
+        ImapAppendedUidSet appendedUid;
+
+        Assert.IsFalse((bool)appendContext.GetResult(out appendedUid));
+        Assert.IsFalse(session.IsTransactionProceeding);
+
+        Assert.AreEqual("0002 APPEND INBOX {0}\r\n",
+                        server.DequeueAll());
+      });
     }
 
     [Test]
@@ -340,7 +628,7 @@ Hello Joe, do you think we can meet at 3:30 tomorrow?
 
     private void AppendMultiple(bool respondAppendUid)
     {
-      using (var session = SelectMailbox("MULTIAPPEND")) {
+      SelectMailbox(new[] {"MULTIAPPEND"}, delegate(ImapSession session, ImapPseudoServer server) {
         // APPEND transaction
         server.EnqueueResponse("+ Ready for literal data\r\n");
         server.EnqueueResponse(string.Empty);
@@ -374,17 +662,17 @@ Content-Type: TEXT/PLAIN; CHARSET=US-ASCII
 ".Replace("\r\n", "\n").Replace("\n", "\r\n");
 
         var message1 = new ImapAppendMessage(Encoding.ASCII.GetBytes(messageBody1),
-                                             new ImapMessageFlagList(ImapMessageFlag.Seen));
+                                             new ImapMessageFlagSet(ImapMessageFlag.Seen));
         var message2 = new ImapAppendMessage(Encoding.ASCII.GetBytes(messageBody2),
                                              new DateTimeOffset(new DateTime(1994, 2, 7, 22, 43, 04), new TimeSpan(-8, 0, 0)),
-                                             new ImapMessageFlagList(ImapMessageFlag.Seen));
+                                             new ImapMessageFlagSet(ImapMessageFlag.Seen));
 
         ImapAppendedUidSet appended;
 
         Assert.IsTrue((bool)session.AppendMultiple(new[] {message1, message2}, "saved-messages", out appended));
 
         var expected =
-          string.Format("0004 APPEND \"saved-messages\" (\\Seen) {{{0}}}\r\n", Encoding.ASCII.GetByteCount(messageBody1)) +
+          string.Format("0004 APPEND saved-messages (\\Seen) {{{0}}}\r\n", Encoding.ASCII.GetByteCount(messageBody1)) +
           messageBody1 +
           string.Format(" (\\Seen) \"07-Feb-1994 22:43:04 -0800\" {{{0}}}\r\n", Encoding.ASCII.GetByteCount(messageBody2)) +
           messageBody2 +
@@ -403,22 +691,22 @@ Content-Type: TEXT/PLAIN; CHARSET=US-ASCII
           Assert.AreEqual(3956L, appendedUids[1]);
         }
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     public void TestAppendMultipleWithNonSyncedLiteral()
     {
-      using (var session = SelectMailbox("MULTIAPPEND", "LITERAL+")) {
+      SelectMailbox(new[] {"MULTIAPPEND", "LITERAL+"}, delegate(ImapSession session, ImapPseudoServer server) {
         // APPEND transaction
         server.EnqueueResponse("0004 OK APPEND completed\r\n");
-  
+
         var message1 = new ImapAppendMessage(Encoding.ASCII.GetBytes("MIME-Version: 1.0\r\n\r\ntest message1"));
         var message2 = new ImapAppendMessage(Encoding.ASCII.GetBytes("MIME-Version: 1.0\r\n\r\ntest message2"));
         Assert.IsTrue((bool)session.AppendMultiple(new[] {message1, message2}, "saved-messages"));
 
-        Assert.AreEqual("0004 APPEND \"saved-messages\" {34+}\r\n" +
+        Assert.AreEqual("0004 APPEND saved-messages {34+}\r\n" +
                         "MIME-Version: 1.0\r\n" +
                         "\r\n" +
                         "test message1 {34+}\r\n" +
@@ -427,28 +715,30 @@ Content-Type: TEXT/PLAIN; CHARSET=US-ASCII
                         "test message2\r\n",
                         server.DequeueAll());
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     [ExpectedException(typeof(ImapIncapableException))]
     public void TestAppendMultipleIncapable()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         session.HandlesIncapableAsException = true;
         // APPEND transaction
         session.AppendMultiple(new[] {
           new ImapAppendMessage(Encoding.ASCII.GetBytes("message")),
           new ImapAppendMessage(Encoding.ASCII.GetBytes("message2")),
         }, "saved-messages");
-      }
+
+        return -1;
+      });
     }
 
     [Test]
     public void TestAppendBinary()
     {
-      using (var session = SelectMailbox("BINARY")) {
+      SelectMailbox(new[] {"BINARY"}, delegate(ImapSession session, ImapPseudoServer server) {
         // APPEND transaction
         server.EnqueueResponse("+ OK continue\r\n");
         server.EnqueueResponse("0004 OK APPEND completed\r\n");
@@ -456,40 +746,40 @@ Content-Type: TEXT/PLAIN; CHARSET=US-ASCII
         Assert.IsTrue((bool)session.AppendBinary(new ImapAppendMessage(Encoding.ASCII.GetBytes("MIME-Version: 1.0\r\n\r\n\x00\x01\x02\x03\x04\x05\x06\x07")),
                                                  "INBOX"));
 
-        Assert.AreEqual("0004 APPEND \"INBOX\" ~{29}\r\n" +
+        Assert.AreEqual("0004 APPEND INBOX ~{29}\r\n" +
                         "MIME-Version: 1.0\r\n" +
                         "\r\n" +
                         "\x00\x01\x02\x03\x04\x05\x06\x07\r\n",
                         server.DequeueAll());
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     public void TestAppendBinaryWithNonSynchronizedLiteral()
     {
-      using (var session = SelectMailbox("BINARY", "LITERAL+")) {
+      SelectMailbox(new[] {"BINARY", "LITERAL+"}, delegate(ImapSession session, ImapPseudoServer server) {
         // APPEND transaction
         server.EnqueueResponse("0004 OK APPEND completed\r\n");
 
         Assert.IsTrue((bool)session.AppendBinary(new ImapAppendMessage(Encoding.ASCII.GetBytes("MIME-Version: 1.0\r\n\r\n\x00\x01\x02\x03\x04\x05\x06\x07")),
                                                  "INBOX"));
 
-        Assert.AreEqual("0004 APPEND \"INBOX\" ~{29+}\r\n" +
+        Assert.AreEqual(("0004 APPEND INBOX ~{29+}\r\n" +
                         "MIME-Version: 1.0\r\n" +
                         "\r\n" +
-                        "\x00\x01\x02\x03\x04\x05\x06\x07\r\n",
-                        server.DequeueAll());
+                        "\x00\x01\x02\x03\x04\x05\x06\x07\r\n").Replace("\x00", @"\0"),
+                        server.DequeueAll().Replace("\x00", @"\0"));
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     public void TestAppendBinaryMultiple()
     {
-      using (var session = SelectMailbox("BINARY", "MULTIAPPEND")) {
+      SelectMailbox(new[] {"BINARY", "MULTIAPPEND"}, delegate(ImapSession session, ImapPseudoServer server) {
         // APPEND transaction
         server.EnqueueResponse("+ OK continue\r\n");
         server.EnqueueResponse("+ OK continue\r\n");
@@ -503,30 +793,32 @@ Content-Type: TEXT/PLAIN; CHARSET=US-ASCII
         Assert.IsTrue((bool)session.AppendBinaryMultiple(messages,
                                                          "INBOX"));
 
-        Assert.AreEqual("0004 APPEND \"INBOX\" ~{37}\r\n" +
+        Assert.AreEqual(("0004 APPEND INBOX ~{37}\r\n" +
                         "MIME-Version: 1.0\r\n" +
                         "\r\n" +
                         "message1\x00\x01\x02\x03\x04\x05\x06\x07" +
                         " ~{37}\r\n" +
                         "MIME-Version: 1.0\r\n" +
                         "\r\n" +
-                        "message2\x00\x01\x02\x03\x04\x05\x06\x07\r\n",
-                        server.DequeueAll());
+                        "message2\x00\x01\x02\x03\x04\x05\x06\x07\r\n").Replace("\x00", @"\0"),
+                        server.DequeueAll().Replace("\x00", @"\0"));
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     [ExpectedException(typeof(ImapIncapableException))]
     public void TestAppendBinaryIncapable()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         session.HandlesIncapableAsException = true;
         // APPEND transaction
         session.AppendBinary(new ImapAppendMessage(Encoding.ASCII.GetBytes("MIME-Version: 1.0\r\n\r\n\x00\x01\x02\x03\x04\x05\x06\x07")),
                              "saved-messages");
-      }
+
+        return -1;
+      });
     }
   }
 }

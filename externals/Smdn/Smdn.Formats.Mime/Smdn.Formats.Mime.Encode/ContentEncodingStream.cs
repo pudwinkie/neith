@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -29,28 +29,32 @@ using System.Security.Cryptography;
 namespace Smdn.Formats.Mime.Encode {
   public abstract class ContentEncodingStream : Stream {
     public override bool CanSeek {
-      get { return false; }
+      get { return /*!IsClosed &&*/ false; }
     }
 
     public override bool CanRead {
-      get { return false; }
+      get { return /*!IsClosed &&*/ false; }
     }
 
     public override bool CanWrite {
-      get { return true; }
+      get { return !IsClosed /*&& true*/; }
     }
 
     public override bool CanTimeout {
-      get { return stream.CanTimeout; }
+      get { return !IsClosed && stream.CanTimeout; }
+    }
+
+    private bool IsClosed {
+      get { return stream == null; }
     }
 
     public override long Position {
-      get { throw new NotSupportedException(); }
-      set { throw new NotSupportedException(); }
+      get { throw ExceptionUtils.CreateNotSupportedSeekingStream(); }
+      set { throw ExceptionUtils.CreateNotSupportedSeekingStream(); }
     }
 
     public override long Length {
-      get { throw new NotSupportedException(); }
+      get { throw ExceptionUtils.CreateNotSupportedSeekingStream(); }
     }
 
     public byte[] EOL {
@@ -71,7 +75,7 @@ namespace Smdn.Formats.Mime.Encode {
       if (stream == null)
         throw new ArgumentNullException("stream");
       if (!stream.CanWrite)
-        throw new ArgumentException("stream must be writable", "stream");
+        throw ExceptionUtils.CreateArgumentMustBeWritableStream("stream");
       if (format == null)
         throw new ArgumentNullException("format");
 
@@ -113,12 +117,12 @@ namespace Smdn.Formats.Mime.Encode {
 
     public override void SetLength(long @value)
     {
-      throw new NotSupportedException();
+      throw ExceptionUtils.CreateNotSupportedSettingStreamLength();
     }
 
     public override long Seek(long offset, SeekOrigin origin)
     {
-      throw new NotSupportedException();
+      throw ExceptionUtils.CreateNotSupportedSeekingStream();
     }
 
     public override void Flush()
@@ -145,7 +149,7 @@ namespace Smdn.Formats.Mime.Encode {
 
     public override int Read(byte[] dest, int offset, int count)
     {
-      throw new NotSupportedException();
+      throw ExceptionUtils.CreateNotSupportedReadingStream();
     }
 
     public override void Write(byte[] buffer, int offset, int count)
@@ -155,11 +159,11 @@ namespace Smdn.Formats.Mime.Encode {
       if (buffer == null)
         throw new ArgumentNullException("buffer");
       if (offset < 0)
-        throw new ArgumentOutOfRangeException("offset", offset, "must be greater than or equals to 0");
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("offset", offset);
       if (count < 0)
-        throw new ArgumentOutOfRangeException("count", count, "must be greater than or equals to 0");
-      if (buffer.Length < offset + count)
-        throw new ArgumentException("invalid range");
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("count", count);
+      if (buffer.Length - count < offset)
+        throw ExceptionUtils.CreateArgumentAttemptToAccessBeyondEndOfArray("offset", buffer, offset, count);
 
       if (0 < folding && folding < lineLength + transform.OutputBlockSize)
         WriteEOL();
@@ -230,8 +234,8 @@ namespace Smdn.Formats.Mime.Encode {
 
     private void CheckDisposed()
     {
-      if (stream == null)
-        throw new ObjectDisposedException(GetType().Name);
+      if (IsClosed)
+        throw new ObjectDisposedException(GetType().FullName);
     }
 
     private ICryptoTransform transform;

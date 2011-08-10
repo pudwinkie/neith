@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -84,7 +84,7 @@ namespace Smdn.Net.Pop3.WebClients {
       {
         CheckRequestStarted();
         if (value < -1)
-          throw new ArgumentOutOfRangeException("Timeout", value, "must be greater than or equals to -1");
+          throw ExceptionUtils.CreateArgumentMustBeGreaterThanOrEqualTo(-1, "Timeout", value);
         timeout = value;
       }
     }
@@ -97,7 +97,7 @@ namespace Smdn.Net.Pop3.WebClients {
       {
         CheckRequestStarted();
         if (value < -1)
-          throw new ArgumentOutOfRangeException("ReadWriteTimeout", value, "must be greater than or equals to -1");
+          throw ExceptionUtils.CreateArgumentMustBeGreaterThanOrEqualTo(-1, "ReadWriteTimeout", value);
         readWriteTimeout = value;
       }
     }
@@ -220,10 +220,13 @@ namespace Smdn.Net.Pop3.WebClients {
 
     public override WebResponse EndGetResponse(IAsyncResult asyncResult)
     {
+      if (asyncResult == null)
+        throw new ArgumentNullException("asyncResult");
+
       var ar = asyncResult as System.Runtime.Remoting.Messaging.AsyncResult;
 
       if (ar != this.asyncResult)
-        throw new ArgumentException("invalid IAsyncResult", "asyncResult");
+        throw ExceptionUtils.CreateArgumentMustBeValidIAsyncResult("asyncResult");
 
       try {
         return (ar.AsyncDelegate as GetResponseDelegate).EndInvoke(ar);

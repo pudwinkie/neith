@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Formats.Playlists.Tests-netfx3.5", "Smdn.Formats.Playlists.Tests-netfx3.5.csproj", "{74542EB7-3069-41C2-B0F9-91CBBA6DA988}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn-netfx3.5", "..\..\Smdn\Smdn-netfx3.5.csproj", "{94EE5515-F253-491B-8F0F-09F70D03B1B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Core.Standards-netfx3.5", "..\..\Smdn.Core.Standards\Smdn.Core.Standards-netfx3.5.csproj", "{A749376E-4C07-400D-9FDA-F6A9DF2E7B18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Xml-netfx3.5", "..\..\Smdn.Xml\Smdn.Xml-netfx3.5.csproj", "{470C9328-0BAD-4186-AA7B-4E11E84DF29B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Formats.Playlists-netfx3.5", "..\Smdn.Formats.Playlists-netfx3.5.csproj", "{77EB2918-18A0-43A4-8398-5576292D8A72}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{470C9328-0BAD-4186-AA7B-4E11E84DF29B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{470C9328-0BAD-4186-AA7B-4E11E84DF29B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{470C9328-0BAD-4186-AA7B-4E11E84DF29B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{470C9328-0BAD-4186-AA7B-4E11E84DF29B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74542EB7-3069-41C2-B0F9-91CBBA6DA988}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74542EB7-3069-41C2-B0F9-91CBBA6DA988}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74542EB7-3069-41C2-B0F9-91CBBA6DA988}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74542EB7-3069-41C2-B0F9-91CBBA6DA988}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77EB2918-18A0-43A4-8398-5576292D8A72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77EB2918-18A0-43A4-8398-5576292D8A72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77EB2918-18A0-43A4-8398-5576292D8A72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77EB2918-18A0-43A4-8398-5576292D8A72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94EE5515-F253-491B-8F0F-09F70D03B1B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94EE5515-F253-491B-8F0F-09F70D03B1B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94EE5515-F253-491B-8F0F-09F70D03B1B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94EE5515-F253-491B-8F0F-09F70D03B1B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A749376E-4C07-400D-9FDA-F6A9DF2E7B18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A749376E-4C07-400D-9FDA-F6A9DF2E7B18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A749376E-4C07-400D-9FDA-F6A9DF2E7B18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A749376E-4C07-400D-9FDA-F6A9DF2E7B18}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Smdn.Formats.Playlists.Tests-netfx3.5.csproj
+	EndGlobalSection
+EndGlobal

@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,7 @@ namespace Smdn.Net.Imap4.Protocol.Client {
     // 7.2.1 CAPABILITY Response
     //   Contents:   capability listing
     //   Example:    S: * CAPABILITY IMAP4rev1 STARTTLS AUTH=GSSAPI XPIG-LATIN
-    public static ImapCapabilityList FromCapability(ImapDataResponse data)
+    public static ImapCapabilitySet FromCapability(ImapDataResponse data)
     {
       /*
       response-data   = "*" SP (resp-cond-state / resp-cond-bye /
@@ -386,7 +386,7 @@ namespace Smdn.Net.Imap4.Protocol.Client {
     //    names that the server supports and that were successfully enabled.
     //    The ENABLED response may contain no capabilities, which means that no
     //    extensions listed by the client were successfully enabled.
-    public static ImapCapabilityList FromEnabled(ImapDataResponse data)
+    public static ImapCapabilitySet FromEnabled(ImapDataResponse data)
     {
       /*
       response-data =/ "*" SP enable-data CRLF

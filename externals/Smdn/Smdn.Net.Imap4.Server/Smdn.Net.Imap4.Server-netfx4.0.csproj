@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FD5711E1-8DC9-4FC2-B7A0-ECE21050FF55}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Smdn.Net.Imap4.Server</RootNamespace>
+    <AssemblyName>Smdn.Net.Imap4.Server</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <OutputPath>..\build\bin\</OutputPath>
+    <IntermediateOutputPath>..\build\obj\</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>NET_2_0;NET_3_5;NET_4_0;DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>3</WarningLevel>
+    <OutputType>Library</OutputType>
+    <OutputPath>..\build\bin\Debug\netfx4.0\</OutputPath>
+    <IntermediateOutputPath>..\build\obj\Debug\netfx4.0\</IntermediateOutputPath>
+    <RootNamespace>Smdn.Net.Imap4.Server</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>NET_2_0;NET_3_5;NET_4_0;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>3</WarningLevel>
+    <OutputType>Library</OutputType>
+    <OutputPath>..\build\bin\Release\netfx4.0\</OutputPath>
+    <IntermediateOutputPath>..\build\obj\Release\netfx4.0\</IntermediateOutputPath>
+    <RootNamespace>Smdn.Net.Imap4.Server</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Smdn.Net.Imap4.Server\Trace.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Server\ImapConnection.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Server\ImapResponseSender.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Server\ImapCommandReceiver.cs" />
+    <Compile Include="Smdn.Net.Imap4.Server.Session\ImapSession.cs" />
+    <Compile Include="Smdn.Net.Imap4.Server.Session\ImapServer.cs" />
+    <Compile Include="Smdn.Net.Imap4.Server.Session\ImapSslServer.cs" />
+    <Compile Include="Smdn.Net.Imap4.Server.Session\IImapServer.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Server\ImapResponse.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Server\ImapTaggedStatusResponse.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Server\ImapUntaggedStatusResponse.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Server\ImapDataResponse.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Server\ImapCommandContinuationRequest.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Server\ImapStatusResponse.cs" />
+    <Compile Include="Smdn.Net.Imap4.Server.Transaction.BuiltIn\GreetingTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Server.Transaction\IImapTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Server.Transaction\ImapTransactionBase.cs" />
+    <Compile Include="Smdn.Net.Imap4.Server.Transaction\ImapTransactionState.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Server\ImapCommand.cs" />
+    <Compile Include="Smdn.Net.Imap4.Protocol.Server\ImapMalformedCommandException.cs" />
+    <Compile Include="Smdn.Net.Imap4.Server.Transaction.BuiltIn\DisconnectTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Server.Transaction.BuiltIn\CapabilityTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Server.Transaction.BuiltIn\NoOpTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Server.Transaction.BuiltIn\LogoutTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Server.Transaction.BuiltIn\InvalidCommandTransaction.cs" />
+    <Compile Include="Smdn.Net.Imap4.Server\ImapMailbox.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <StandardHeader Text="&#xA;Author:&#xA;      ${AuthorName} &lt;${AuthorEmail}&gt;&#xA;&#xA;Copyright (c) 2008-${Year} ${CopyrightHolder}&#xA;&#xA;Permission is hereby granted, free of charge, to any person obtaining a copy&#xA;of this software and associated documentation files (the &quot;Software&quot;), to deal&#xA;in the Software without restriction, including without limitation the rights&#xA;to use, copy, modify, merge, publish, distribute, sublicense, and/or sell&#xA;copies of the Software, and to permit persons to whom the Software is&#xA;furnished to do so, subject to the following conditions:&#xA;&#xA;The above copyright notice and this permission notice shall be included in&#xA;all copies or substantial portions of the Software.&#xA;&#xA;THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR&#xA;IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,&#xA;FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE&#xA;AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER&#xA;LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,&#xA;OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN&#xA;THE SOFTWARE." inheritsSet="MITX11License" />
+          <ChangeLogPolicy UpdateMode="None" VcsIntegration="None" inheritsSet="Mono" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
+  <ItemGroup>
+    <ProjectReference Include="..\Smdn\Smdn-netfx4.0.csproj">
+      <Project>{3FDF8CFA-B168-466F-B303-AEDDBED87BB9}</Project>
+      <Name>Smdn-netfx4.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Smdn.Net.Imap4\Smdn.Net.Imap4-netfx4.0.csproj">
+      <Project>{CBF73660-7437-4193-8658-BCDF0DFA8DD2}</Project>
+      <Name>Smdn.Net.Imap4-netfx4.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Smdn.Security.Authentication.Sasl\Smdn.Security.Authentication.Sasl-netfx4.0.csproj">
+      <Project>{33510B82-7100-4BF5-AEE0-95751B272B0E}</Project>
+      <Name>Smdn.Security.Authentication.Sasl-netfx4.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Smdn.Net.MessageAccessProtocols\Smdn.Net.MessageAccessProtocols-netfx4.0.csproj">
+      <Project>{85D967BA-2403-4167-90F8-D711084D66B5}</Project>
+      <Name>Smdn.Net.MessageAccessProtocols-netfx4.0</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Smdn.Net.Imap4.Server\" />
+    <Folder Include="Smdn.Net.Imap4.Protocol.Server\" />
+    <Folder Include="Smdn.Net.Imap4.Server.Session\" />
+    <Folder Include="Smdn.Net.Imap4.Server.Transaction.BuiltIn\" />
+    <Folder Include="Smdn.Net.Imap4.Server.Transaction\" />
+  </ItemGroup>
+</Project>

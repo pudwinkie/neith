@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -36,19 +36,14 @@ namespace Smdn.Net.Pop3.Client.Transaction.BuiltIn {
       this.command = command;
     }
 
-    protected override ProcessTransactionDelegate Reset()
-    {
-      return ProcessGenericCommand;
-    }
-
-    private void ProcessGenericCommand()
+    protected override PopCommand PrepareCommand()
     {
       string arguments;
 
       if (RequestArguments.TryGetValue("arguments", out arguments))
-        SendCommand(command, ProcessReceiveResponse, arguments);
+        return new PopCommand(command, arguments);
       else
-        SendCommand(command, ProcessReceiveResponse);
+        return new PopCommand(command);
     }
 
     private string command;

@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2009-2010 smdn
+// Copyright (c) 2009-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -30,68 +30,74 @@ namespace Smdn {
     public delegate string ReplaceCharEvaluator(char ch, string str, int index);
     public delegate string ReplaceStringEvaluator(string matched, string str, int index);
 
-    private static string ReplaceToEmpty(char ch, string str, int index)
-    {
-      return string.Empty;
-    }
-
-    private static string ReplaceToEmpty(string matched, string str, int index)
-    {
-      return string.Empty;
-    }
-
+    [Obsolete("use RemoveChars instead")]
     public static string Remove(this string str, params char[] oldChars)
     {
-      return Replace(str, oldChars, ReplaceToEmpty);
+      return ReplaceInternal(str, oldChars, null);
+    }
+
+    public static string RemoveChars(this string str, params char[] oldChars)
+    {
+      return ReplaceInternal(str, oldChars, null);
     }
 
     public static string Remove(this string str, params string[] oldValues)
     {
-      return Replace(str, oldValues, ReplaceToEmpty);
+      return ReplaceInternal(str, oldValues, null);
     }
 
     public static string Replace(this string str, char[] oldChars, ReplaceCharEvaluator evaluator)
+    {
+      if (evaluator == null)
+        throw new ArgumentNullException("evaluator");
+
+      return ReplaceInternal(str, oldChars, evaluator);
+    }
+
+    private static string ReplaceInternal(string str, char[] oldChars, ReplaceCharEvaluator evaluator)
     {
       if (str == null)
         throw new ArgumentNullException("str");
       if (oldChars == null)
         throw new ArgumentNullException("oldChars");
-      if (evaluator == null)
-        throw new ArgumentNullException("evaluator");
 
-      foreach (var ch in oldChars) {
-        var lastIndex = 0;
-        var sb = new StringBuilder();
+      var lastIndex = 0;
+      var sb = new StringBuilder(str.Length);
 
-        for (;;) {
-          var index = str.IndexOf(ch, lastIndex);
+      for (;;) {
+        var index = str.IndexOfAny(oldChars, lastIndex);
 
-          if (index < 0) {
-            sb.Append(str.Substring(lastIndex));
-            break;
-          }
-          else {
-            sb.Append(str.Substring(lastIndex, index - lastIndex));
-            sb.Append(evaluator(ch, str, index));
-
-            lastIndex = index + 1;
-          }
+        if (index < 0) {
+          sb.Append(str.Substring(lastIndex));
+          break;
         }
+        else {
+          sb.Append(str.Substring(lastIndex, index - lastIndex));
 
-        str = sb.ToString();
+          if (evaluator != null)
+            sb.Append(evaluator(str[index], str, index));
+
+          lastIndex = index + 1;
+        }
       }
 
-      return str;
+      return sb.ToString();
     }
 
     public static string Replace(this string str, string[] oldValues, ReplaceStringEvaluator evaluator)
+    {
+      if (evaluator == null)
+        throw new ArgumentNullException("evaluator");
+
+      return ReplaceInternal(str, oldValues, evaluator);
+    }
+
+    private static string ReplaceInternal(string str, string[] oldValues, ReplaceStringEvaluator evaluator)
     {
       if (str == null)
         throw new ArgumentNullException("str");
       if (oldValues == null)
         throw new ArgumentNullException("oldValues");
-      if (evaluator == null)
-        throw new ArgumentNullException("evaluator");
 
       foreach (var oldValue in oldValues) {
         var lastIndex = 0;
@@ -109,7 +115,9 @@ namespace Smdn {
           }
           else {
             sb.Append(str.Substring(lastIndex, index - lastIndex));
-            sb.Append(evaluator(oldValue, str, index));
+
+            if (evaluator != null)
+              sb.Append(evaluator(oldValue, str, index));
 
             lastIndex = index + oldValue.Length;
           }
@@ -141,9 +149,10 @@ namespace Smdn {
     {
       if (str == null)
         throw new ArgumentNullException("str");
-
-      if (string.IsNullOrEmpty(substr))
-        throw new ArgumentException("length must be greater than 1", "substr");
+      if (substr == null)
+        throw new ArgumentNullException("substr");
+      if (substr.Length == 0)
+        throw ExceptionUtils.CreateArgumentMustBeNonEmptyString("substr");
 
       for (int count = 0, lastIndex = 0;; count++) {
         var index = str.IndexOf(substr, lastIndex);
@@ -153,6 +162,22 @@ namespace Smdn {
         else
           lastIndex = index + substr.Length;
       }
+    }
+
+    public static string Slice(this string str, int from, int to)
+    {
+      if (str == null)
+        throw new ArgumentNullException("str");
+      if (from < 0)
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("from", from);
+      if (str.Length <= from)
+        throw ExceptionUtils.CreateArgumentMustBeLessThan("'str.Length'", "from", from);
+      if (to < from)
+        throw ExceptionUtils.CreateArgumentMustBeGreaterThanOrEqualTo("'from'", "to", to);
+      if (str.Length < to)
+        throw ExceptionUtils.CreateArgumentMustBeLessThanOrEqualTo("'str.Length'", "to", to);
+
+      return str.Substring(from, to - from);
     }
   }
 }

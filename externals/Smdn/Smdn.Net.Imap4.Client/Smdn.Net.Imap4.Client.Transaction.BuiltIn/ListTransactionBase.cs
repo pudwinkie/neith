@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -34,25 +34,6 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
       : base(connection)
     {
     }
-
-    protected override ProcessTransactionDelegate Reset()
-    {
-#if DEBUG
-      if (!RequestArguments.ContainsKey("reference name"))
-        return ProcessArgumentNotSetted;
-      else if (!RequestArguments.ContainsKey("mailbox name"))
-        return ProcessArgumentNotSetted;
-      else
-#endif
-        return ProcessList;
-    }
-
-#if DEBUG
-    private void ProcessArgumentNotSetted()
-    {
-      FinishError(ImapCommandResultCode.RequestError, "arguments 'reference name' and 'mailbox name' must be setted");
-    }
-#endif
 
     /*
      * 6.3.8. LIST Command
@@ -111,8 +92,16 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
      *    list of options at the end that control what kind of information
      *    should be returned (LIST return options).
      */
-    private void ProcessList()
+    protected override ImapCommand PrepareCommand()
     {
+#if DEBUG
+      if (!RequestArguments.ContainsKey("reference name") ||
+          !RequestArguments.ContainsKey("mailbox name")) {
+        FinishError(ImapCommandResultCode.RequestError, "arguments 'reference name' and 'mailbox name' must be setted");
+        return null;
+      }
+#endif
+
       if (this is ListExtendedTransaction) {
         var args = new List<ImapString>(5);
 
@@ -127,9 +116,8 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
           args.Add(RequestArguments["return options"]);
         }
 
-        SendCommand("LIST",
-                    ProcessReceiveResponse,
-                    args.ToArray());
+        return Connection.CreateCommand("LIST",
+                                        args.ToArray());
       }
       else {
         string commandString = null;
@@ -145,10 +133,9 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
         else if (this is XListTransaction)
           commandString = "XLIST";
 
-        SendCommand(commandString,
-                    ProcessReceiveResponse,
-                    RequestArguments["reference name"],
-                    RequestArguments["mailbox name"]);
+        return Connection.CreateCommand(commandString,
+                                        RequestArguments["reference name"],
+                                        RequestArguments["mailbox name"]);
       }
     }
 

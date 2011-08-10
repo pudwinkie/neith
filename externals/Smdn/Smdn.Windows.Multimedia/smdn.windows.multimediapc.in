@@ -1,0 +1,6 @@
+Name: Smdn.Windows.Multimedia
+Description: Smdn.Windows.Multimedia
+Version: 0.1
+
+Requires: 
+Libs: -r:@expanded_libdir@/@PACKAGE@/Smdn.Windows.Multimedia.dll

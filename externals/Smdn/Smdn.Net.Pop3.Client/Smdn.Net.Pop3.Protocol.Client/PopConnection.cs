@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -81,22 +81,10 @@ namespace Smdn.Net.Pop3.Protocol.Client {
       set { (Receiver as PopResponseReceiver).HandleAsMultiline = value; }
     }
 
-    public PopConnection(string host)
-      : this(host, -1, null)
-    {
-    }
-
-    public PopConnection(string host, int port)
-      : this(host, port, null)
-    {
-    }
-
-    public PopConnection(string host, UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
-      : this(host, -1, createAuthenticatedStreamCallback)
-    {
-    }
-
-    public PopConnection(string host, int port, UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
+    public PopConnection(string host,
+                         int port,
+                         int millisecondsTimeout,
+                         UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
       : base(popConnectionTraceSource)
     {
       if (port == -1) {
@@ -106,7 +94,10 @@ namespace Smdn.Net.Pop3.Protocol.Client {
           port = PopDefaultPorts.Pops;
       }
 
-      Connect(host, port, createAuthenticatedStreamCallback);
+      Connect(host,
+              port,
+              millisecondsTimeout,
+              createAuthenticatedStreamCallback);
     }
 
     internal void SetIsSecureConnection(bool isSecureConnection)
@@ -198,7 +189,8 @@ namespace Smdn.Net.Pop3.Protocol.Client {
 
         default:
           // unexpected socket exception
-          return new PopConnectionException("unexpected socket error", ex);
+          return new PopConnectionException(string.Format("unexpected socket error ({0})", ex.SocketErrorCode),
+                                            ex);
       }
     }
 #endregion

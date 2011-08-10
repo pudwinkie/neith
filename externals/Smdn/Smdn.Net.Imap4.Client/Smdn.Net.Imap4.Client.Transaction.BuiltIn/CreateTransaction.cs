@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,13 +23,18 @@
 // THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 
 using Smdn.Net.Imap4.Protocol.Client;
 
 namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
   internal sealed class CreateTransaction : ImapTransactionBase, IImapExtension {
-    ImapCapability IImapExtension.RequiredCapability {
-      get { return createParametersCapabilityRequirement; }
+    IEnumerable<ImapCapability> IImapExtension.RequiredCapabilities {
+      get
+      {
+        if (createParametersCapabilityRequirement != null)
+          yield return createParametersCapabilityRequirement;
+      }
     }
 
     public CreateTransaction(ImapConnection connection, ImapCapability createParametersCapabilityRequirement)
@@ -37,23 +42,6 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     {
       this.createParametersCapabilityRequirement = createParametersCapabilityRequirement;
     }
-
-    protected override ProcessTransactionDelegate Reset()
-    {
-#if DEBUG
-      if (!RequestArguments.ContainsKey("mailbox name"))
-        return ProcessArgumentNotSetted;
-      else
-#endif
-        return ProcessCreate;
-    }
-
-#if DEBUG
-    private void ProcessArgumentNotSetted()
-    {
-      FinishError(ImapCommandResultCode.RequestError, "arguments 'mailbox name' must be setted");
-    }
-#endif
 
     // RFC 4466 - Collected Extensions to IMAP4 ABNF
     // http://tools.ietf.org/html/rfc4466
@@ -65,19 +53,24 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     //                NO - create failure: cannot create mailbox with
     //                     that name
     //                BAD - argument(s) invalid
-    private void ProcessCreate()
+    protected override ImapCommand PrepareCommand()
     {
+#if DEBUG
+      if (!RequestArguments.ContainsKey("mailbox name")) {
+        FinishError(ImapCommandResultCode.RequestError, "arguments 'mailbox name' must be setted");
+        return null;
+      }
+#endif
+
       ImapString createParameters;
 
       if (RequestArguments.TryGetValue("create parameters", out createParameters))
-        SendCommand("CREATE",
-                    ProcessReceiveResponse,
-                    RequestArguments["mailbox name"],
-                    createParameters);
+        return Connection.CreateCommand("CREATE",
+                                        RequestArguments["mailbox name"],
+                                        createParameters);
       else
-        SendCommand("CREATE",
-                    ProcessReceiveResponse,
-                    RequestArguments["mailbox name"]);
+        return Connection.CreateCommand("CREATE",
+                                        RequestArguments["mailbox name"]);
     }
 
     private ImapCapability createParametersCapabilityRequirement;

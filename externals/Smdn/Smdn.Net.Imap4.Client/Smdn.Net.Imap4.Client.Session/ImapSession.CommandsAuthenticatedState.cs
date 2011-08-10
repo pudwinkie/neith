@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+#if NET_3_5
+using System.Linq;
+#else
+using Smdn.Collections;
+#endif
 
 using Smdn.Net.Imap4.Protocol;
 using Smdn.Net.Imap4.Protocol.Client;
@@ -126,7 +131,7 @@ namespace Smdn.Net.Imap4.Client.Session {
     {
       RejectNonAuthenticatedState();
 
-      RejectInvalidMailboxNameArgument(mailboxName);
+      var argMailboxName = ImapMailboxNameString.CreateMailboxNameNonEmpty(mailboxName);
 
       var selectingMailbox = mailboxManager.GetExist(mailboxName);
       var selectingMailboxExists = (selectingMailbox != null);
@@ -164,7 +169,7 @@ namespace Smdn.Net.Imap4.Client.Session {
          *                      ;; This non-terminal shows recommended syntax
          *                      ;; for future extensions
          */
-        t.RequestArguments["mailbox name"] = new ImapMailboxNameString(mailboxName);
+        t.RequestArguments["mailbox name"] = argMailboxName;
 
         // select-params
         if (selectParameters != null)
@@ -218,7 +223,7 @@ namespace Smdn.Net.Imap4.Client.Session {
     {
       ImapMailbox discard;
 
-      return CreateSpecialUse(mailboxName, new ImapMailboxFlagList(useFlags), out discard);
+      return CreateSpecialUse(mailboxName, new ImapMailboxFlagSet(useFlags), out discard);
     }
 
     /// <summary>sends CREATE command</summary>
@@ -228,7 +233,7 @@ namespace Smdn.Net.Imap4.Client.Session {
     /// </remarks>
     public ImapCommandResult CreateSpecialUse(string mailboxName, out ImapMailbox createdMailbox, params ImapMailboxFlag[] useFlags)
     {
-      return CreateSpecialUse(mailboxName, new ImapMailboxFlagList(useFlags), out createdMailbox);
+      return CreateSpecialUse(mailboxName, new ImapMailboxFlagSet(useFlags), out createdMailbox);
     }
 
     /// <summary>sends CREATE command</summary>
@@ -253,11 +258,8 @@ namespace Smdn.Net.Imap4.Client.Session {
       if (useFlags == null)
         throw new ArgumentNullException("useFlags");
 
-      foreach (var useFlag in useFlags) {
-        if (!ImapMailboxFlag.UseFlags.Has(useFlag))
-          throw new ArgumentException(string.Format("must be one of use-flag. '{0}' is invalid.", useFlag),
-                                      "useFlags");
-      }
+      if (!ImapMailboxFlag.UseFlags.IsSupersetOf(useFlags))
+        throw new ArgumentException("contains non-use-flag", "useFlags");
 
       using (var t = new CreateTransaction(connection, ImapCapability.CreateSpecialUse)) {
         var result = CreateInternal(t,
@@ -266,7 +268,7 @@ namespace Smdn.Net.Imap4.Client.Session {
                                     out createdMailbox);
 
         if (result.Succeeded)
-          createdMailbox.Flags = (new ImapMailboxFlagList(useFlags)).AsReadOnly();
+          createdMailbox.Flags = (new ImapMailboxFlagSet(useFlags)).AsReadOnly();
 
         return result;
       }
@@ -276,7 +278,7 @@ namespace Smdn.Net.Imap4.Client.Session {
     {
       RejectNonAuthenticatedState();
 
-      RejectInvalidMailboxNameArgument(mailboxName);
+      var argMailboxName = ImapMailboxNameString.CreateMailboxNameNonEmpty(mailboxName);
 
       /*
        * 6.3.3. CREATE Command
@@ -288,7 +290,7 @@ namespace Smdn.Net.Imap4.Client.Session {
 
       var existingMailbox = mailboxManager.GetExist(mailboxName);
 
-      if (existingMailbox != null && !existingMailbox.Flags.Has(ImapMailboxFlag.NonExistent))
+      if (existingMailbox != null && !existingMailbox.Flags.Contains(ImapMailboxFlag.NonExistent))
         throw new ImapProtocolViolationException(string.Format("It is an error to attempt to create a mailbox with a name that refers to an extent mailbox. (mailboxName: '{0}')", mailboxName));
 
       createdMailbox = null;
@@ -308,7 +310,7 @@ namespace Smdn.Net.Imap4.Client.Session {
        *                      ;; for future extensions.
        */
       // mailbox name
-      t.RequestArguments["mailbox name"] = new ImapMailboxNameString(mailboxName);
+      t.RequestArguments["mailbox name"] = argMailboxName;
 
       // create-params
       if (createParams != null)
@@ -342,7 +344,7 @@ namespace Smdn.Net.Imap4.Client.Session {
     {
       RejectNonAuthenticatedState();
 
-      RejectInvalidMailboxNameArgument(mailboxName);
+      var argMailboxName = ImapMailboxNameString.CreateMailboxNameNonEmpty(mailboxName);
 
       /*
        * 6.3.4. DELETE Command
@@ -372,7 +374,7 @@ namespace Smdn.Net.Imap4.Client.Session {
       }
 
       using (var t = new DeleteTransaction(connection)) {
-        t.RequestArguments["mailbox name"] = new ImapMailboxNameString(mailboxName);
+        t.RequestArguments["mailbox name"] = argMailboxName;
 
         if (ProcessTransaction(t).Succeeded) {
           if (selectedMailbox != null && deletingMailbox == selectedMailbox) {
@@ -425,8 +427,8 @@ namespace Smdn.Net.Imap4.Client.Session {
     {
       RejectNonAuthenticatedState();
 
-      RejectInvalidMailboxNameArgument(existingMailboxName);
-      RejectInvalidMailboxNameArgument(newMailboxName);
+      var argExistingMailboxName = ImapMailboxNameString.CreateMailboxNameNonEmpty(existingMailboxName);
+      var argNewMailboxName = ImapMailboxNameString.CreateMailboxNameNonEmpty(newMailboxName);
 
       if (ImapMailbox.NameEquals(existingMailboxName, newMailboxName))
         throw new ArgumentException("An existing mailbox name and a new mailbox name are same.", "newMailboxName");
@@ -440,7 +442,7 @@ namespace Smdn.Net.Imap4.Client.Session {
       var existingRenameToMailbox = mailboxManager.GetExist(newMailboxName);
 
       if (ImapMailbox.IsNameInbox(newMailboxName) ||
-          (existingRenameToMailbox != null && !existingRenameToMailbox.Flags.Has(ImapMailboxFlag.NonExistent)))
+          (existingRenameToMailbox != null && !existingRenameToMailbox.Flags.Contains(ImapMailboxFlag.NonExistent)))
         throw new ImapProtocolViolationException(string.Format("It is an error to attempt to rename to a mailbox name that already exists. (newMailboxName: '{0}')", newMailboxName));
 
       renamedMailbox = null;
@@ -462,8 +464,8 @@ namespace Smdn.Net.Imap4.Client.Session {
          *                      ;; This non-terminal shows recommended syntax
          *                      ;; for future extensions.
          */
-        t.RequestArguments["existing mailbox name"] = new ImapMailboxNameString(existingMailboxName);
-        t.RequestArguments["new mailbox name"] = new ImapMailboxNameString(newMailboxName);
+        t.RequestArguments["existing mailbox name"] = argExistingMailboxName;
+        t.RequestArguments["new mailbox name"] = argNewMailboxName;
 
         // rename-params
         //t.RequestArguments["rename parameters"] = new ImapParenthesizedString();
@@ -492,15 +494,15 @@ namespace Smdn.Net.Imap4.Client.Session {
     {
       RejectNonAuthenticatedState();
 
-      RejectInvalidMailboxNameArgument(mailboxName);
+      var argMailboxName = ImapMailboxNameString.CreateMailboxNameNonEmpty(mailboxName);
 
       var existingSubscribeMailbox = mailboxManager.GetExist(mailboxName);
 
-      if (existingSubscribeMailbox != null && existingSubscribeMailbox.Flags.Has(ImapMailboxFlag.NonExistent))
+      if (existingSubscribeMailbox != null && existingSubscribeMailbox.Flags.Contains(ImapMailboxFlag.NonExistent))
         throw new ImapProtocolViolationException("It is an error to attempt to subscribe a name that has the \\NonExistent mailbox name attribute.");
 
       using (var t = new SubscribeTransaction(connection)) {
-        t.RequestArguments["mailbox name"] = new ImapMailboxNameString(mailboxName);
+        t.RequestArguments["mailbox name"] = argMailboxName;
 
         if (ProcessTransaction(t).Failed)
           ProcessMailboxRefferalResponse(t.Result.TaggedStatusResponse);
@@ -524,506 +526,16 @@ namespace Smdn.Net.Imap4.Client.Session {
     {
       RejectNonAuthenticatedState();
 
-      RejectInvalidMailboxNameArgument(mailboxName);
+      var argMailboxName = ImapMailboxNameString.CreateMailboxNameNonEmpty(mailboxName);
 
       using (var t = new UnsubscribeTransaction(connection)) {
-        t.RequestArguments["mailbox name"] = new ImapMailboxNameString(mailboxName);
+        t.RequestArguments["mailbox name"] = argMailboxName;
 
         if (ProcessTransaction(t).Failed)
           ProcessMailboxRefferalResponse(t.Result.TaggedStatusResponse);
 
         return t.Result;
       }
-    }
-
-    /// <summary>sends LIST command</summary>
-    /// <remarks>
-    /// valid in authenticated state
-    /// This method sends LIST command with an empty mailbox name and an empty reference name.
-    /// </remarks>
-    public ImapCommandResult ListRoot(out ImapMailboxList root)
-    {
-      return ListRoot(string.Empty, out root);
-    }
-
-    /// <summary>sends LIST command</summary>
-    /// <remarks>
-    /// valid in authenticated state
-    /// This method sends LIST command with an empty mailbox name.
-    /// </remarks>
-    public ImapCommandResult ListRoot(string referenceName, out ImapMailboxList root)
-    {
-      RejectNonAuthenticatedState();
-
-      if (referenceName == null)
-        throw new ArgumentNullException("referenceName");
-
-      root = null;
-
-      using (var t = new ListTransaction(connection)) {
-        t.RequestArguments["reference name"] = new ImapQuotedString(referenceName);
-        t.RequestArguments["mailbox name"] = new ImapQuotedString(string.Empty);
-
-        if (ProcessTransaction(t).Succeeded) {
-          hierarchyDelimiters[referenceName] = t.Result.Value[0].HierarchyDelimiter;
-
-          root = t.Result.Value[0];
-        }
-
-        return t.Result;
-      }
-    }
-
-    /// <summary>sends LIST command</summary>
-    /// <remarks>
-    /// valid in authenticated state
-    /// This method sends LIST command with an empty reference name and a wildcard "*" as mailbox name
-    /// </remarks>
-    public ImapCommandResult List(out ImapMailbox[] mailboxes)
-    {
-      return ListInternal(string.Empty, "*", out mailboxes);
-    }
-
-    /// <summary>sends LIST command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public ImapCommandResult List(string mailboxName, out ImapMailbox[] mailboxes)
-    {
-      if (mailboxName == null)
-        throw new ArgumentNullException("mailboxName");
-
-      return ListInternal(string.Empty, new ImapMailboxNameString(mailboxName), out mailboxes);
-    }
-
-    /// <summary>sends LIST command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public ImapCommandResult List(ImapMailbox mailbox)
-    {
-      ValidateMailboxRelationship(mailbox);
-
-      ImapMailbox[] discard;
-
-      return ListInternal(string.Empty, new ImapMailboxNameString(mailbox.Name), out discard);
-    }
-
-    /// <summary>sends LIST command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public ImapCommandResult List(string referenceName, string mailboxName, out ImapMailbox[] mailboxes)
-    {
-      if (mailboxName == null)
-        throw new ArgumentNullException("mailboxName");
-
-      return ListInternal(referenceName, new ImapMailboxNameString(mailboxName), out mailboxes);
-    }
-
-    private ImapCommandResult ListInternal(string referenceName,
-                                           ImapString mailboxName,
-                                           out ImapMailbox[] mailboxes)
-    {
-      if (referenceName == null)
-        throw new ArgumentNullException("referenceName");
-
-      using (var t = new ListTransaction(connection)) {
-        return ListLsubInternal(t, referenceName, mailboxName, out mailboxes);
-      }
-    }
-
-    /// <summary>sends LSUB command</summary>
-    /// <remarks>
-    /// valid in authenticated state
-    /// This method sends LSUB command with an empty reference name and a wildcard "*" as mailbox name
-    /// </remarks>
-    public ImapCommandResult Lsub(out ImapMailbox[] mailboxes)
-    {
-      return LsubInternal(string.Empty, "*", out mailboxes);
-    }
-
-    /// <summary>sends LSUB command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public ImapCommandResult Lsub(string mailboxName, out ImapMailbox[] mailboxes)
-    {
-      if (mailboxName == null)
-        throw new ArgumentNullException("mailboxName");
-
-      return LsubInternal(string.Empty, new ImapMailboxNameString(mailboxName), out mailboxes);
-    }
-
-    /// <summary>sends LSUB command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public ImapCommandResult Lsub(ImapMailbox mailbox)
-    {
-      ValidateMailboxRelationship(mailbox);
-
-      ImapMailbox[] discard;
-
-      return LsubInternal(string.Empty, new ImapMailboxNameString(mailbox.Name), out discard);
-    }
-
-    /// <summary>sends LSUB command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public ImapCommandResult Lsub(string referenceName, string mailboxName, out ImapMailbox[] mailboxes)
-    {
-      if (mailboxName == null)
-        throw new ArgumentNullException("mailboxName");
-
-      return LsubInternal(referenceName, new ImapMailboxNameString(mailboxName), out mailboxes);
-    }
-
-    private ImapCommandResult LsubInternal(string referenceName,
-                                           ImapString mailboxName,
-                                           out ImapMailbox[] mailboxes)
-    {
-      if (referenceName == null)
-        throw new ArgumentNullException("referenceName");
-
-      using (var t = new LsubTransaction(connection)) {
-        return ListLsubInternal(t, referenceName, mailboxName, out mailboxes);
-      }
-    }
-
-    /// <summary>sends Gimap XLIST command</summary>
-    /// <remarks>
-    /// valid in authenticated state
-    /// This method sends Gimap XLIST command with an empty reference name and a wildcard "*" as mailbox name
-    /// </remarks>
-    public ImapCommandResult XList(out ImapMailbox[] mailboxes)
-    {
-      return XListInternal(string.Empty, "*", out mailboxes);
-    }
-
-    /// <summary>sends Gimap LIST command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public ImapCommandResult XList(string mailboxName, out ImapMailbox[] mailboxes)
-    {
-      if (mailboxName == null)
-        throw new ArgumentNullException("mailboxName");
-
-      return XListInternal(string.Empty, new ImapMailboxNameString(mailboxName), out mailboxes);
-    }
-
-    /// <summary>sends Gimap LIST command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public ImapCommandResult XList(ImapMailbox mailbox)
-    {
-      ValidateMailboxRelationship(mailbox);
-
-      ImapMailbox[] discard;
-
-      return XListInternal(string.Empty, new ImapMailboxNameString(mailbox.Name), out discard);
-    }
-
-    /// <summary>sends Gimap LIST command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public ImapCommandResult XList(string referenceName, string mailboxName, out ImapMailbox[] mailboxes)
-    {
-      if (mailboxName == null)
-        throw new ArgumentNullException("mailboxName");
-
-      return XListInternal(referenceName, new ImapMailboxNameString(mailboxName), out mailboxes);
-    }
-
-    private ImapCommandResult XListInternal(string referenceName,
-                                            ImapString mailboxName,
-                                            out ImapMailbox[] mailboxes)
-    {
-      if (referenceName == null)
-        throw new ArgumentNullException("referenceName");
-
-      using (var t = new XListTransaction(connection)) {
-        return ListLsubInternal(t, referenceName, mailboxName, out mailboxes);
-      }
-    }
-
-    /// <summary>sends RLIST command</summary>
-    /// <remarks>
-    /// valid in authenticated state
-    /// This method sends RLIST command with an empty reference name and a wildcard "*" as mailbox name
-    /// </remarks>
-    public ImapCommandResult RList(out ImapMailbox[] mailboxes)
-    {
-      return RListInternal(string.Empty, "*", out mailboxes);
-    }
-
-    /// <summary>sends RLIST command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public ImapCommandResult RList(string mailboxName, out ImapMailbox[] mailboxes)
-    {
-      if (mailboxName == null)
-        throw new ArgumentNullException("mailboxName");
-
-      return RListInternal(string.Empty, new ImapMailboxNameString(mailboxName), out mailboxes);
-    }
-
-    /// <summary>sends RLIST command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public ImapCommandResult RList(string referenceName, string mailboxName, out ImapMailbox[] mailboxes)
-    {
-      if (mailboxName == null)
-        throw new ArgumentNullException("mailboxName");
-
-      return RListInternal(referenceName, new ImapMailboxNameString(mailboxName), out mailboxes);
-    }
-
-    private ImapCommandResult RListInternal(string referenceName,
-                                            ImapString mailboxName,
-                                            out ImapMailbox[] mailboxes)
-    {
-      if (referenceName == null)
-        throw new ArgumentNullException("referenceName");
-
-      using (var t = new RListTransaction(connection)) {
-        return ListLsubInternal(t, referenceName, mailboxName, out mailboxes);
-      }
-    }
-
-    /// <summary>sends RLSUB command</summary>
-    /// <remarks>
-    /// valid in authenticated state
-    /// This method sends LIST command with an empty reference name and a wildcard "*" as mailbox name
-    /// </remarks>
-    public ImapCommandResult RLsub(out ImapMailbox[] mailboxes)
-    {
-      return RLsubInternal(string.Empty, "*", out mailboxes);
-    }
-
-    /// <summary>sends RLSUB command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public ImapCommandResult RLsub(string mailboxName, out ImapMailbox[] mailboxes)
-    {
-      if (mailboxName == null)
-        throw new ArgumentNullException("mailboxName");
-
-      return RLsubInternal(string.Empty, new ImapMailboxNameString(mailboxName), out mailboxes);
-    }
-
-    /// <summary>sends RLSUB command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public ImapCommandResult RLsub(string referenceName, string mailboxName, out ImapMailbox[] mailboxes)
-    {
-      if (mailboxName == null)
-        throw new ArgumentNullException("mailboxName");
-
-      return RLsubInternal(referenceName, new ImapMailboxNameString(mailboxName), out mailboxes);
-    }
-
-    private ImapCommandResult RLsubInternal(string referenceName,
-                                            ImapString mailboxName,
-                                            out ImapMailbox[] mailboxes)
-    {
-      if (referenceName == null)
-        throw new ArgumentNullException("referenceName");
-
-      using (var t = new RLsubTransaction(connection)) {
-        return ListLsubInternal(t, referenceName, mailboxName, out mailboxes);
-      }
-    }
-
-#region "extended LIST with no reference name"
-#region "extended LIST with multiple mailbox name pattern"
-    /// <summary>sends extended LIST command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public ImapCommandResult ListExtended(out ImapMailbox[] mailboxes,
-                                          string mailboxNamePattern,
-                                          params string[] mailboxNamePatterns)
-    {
-      return ListExtendedInternalNoRefName(mailboxNamePattern, mailboxNamePatterns, null, null, out mailboxes);
-    }
-
-    /// <summary>sends extended LIST command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public ImapCommandResult ListExtended(ImapListSelectionOptions selectionOptions,
-                                          out ImapMailbox[] mailboxes,
-                                          string mailboxNamePattern,
-                                          params string[] mailboxNamePatterns)
-    {
-      if (selectionOptions == null)
-        throw new ArgumentNullException("selectionOptions");
-
-      return ListExtendedInternalNoRefName(mailboxNamePattern, mailboxNamePatterns, selectionOptions, null, out mailboxes);
-    }
-
-      /// <summary>sends extended LIST command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public ImapCommandResult ListExtended(ImapListReturnOptions returnOptions,
-                                          out ImapMailbox[] mailboxes,
-                                          string mailboxNamePattern,
-                                          params string[] mailboxNamePatterns)
-    {
-      if (returnOptions == null)
-        throw new ArgumentNullException("returnOptions");
-
-      return ListExtendedInternalNoRefName(mailboxNamePattern, mailboxNamePatterns, null, returnOptions, out mailboxes);
-    }
-
-    /// <summary>sends extended LIST command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public ImapCommandResult ListExtended(ImapListSelectionOptions selectionOptions,
-                                          ImapListReturnOptions returnOptions,
-                                          out ImapMailbox[] mailboxes,
-                                          string mailboxNamePattern,
-                                          params string[] mailboxNamePatterns)
-    {
-      if (selectionOptions == null)
-        throw new ArgumentNullException("selectionOptions");
-      if (returnOptions == null)
-        throw new ArgumentNullException("returnOptions");
-
-      return ListExtendedInternalNoRefName(mailboxNamePattern, mailboxNamePatterns, selectionOptions, returnOptions, out mailboxes);
-    }
-#endregion
-
-#region "extended LIST with single mailbox name pattern"
-    /// <summary>sends extended LIST command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public ImapCommandResult ListExtended(string mailboxNamePattern,
-                                          out ImapMailbox[] mailboxes)
-    {
-      return ListExtendedInternalNoRefName(mailboxNamePattern, null, null, null, out mailboxes);
-    }
-
-    /// <summary>sends extended LIST command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public ImapCommandResult ListExtended(string mailboxNamePattern,
-                                          ImapListSelectionOptions selectionOptions,
-                                          out ImapMailbox[] mailboxes)
-    {
-      if (selectionOptions == null)
-        throw new ArgumentNullException("selectionOptions");
-
-      return ListExtendedInternalNoRefName(mailboxNamePattern, null, selectionOptions, null, out mailboxes);
-    }
-
-      /// <summary>sends extended LIST command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public ImapCommandResult ListExtended(string mailboxNamePattern,
-                                          ImapListReturnOptions returnOptions,
-                                          out ImapMailbox[] mailboxes)
-    {
-      if (returnOptions == null)
-        throw new ArgumentNullException("returnOptions");
-
-      return ListExtendedInternalNoRefName(mailboxNamePattern, null, null, returnOptions, out mailboxes);
-    }
-
-    /// <summary>sends extended LIST command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public ImapCommandResult ListExtended(string mailboxNamePattern,
-                                          ImapListSelectionOptions selectionOptions,
-                                          ImapListReturnOptions returnOptions,
-                                          out ImapMailbox[] mailboxes)
-    {
-      if (selectionOptions == null)
-        throw new ArgumentNullException("selectionOptions");
-      if (returnOptions == null)
-        throw new ArgumentNullException("returnOptions");
-
-      return ListExtendedInternalNoRefName(mailboxNamePattern, null, selectionOptions, returnOptions, out mailboxes);
-    }
-#endregion
-
-    private ImapCommandResult ListExtendedInternalNoRefName(string mailboxNamePattern,
-                                                            string[] mailboxNamePatterns,
-                                                            ImapListSelectionOptions selectionOptions,
-                                                            ImapListReturnOptions returnOptions,
-                                                            out ImapMailbox[] mailboxes)
-    {
-      if (mailboxNamePattern == null)
-        throw new ArgumentNullException("mailboxNamePattern");
-
-      if (mailboxNamePatterns == null || mailboxNamePatterns.Length == 0)
-        return ListExtendedInternal(string.Empty, new[] {mailboxNamePattern}, selectionOptions, returnOptions, out mailboxes);
-      else
-        return ListExtendedInternal(string.Empty, mailboxNamePatterns.Prepend(mailboxNamePattern), selectionOptions, returnOptions, out mailboxes);
-    }
-#endregion
-
-    /// <summary>sends extended LIST command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public ImapCommandResult ListExtended(string referenceName,
-                                          string[] mailboxNamePatterns,
-                                          ImapListSelectionOptions selectionOptions,
-                                          ImapListReturnOptions returnOptions,
-                                          out ImapMailbox[] mailboxes)
-    {
-      if (referenceName == null)
-        throw new ArgumentNullException("referenceName");
-      if (mailboxNamePatterns == null)
-        throw new ArgumentNullException("mailboxNamePatterns");
-      else if (mailboxNamePatterns.Length == 0)
-        throw new ArgumentException("must be non-empty array", "mailboxNamePatterns");
-      if (selectionOptions == null)
-        throw new ArgumentNullException("selectionOptions");
-      if (returnOptions == null)
-        throw new ArgumentNullException("returnOptions");
-
-      return ListExtendedInternal(referenceName, mailboxNamePatterns, selectionOptions, returnOptions, out mailboxes);
-    }
-
-    private ImapCommandResult ListExtendedInternal(string referenceName,
-                                                   string[] mailboxNamePatterns,
-                                                   ImapListSelectionOptions selectionOptions,
-                                                   ImapListReturnOptions returnOptions,
-                                                   out ImapMailbox[] mailboxes)
-    {
-      using (var t = new ListExtendedTransaction(connection)) {
-        if (selectionOptions != null)
-        t.RequestArguments["selection options"] = selectionOptions;
-
-        if (returnOptions != null)
-          t.RequestArguments["return options"] = returnOptions;
-
-        var quotedMailboxNamePatterns = Array.ConvertAll(mailboxNamePatterns, delegate(string pattern) {
-          return new ImapMailboxNameString(pattern);
-        });
-
-        if (quotedMailboxNamePatterns.Length == 1)
-          ListLsubInternal(t, referenceName, quotedMailboxNamePatterns[0], out mailboxes);
-        else
-          ListLsubInternal(t, referenceName, new ImapParenthesizedString(quotedMailboxNamePatterns), out mailboxes);
-
-        /*
-         * IMAP4 Extension for Returning STATUS Information in Extended LIST
-         * http://tools.ietf.org/html/rfc5819
-         */
-        if (returnOptions != null && returnOptions.RequiredCapabilities.Contains(ImapCapability.ListStatus)) {
-          // XXX: converting STATUS response
-          foreach (var response in t.Result.ReceivedResponses) {
-            var data = response as ImapDataResponse;
-
-            if (data == null || data.Type != ImapDataResponseType.Status)
-              continue;
-
-            string mailboxName;
-            var statusAttr = ImapDataResponseConverter.FromStatus(data, out mailboxName);
-
-            var statusMailbox = Array.Find(mailboxes, delegate(ImapMailbox mailbox) {
-              return mailbox.Name == mailboxName;
-            });
-
-            if (statusMailbox != null)
-              statusMailbox.UpdateStatus(statusAttr);
-          }
-        }
-
-        return t.Result;
-      }
-    }
-
-    private ImapCommandResult ListLsubInternal(ListTransactionBase t,
-                                               string referenceName,
-                                               ImapString mailboxName,
-                                               out ImapMailbox[] mailboxes)
-    {
-      RejectNonAuthenticatedState();
-
-      mailboxes = null;
-
-      t.RequestArguments["reference name"] = new ImapQuotedString(referenceName);
-      t.RequestArguments["mailbox name"] = mailboxName;
-
-      if (ProcessTransaction(t).Succeeded)
-        mailboxes = Array.ConvertAll<ImapMailboxList, ImapMailbox>(t.Result.Value, mailboxManager.GetExistOrCreate);
-
-      return t.Result;
     }
 
     /// <summary>sends STATUS command</summary>
@@ -1072,7 +584,7 @@ namespace Smdn.Net.Imap4.Client.Session {
     {
       RejectNonAuthenticatedState();
 
-      RejectInvalidMailboxNameArgument(mailboxName);
+      var argMailboxName = ImapMailboxNameString.CreateMailboxNameNonEmpty(mailboxName);
 
       if (statusDataItem == null)
         throw new ArgumentNullException("statusDataItem");
@@ -1103,7 +615,7 @@ namespace Smdn.Net.Imap4.Client.Session {
 
       using (var t = new StatusTransaction(connection)) {
         // mailbox name
-        t.RequestArguments["mailbox name"] = new ImapMailboxNameString(mailboxName);
+        t.RequestArguments["mailbox name"] = argMailboxName;
 
         // status data item names
         t.RequestArguments["status data item names"] = statusDataItem;
@@ -1122,523 +634,18 @@ namespace Smdn.Net.Imap4.Client.Session {
       }
     }
 
-    /// <summary>sends APPEND command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public ImapCommandResult Append(IImapAppendMessage message, ImapMailbox mailbox)
-    {
-      return AppendInternal(new[] {message}, false, mailbox);
-    }
-
-    /// <summary>sends APPEND command</summary>
-    /// <remarks>
-    /// valid in authenticated state.
-    /// this method will fail if server does not support BINARY extension.
-    /// </remarks>
-    public ImapCommandResult AppendBinary(IImapAppendMessage message, ImapMailbox mailbox)
-    {
-      return AppendInternal(new[] {message}, true, mailbox);
-    }
-
-    /// <summary>sends APPEND command</summary>
-    /// <remarks>
-    /// valid in authenticated state.
-    /// this method will fail if server does not support MULTIAPPEND extension.
-    /// </remarks>
-    public ImapCommandResult AppendMultiple(IEnumerable<IImapAppendMessage> messages, ImapMailbox mailbox)
-    {
-      return AppendInternal(messages, false, mailbox);
-    }
-
-    /// <summary>sends APPEND command</summary>
-    /// <remarks>
-    /// valid in authenticated state.
-    /// this method will fail if server does not support BINARY or MULTIAPPEND extension.
-    /// </remarks>
-    public ImapCommandResult AppendBinaryMultiple(IEnumerable<IImapAppendMessage> messages, ImapMailbox mailbox)
-    {
-      return AppendInternal(messages, true, mailbox);
-    }
-
-    private ImapCommandResult AppendInternal(IEnumerable<IImapAppendMessage> messages, bool binary, ImapMailbox mailbox)
-    {
-      ValidateMailboxRelationship(mailbox);
-
-      ImapAppendedUidSet discard;
-      ImapMailbox discard2;
-
-      return AppendInternal(messages, binary, mailbox.Name, false, out discard, out discard2);
-    }
-
-    /// <summary>sends APPEND command</summary>
-    /// <remarks>
-    /// valid in authenticated state.
-    /// the out parameter <paramref name="appendedUids"/> will be set if the server supports UIDPLUS extension and returns [APPENDUID] responce code, otherwise null.
-    /// </remarks>
-    public ImapCommandResult Append(IImapAppendMessage message, ImapMailbox mailbox, out ImapAppendedUidSet appendedUids)
-    {
-      return AppendInternal(new[] {message}, false, mailbox, out appendedUids);
-    }
-
-    /// <summary>sends APPEND command</summary>
-    /// <remarks>
-    /// valid in authenticated state.
-    /// this method will fail if server does not support BINARY extension.
-    /// the out parameter <paramref name="appendedUids"/> will be set if the server supports UIDPLUS extension and returns [APPENDUID] responce code, otherwise null.
-    /// </remarks>
-    public ImapCommandResult AppendBinary(IImapAppendMessage message, ImapMailbox mailbox, out ImapAppendedUidSet appendedUids)
-    {
-      return AppendInternal(new[] {message}, true, mailbox, out appendedUids);
-    }
-
-    /// <summary>sends APPEND command</summary>
-    /// <remarks>
-    /// valid in authenticated state.
-    /// this method will fail if server does not support MULTIAPPEND extension.
-    /// the out parameter <paramref name="appendedUids"/> will be set if the server supports UIDPLUS extension and returns [APPENDUID] responce code, otherwise null.
-    /// </remarks>
-    public ImapCommandResult AppendMultiple(IEnumerable<IImapAppendMessage> messages, ImapMailbox mailbox, out ImapAppendedUidSet appendedUids)
-    {
-      return AppendInternal(messages, false, mailbox, out appendedUids);
-    }
-
-    /// <summary>sends APPEND command</summary>
-    /// <remarks>
-    /// valid in authenticated state.
-    /// this method will fail if server does not support BINARY or MULTIAPPEND extension.
-    /// the out parameter <paramref name="appendedUids"/> will be set if the server supports UIDPLUS extension and returns [APPENDUID] responce code, otherwise null.
-    /// </remarks>
-    public ImapCommandResult AppendBinaryMultiple(IEnumerable<IImapAppendMessage> messages, ImapMailbox mailbox, out ImapAppendedUidSet appendedUids)
-    {
-      return AppendInternal(messages, true, mailbox, out appendedUids);
-    }
-
-    private ImapCommandResult AppendInternal(IEnumerable<IImapAppendMessage> messages, bool binary, ImapMailbox mailbox, out ImapAppendedUidSet appendedUids)
-    {
-      ValidateMailboxRelationship(mailbox);
-
-      ImapMailbox discard;
-
-      return AppendInternal(messages, binary, mailbox.Name, false, out appendedUids, out discard);
-    }
-
-    /// <summary>sends APPEND command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public ImapCommandResult Append(IImapAppendMessage message, string mailboxName)
-    {
-      return AppendInternal(new[] {message}, false, mailboxName);
-    }
-
-    /// <summary>sends APPEND command</summary>
-    /// <remarks>
-    /// valid in authenticated state.
-    /// this method will fail if server does not support BINARY extension.
-    /// </remarks>
-    public ImapCommandResult AppendBinary(IImapAppendMessage message, string mailboxName)
-    {
-      return AppendInternal(new[] {message}, true, mailboxName);
-    }
-
-    /// <summary>sends APPEND command</summary>
-    /// <remarks>
-    /// valid in authenticated state.
-    /// this method will fail if server does not support MULTIAPPEND extension.
-    /// </remarks>
-    public ImapCommandResult AppendMultiple(IEnumerable<IImapAppendMessage> messages, string mailboxName)
-    {
-      return AppendInternal(messages, false, mailboxName);
-    }
-
-    /// <summary>sends APPEND command</summary>
-    /// <remarks>
-    /// valid in authenticated state.
-    /// this method will fail if server does not support BINARY or MULTIAPPEND extension.
-    /// </remarks>
-    public ImapCommandResult AppendBinaryMultiple(IEnumerable<IImapAppendMessage> messages, string mailboxName)
-    {
-      return AppendInternal(messages, true, mailboxName);
-    }
-
-    private ImapCommandResult AppendInternal(IEnumerable<IImapAppendMessage> messages, bool binary, string mailboxName)
-    {
-      ImapAppendedUidSet discard;
-      ImapMailbox discard2;
-
-      return AppendInternal(messages, binary, mailboxName, false, out discard, out discard2);
-    }
-
-    /// <summary>sends APPEND command</summary>
-    /// <remarks>
-    /// valid in authenticated state.
-    /// the out parameter <paramref name="appendedUids"/> will be set if the server supports UIDPLUS extension and returns [APPENDUID] responce code, otherwise null.
-    /// </remarks>
-    public ImapCommandResult Append(IImapAppendMessage message, string mailboxName, out ImapAppendedUidSet appendedUids)
-    {
-      return AppendInternal(new[] {message}, false, mailboxName, out appendedUids);
-    }
-
-    /// <summary>sends APPEND command</summary>
-    /// <remarks>
-    /// valid in authenticated state.
-    /// this method will fail if server does not support BINARY extension.
-    /// the out parameter <paramref name="appendedUids"/> will be set if the server supports UIDPLUS extension and returns [APPENDUID] responce code, otherwise null.
-    /// </remarks>
-    public ImapCommandResult AppendBinary(IImapAppendMessage message, string mailboxName, out ImapAppendedUidSet appendedUids)
-    {
-      return AppendInternal(new[] {message}, true, mailboxName, out appendedUids);
-    }
-
-    /// <summary>sends APPEND command</summary>
-    /// <remarks>
-    /// valid in authenticated state.
-    /// this method will fail if server does not support MULTIAPPEND extension.
-    /// the out parameter <paramref name="appendedUids"/> will be set if the server supports UIDPLUS extension and returns [APPENDUID] responce code, otherwise null.
-    /// </remarks>
-    public ImapCommandResult AppendMultiple(IEnumerable<IImapAppendMessage> messages, string mailboxName, out ImapAppendedUidSet appendedUids)
-    {
-      return AppendInternal(messages, false, mailboxName, out appendedUids);
-    }
-
-    /// <summary>sends APPEND command</summary>
-    /// <remarks>
-    /// valid in authenticated state.
-    /// this method will fail if server does not support BINARY or MULTIAPPEND extension.
-    /// the out parameter <paramref name="appendedUids"/> will be set if the server supports UIDPLUS extension and returns [APPENDUID] responce code, otherwise null.
-    /// </remarks>
-    public ImapCommandResult AppendBinaryMultiple(IEnumerable<IImapAppendMessage> messages, string mailboxName, out ImapAppendedUidSet appendedUids)
-    {
-      return AppendInternal(messages, true, mailboxName, out appendedUids);
-    }
-
-    private ImapCommandResult AppendInternal(IEnumerable<IImapAppendMessage> messages, bool binary, string mailboxName, out ImapAppendedUidSet appendedUids)
-    {
-      ImapMailbox discard;
-
-      return AppendInternal(messages, binary, mailboxName, false, out appendedUids, out discard);
-    }
-
-    /// <summary>sends APPEND command</summary>
-    /// <remarks>
-    /// valid in authenticated state.
-    /// this method tries to automatically create the mailbox when server sent [TRYCREATE] response code.
-    /// </remarks>
-    public ImapCommandResult Append(IImapAppendMessage message, string mailboxName, out ImapMailbox createdMailbox)
-    {
-      return AppendInternal(new[] {message}, false, mailboxName, out createdMailbox);
-    }
-
-    /// <summary>sends APPEND command</summary>
-    /// <remarks>
-    /// valid in authenticated state.
-    /// this method will fail if server does not support BINARY extension.
-    /// this method tries to automatically create the mailbox when server sent [TRYCREATE] response code.
-    /// </remarks>
-    public ImapCommandResult AppendBinary(IImapAppendMessage message, string mailboxName, out ImapMailbox createdMailbox)
-    {
-      return AppendInternal(new[] {message}, true, mailboxName, out createdMailbox);
-    }
-
-    /// <summary>sends APPEND command</summary>
-    /// <remarks>
-    /// valid in authenticated state.
-    /// this method will fail if server does not support MULTIAPPEND extension.
-    /// this method tries to automatically create the mailbox when server sent [TRYCREATE] response code.
-    /// </remarks>
-    public ImapCommandResult AppendMultiple(IEnumerable<IImapAppendMessage> messages, string mailboxName, out ImapMailbox createdMailbox)
-    {
-      return AppendInternal(messages, false, mailboxName, out createdMailbox);
-    }
-
-    /// <summary>sends APPEND command</summary>
-    /// <remarks>
-    /// valid in authenticated state.
-    /// this method will fail if server does not support BINARY or MULTIAPPEND extension.
-    /// this method tries to automatically create the mailbox when server sent [TRYCREATE] response code.
-    /// </remarks>
-    public ImapCommandResult AppendBinaryMultiple(IEnumerable<IImapAppendMessage> messages, string mailboxName, out ImapMailbox createdMailbox)
-    {
-      return AppendInternal(messages, true, mailboxName, out createdMailbox);
-    }
-
-    private ImapCommandResult AppendInternal(IEnumerable<IImapAppendMessage> messages, bool binary, string mailboxName, out ImapMailbox createdMailbox)
-    {
-      ImapAppendedUidSet discard;
-
-      return AppendInternal(messages, binary, mailboxName, true, out discard, out createdMailbox);
-    }
-
-    /// <summary>sends APPEND command</summary>
-    /// <remarks>
-    /// valid in authenticated state.
-    /// this method tries to automatically create the mailbox when server sent [TRYCREATE] response code.
-    /// the out parameter <paramref name="appendedUids"/> will be set if the server supports UIDPLUS extension and returns [APPENDUID] responce code, otherwise null.
-    /// </remarks>
-    public ImapCommandResult Append(IImapAppendMessage message, string mailboxName, out ImapAppendedUidSet appendedUids, out ImapMailbox createdMailbox)
-    {
-      return AppendInternal(new[] {message}, false, mailboxName, out appendedUids, out createdMailbox);
-    }
-
-    /// <summary>sends APPEND command</summary>
-    /// <remarks>
-    /// valid in authenticated state.
-    /// this method will fail if server does not support BINARY extension.
-    /// this method tries to automatically create the mailbox when server sent [TRYCREATE] response code.
-    /// the out parameter <paramref name="appendedUids"/> will be set if the server supports UIDPLUS extension and returns [APPENDUID] responce code, otherwise null.
-    /// </remarks>
-    public ImapCommandResult AppendBinary(IImapAppendMessage message, string mailboxName, out ImapAppendedUidSet appendedUids, out ImapMailbox createdMailbox)
-    {
-      return AppendInternal(new[] {message}, true, mailboxName, out appendedUids, out createdMailbox);
-    }
-
-    /// <summary>sends APPEND command</summary>
-    /// <remarks>
-    /// valid in authenticated state.
-    /// this method will fail if server does not support MULTIAPPEND extension.
-    /// this method tries to automatically create the mailbox when server sent [TRYCREATE] response code.
-    /// the out parameter <paramref name="appendedUids"/> will be set if the server supports UIDPLUS extension and returns [APPENDUID] responce code, otherwise null.
-    /// </remarks>
-    public ImapCommandResult AppendMultiple(IEnumerable<IImapAppendMessage> messages, string mailboxName, out ImapAppendedUidSet appendedUids, out ImapMailbox createdMailbox)
-    {
-      return AppendInternal(messages, false, mailboxName, out appendedUids, out createdMailbox);
-    }
-
-    /// <summary>sends APPEND command</summary>
-    /// <remarks>
-    /// valid in authenticated state.
-    /// this method will fail if server does not support BINARY or MULTIAPPEND extension.
-    /// this method tries to automatically create the mailbox when server sent [TRYCREATE] response code.
-    /// the out parameter <paramref name="appendedUids"/> will be set if the server supports UIDPLUS extension and returns [APPENDUID] responce code, otherwise null.
-    /// </remarks>
-    public ImapCommandResult AppendBinaryMultiple(IEnumerable<IImapAppendMessage> messages, string mailboxName, out ImapAppendedUidSet appendedUids, out ImapMailbox createdMailbox)
-    {
-      return AppendInternal(messages, true, mailboxName, out appendedUids, out createdMailbox);
-    }
-
-    private ImapCommandResult AppendInternal(IEnumerable<IImapAppendMessage> messages, bool binary, string mailboxName, out ImapAppendedUidSet appendedUids, out ImapMailbox createdMailbox)
-    {
-      return AppendInternal(messages, binary, mailboxName, true, out appendedUids, out createdMailbox);
-    }
-
-    private ImapCommandResult AppendInternal(IEnumerable<IImapAppendMessage> messages, bool binary, string mailboxName, bool tryCreate, out ImapAppendedUidSet appendedUids, out ImapMailbox createdMailbox)
-    {
-      RejectNonAuthenticatedState();
-
-      if (messages == null)
-        throw new ArgumentNullException("messages");
-
-      RejectInvalidMailboxNameArgument(mailboxName);
-
-      appendedUids = null;
-      createdMailbox = null;
-
-      // append message
-      var messagesToUpload = new List<ImapString>();
-      var messageCount = 0;
-      var literalOptions = ImapLiteralOptions.NonSynchronizingIfCapable
-                           | (binary ? ImapLiteralOptions.Literal8 : ImapLiteralOptions.Literal);
-
-      foreach (var message in messages) {
-        if (message == null)
-          throw new ArgumentException("contains null", "messages");
-
-        /*
-         * RFC 4466 - Collected Extensions to IMAP4 ABNF
-         * http://tools.ietf.org/html/rfc4466
-         * 
-         *    append          = "APPEND" SP mailbox 1*append-message
-         *                      ;; only a single append-message may appear
-         *                      ;; if MULTIAPPEND [MULTIAPPEND] capability
-         *                      ;; is not present
-         *    append-message  = append-opts SP append-data
-         *    append-ext      = append-ext-name SP append-ext-value
-         *                      ;; This non-terminal define extensions to
-         *                      ;; to message metadata.
-         *    append-ext-name = tagged-ext-label
-         *    append-ext-value= tagged-ext-val
-         *                      ;; This non-terminal shows recommended syntax
-         *                      ;; for future extensions.
-         *    append-data     = literal / literal8 / append-data-ext
-         *    append-data-ext = tagged-ext
-         *                      ;; This non-terminal shows recommended syntax
-         *                      ;; for future extensions,
-         *                      ;; i.e., a mandatory label followed
-         *                      ;; by parameters.
-         *    append-opts     = [SP flag-list] [SP date-time] *(SP append-ext)
-         *                      ;; message metadata
-         */
-
-        // flag-list
-        if (message.Flags != null && 0 < message.Flags.Count)
-          messagesToUpload.Add(new ImapParenthesizedString(message.Flags.GetNonApplicableFlagsRemoved().ToArray()));
-
-        // date-time
-        if (message.InternalDate.HasValue)
-          messagesToUpload.Add(ImapDateTimeFormat.ToDateTimeString(message.InternalDate.Value));
-
-        // append-data
-        messagesToUpload.Add(new ImapLiteralStream(message.GetMessageStream(),
-                                                   literalOptions));
-
-        messageCount++;
-      }
-
-      if (messageCount == 0)
-        throw new ArgumentException("at least 1 message must be specified", "messages");
-
-      ImapCommandResult failedResult = null;
-
-      for (var i = 0; i < 2; i++) {
-        var respTryCreate = false;
-
-        using (var t = new AppendTransaction(connection, 1 < messageCount)) {
-          // mailbox name
-          t.RequestArguments["mailbox name"] = new ImapMailboxNameString(mailboxName);
-
-          // messages to upload
-          t.RequestArguments["messages to upload"] = new ImapStringList(messagesToUpload.ToArray());
-
-          if (ProcessTransaction(t).Succeeded) {
-            appendedUids = t.Result.Value;
-            return t.Result;
-          }
-          else {
-            if (ProcessMailboxRefferalResponse(t.Result.TaggedStatusResponse) || !tryCreate)
-              return t.Result;
-          }
-
-          failedResult = t.Result;
-
-          // 6.3.11. APPEND Command
-          //       If the destination mailbox does not exist, a server MUST return an
-          //       error, and MUST NOT automatically create the mailbox.  Unless it
-          //       is certain that the destination mailbox can not be created, the
-          //       server MUST send the response code "[TRYCREATE]" as the prefix of
-          //       the text of the tagged NO response.  This gives a hint to the
-          //       client that it can attempt a CREATE command and retry the APPEND
-          //       if the CREATE is successful.
-          respTryCreate = (t.Result.GetResponseCode(ImapResponseCode.TryCreate) is ImapTaggedStatusResponse);
-        }
-
-        // try create
-        if (i == 0 && respTryCreate)
-          if (Create(mailboxName, out createdMailbox).Failed)
-            return failedResult;
-      }
-
-      return failedResult;
-    }
-
-    /// <summary>begins to send APPEND command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public IAsyncResult BeginAppend(Stream messageBodyStream, DateTimeOffset? internalDate, IImapMessageFlagSet flags, ImapMailbox mailbox)
-    {
-      ValidateMailboxRelationship(mailbox);
-
-      return BeginAppend(messageBodyStream, internalDate, flags, mailbox.Name);
-    }
-
-    /// <summary>begins to send APPEND command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public IAsyncResult BeginAppend(Stream messageBodyStream, DateTimeOffset? internalDate, IImapMessageFlagSet flags, string mailboxName)
-    {
-      RejectNonAuthenticatedState();
-      RejectTransactionProceeding();
-
-      if (messageBodyStream == null)
-        throw new ArgumentNullException("messageBodyStream");
-
-      RejectInvalidMailboxNameArgument(mailboxName);
-
-      // append message
-      var messagesToUpload = new List<ImapString>(1);
-
-      // flag-list
-      if (flags != null && 0 < flags.Count)
-        messagesToUpload.Add(new ImapParenthesizedString(flags.GetNonApplicableFlagsRemoved().ToArray()));
-
-      // date-time
-      if (internalDate.HasValue)
-        messagesToUpload.Add(ImapDateTimeFormat.ToDateTimeString(internalDate.Value));
-
-      // append-data
-      messagesToUpload.Add(new ImapLiteralStream(messageBodyStream, ImapLiteralOptions.Synchronizing));
-
-      AppendTransaction t = null;
-
-      try {
-        t = new AppendTransaction(connection, false);
-
-        // mailbox name
-        t.RequestArguments["mailbox name"] = new ImapMailboxNameString(mailboxName);
-
-        // messages to upload
-        t.RequestArguments["messages to upload"] = new ImapStringList(messagesToUpload.ToArray());
-
-        var asyncResult = BeginProcessTransaction(t, handlesIncapableAsException);
-
-        // wait for started (or completed)
-        for (;;) {
-          if (asyncResult.IsCompleted)
-            break;
-          else if (IsTransactionProceeding)
-            break;
-          else
-            System.Threading.Thread.Sleep(10);
-        }
-
-        return asyncResult;
-      }
-      catch {
-        if (t != null) {
-          t.Dispose();
-          t = null;
-        }
-
-        throw;
-      }
-    }
-
-    /// <summary>ends to send APPEND command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public ImapCommandResult EndAppend(IAsyncResult asyncResult)
-    {
-      ImapAppendedUidSet discard;
-
-      return EndAppend(asyncResult, out discard);
-    }
-
-    /// <summary>ends to send APPEND command</summary>
-    /// <remarks>valid in authenticated state</remarks>
-    public ImapCommandResult EndAppend(IAsyncResult asyncResult, out ImapAppendedUidSet appendedUid)
-    {
-      appendedUid = null;
-
-      var appendAsyncResult = asyncResult as TransactionAsyncResult;
-
-      if (appendAsyncResult == null)
-        throw new ArgumentException("invalid IAsyncResult", "asyncResult");
-
-      using (var t = appendAsyncResult.Transaction as AppendTransaction) {
-        if (EndProcessTransaction(appendAsyncResult).Succeeded)
-          appendedUid = t.Result.Value;
-        else
-          ProcessMailboxRefferalResponse(t.Result.TaggedStatusResponse);
-
-        return t.Result;
-      }
-    }
-
     /// <summary>sends ENABLE command</summary>
     /// <remarks>valid in authenticated state</remarks>
     public ImapCommandResult Enable(params string[] capabilityNames)
     {
-      ImapCapabilityList discard;
+      ImapCapabilitySet discard;
 
       return Enable(out discard, capabilityNames);
     }
 
     /// <summary>sends ENABLE command</summary>
     /// <remarks>valid in authenticated state</remarks>
-    public ImapCommandResult Enable(out ImapCapabilityList enabledCapabilities, params string[] capabilityNames)
+    public ImapCommandResult Enable(out ImapCapabilitySet enabledCapabilities, params string[] capabilityNames)
     {
       RejectNonAuthenticatedState();
 
@@ -1702,11 +709,11 @@ namespace Smdn.Net.Imap4.Client.Session {
                                                referrals);
       }
       else {
-        Trace.Info("mailbox referral: '{0}'", tagged.ResponseText.Text);
-        Trace.Info("  try mailboxes below:");
+        TraceInfo("mailbox referral: '{0}'", tagged.ResponseText.Text);
+        TraceInfo("  try mailboxes below:");
 
         foreach (var referral in referrals) {
-          Trace.Info("    {0}", referral);
+          TraceInfo(string.Concat("    ", referral));
         }
       }
 

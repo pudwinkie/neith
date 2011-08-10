@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -146,14 +146,15 @@ namespace Smdn.Net.Imap4.Client.Session {
 
     public ImapCommandResult GetQuotaRoot(string mailboxName, out IDictionary<string, ImapQuota[]> quotaRoots)
     {
-      RejectInvalidMailboxNameArgument(mailboxName);
       RejectNonAuthenticatedState();
+
+      var argMailboxName = ImapMailboxNameString.CreateMailboxNameNonEmpty(mailboxName);
 
       quotaRoots = null;
 
       using (var t = new GetQuotaRootTransaction(connection)) {
         // mailbox name
-        t.RequestArguments["mailbox name"] = new ImapMailboxNameString(mailboxName);
+        t.RequestArguments["mailbox name"] = argMailboxName;
 
         if (ProcessTransaction(t).Succeeded)
           quotaRoots = t.Result.Value;
@@ -193,7 +194,7 @@ namespace Smdn.Net.Imap4.Client.Session {
     private ImapCommandResult IdleInternal(int idleMillisecondsTimeout, object keepIdleState, ImapKeepIdleCallback keepIdleCallback)
     {
       if (idleMillisecondsTimeout < -1)
-        throw new ArgumentOutOfRangeException("idleMillisecondsTimeout", idleMillisecondsTimeout, "must be greater than or equals to -1");
+        throw ExceptionUtils.CreateArgumentMustBeGreaterThanOrEqualTo(-1, "idleMillisecondsTimeout", idleMillisecondsTimeout);
 
       var idleAsyncResult = BeginIdle(keepIdleState, keepIdleCallback);
 
@@ -242,10 +243,13 @@ namespace Smdn.Net.Imap4.Client.Session {
     /// <remarks>valid in idling</remarks>
     public ImapCommandResult EndIdle(IAsyncResult asyncResult)
     {
+      if (asyncResult == null)
+        throw new ArgumentNullException("asyncResult");
+
       var idleAsyncResult = asyncResult as TransactionAsyncResult;
 
       if (idleAsyncResult == null)
-        throw new ArgumentException("invalid IAsyncResult", "asyncResult");
+        throw ExceptionUtils.CreateArgumentMustBeValidIAsyncResult("asyncResult");
 
       using (var t = idleAsyncResult.Transaction as IdleTransaction) {
         // send 'DONE' if idling
@@ -432,7 +436,10 @@ namespace Smdn.Net.Imap4.Client.Session {
 
     private ImapCommandResult GetMetadataInternal(string[] entrySpecifiers, ImapGetMetadataOptions options, out ImapMetadata[] metadata)
     {
-      return GetMetadataInternal(null, false, entrySpecifiers, options, out metadata);
+      return GetMetadataInternal(null,
+                                 entrySpecifiers,
+                                 options,
+                                 out metadata);
     }
 #endregion
 
@@ -446,7 +453,10 @@ namespace Smdn.Net.Imap4.Client.Session {
     {
       ValidateMailboxRelationship(mailbox);
 
-      return GetMetadataInternal(mailbox.Name, false, new[] {entrySpecifier}, null, out metadata);
+      return GetMetadataInternal(ImapMailboxNameString.CreateMailboxNameNonEmpty(mailbox.Name),
+                                 new[] {entrySpecifier},
+                                 null,
+                                 out metadata);
     }
 
     /// <remarks>
@@ -457,7 +467,10 @@ namespace Smdn.Net.Imap4.Client.Session {
     {
       ValidateMailboxRelationship(mailbox);
 
-      return GetMetadataInternal(mailbox.Name, false, entrySpecifiers, null, out metadata);
+      return GetMetadataInternal(ImapMailboxNameString.CreateMailboxNameNonEmpty(mailbox.Name),
+                                 entrySpecifiers,
+                                 null,
+                                 out metadata);
     }
 
     /// <summary>sends GETMETADATA command</summary>
@@ -467,7 +480,10 @@ namespace Smdn.Net.Imap4.Client.Session {
     /// </remarks>
     public ImapCommandResult GetMetadata(string mailboxName, string entrySpecifier, out ImapMetadata[] metadata)
     {
-      return GetMetadataInternal(mailboxName, true, new[] {entrySpecifier}, null, out metadata);
+      return GetMetadataInternal(ImapMailboxNameString.CreateMailboxNameNonEmpty(mailboxName),
+                                 new[] {entrySpecifier},
+                                 null,
+                                 out metadata);
     }
 
     /// <summary>sends GETMETADATA command</summary>
@@ -477,7 +493,10 @@ namespace Smdn.Net.Imap4.Client.Session {
     /// </remarks>
     public ImapCommandResult GetMetadata(string mailboxName, string[] entrySpecifiers, out ImapMetadata[] metadata)
     {
-      return GetMetadataInternal(mailboxName, true, entrySpecifiers, null, out metadata);
+      return GetMetadataInternal(ImapMailboxNameString.CreateMailboxNameNonEmpty(mailboxName),
+                                 entrySpecifiers,
+                                 null,
+                                 out metadata);
     }
 
     /// <summary>sends GETMETADATA command</summary>
@@ -492,7 +511,10 @@ namespace Smdn.Net.Imap4.Client.Session {
 
       ValidateMailboxRelationship(mailbox);
 
-      return GetMetadataInternal(mailbox.Name, false, new[] {entrySpecifier}, options, out metadata);
+      return GetMetadataInternal(ImapMailboxNameString.CreateMailboxNameNonEmpty(mailbox.Name),
+                                 new[] {entrySpecifier},
+                                 options,
+                                 out metadata);
     }
 
     /// <summary>sends GETMETADATA command</summary>
@@ -507,7 +529,10 @@ namespace Smdn.Net.Imap4.Client.Session {
 
       ValidateMailboxRelationship(mailbox);
 
-      return GetMetadataInternal(mailbox.Name, false, entrySpecifiers, options, out metadata);
+      return GetMetadataInternal(ImapMailboxNameString.CreateMailboxNameNonEmpty(mailbox.Name),
+                                 entrySpecifiers,
+                                 options,
+                                 out metadata);
     }
 
     /// <summary>sends GETMETADATA command</summary>
@@ -520,7 +545,10 @@ namespace Smdn.Net.Imap4.Client.Session {
       if (options == null)
         throw new ArgumentNullException("options");
 
-      return GetMetadataInternal(mailboxName, true, new[] {entrySpecifier}, options, out metadata);
+      return GetMetadataInternal(ImapMailboxNameString.CreateMailboxNameNonEmpty(mailboxName),
+                                 new[] {entrySpecifier},
+                                 options,
+                                 out metadata);
     }
 
     /// <summary>sends GETMETADATA command</summary>
@@ -533,19 +561,22 @@ namespace Smdn.Net.Imap4.Client.Session {
       if (options == null)
         throw new ArgumentNullException("options");
 
-      return GetMetadataInternal(mailboxName, true, entrySpecifiers, options, out metadata);
+      return GetMetadataInternal(ImapMailboxNameString.CreateMailboxNameNonEmpty(mailboxName),
+                                 entrySpecifiers,
+                                 options,
+                                 out metadata);
     }
 #endregion
 
-    private ImapCommandResult GetMetadataInternal(string mailboxName, bool checkName, string[] entrySpecifiers, ImapGetMetadataOptions options, out ImapMetadata[] metadata)
+    private ImapCommandResult GetMetadataInternal(ImapString mailboxName,
+                                                  string[] entrySpecifiers,
+                                                  ImapGetMetadataOptions options,
+                                                  out ImapMetadata[] metadata)
     {
       if (entrySpecifiers == null)
         throw new ArgumentNullException("entrySpecifiers");
-      else if (entrySpecifiers.Length == 0)
-        throw new ArgumentException("must be non-empty array", "entrySpecifiers");
-
-      if (checkName)
-        RejectInvalidMailboxNameArgument(mailboxName);
+      if (entrySpecifiers.Length == 0)
+        throw ExceptionUtils.CreateArgumentMustBeNonEmptyArray("entrySpecifiers");
 
       if (handlesIncapableAsException)
         CheckServerCapabilityMetadata(mailboxName != null);
@@ -554,9 +585,10 @@ namespace Smdn.Net.Imap4.Client.Session {
 
       using (var t = new GetMetadataTransaction(connection)) {
         // mailbox-name
-        t.RequestArguments["mailbox-name"] = (mailboxName == null)
-          ? new ImapQuotedString(string.Empty)
-          : new ImapMailboxNameString(mailboxName);
+        if (mailboxName == null)
+          t.RequestArguments["mailbox-name"] = ImapQuotedString.Empty;
+        else
+          t.RequestArguments["mailbox-name"] = mailboxName;
 
         // options
         if (options != null)
@@ -585,7 +617,8 @@ namespace Smdn.Net.Imap4.Client.Session {
     /// </remarks>
     public ImapCommandResult SetMetadata(params ImapMetadata[] metadata)
     {
-      return SetMetadataInternal(null, false, metadata);
+      return SetMetadataInternal(null,
+                                 metadata);
     }
 
     /// <summary>sends SETMETADATA command and sets NIL value to remove entries</summary>
@@ -595,7 +628,8 @@ namespace Smdn.Net.Imap4.Client.Session {
     /// </remarks>
     public ImapCommandResult SetMetadata(string[] entrySpecifiers)
     {
-      return SetMetadataInternal(null, false, Array.ConvertAll<string, ImapMetadata>(entrySpecifiers, ImapMetadata.CreateNil));
+      return SetMetadataInternal(null,
+                                 Array.ConvertAll<string, ImapMetadata>(entrySpecifiers, ImapMetadata.CreateNil));
     }
 #endregion
 
@@ -609,7 +643,8 @@ namespace Smdn.Net.Imap4.Client.Session {
     {
       ValidateMailboxRelationship(mailbox);
 
-      return SetMetadataInternal(mailbox.Name, false, metadata);
+      return SetMetadataInternal(ImapMailboxNameString.CreateMailboxNameNonEmpty(mailbox.Name),
+                                 metadata);
     }
 
     /// <summary>sends SETMETADATA command</summary>
@@ -619,7 +654,8 @@ namespace Smdn.Net.Imap4.Client.Session {
     /// </remarks>
     public ImapCommandResult SetMetadata(string mailboxName, params ImapMetadata[] metadata)
     {
-      return SetMetadataInternal(mailboxName, true, metadata);
+      return SetMetadataInternal(ImapMailboxNameString.CreateMailboxNameNonEmpty(mailboxName),
+                                 metadata);
     }
 
     /// <summary>sends SETMETADATA command and sets NIL value to remove entries</summary>
@@ -631,7 +667,8 @@ namespace Smdn.Net.Imap4.Client.Session {
     {
       ValidateMailboxRelationship(mailbox);
 
-      return SetMetadataInternal(mailbox.Name, false, Array.ConvertAll<string, ImapMetadata>(entrySpecifiers, ImapMetadata.CreateNil));
+      return SetMetadataInternal(ImapMailboxNameString.CreateMailboxNameNonEmpty(mailbox.Name),
+                                 Array.ConvertAll<string, ImapMetadata>(entrySpecifiers, ImapMetadata.CreateNil));
     }
 
     /// <summary>sends SETMETADATA command and sets NIL value to remove entries</summary>
@@ -641,26 +678,26 @@ namespace Smdn.Net.Imap4.Client.Session {
     /// </remarks>
     public ImapCommandResult SetMetadata(string mailboxName, params string[] entrySpecifiers)
     {
-      return SetMetadataInternal(mailboxName, true, Array.ConvertAll<string, ImapMetadata>(entrySpecifiers, ImapMetadata.CreateNil));
+      return SetMetadataInternal(ImapMailboxNameString.CreateMailboxNameNonEmpty(mailboxName),
+                                 Array.ConvertAll<string, ImapMetadata>(entrySpecifiers, ImapMetadata.CreateNil));
     }
 #endregion
 
-    private ImapCommandResult SetMetadataInternal(string mailboxName, bool checkName, ImapMetadata[] metadata)
+    private ImapCommandResult SetMetadataInternal(ImapMailboxNameString mailboxName,
+                                                  ImapMetadata[] metadata)
     {
       if (metadata == null)
         throw new ArgumentNullException("metadata");
-
-      if (checkName)
-        RejectInvalidMailboxNameArgument(mailboxName);
 
       if (handlesIncapableAsException)
         CheckServerCapabilityMetadata(mailboxName != null);
 
       using (var t = new SetMetadataTransaction(connection)) {
         // mailbox-name
-        t.RequestArguments["mailbox-name"] = (mailboxName == null)
-          ? new ImapQuotedString(string.Empty)
-          : new ImapMailboxNameString(mailboxName);
+        if (mailboxName == null)
+          t.RequestArguments["mailbox-name"] = ImapQuotedString.Empty;
+        else
+          t.RequestArguments["mailbox-name"] = mailboxName;
 
         // list of entry, values
         var listOfEntryAndValues = new List<ImapString>(metadata.Length);
@@ -672,7 +709,7 @@ namespace Smdn.Net.Imap4.Client.Session {
           listOfEntryAndValues.Add(m.EntryName);
 
           if (m.Value == null)
-            listOfEntryAndValues.Add(new ImapNilString());
+            listOfEntryAndValues.Add(ImapNilString.Nil);
           else
             listOfEntryAndValues.Add(m.Value);
         }
@@ -699,11 +736,11 @@ namespace Smdn.Net.Imap4.Client.Session {
        *    of this extension by returning "METADATA-SERVER" as one of the
        *    supported capabilities in the CAPABILITY command response.
        */
-      if (serverCapabilities.Has(ImapCapability.Metadata))
+      if (serverCapabilities.Contains(ImapCapability.Metadata))
         return;
       else if (requireMailboxAnnotations)
         throw new ImapIncapableException(ImapCapability.Metadata);
-      else if (!serverCapabilities.Has(ImapCapability.MetadataServer))
+      else if (!serverCapabilities.Contains(ImapCapability.MetadataServer))
         throw new ImapIncapableException(ImapCapability.MetadataServer);
     }
   }

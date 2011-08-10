@@ -1,0 +1,42 @@
+#「東方花映塚　～ Phantasmagoria of Flower View.」 製品版曲データ (written by santa marta)
+#デフォルトのパスと製品名
+@東方花映塚\thbgm.dat,東方花映塚　～ Phantasmagoria of Flower View.
+#原作者名
+#=ProductInfo,Creator,上海アリス幻樂団
+#製品略称
+#=ProductInfo,Prefix,th09
+#=ProductInfo,ShortName,東方花映塚
+#=ProductInfo,AbbreviatedShortName,花映塚
+#=ProductInfo,ShortestName,花
+#頒布年月日
+#=ProductInfo,ReleaseDate,2005-08-14
+#thbgm.datのサイズ(バイト単位)
+#=ProductInfo,BgmSourceLength,439835760
+#thbgm.datのハッシュ値(MD5)
+#=ProductInfo,BgmSourceHash,MD5Sum,479ea48333bdd8e6ea433d9fda5af626
+#thbgm.datの識別用ハッシュ値(末尾4MBのハッシュ)
+#=ProductInfo,BgmSourceIdentificationHash,MD5Sum,b44dd75fa29f8f61e38d5959b91c8424
+#THxxBGM製品識別用GUID
+#=ProductInfo,THxxBGMProductGuid,881949A5-B453-A741-E8CD-72D1A5741E0F
+#曲データ
+#開始位置[Bytes]、イントロ部の長さ[Bytes]、ループ部の長さ[Bytes]、曲名
+#位置・長さは16進値として記述する
+00000010,000D5900,00B20B00,花映塚　～ Higan Retour
+02E77C10,00170280,0196ED80,春色小径　～ Colorful Path
+00BF6410,001D5000,014D4C00,オリエンタルダークフライト
+04956C10,000CA800,0151CC00,フラワリングナイト
+0ABF7010,0028E800,01834000,東方妖々夢　～ Ancient Temple
+10172810,000A2C00,013B5C00,狂気の瞳　～ Invisible Full Moon
+05F3E010,001D2800,0172F400,おてんば恋娘の冒険
+09439010,000B3000,01708830,幽霊楽団　～ Phantom Ensemble
+0783FC10,001B3C80,01A41E40,もう歌しか聞こえない　～ Flower Mix
+115CC010,000F1400,0117FC00,お宇佐さまの素い幡
+0C6B9810,002AFC00,01B62000,風神少女　 (Short Version)
+1530F810,00108800,012C1C00,ポイズンボディ　～ Forsaken Doll
+166DB010,001CF800,0191B000,今昔幻想郷　～ Flower Land
+0E4CB410,00268900,01A3E700,彼岸帰航　～ Riverside View
+1283E410,00106000,029CA400,六十年目の東方裁判　～ Fate of Sixty Years
+022A0010,000B7A00,00B20200,花の映る塚
+18A18810,0034CC00,00325400,此岸の塚
+181C5810,0005F800,007F1800,花は幻想のままに
+1908B810,000D7C00,01212860,魂の花　～ Another Dream

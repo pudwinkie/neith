@@ -54,6 +54,20 @@ namespace Smdn {
     }
 
     [Test]
+    public void TestConstruct3()
+    {
+      var uuid = new Uuid("01c47915-4777-11d8-bc70-0090272ff725");
+      var guid = new Guid("01c47915-4777-11d8-bc70-0090272ff725");
+
+      Assert.IsTrue(uuid.Equals(guid), "construct from string");
+
+      uuid = new Uuid(new byte[] {0x6b, 0xa7, 0xb8, 0x10, 0x9d, 0xad, 0x11, 0xd1, 0x80, 0xb4, 0x00, 0xc0, 0x4f, 0xd4, 0x30, 0xc8});
+      guid = new Guid(new byte[] {0x6b, 0xa7, 0xb8, 0x10, 0x9d, 0xad, 0x11, 0xd1, 0x80, 0xb4, 0x00, 0xc0, 0x4f, 0xd4, 0x30, 0xc8});
+
+      Assert.IsTrue(uuid.Equals(guid), "construct from byte array");
+    }
+
+    [Test]
     public void TestConstructFromGuid()
     {
       Assert.AreEqual(Uuid.Nil, new Uuid(Guid.Empty));
@@ -146,7 +160,7 @@ namespace Smdn {
     }
 
     [Test]
-    public void TestToString()
+    public void TestToString1()
     {
       Assert.AreEqual("00000000-0000-0000-0000-000000000000", Uuid.Nil.ToString());
       Assert.AreEqual("6ba7b810-9dad-11d1-80b4-00c04fd430c8", Uuid.RFC4122NamespaceDns.ToString());
@@ -170,10 +184,105 @@ namespace Smdn {
     }
 
     [Test]
-    public void TestToByteArray()
+    public void TestToString2()
     {
-      Assert.AreEqual(BitConverter.ToString(new byte[] {0x6b, 0xa7, 0xb8, 0x10, 0x9d, 0xad, 0x11, 0xd1, 0x80, 0xb4, 0x00, 0xc0, 0x4f, 0xd4, 0x30, 0xc8}),
+      var guid = new Guid("6ba7b810-9dad-11d1-80b4-00c04fd430c8");
+      var uuid = new Uuid("6ba7b810-9dad-11d1-80b4-00c04fd430c8");
+
+      Assert.AreEqual(guid.ToString(), uuid.ToString());
+      Assert.AreEqual(guid.ToString("N"), uuid.ToString("N"), "format = N");
+      Assert.AreEqual(guid.ToString("D"), uuid.ToString("D"), "format = D");
+      Assert.AreEqual(guid.ToString("B"), uuid.ToString("B"), "format = B");
+      Assert.AreEqual(guid.ToString("P"), uuid.ToString("P"), "format = P");
+    }
+
+    [Test]
+    public void TestToString3()
+    {
+      var guid = new Guid(new byte[] {0x6b, 0xa7, 0xb8, 0x10, 0x9d, 0xad, 0x11, 0xd1, 0x80, 0xb4, 0x00, 0xc0, 0x4f, 0xd4, 0x30, 0xc8});
+      var uuid = new Uuid(new byte[] {0x6b, 0xa7, 0xb8, 0x10, 0x9d, 0xad, 0x11, 0xd1, 0x80, 0xb4, 0x00, 0xc0, 0x4f, 0xd4, 0x30, 0xc8});
+
+      Assert.AreEqual(guid.ToString(), uuid.ToString());
+      Assert.AreEqual(guid.ToString("N"), uuid.ToString("N"), "format = N");
+      Assert.AreEqual(guid.ToString("D"), uuid.ToString("D"), "format = D");
+      Assert.AreEqual(guid.ToString("B"), uuid.ToString("B"), "format = B");
+      Assert.AreEqual(guid.ToString("P"), uuid.ToString("P"), "format = P");
+    }
+
+    [Test]
+    public void TestToByteArray1()
+    {
+      var expectedBigEndian     = new byte[] {0x6b, 0xa7, 0xb8, 0x10, 0x9d, 0xad, 0x11, 0xd1, 0x80, 0xb4, 0x00, 0xc0, 0x4f, 0xd4, 0x30, 0xc8};
+      var expectedLittleEndian  = new byte[] {0x10, 0xb8, 0xa7, 0x6b, 0xad, 0x9d, 0xd1, 0x11, 0x80, 0xb4, 0x00, 0xc0, 0x4f, 0xd4, 0x30, 0xc8};
+
+      Assert.AreEqual(BitConverter.ToString(BitConverter.IsLittleEndian ? expectedLittleEndian : expectedBigEndian),
                       BitConverter.ToString(Uuid.RFC4122NamespaceDns.ToByteArray()));
+
+      Assert.AreEqual(BitConverter.ToString(expectedBigEndian),
+                      BitConverter.ToString(Uuid.RFC4122NamespaceDns.ToByteArray(Endianness.BigEndian)));
+      Assert.AreEqual(BitConverter.ToString(expectedLittleEndian),
+                      BitConverter.ToString(Uuid.RFC4122NamespaceDns.ToByteArray(Endianness.LittleEndian)));
+    }
+
+    [Test]
+    public void TestToByteArray2()
+    {
+      var guid = new Guid("6ba7b810-9dad-11d1-80b4-00c04fd430c8");
+      var uuid = new Uuid("6ba7b810-9dad-11d1-80b4-00c04fd430c8");
+
+      Assert.AreEqual(BitConverter.ToString(guid.ToByteArray()),
+                      BitConverter.ToString(uuid.ToByteArray()));
+    }
+
+    [Test]
+    public void TestGetBytes()
+    {
+      byte[] buffer = new byte[18] {
+        0xcc,
+        0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00,
+        0xcc
+      };
+
+      Uuid.RFC4122NamespaceDns.GetBytes(buffer, 1, Endianness.BigEndian);
+
+      CollectionAssert.AreEqual(new[] {0xcc, 0x6b, 0xa7, 0xb8, 0x10, 0x9d, 0xad, 0x11, 0xd1, 0x80, 0xb4, 0x00, 0xc0, 0x4f, 0xd4, 0x30, 0xc8, 0xcc},
+                                buffer);
+
+      Uuid.RFC4122NamespaceDns.GetBytes(buffer, 1, Endianness.LittleEndian);
+
+      CollectionAssert.AreEqual(new[] {0xcc, 0x10, 0xb8, 0xa7, 0x6b, 0xad, 0x9d, 0xd1, 0x11, 0x80, 0xb4, 0x00, 0xc0, 0x4f, 0xd4, 0x30, 0xc8, 0xcc},
+                                buffer);
+
+      try {
+        Uuid.RFC4122NamespaceDns.GetBytes(null, 0);
+        Assert.Fail("ArgumentNullException not thrown");
+      }
+      catch (ArgumentNullException) {
+      }
+
+      try {
+        Uuid.RFC4122NamespaceDns.GetBytes(new byte[15], -1);
+        Assert.Fail("ArgumentOutOfRangeException not thrown");
+      }
+      catch (ArgumentOutOfRangeException) {
+      }
+
+      try {
+        Uuid.RFC4122NamespaceDns.GetBytes(new byte[15], 0);
+        Assert.Fail("ArgumentException not thrown");
+      }
+      catch (ArgumentException) {
+      }
+
+      try {
+        Uuid.RFC4122NamespaceDns.GetBytes(new byte[16], 1);
+        Assert.Fail("ArgumentException not thrown");
+      }
+      catch (ArgumentException) {
+      }
     }
 
     [Test]
@@ -191,13 +300,13 @@ namespace Smdn {
     }
 
     [Test]
-    public void TestImplicitConversionOperator()
+    public void TestExplicitConversionOperator()
     {
-      Guid guid = Uuid.Nil;
+      Guid guid = (Guid)Uuid.Nil;
 
       Assert.AreEqual(guid, Guid.Empty);
 
-      Uuid uuid = Guid.Empty;
+      Uuid uuid = (Uuid)Guid.Empty;
 
       Assert.AreEqual(uuid, Uuid.Nil);
     }
@@ -209,6 +318,91 @@ namespace Smdn {
       Assert.IsFalse(Uuid.Nil != Uuid.Nil);
       Assert.IsFalse(Uuid.Nil == Uuid.RFC4122NamespaceDns);
       Assert.IsTrue(Uuid.Nil != Uuid.RFC4122NamespaceDns);
+    }
+
+    [Test]
+    public void TestEquals()
+    {
+      Assert.IsTrue(Uuid.RFC4122NamespaceDns.Equals(Uuid.RFC4122NamespaceDns));
+      Assert.IsFalse(Uuid.RFC4122NamespaceDns.Equals(null));
+      Assert.IsFalse(Uuid.RFC4122NamespaceDns.Equals(1));
+
+      var u0 = new Uuid("00000000-0000-0000-0000-000000000000");
+      var g0 = new Guid("00000000-0000-0000-0000-000000000000");
+      var u1 = new Uuid("00000001-0000-0000-0000-000000000000");
+      var g1 = new Guid("00000001-0000-0000-0000-000000000000");
+      var u2 = new Uuid("00000000-0000-0000-0000-000000000001");
+      var g2 = new Guid("00000000-0000-0000-0000-000000000001");
+      object o;
+
+      Assert.IsTrue(u0.Equals(u0));
+      Assert.IsTrue(u0.Equals(g0));
+
+      o = u0; Assert.IsTrue(u0.Equals(o));
+      o = g0; Assert.IsTrue(u0.Equals(o));
+
+      Assert.IsFalse(u0.Equals(u1));
+      Assert.IsFalse(u0.Equals(g1));
+
+      o = u1; Assert.IsFalse(u0.Equals(o));
+      o = g1; Assert.IsFalse(u0.Equals(o));
+
+      Assert.IsFalse(u0.Equals(u2));
+      Assert.IsFalse(u0.Equals(g2));
+
+      o = u2; Assert.IsFalse(u0.Equals(o));
+      o = g2; Assert.IsFalse(u0.Equals(o));
+    }
+
+    [Test]
+    public void TestCompareTo()
+    {
+      Assert.AreEqual(0, Uuid.RFC4122NamespaceDns.CompareTo(Uuid.RFC4122NamespaceDns));
+      Assert.AreEqual(1, Uuid.RFC4122NamespaceDns.CompareTo(null));
+      Assert.AreNotEqual(0, Uuid.RFC4122NamespaceDns.CompareTo(Guid.Empty));
+
+      try {
+        Uuid.RFC4122NamespaceDns.CompareTo(1);
+        Assert.Fail("ArgumentException not thrown");
+      }
+      catch (ArgumentException) {
+      }
+
+      var ux = new Uuid("00000000-0000-0000-0000-000000000000");
+      var uy = new Uuid("00000001-0000-0000-0000-000000000000");
+      var gx = new Guid("00000000-0000-0000-0000-000000000000");
+      var gy = new Guid("00000001-0000-0000-0000-000000000000");
+
+      Assert.Less(ux, uy);
+      Assert.Less(gx, uy);
+      Assert.Greater(uy, ux);
+      Assert.Greater(gy, ux);
+
+      ux = new Uuid("00000000-0000-0000-0000-000000000000");
+      uy = new Uuid("00000000-0000-0000-0000-000000000001");
+      gx = new Guid("00000000-0000-0000-0000-000000000000");
+      gy = new Guid("00000000-0000-0000-0000-000000000001");
+
+      Assert.Less(ux, uy);
+      Assert.Less(gx, uy);
+      Assert.Greater(uy, ux);
+      Assert.Greater(gy, ux);
+    }
+
+    [Test]
+    public void TestGreaterThanLessThanOperator()
+    {
+      var x = new Uuid("00000000-0000-0000-0000-000000000000");
+      var y = new Uuid("00000001-0000-0000-0000-000000000000");
+
+      Assert.IsTrue(x < y, "x < y");
+      Assert.IsFalse(x > y, "x > y");
+
+      x = new Uuid("00000000-0000-0000-0000-000000000000");
+      y = new Uuid("00000000-0000-0000-0000-000000000001");
+
+      Assert.IsTrue(x < y, "x < y");
+      Assert.IsFalse(x > y, "x > y");
     }
   }
 }

@@ -11,7 +11,7 @@ using Smdn.IO;
 namespace Smdn.Net.Imap4 {
   public class ImapPseudoServer : IDisposable {
     public IPEndPoint ServerEndPoint {
-      get { return server.LocalEndpoint as IPEndPoint; } 
+      get { return serverEndPoint; }
     }
 
     public string Host {
@@ -27,19 +27,22 @@ namespace Smdn.Net.Imap4 {
     }
 
     public bool IsStarted {
-      get { return thread != null; }
+      get { return serverProcRunning != 0; }
     }
 
     public bool WaitForRequest {
-      get; set;
+      get { return waitForRequest; }
+      set { waitForRequest = value; }
     }
 
     public ImapPseudoServer()
     {
-      WaitForRequest = true;
+      waitForRequest = true;
 
       server = new TcpListener(new IPEndPoint(IPAddress.Loopback, 0));
       server.Start();
+
+      serverEndPoint = server.LocalEndpoint as IPEndPoint;
 
       requestStream = new StrictLineOrientedStream(new MemoryStream());
     }
@@ -48,13 +51,28 @@ namespace Smdn.Net.Imap4 {
     {
       responseTag = 0;
 
-      thread = new Thread(ServerThread);
-      thread.Start();
+      if (IsStarted)
+        throw new InvalidOperationException("already started");
+
+      serverStopped = false;
+
+      server.BeginAcceptTcpClient(AcceptClient, null);
     }
 
     public void Dispose()
     {
-      Stop();
+      serverStopped = true;
+
+      if (server != null) {
+        server.Stop();
+        server = null;
+      }
+
+      if (serverProcWaitHandle != null) {
+        serverProcWaitHandle.WaitOne();
+        serverProcWaitHandle.Close();
+        serverProcWaitHandle = null;
+      }
     }
 
     public void Stop()
@@ -64,12 +82,13 @@ namespace Smdn.Net.Imap4 {
 
     public void Stop(bool sendEnqueued)
     {
-      if (thread != null) {
+      if (IsStarted) {
         if (sendEnqueued)
           this.sendEnqueued = true;
 
-        thread.Abort();
-        thread = null;
+        serverStopped = true;
+
+        serverProcWaitHandle.WaitOne();
       }
     }
 
@@ -153,141 +172,169 @@ namespace Smdn.Net.Imap4 {
       return encoding.GetString(line);
     }
 
-    private void ServerThread()
+    private void AcceptClient(IAsyncResult asyncResult)
     {
-      var client = server.AcceptTcpClient();
+      if (serverStopped) // XXX: ?
+        return;
 
-      Console.WriteLine("accepted");
+#pragma warning disable 0420
+      Interlocked.Exchange(ref serverProcRunning, 1);
+#pragma warning restore 0420
 
-      NetworkStream stream = null;
-
-      client.ReceiveTimeout = 250;
+      serverProcWaitHandle.Reset();
 
       try {
-        stream = client.GetStream();
+        TcpClient client = null;
 
         for (;;) {
-          if (responseQueue.Count == 0) {
-            Thread.Sleep(25);
-            continue;
-          }
-
-          // send response
-          var responseText = responseQueue.Dequeue();
-          var response = Encoding.UTF8.GetBytes(responseText);
-
-          try {
-            stream.Write(response, 0, response.Length);
-          }
-          catch (IOException ex) {
-            Console.WriteLine("failed at send, client disconnected?");
-            Console.WriteLine(ex);
-            return;
-          }
-
-          Console.WriteLine("S: {0}", responseText);
-
-          // receive request
-          var buffer = new byte[0x1000];
-
-          for (;;) {
-            try {
-              var read = stream.Read(buffer, 0, buffer.Length);
-
-              if (read == 0) {
-                if (client.Connected) {
-                  continue;
-                }
-                else {
-                  Console.WriteLine("client disconnected");
-                  stream.Close();
-                  client.Close();
-                  return;
-                }
-              }
-
-              Console.WriteLine("C: {0}", Encoding.UTF8.GetString(buffer, 0, read));
-
-              streamLock.AcquireWriterLock(1000);
-
-              try {
-                requestStream.Position = writeOffset;
-                requestStream.Write(buffer, 0, read);
-                requestStream.Flush();
-                writeOffset += read;
-              }
-              finally {
-                streamLock.ReleaseWriterLock();
-              }
-
-              if (read < buffer.Length)
-                break;
+          if (asyncResult.AsyncWaitHandle.WaitOne(25)) {
+            if (serverStopped) {
+              Console.WriteLine("disposed before accept");
+              return;
             }
-            catch (IOException ex) {
-              var sockEx = ex.InnerException as SocketException;
 
-              if (sockEx != null && (sockEx.SocketErrorCode == SocketError.WouldBlock || sockEx.SocketErrorCode == SocketError.TimedOut)) {
-                // FIXME:
-                if (Runtime.IsRunningOnWindows) {
-                  if (WaitForRequest && responseQueue.Count <= 0) {
-                    continue;
-                  }
-                  else {
-                    break;
-                  }
-                }
-                else {
-                  if (responseQueue.Count <= 0) {
-                    continue;
-                  }
-                  else {
-                    if (WaitForRequest)
-                      continue;
-                    else
-                      break;
-                  }
-                }
-              }
-              else {
-                if (!(ex.InnerException is ThreadAbortException)) {
-                  Console.WriteLine("failed at receive, client disconnected?");
-                  Console.WriteLine(ex);
-                }
-                return;
-              }
+            client = server.EndAcceptTcpClient(asyncResult);
+            break;
+          }
+          else {
+            if (serverStopped) {
+              Console.WriteLine("stopped before accept");
+              return;
             }
           }
         }
+
+        Console.WriteLine("accepted");
+
+        client.ReceiveTimeout = 250;
+
+        ServerProc(client);
       }
-      catch (ThreadAbortException) {
-        if (sendEnqueued) {
-          while (0 < responseQueue.Count) {
-            var responseText = responseQueue.Dequeue();
-            var response = Encoding.UTF8.GetBytes(responseText);
+      finally {
+        if (serverProcWaitHandle != null)
+          serverProcWaitHandle.Set();
 
-            stream.Write(response, 0, response.Length);
-
-            Console.WriteLine("S: {0}", responseText);
-          }
-
-          client.Client.Shutdown(SocketShutdown.Both);
-        }
-
-        client.Close();
-
-        if (stream != null)
-          stream.Close();
+#pragma warning disable 0420
+        Interlocked.Exchange(ref serverProcRunning, 0);
+#pragma warning restore 0420
       }
     }
 
+    private void ServerProc(TcpClient client)
+    {
+      var stream = client.GetStream();
+
+      for (;;) {
+        if (serverStopped)
+          break;
+
+        if (responseQueue.Count == 0) {
+          Thread.Sleep(25);
+          continue;
+        }
+
+        // send response
+        var responseText = responseQueue.Dequeue();
+        var response = Encoding.UTF8.GetBytes(responseText);
+
+        try {
+          stream.Write(response, 0, response.Length);
+        }
+        catch (IOException ex) {
+          Console.WriteLine("failed at send, client disconnected?");
+          Console.WriteLine(ex);
+          return;
+        }
+
+        Console.WriteLine("S: {0}", responseText);
+
+        // receive request
+        var buffer = new byte[0x1000];
+
+        for (;;) {
+          if (serverStopped)
+            break;
+
+          try {
+            var read = stream.Read(buffer, 0, buffer.Length);
+
+            if (read == 0) {
+              if (client.Connected) {
+                continue;
+              }
+              else {
+                Console.WriteLine("client disconnected");
+                stream.Close();
+                client.Close();
+                return;
+              }
+            }
+
+            Console.WriteLine("C: {0}", Encoding.UTF8.GetString(buffer, 0, read));
+
+            streamLock.AcquireWriterLock(1000);
+
+            try {
+              requestStream.Position = writeOffset;
+              requestStream.Write(buffer, 0, read);
+              requestStream.Flush();
+              writeOffset += read;
+            }
+            finally {
+              streamLock.ReleaseWriterLock();
+            }
+
+            if (read < buffer.Length)
+              break;
+          }
+          catch (IOException ex) {
+            var sockEx = ex.InnerException as SocketException;
+
+            if (sockEx != null && (sockEx.SocketErrorCode == SocketError.WouldBlock || sockEx.SocketErrorCode == SocketError.TimedOut)) {
+              if (waitForRequest && responseQueue.Count <= 0)
+                continue;
+              else
+                break;
+            }
+            else {
+              Console.WriteLine("failed at receive, client disconnected?");
+              Console.WriteLine(ex);
+              return;
+            }
+          }
+        }
+      }
+
+      if (sendEnqueued) {
+        while (0 < responseQueue.Count) {
+          var responseText = responseQueue.Dequeue();
+          var response = Encoding.UTF8.GetBytes(responseText);
+
+          stream.Write(response, 0, response.Length);
+
+          Console.WriteLine("S: {0}", responseText);
+        }
+      }
+
+      client.Client.Shutdown(SocketShutdown.Both);
+      client.Close();
+
+      if (stream != null)
+        stream.Close();
+    }
+
     private TcpListener server;
-    private Thread thread;
+    private IPEndPoint serverEndPoint;
+    private volatile int serverProcRunning = 0;
+    private ManualResetEvent serverProcWaitHandle = new ManualResetEvent(true);
     private readonly Queue<string> responseQueue = new Queue<string>();
     private long writeOffset = 0L;
     private long readOffset = 0L;
     private LineOrientedStream requestStream;
     private ReaderWriterLock streamLock = new ReaderWriterLock();
     private int responseTag = 0;
-    private bool sendEnqueued = false;
+    private volatile bool waitForRequest;
+    private volatile bool sendEnqueued = false;
+    private volatile bool serverStopped = false;
   }
 }

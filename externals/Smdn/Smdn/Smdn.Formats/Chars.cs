@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2009-2010 smdn
+// Copyright (c) 2009-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -39,18 +39,38 @@ namespace Smdn.Formats {
     public const char Ampersand   = '&';
     public const string CRLF  = "\u000d\u000a";
 
-    public static readonly char[] LowerCaseHexChars = new char[] {
+    internal static readonly char[] LowerCaseHexCharArray = new char[] {
       '0', '1', '2', '3',
       '4', '5', '6', '7',
       '8', '9', 'a', 'b',
       'c', 'd', 'e', 'f'
     };
 
-    public static readonly char[] UpperCaseHexChars = new char[] {
+    internal static readonly char[] UpperCaseHexCharArray = new char[] {
       '0', '1', '2', '3',
       '4', '5', '6', '7',
       '8', '9', 'A', 'B',
       'C', 'D', 'E', 'F'
     };
+
+    [Obsolete("use GetLowerCaseHexChars() instead", true)]
+    public static char[] LowerCaseHexChars {
+      get { throw new NotImplementedException(); }
+    }
+
+    [Obsolete("use GetUpperCaseHexChars() instead", true)]
+    public static char[] UpperCaseHexChars {
+      get { throw new NotImplementedException(); }
+    }
+
+    public static char[] GetLowerCaseHexChars()
+    {
+      return (char[])LowerCaseHexCharArray.Clone();
+    }
+
+    public static char[] GetUpperCaseHexChars()
+    {
+      return (char[])UpperCaseHexCharArray.Clone();
+    }
   }
 }

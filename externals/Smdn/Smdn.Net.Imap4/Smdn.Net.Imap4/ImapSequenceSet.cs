@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -70,7 +70,7 @@ namespace Smdn.Net.Imap4 {
     public virtual IEnumerable<ImapSequenceSet> SplitIntoEach(int count)
     {
       if (count <= 0)
-        throw new ArgumentOutOfRangeException("count", count, "must be non-zero positive number");
+        throw ExceptionUtils.CreateArgumentMustBeNonZeroPositive("count", count);
 
       var numbers = new long[count];
       var index = 0;
@@ -231,11 +231,11 @@ namespace Smdn.Net.Imap4 {
       if (numbers == null)
         throw new ArgumentNullException("numbers");
       if (count <= 0)
-        throw new ArgumentOutOfRangeException("count", count, "must be non-zero positive number");
+        throw ExceptionUtils.CreateArgumentMustBeNonZeroPositive("count", count);
       if (start < 0)
-        throw new ArgumentOutOfRangeException("start", start, "must be zero or positive number");
-      if (numbers.Length < start + count)
-        throw new ArgumentOutOfRangeException("count", count, "length < start + count");
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("start", start);
+      if (numbers.Length - count < start)
+        throw ExceptionUtils.CreateArgumentAttemptToAccessBeyondEndOfArray("start", numbers, start, count);
 
       return new SetSequenceSet(uidSet, numbers.Slice(start, count));
     }
@@ -351,7 +351,7 @@ namespace Smdn.Net.Imap4 {
         : base(isUidSet)
       {
         if (from <= 0)
-          throw new ArgumentOutOfRangeException("from", from, "must be non-zero positive number");
+          throw ExceptionUtils.CreateArgumentMustBeNonZeroPositive("from", from);
 
         this.From = from;
       }
@@ -396,7 +396,7 @@ namespace Smdn.Net.Imap4 {
         : base(isUidSet)
       {
         if (to <= 0)
-          throw new ArgumentOutOfRangeException("to", to, "must be non-zero positive number");
+          throw ExceptionUtils.CreateArgumentMustBeNonZeroPositive("to", to);
 
         this.To = to;
       }
@@ -445,9 +445,9 @@ namespace Smdn.Net.Imap4 {
         : base(isUidSet)
       {
         if (from <= 0)
-          throw new ArgumentOutOfRangeException("from", from, "must be non-zero positive number");
+          throw ExceptionUtils.CreateArgumentMustBeNonZeroPositive("from", from);
         if (to <= from)
-          throw new ArgumentOutOfRangeException("to", to, "must be greater than from value");
+          throw ExceptionUtils.CreateArgumentMustBeGreaterThan("'from'", "to", to);
 
         this.From = from;
         this.To = to;

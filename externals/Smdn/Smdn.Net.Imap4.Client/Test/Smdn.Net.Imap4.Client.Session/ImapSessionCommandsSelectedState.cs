@@ -10,15 +10,15 @@ namespace Smdn.Net.Imap4.Client.Session {
     [Test, ExpectedException(typeof(ImapProtocolViolationException))]
     public void TestCloseInNonAuthenticatedState()
     {
-      using (var session = Connect()) {
+      Connect(delegate(ImapSession session) {
         session.Close();
-      }
+      });
     }
 
     [Test]
     public void TestCloseInAuthenticatedState()
     {
-      using (var session = Authenticate()) {
+      Authenticate(delegate(ImapSession session, ImapPseudoServer server) {
         Assert.AreEqual(ImapSessionState.Authenticated, session.State);
         Assert.IsNull(session.SelectedMailbox);
 
@@ -29,13 +29,13 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         Assert.AreEqual(ImapSessionState.Authenticated, session.State);
         Assert.IsNull(session.SelectedMailbox);
-      }
+      });
     }
 
     [Test]
     public void TestCheckStatusUpdate()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // CHECK transaction
         server.EnqueueResponse("* 23 EXISTS\r\n" +
                                "* 1 RECENT\r\n" +
@@ -49,31 +49,33 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual(23L, session.SelectedMailbox.ExistsMessage, "selected mailbox exist message count");
         Assert.AreEqual(1L, session.SelectedMailbox.RecentMessage, "selected mailbox recent message count");
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     public void TestUnselect()
     {
-      using (var session = SelectMailbox("UNSELECT")) {
+      SelectMailbox(new[] {"UNSELECT"}, delegate(ImapSession session, ImapPseudoServer server) {
         // EXPUNGE transaction
         server.EnqueueResponse("0004 OK UNSELECT completed\r\n");
-  
+
         Assert.IsTrue((bool)session.Unselect());
-  
+
         Assert.AreEqual("0004 UNSELECT\r\n",
                         server.DequeueRequest());
-  
+
         Assert.AreEqual(ImapSessionState.Authenticated, session.State);
         Assert.IsNull(session.SelectedMailbox);
-      }
+
+        return -1; // no need to CLOSE
+      });
     }
 
     [Test]
     public void TestSearch()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // SEARCH transaction
         server.EnqueueResponse("* SEARCH 2 84 882\r\n" +
                                "0004 OK SEARCH completed\r\n");
@@ -94,14 +96,14 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual(84,   messages[1]);
         Assert.AreEqual(882,  messages[2]);
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     public void TestSearchWithLiteralAndDefaultCharset()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // SEARCH transaction
         server.EnqueueResponse("+ continue\r\n");
         server.EnqueueResponse("* SEARCH 2 84 882\r\n" +
@@ -119,14 +121,14 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.IsFalse(matched.IsUidSet);
         Assert.IsFalse(matched.IsEmpty);
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     public void TestSearchWithLiteralAndSpecifiedCharset()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // SEARCH transaction
         server.EnqueueResponse("+ continue\r\n");
         server.EnqueueResponse("* SEARCH 2 84 882\r\n" +
@@ -144,14 +146,14 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.IsFalse(matched.IsUidSet);
         Assert.IsFalse(matched.IsEmpty);
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     public void TestSearchNothingMatched()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // SEARCH transaction
         server.EnqueueResponse("+ continue\r\n");
         server.EnqueueResponse("* SEARCH\r\n" +
@@ -168,14 +170,14 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.IsFalse(matched.IsUidSet);
         Assert.IsTrue(matched.IsEmpty);
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     public void TestSearchWithCriteriaFromUri()
     {
-      using (var session = SelectMailbox("LITERAL+")) {
+      SelectMailbox(new[] {"LITERAL+"}, delegate(ImapSession session, ImapPseudoServer server) {
         var b = new ImapUriBuilder(session.SelectedMailbox.Url);
 
         b.SearchCriteria = ImapSearchCriteria.From("差出人") & (ImapSearchCriteria.Seen | ImapSearchCriteria.Subject("件名"));
@@ -199,37 +201,37 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.IsFalse(matched.IsUidSet);
         Assert.IsFalse(matched.IsEmpty);
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test, Ignore("not implemented")]
     public void TestSearchBadCharset()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // SEARCH transaction
         server.EnqueueResponse("0004 NO [BADCHARSET ONDUL EUC-JP] Unknown charset\r\n");
         server.EnqueueResponse("+ OK\r\n");
         server.EnqueueResponse("0005 OK SEARCH completed\r\n");
-  
+
         ImapMatchedSequenceSet matched;
-  
+
         Assert.IsTrue((bool)session.Search(ImapSearchCriteria.Body("ほげほげ"), out matched));
-  
+
         Assert.AreEqual("0004 search charset utf-8 BODY {12}\r\n",
                         server.DequeueRequest());
         Assert.AreEqual("0005 search charset EUC-JP BODY {8}\r\n",
                         server.DequeueRequest());
         server.DequeueRequest();
-  
-        CloseMailbox(session, "0006");
-      }
+
+        return 2;
+      });
     }
 
     [Test]
     public void TestSearchCondStoreModSeq()
     {
-      using (var session = SelectMailbox("CONDSTORE")) {
+      SelectMailbox(new[] {"CONDSTORE"}, delegate(ImapSession session, ImapPseudoServer server) {
         // SEARCH transaction
         server.EnqueueResponse("* SEARCH 2 5 6 (MODSEQ 917162500)\r\n" +
                                "0004 OK SEARCH completed\r\n");
@@ -251,14 +253,14 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual(5, messages[1]);
         Assert.AreEqual(6, messages[2]);
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     public void TestSearchCondStoreModSeqWithEntry()
     {
-      using (var session = SelectMailbox("CONDSTORE")) {
+      SelectMailbox(new[] {"CONDSTORE"}, delegate(ImapSession session, ImapPseudoServer server) {
         // SEARCH transaction
         server.EnqueueResponse("* SEARCH 2 5 6 7 11 12 18 19 20 23 (MODSEQ 917162500)\r\n" +
                                "0004 OK SEARCH completed\r\n");
@@ -281,25 +283,27 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual(6, messages[2]);
         Assert.AreEqual(23, messages[9]);
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     [ExpectedException(typeof(ImapIncapableException))]
     public void TestSearchCondStoreIncapable()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         ImapMatchedSequenceSet matched;
 
         session.Search(ImapSearchCriteria.ModSeqAllEntry(620162338UL, ImapMessageFlag.Draft), out matched);
-      }
+
+        return 1;
+      });
     }
 
     [Test]
     public void TestESearch()
     {
-      using (var session = SelectMailbox("ESEARCH")) {
+      SelectMailbox(new[] {"ESEARCH"}, delegate(ImapSession session, ImapPseudoServer server) {
         // SEARCH transaction
         server.EnqueueResponse("+ continue\r\n");
         server.EnqueueResponse("* ESEARCH (TAG \"0004\") MIN 2 COUNT 3\r\n" +
@@ -325,25 +329,27 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.IsNotNull(matched.Count);
         Assert.AreEqual(3, matched.Count);
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     [ExpectedException(typeof(ImapIncapableException))]
     public void TestESearchIncapable()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         ImapMatchedSequenceSet matched;
 
         session.ESearch(ImapSearchCriteria.All, ImapSearchResultOptions.Min, out matched);
-      }
+
+        return -1;
+      });
     }
 
     [Test]
     public void TestESearchSearchres()
     {
-      using (var session = SelectMailbox("ESEARCH", "SEARCHRES")) {
+      SelectMailbox(new[] {"ESEARCH", "SEARCHRES"}, delegate(ImapSession session, ImapPseudoServer server) {
         // SEARCH transaction
         server.EnqueueResponse("+ continue\r\n");
         server.EnqueueResponse("0004 OK SEARCH completed, result saved\r\n");
@@ -376,14 +382,14 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual("0005 FETCH $ (UID)\r\n",
                         server.DequeueRequest());
 
-        CloseMailbox(session, "0006");
-      }
+        return 2;
+      });
     }
 
     [Test]
     public void TestESearchSearchresSearchWithSavedResult()
     {
-      using (var session = SelectMailbox("ESEARCH", "SEARCHRES")) {
+      SelectMailbox(new[] {"ESEARCH", "SEARCHRES"}, delegate(ImapSession session, ImapPseudoServer server) {
         // SEARCH transaction
         server.EnqueueResponse("+ continue\r\n");
         server.EnqueueResponse("0004 OK SEARCH completed, result saved\r\n");
@@ -424,15 +430,15 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual(900, arr[1]);
         Assert.AreEqual(901, arr[2]);
 
-        CloseMailbox(session, "0006");
-      }
+        return 2;
+      });
     }
 
     [Test]
     [ExpectedException(typeof(ImapIncapableException))]
     public void TestESearchSearchresIncapable()
     {
-      using (var session = SelectMailbox("ESEARCH")) {
+      SelectMailbox(new[] {"ESEARCH"}, delegate(ImapSession session, ImapPseudoServer server) {
         // SEARCH transaction
         var criteria = ImapSearchCriteria.Flagged &
           ImapSearchCriteria.Since(new DateTime(1994, 2, 1)) &
@@ -441,13 +447,15 @@ namespace Smdn.Net.Imap4.Client.Session {
         ImapMatchedSequenceSet matched;
 
         session.ESearch(criteria, ImapSearchResultOptions.Save, out matched);
-      }
+
+        return -1;
+      });
     }
 
     [Test]
     public void TestSort()
     {
-      using (var session = SelectMailbox("SORT")) {
+      SelectMailbox(new[] {"SORT"}, delegate(ImapSession session, ImapPseudoServer server) {
         // SORT transaction
         server.EnqueueResponse("* SORT 5 3 4 1 2\r\n" +
                                "0004 OK SORT completed\r\n");
@@ -470,14 +478,14 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual(1, messages[3]);
         Assert.AreEqual(2, messages[4]);
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     public void TestSortWithLiteralAndDefaultCharset()
     {
-      using (var session = SelectMailbox("SORT")) {
+      SelectMailbox(new[] {"SORT"}, delegate(ImapSession session, ImapPseudoServer server) {
         // SORT transaction
         server.EnqueueResponse("+ continue\r\n");
         server.EnqueueResponse("* SORT 5 3 4 1 2\r\n" +
@@ -497,14 +505,14 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.IsFalse(matched.IsUidSet);
         Assert.IsFalse(matched.IsEmpty);
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     public void TestSortWithLiteralAndSpecifiedCharset()
     {
-      using (var session = SelectMailbox("SORT")) {
+      SelectMailbox(new[] {"SORT"}, delegate(ImapSession session, ImapPseudoServer server) {
         // SORT transaction
         server.EnqueueResponse("+ continue\r\n");
         server.EnqueueResponse("* SORT 5 3 4 1 2\r\n" +
@@ -525,24 +533,26 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.IsFalse(matched.IsUidSet);
         Assert.IsFalse(matched.IsEmpty);
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test, ExpectedException(typeof(ImapIncapableException))]
     public void TestSortIncapable()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         ImapMatchedSequenceSet matched;
 
         session.Sort(ImapSortCriteria.SizeReverse + ImapSortCriteria.Date, ImapSearchCriteria.All, out matched);
-      }
+
+        return -1;
+      });
     }
 
     [Test]
     public void TestESort()
     {
-      using (var session = SelectMailbox("SORT", "ESORT")) {
+      SelectMailbox(new[] {"SORT", "ESORT"}, delegate(ImapSession session, ImapPseudoServer server) {
         // SORT transaction
         server.EnqueueResponse("* ESEARCH (TAG \"0004\") UID ALL 23765,23764,23763,23761\r\n" +
                                "0004 OK SORT completed\r\n");
@@ -568,14 +578,14 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual(23763, messages[2]);
         Assert.AreEqual(23761, messages[3]);
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test, ExpectedException(typeof(ImapIncapableException))]
     public void TestESortIncapable()
     {
-      using (var session = SelectMailbox("SORT")) {
+      SelectMailbox(new[] {"SORT"}, delegate(ImapSession session, ImapPseudoServer server) {
         // SORT transaction
         ImapMatchedSequenceSet matched;
 
@@ -583,13 +593,15 @@ namespace Smdn.Net.Imap4.Client.Session {
                                        ImapSearchCriteria.Undeleted & ImapSearchCriteria.Unkeyword("$Junk"),
                                        ImapSearchResultOptions.All,
                                        out matched));
-      }
+
+        return -1;
+      });
     }
 
     [Test]
     public void TestSortDisplayIncapable()
     {
-      using (var session = SelectMailbox("SORT")) {
+      SelectMailbox(new[] {"SORT"}, delegate(ImapSession session, ImapPseudoServer server) {
         ImapMatchedSequenceSet matched;
 
         try {
@@ -597,15 +609,17 @@ namespace Smdn.Net.Imap4.Client.Session {
           Assert.Fail("ImapIncapableException not thrown");
         }
         catch (ImapIncapableException ex) {
-          Assert.AreEqual(ImapCapability.SortDisplay, ex.RequiredCapability);
+          CollectionAssert.Contains(ex.RequiredCapabilities, ImapCapability.SortDisplay);
         }
-      }
+
+        return -1;
+      });
     }
 
     [Test]
     public void TestThread()
     {
-      using (var session = SelectMailbox("THREAD=REFERENCES")) {
+      SelectMailbox(new[] {"THREAD=REFERENCES"}, delegate(ImapSession session, ImapPseudoServer server) {
         // THREAD transaction
         server.EnqueueResponse("* THREAD (166)(167)(168)(169)(172)(170)(171)(173)(174 (175)(176)(178)(181)(180))(179)(177 (183)(182)(188)(184)(185)(186)(187)(189))(190)(191)(192)(193)(194 195)(196 (197)(198))(199)(200 202)(201)(203)(204)(205)(206 207)(208)\r\n" +
                                "0004 OK THREAD completed\r\n");
@@ -619,14 +633,14 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         Assert.AreEqual(25, threadList.Children.Length);
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     public void TestThreadWithLiteralAndDefaultCharset()
     {
-      using (var session = SelectMailbox("THREAD=REFERENCES")) {
+      SelectMailbox(new[] {"THREAD=REFERENCES"}, delegate(ImapSession session, ImapPseudoServer server) {
         // THREAD transaction
         server.EnqueueResponse("+ continue\r\n");
         server.EnqueueResponse("* THREAD (206 207)(208)\r\n" +
@@ -644,14 +658,14 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         Assert.IsNotNull(threadList);
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     public void TestThreadWithLiteralAndSpecifiedCharset()
     {
-      using (var session = SelectMailbox("THREAD=REFERENCES")) {
+      SelectMailbox(new[] {"THREAD=REFERENCES"}, delegate(ImapSession session, ImapPseudoServer server) {
         // THREAD transaction
         server.EnqueueResponse("+ continue\r\n");
         server.EnqueueResponse("* THREAD (206 207)(208)\r\n" +
@@ -670,24 +684,26 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         Assert.IsNotNull(threadList);
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test, ExpectedException(typeof(ImapIncapableException))]
     public void TestThreadIncapable()
     {
-      using (var session = SelectMailbox("THREAD=ORDEREDSUBJECT")) {
+      SelectMailbox(new[] {"THREAD=ORDEREDSUBJECT"}, delegate(ImapSession session, ImapPseudoServer server) {
         ImapThreadList threadList;
 
         session.Thread(ImapThreadingAlgorithm.References, ImapSearchCriteria.All, out threadList);
-      }
+
+        return -1;
+      });
     }
 
     [Test]
     public void TestStore()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // STORE
         server.EnqueueResponse("* 2 FETCH (FLAGS (\\Deleted \\Seen))\r\n" +
                                "* 3 FETCH (FLAGS (\\Deleted))\r\n" +
@@ -708,45 +724,49 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual(2, messagesAttrs[0].Sequence);
         Assert.AreEqual(0UL, messagesAttrs[0].ModSeq);
         Assert.AreEqual(2, messagesAttrs[0].Flags.Count);
-        Assert.IsTrue(messagesAttrs[0].Flags.Has(ImapMessageFlag.Deleted));
-        Assert.IsTrue(messagesAttrs[0].Flags.Has(ImapMessageFlag.Seen));
+        Assert.IsTrue(messagesAttrs[0].Flags.Contains(ImapMessageFlag.Deleted));
+        Assert.IsTrue(messagesAttrs[0].Flags.Contains(ImapMessageFlag.Seen));
 
         Assert.AreEqual(3, messagesAttrs[1].Sequence);
         Assert.AreEqual(0UL, messagesAttrs[1].ModSeq);
         Assert.AreEqual(1, messagesAttrs[1].Flags.Count);
-        Assert.IsTrue(messagesAttrs[1].Flags.Has(ImapMessageFlag.Deleted));
+        Assert.IsTrue(messagesAttrs[1].Flags.Contains(ImapMessageFlag.Deleted));
 
         Assert.AreEqual(4, messagesAttrs[2].Sequence);
         Assert.AreEqual(0UL, messagesAttrs[2].ModSeq);
         Assert.AreEqual(3, messagesAttrs[2].Flags.Count);
-        Assert.IsTrue(messagesAttrs[2].Flags.Has(ImapMessageFlag.Deleted));
-        Assert.IsTrue(messagesAttrs[2].Flags.Has(ImapMessageFlag.Flagged));
-        Assert.IsTrue(messagesAttrs[2].Flags.Has(ImapMessageFlag.Seen));
+        Assert.IsTrue(messagesAttrs[2].Flags.Contains(ImapMessageFlag.Deleted));
+        Assert.IsTrue(messagesAttrs[2].Flags.Contains(ImapMessageFlag.Flagged));
+        Assert.IsTrue(messagesAttrs[2].Flags.Contains(ImapMessageFlag.Seen));
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test, ExpectedException(typeof(ArgumentException))]
     public void TestStoreEmptySequenceSet()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         session.Store(ImapSequenceSet.CreateSet(new long[] {}), ImapStoreDataItem.AddFlags(ImapMessageFlag.Deleted));
-      }
+
+        return -1;
+      });
     }
 
     [Test, ExpectedException(typeof(ArgumentException))]
     public void TestStoreEmptyUidSet()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         session.Store(ImapSequenceSet.CreateUidSet(new long[] {}), ImapStoreDataItem.AddFlags(ImapMessageFlag.Deleted));
-      }
+
+        return -1;
+      });
     }
 
     [Test]
     public void TestStoreUnchangedSince()
     {
-      using (var session = SelectMailbox("CONDSTORE")) {
+      SelectMailbox(new[] {"CONDSTORE"}, delegate(ImapSession session, ImapPseudoServer server) {
         // STORE
         server.EnqueueResponse("* 7 FETCH (MODSEQ (320162342) FLAGS (\\Seen \\Deleted))\r\n" +
                                "* 5 FETCH (MODSEQ (320162350))\r\n" +
@@ -755,13 +775,13 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         ImapMessageAttribute[] messagesAttrs;
         ImapSequenceSet failedMessageSet;
-  
+
         Assert.IsTrue((bool)session.StoreUnchangedSince(ImapSequenceSet.CreateSet(7, 5, 9),
                                                   ImapStoreDataItem.AddFlagsSilent(ImapMessageFlag.Deleted),
                                                   320162338UL,
                                                   out messagesAttrs,
                                                   out failedMessageSet));
-  
+
         Assert.AreEqual("0004 STORE 7,5,9 (UNCHANGEDSINCE 320162338) +FLAGS.SILENT (\\Deleted)\r\n",
                         server.DequeueRequest());
 
@@ -770,8 +790,8 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual(7, messagesAttrs[0].Sequence);
         Assert.AreEqual(320162342UL, messagesAttrs[0].ModSeq);
         Assert.AreEqual(2, messagesAttrs[0].Flags.Count);
-        Assert.IsTrue(messagesAttrs[0].Flags.Has(ImapMessageFlag.Seen));
-        Assert.IsTrue(messagesAttrs[0].Flags.Has(ImapMessageFlag.Deleted));
+        Assert.IsTrue(messagesAttrs[0].Flags.Contains(ImapMessageFlag.Seen));
+        Assert.IsTrue(messagesAttrs[0].Flags.Contains(ImapMessageFlag.Deleted));
 
         Assert.AreEqual(5, messagesAttrs[1].Sequence);
         Assert.AreEqual(320162350UL, messagesAttrs[1].ModSeq);
@@ -780,7 +800,7 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual(9, messagesAttrs[2].Sequence);
         Assert.AreEqual(320162349UL, messagesAttrs[2].ModSeq);
         Assert.AreEqual(1, messagesAttrs[2].Flags.Count);
-        Assert.IsTrue(messagesAttrs[2].Flags.Has(ImapMessageFlag.Answered));
+        Assert.IsTrue(messagesAttrs[2].Flags.Contains(ImapMessageFlag.Answered));
 
         var failed = failedMessageSet.ToArray();
 
@@ -788,14 +808,14 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual(7, failed[0]);
         Assert.AreEqual(9, failed[1]);
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     public void TestStoreUnchangedSinceWithTaggedNoResponse()
     {
-      using (var session = SelectMailbox("CONDSTORE")) {
+      SelectMailbox(new[] {"CONDSTORE"}, delegate(ImapSession session, ImapPseudoServer server) {
         // STORE
         server.EnqueueResponse("* 1 FETCH (MODSEQ (320172342) FLAGS (\\SEEN))\r\n" +
                                "* 3 FETCH (MODSEQ (320172342) FLAGS (\\SEEN))\r\n" +
@@ -819,27 +839,27 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual(1, messagesAttrs[0].Sequence);
         Assert.AreEqual(320172342UL, messagesAttrs[0].ModSeq);
         Assert.AreEqual(1, messagesAttrs[0].Flags.Count);
-        Assert.IsTrue(messagesAttrs[0].Flags.Has(ImapMessageFlag.Seen));
+        Assert.IsTrue(messagesAttrs[0].Flags.Contains(ImapMessageFlag.Seen));
 
         Assert.AreEqual(3, messagesAttrs[1].Sequence);
         Assert.AreEqual(320172342UL, messagesAttrs[1].ModSeq);
         Assert.AreEqual(1, messagesAttrs[1].Flags.Count);
-        Assert.IsTrue(messagesAttrs[1].Flags.Has(ImapMessageFlag.Seen));
+        Assert.IsTrue(messagesAttrs[1].Flags.Contains(ImapMessageFlag.Seen));
 
         var failed = failedMessageSet.ToArray();
 
         Assert.AreEqual(1, failed.Length);
         Assert.AreEqual(2, failed[0]);
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     [ExpectedException(typeof(ImapIncapableException))]
     public void TestStoreUnchangedSinceIncapable()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // STORE
         ImapMessageAttribute[] messagesAttrs;
         ImapSequenceSet failedMessageSet;
@@ -848,24 +868,26 @@ namespace Smdn.Net.Imap4.Client.Session {
                                     320172338UL,
                                     out messagesAttrs,
                                     out failedMessageSet);
-      }
+
+        return -1;
+      });
     }
 
     [Test]
     public void TestExpunge()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // EXPUNGE transaction
         server.EnqueueResponse("* 3 EXPUNGE\r\n" +
                                "* 4 EXPUNGE\r\n" +
                                "* 7 EXPUNGE\r\n" +
                                "* 11 EXPUNGE\r\n" +
                                "0004 OK EXPUNGE completed\r\n");
-  
+
         long[] expunged;
-  
+
         Assert.IsTrue((bool)session.Expunge(out expunged));
-  
+
         Assert.AreEqual("0004 EXPUNGE\r\n",
                         server.DequeueRequest());
 
@@ -874,25 +896,25 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual(4,  expunged[1]);
         Assert.AreEqual(7,  expunged[2]);
         Assert.AreEqual(11, expunged[3]);
-  
-        CloseMailbox(session);
-      }
+
+        return 1;
+      });
     }
 
     [Test]
     public void TestUidExpunge()
     {
-      using (var session = SelectMailbox("UIDPLUS")) {
+      SelectMailbox(new[] {"UIDPLUS"}, delegate(ImapSession session, ImapPseudoServer server) {
         // EXPUNGE transaction
         server.EnqueueResponse("* 3 EXPUNGE\r\n" +
                                "* 3 EXPUNGE\r\n" +
                                "* 3 EXPUNGE\r\n" +
                                "0004 OK EXPUNGE completed\r\n");
-  
+
         long[] expunged;
-  
+
         Assert.IsTrue((bool)session.UidExpunge(ImapSequenceSet.CreateUidFromSet(1), out expunged));
-  
+
         Assert.AreEqual("0004 UID EXPUNGE 1:*\r\n",
                         server.DequeueRequest());
 
@@ -900,110 +922,121 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual(3,  expunged[0]);
         Assert.AreEqual(3,  expunged[1]);
         Assert.AreEqual(3,  expunged[2]);
-  
-        CloseMailbox(session);
-      }
+
+        return 1;
+      });
     }
 
     [Test, ExpectedException(typeof(ArgumentException))]
     public void TestExpungeSequenceSet()
     {
-      using (var session = SelectMailbox("UIDPLUS")) {
+      SelectMailbox(new[] {"UIDPLUS"}, delegate(ImapSession session, ImapPseudoServer server) {
         long[] expunged;
 
         session.UidExpunge(ImapSequenceSet.CreateFromSet(1), out expunged);
-      }
+
+        return -1;
+      });
     }
 
     [Test, ExpectedException(typeof(ArgumentException))]
     public void TestUidExpungeEmptyUidSet()
     {
-      using (var session = SelectMailbox("UIDPLUS")) {
+      SelectMailbox(new[] {"UIDPLUS"}, delegate(ImapSession session, ImapPseudoServer server) {
         long[] expunged;
 
         session.UidExpunge(ImapSequenceSet.CreateUidSet(new long[] {}), out expunged);
-      }
+
+        return -1;
+      });
     }
 
     [Test]
     [ExpectedException(typeof(ImapIncapableException))]
     public void TestUidExpungeIncapable()
     {
-      using (var session = SelectMailbox()) {
-        Assert.IsFalse(session.ServerCapabilities.Has(ImapCapability.UidPlus));
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
+        Assert.IsFalse(session.ServerCapabilities.Contains(ImapCapability.UidPlus));
 
         long[] expunged;
 
         session.UidExpunge(ImapSequenceSet.CreateUidFromSet(1), out expunged);
-      }
+
+        return -1;
+      });
     }
 
     [Test]
     public void TestCopy()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // COPY transaction
         server.EnqueueResponse("0004 OK COPY completed\r\n");
-  
+
         Assert.IsTrue((bool)session.Copy(ImapSequenceSet.CreateRangeSet(1, 10), "INBOX"));
-  
-        Assert.AreEqual("0004 COPY 1:10 \"INBOX\"\r\n",
+
+        Assert.AreEqual("0004 COPY 1:10 INBOX\r\n",
                         server.DequeueRequest());
-  
-        CloseMailbox(session);
-      }
+
+        return -1;
+      });
     }
 
     [Test, ExpectedException(typeof(ArgumentException))]
     public void TestCopyEmptySequenceSet()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         session.Copy(ImapSequenceSet.CreateSet(new long[] {}), "INBOX");
-      }
+
+        return -1;
+      });
     }
 
     [Test, ExpectedException(typeof(ArgumentException))]
     public void TestCopyEmptyUidSet()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         session.Copy(ImapSequenceSet.CreateUidSet(new long[] {}), "INBOX");
-      }
+
+        return -1;
+      });
     }
 
     [Test]
     public void TestCopyTryCreate()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server, Uri expectedAuthority) {
         // COPY transaction
         server.EnqueueResponse("0004 NO [TRYCREATE] Mailbox doesn't exist: INBOX.copyto\r\n");
         server.EnqueueResponse("0005 OK CREATE completed\r\n");
         server.EnqueueResponse("0006 OK COPY completed\r\n");
-  
+
         ImapMailbox created;
-  
+
         Assert.IsTrue((bool)session.Copy(ImapSequenceSet.CreateUidRangeSet(1, 10), "INBOX.copyto", out created));
-  
+
         Assert.AreEqual("INBOX.copyto", created.Name);
-        Assert.AreEqual(new Uri(uri, "./INBOX.copyto"), created.Url);
+        Assert.AreEqual(new Uri(expectedAuthority, "./INBOX.copyto"),
+                        created.Url);
         Assert.IsNotNull(created.Flags);
         Assert.IsNotNull(created.ApplicableFlags);
         Assert.IsNotNull(created.PermanentFlags);
 
-        Assert.AreEqual("0004 UID COPY 1:10 \"INBOX.copyto\"\r\n",
+        Assert.AreEqual("0004 UID COPY 1:10 INBOX.copyto\r\n",
                         server.DequeueRequest());
-        Assert.AreEqual("0005 CREATE \"INBOX.copyto\"\r\n",
+        Assert.AreEqual("0005 CREATE INBOX.copyto\r\n",
                         server.DequeueRequest());
-        Assert.AreEqual("0006 UID COPY 1:10 \"INBOX.copyto\"\r\n",
+        Assert.AreEqual("0006 UID COPY 1:10 INBOX.copyto\r\n",
                         server.DequeueRequest());
-  
-        CloseMailbox(session, "0007");
-      }
+
+        return 3;
+      });
     }
 
     [Test]
     public void TestCopyTryCreateNoReferralResponseCode()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // COPY transaction
         server.EnqueueResponse("0004 NO [REFERRAL IMAP://user;AUTH=*@SERVER2/SHARED/STUFF] Unable to copy message(s) to SERVER2.\r\n");
 
@@ -1013,39 +1046,41 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         Assert.IsNull(created);
 
-        Assert.AreEqual("0004 UID COPY 1:10 \"SHARED/STUFF\"\r\n",
+        Assert.AreEqual("0004 UID COPY 1:10 SHARED/STUFF\r\n",
                         server.DequeueRequest());
-      }
+
+        return 1;
+      });
     }
 
     [Test]
     public void TestCopyDontTryCreate()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // COPY transaction
         server.EnqueueResponse("0004 NO [TRYCREATE] Mailbox doesn't exist: INBOX.copyto\r\n");
-  
+
         Assert.IsFalse((bool)session.Copy(ImapSequenceSet.CreateRangeSet(1, 10), "INBOX.copyto"));
-  
-        Assert.AreEqual("0004 COPY 1:10 \"INBOX.copyto\"\r\n",
+
+        Assert.AreEqual("0004 COPY 1:10 INBOX.copyto\r\n",
                         server.DequeueRequest());
-  
-        CloseMailbox(session);
-      }
+
+        return 1;
+      });
     }
 
     [Test]
     public void TestCopyWithAppendUidResponseCode()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // COPY transaction
         server.EnqueueResponse("0004 OK [COPYUID 38505 304,319:320 3956:3958] Done\r\n");
-  
+
         ImapCopiedUidSet copied;
 
         Assert.IsTrue((bool)session.Copy(ImapSequenceSet.CreateRangeSet(2, 4), "meeting", out copied));
-  
-        Assert.AreEqual("0004 COPY 2:4 \"meeting\"\r\n",
+
+        Assert.AreEqual("0004 COPY 2:4 meeting\r\n",
                         server.DequeueRequest());
 
         Assert.IsNotNull(copied);
@@ -1064,9 +1099,9 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual(3956, assignedUids[0]);
         Assert.AreEqual(3957, assignedUids[1]);
         Assert.AreEqual(3958, assignedUids[2]);
-  
-        CloseMailbox(session);
-      }
+
+        return 1;
+      });
     }
   }
 }

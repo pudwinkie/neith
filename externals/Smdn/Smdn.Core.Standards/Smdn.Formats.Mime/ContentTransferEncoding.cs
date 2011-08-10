@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -86,8 +86,7 @@ namespace Smdn.Formats.Mime {
         case ContentTransferEncodingMethod.UUEncode: return "x-uuencode";
         case ContentTransferEncodingMethod.GZip64: return "x-gzip64";
         default:
-          throw new NotSupportedException(string.Format("unsupported content transfer encoding: {0}",
-                                                        method));
+          throw ExceptionUtils.CreateNotSupportedEnumValue(method);
       }
     }
 
@@ -113,7 +112,7 @@ namespace Smdn.Formats.Mime {
         case ContentTransferEncodingMethod.UUEncode:
         case ContentTransferEncodingMethod.GZip64:
         default:
-          throw new NotSupportedException(string.Format("unsupported content transfer encoding: {0}", encoding));
+          throw ExceptionUtils.CreateNotSupportedEnumValue(encoding);
       }
     }
 

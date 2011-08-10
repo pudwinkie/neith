@@ -43,7 +43,6 @@
   <ItemGroup>
     <Compile Include="Smdn.Net.Pop3\PopUri.cs" />
     <Compile Include="Smdn.Net.Pop3\PopCapability.cs" />
-    <Compile Include="Smdn.Net.Pop3\PopCapabilityList.cs" />
     <Compile Include="Smdn.Net.Pop3.Protocol\ApopDigest.cs" />
     <Compile Include="Smdn.Net.Pop3.Protocol\PopTextConverter.cs" />
     <Compile Include="Smdn.Net.Pop3\PopStyleUriParser.cs" />
@@ -57,6 +56,8 @@
     <Compile Include="Smdn.Net.Pop3.Protocol\PopMalformedTextException.cs" />
     <Compile Include="Smdn.Net.Pop3.Protocol\PopUpgradeConnectionException.cs" />
     <Compile Include="Smdn.Net.Pop3\PopAuthenticationMechanism.cs" />
+    <Compile Include="Smdn.Net.Pop3\PopCapabilitySet.cs" />
+    <Compile Include="Smdn.Net.Pop3.Protocol\PopResponseCode.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -42,14 +42,14 @@ namespace Smdn.Net.Imap4.Client.Session {
     /// <remarks>valid in any state</remarks>
     public ImapCommandResult Capability()
     {
-      ImapCapabilityList discard;
+      ImapCapabilitySet discard;
 
       return Capability(out discard);
     }
 
     /// <summary>sends CAPABILITY command</summary>
     /// <remarks>valid in any state</remarks>
-    public ImapCommandResult Capability(out ImapCapabilityList capabilities)
+    public ImapCommandResult Capability(out ImapCapabilitySet capabilities)
     {
       RejectNonConnectedState();
 
@@ -137,7 +137,7 @@ namespace Smdn.Net.Imap4.Client.Session {
               idParamsList.Add(new ImapQuotedString(param.Key));
 
               if (param.Value == null) {
-                idParamsList.Add(new ImapNilString());
+                idParamsList.Add(ImapNilString.Nil);
               }
               else {
                 if (1024 < NetworkTransferEncoding.Transfer7Bit.GetByteCount(param.Value))
@@ -274,8 +274,8 @@ namespace Smdn.Net.Imap4.Client.Session {
 
       if (languageRange == null)
         throw new ArgumentNullException("languageRange");
-      else if (languageRange.Length == 0)
-        throw new ArgumentException("language range must be non-empty string", "languageRange");
+      if (languageRange.Length == 0)
+        throw ExceptionUtils.CreateArgumentMustBeNonEmptyString("languageRange");
 
       var languageRangeArguments = new List<string>();
 
@@ -285,8 +285,8 @@ namespace Smdn.Net.Imap4.Client.Session {
         for (var i = 0; i < languageRanges.Length; i++) {
           if (languageRanges[i] == null)
             throw new ArgumentNullException(string.Format("languageRanges[{0}]", i));
-          else if (languageRanges[i].Length == 0)
-            throw new ArgumentException("language range must be non-empty string", string.Format("languageRanges[{0}]", i));
+          if (languageRanges[i].Length == 0)
+            throw ExceptionUtils.CreateArgumentMustBeNonEmptyString(string.Format("languageRanges[{0}]", i));
 
           languageRangeArguments.Add(languageRanges[i]);
         }

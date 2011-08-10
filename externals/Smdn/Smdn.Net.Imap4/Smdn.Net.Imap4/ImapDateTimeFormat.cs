@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -54,9 +54,11 @@ namespace Smdn.Net.Imap4 {
     //                     ; The Universal Time zone is "+0000".
     public static string ToDateTimeString(DateTimeOffset dateTime)
     {
-      return string.Format("\"{0} {1}\"",
+      return string.Concat("\"",
                            dateTime.ToString("dd-MMM-yyyy HH:mm:ss", CultureInfo.InvariantCulture),
-                           dateTime.ToString("zzz", CultureInfo.InvariantCulture).Replace(":", string.Empty));
+                           " ",
+                           dateTime.ToString("zzz", CultureInfo.InvariantCulture).RemoveChars(':'),
+                           "\"");
     }
 
     public static DateTimeOffset FromDateTimeString(string dateTime)

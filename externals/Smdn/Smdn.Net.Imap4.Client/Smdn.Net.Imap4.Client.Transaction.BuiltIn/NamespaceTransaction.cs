@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -30,18 +30,13 @@ using Smdn.Net.Imap4.Protocol.Client;
 
 namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
   internal sealed class NamespaceTransaction : ImapTransactionBase<ImapCommandResult<ImapNamespace>>, IImapExtension {
-    ImapCapability IImapExtension.RequiredCapability {
-      get { return ImapCapability.Namespace; }
+    IEnumerable<ImapCapability> IImapExtension.RequiredCapabilities {
+      get { yield return ImapCapability.Namespace; }
     }
 
     public NamespaceTransaction(ImapConnection connection)
       : base(connection)
     {
-    }
-
-    protected override ProcessTransactionDelegate Reset()
-    {
-      return ProcessNamespace;
     }
 
     // 5. NAMESPACE Command
@@ -58,9 +53,9 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     //    Result:    OK - Command completed
     //                  NO - Error: Can't complete command
     //                  BAD - argument invalid
-    private void ProcessNamespace()
+    protected override ImapCommand PrepareCommand()
     {
-      SendCommand("NAMESPACE", ProcessReceiveResponse);
+      return Connection.CreateCommand("NAMESPACE");
     }
 
     protected override void OnDataResponseReceived(ImapDataResponse data)

@@ -1,0 +1,20 @@
+﻿<CustomWindow:StandardWindow x:Class="CustomWindowDemo.DemoWindow4"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:CustomWindow="clr-namespace:CustomWindow;assembly=CustomWindow"
+    Caption="" Title="Taskbar text"
+    ContentExtend="True"
+    Height="100" Width="300">
+  <StackPanel>
+    <Ellipse Width="40" Height="40" Stroke="#6B7B93" 
+           HorizontalAlignment="Left" VerticalAlignment="Top">
+      <Ellipse.Fill>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+          <GradientStop Color="#EDF0F4" Offset="0.2" />
+          <GradientStop Color="#93A4C1" Offset="1" />
+        </LinearGradientBrush>
+      </Ellipse.Fill>
+    </Ellipse>
+    <TextBlock TextAlignment="Center">Extended content</TextBlock>
+  </StackPanel>
+</CustomWindow:StandardWindow>

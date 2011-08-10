@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,13 +23,19 @@
 // THE SOFTWARE.
 
 using System;
+#if NET_4_0
+using System.Collections.Generic;
+#else
+using Smdn.Collections;
+#endif
 
 using Smdn.Net.MessageAccessProtocols;
 
 namespace Smdn.Net.Imap4 {
-  public interface IImapMessageFlagSet : IStringEnumSet<ImapMessageFlag> {
+  public interface IImapMessageFlagSet : ISet<ImapMessageFlag> {
     bool ContainNonApplicableFlags { get; }
 
+    bool Contains(string @value);
     IImapMessageFlagSet GetNonApplicableFlagsRemoved();
   }
 }

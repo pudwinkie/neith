@@ -5,16 +5,24 @@ namespace Smdn.Net.Imap4 {
   [TestFixture]
   public class ImapStringTests {
     [Test]
-    public void TestOpExplicit()
+    public void TestValue()
     {
       var str = new ImapString("hoge");
 
-      Assert.AreEqual("hoge", (string)str);
-      Assert.AreEqual(str.ToString(), (string)str);
+      Assert.AreEqual("hoge", str.Value);
+      Assert.AreEqual(str.ToString(), str.Value);
+    }
 
-      str = null;
+    [Test]
+    public void TestSerializeBinary()
+    {
+      var str = new ImapString("hoge");
 
-      Assert.IsNull((string)str);
+      TestUtils.SerializeBinary(str, delegate(ImapString deserialized) {
+        Assert.AreNotSame(str, deserialized);
+        Assert.AreEqual(str, deserialized);
+        Assert.AreEqual("hoge", deserialized.Value);
+      });
     }
   }
 }

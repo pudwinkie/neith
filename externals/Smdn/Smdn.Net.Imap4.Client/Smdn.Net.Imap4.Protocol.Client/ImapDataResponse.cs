@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -41,6 +41,7 @@ namespace Smdn.Net.Imap4.Protocol.Client {
   //     ImapCommandContinuationRequest
   //       => handles '7.5. Server Responses - Command Continuation Request'
 
+  [Serializable]
   public sealed class ImapDataResponse : ImapResponse {
     public ImapDataResponseType Type {
       get; private set;
@@ -52,9 +53,11 @@ namespace Smdn.Net.Imap4.Protocol.Client {
 
     internal static ImapDataResponse Create(ImapData[] data)
     {
+      ImapDataResponseType responseType;
+
       if (2 <= data.Length &&
           data[1].Format == ImapDataFormat.Text &&
-          ImapDataResponseType.SizeStatusTypes.Has(data[1].GetTextAsString())) {
+          ImapDataResponseType.SizeStatusTypes.TryGet(data[1].GetTextAsString(), out responseType)) {
         // 'Mailbox Size' or 'Message Status'
         var dataWithoutType = new ImapData[data.Length - 1];
 
@@ -62,16 +65,16 @@ namespace Smdn.Net.Imap4.Protocol.Client {
 
         Array.Copy(data, 2, dataWithoutType, 1, dataWithoutType.Length - 1);
 
-        return new ImapDataResponse(ImapDataResponseType.SizeStatusTypes.Find(data[1].GetTextAsString()), dataWithoutType);
+        return new ImapDataResponse(responseType, dataWithoutType);
       }
       else if (1 <= data.Length &&
                data[0].Format == ImapDataFormat.Text &&
-               ImapDataResponseType.AllTypes.Has(data[0].GetTextAsString())) {
-        return new ImapDataResponse(ImapDataResponseType.AllTypes.Find(data[0].GetTextAsString()),
-                                    (1 == data.Length) ? new ImapData[] {} : data.Slice(1));
+               ImapDataResponseType.AllTypes.TryGet(data[0].GetTextAsString(), out responseType)) {
+        return new ImapDataResponse(responseType,
+                                    data.Slice(1));
       }
       else {
-        Smdn.Net.Imap4.Client.Trace.Verbose("unknown data response type: {0}", data[0]);
+        Smdn.Net.Imap4.Client.Trace.Verbose(string.Concat("unknown data response type: ", data[0]));
 
         return new ImapDataResponse(ImapDataResponseType.InvalidOrUnknown, data);
       }

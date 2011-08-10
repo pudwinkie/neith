@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using NUnit.Framework;
 
+using Smdn.IO;
 using Smdn.Net.Pop3.Client.Session;
 
 namespace Smdn.Net.Pop3.Client {
@@ -112,7 +113,7 @@ end of message
     }
 
     [Test]
-    public void TestPropertyGetUniqueId()
+    public void TestPropertyGetUniqueIdServerSupportsUidl()
     {
       TestMessage(delegate(PopPseudoServer server, PopMessageInfo message) {
         // UIDL
@@ -124,6 +125,22 @@ end of message
 
         // retrieve again
         Assert.AreEqual("whqtswO00WBw418f9t5JxYwZ", message.UniqueId);
+      });
+    }
+
+    [Test]
+    public void TestPropertyGetUniqueIdServerNotSupportsUidl()
+    {
+      TestMessage(delegate(PopPseudoServer server, PopMessageInfo message) {
+        // UIDL
+        server.EnqueueResponse("-ERR\r\n");
+
+        Assert.IsNull(message.UniqueId);
+
+        Assert.AreEqual(server.DequeueRequest(), "UIDL 1\r\n");
+
+        // retrieve again
+        Assert.IsNull(message.UniqueId);
       });
     }
 
@@ -182,6 +199,109 @@ end of message
     {
       TestClosedSessionMessage(delegate(PopMessageInfo message) {
         message.MarkAsDeleted();
+      });
+    }
+
+    [Test]
+    public void TestGetUniqueIdServerSupportsUidl()
+    {
+      TestMessage(delegate(PopPseudoServer server, PopMessageInfo message) {
+        // UIDL
+        server.EnqueueResponse("+OK 1 whqtswO00WBw418f9t5JxYwZ\r\n");
+
+        Assert.AreEqual("whqtswO00WBw418f9t5JxYwZ", message.GetUniqueId());
+
+        Assert.AreEqual(server.DequeueRequest(), "UIDL 1\r\n");
+
+        // retrieve again
+        Assert.AreEqual("whqtswO00WBw418f9t5JxYwZ", message.GetUniqueId());
+        Assert.AreEqual("whqtswO00WBw418f9t5JxYwZ", message.UniqueId);
+      });
+    }
+
+    [Test]
+    public void TestGetUniqueIdServerNotSupportsUidl()
+    {
+      TestMessage(delegate(PopPseudoServer server, PopMessageInfo message) {
+        // UIDL
+        server.EnqueueResponse("-ERR\r\n");
+
+        try {
+          message.GetUniqueId();
+          Assert.Fail("PopIncapableException not thrown");
+        }
+        catch (PopIncapableException) {
+        }
+
+        // retrieve again
+        try {
+          message.GetUniqueId();
+          Assert.Fail("PopIncapableException not thrown");
+        }
+        catch (PopIncapableException) {
+        }
+
+        Assert.IsNull(message.UniqueId);
+      });
+    }
+
+    [Test]
+    public void TestTryGetUniqueIdServerSupportsUidl()
+    {
+      TestMessage(delegate(PopPseudoServer server, PopMessageInfo message) {
+        // UIDL
+        server.EnqueueResponse("+OK 1 whqtswO00WBw418f9t5JxYwZ\r\n");
+
+        string uniqueId;
+
+        Assert.IsTrue(message.TryGetUniqueId(out uniqueId), "method return value 1");
+        Assert.AreEqual("whqtswO00WBw418f9t5JxYwZ", uniqueId);
+
+        Assert.AreEqual(server.DequeueRequest(), "UIDL 1\r\n");
+
+        // retrieve again
+        Assert.IsTrue(message.TryGetUniqueId(out uniqueId), "method return value 2");
+        Assert.AreEqual("whqtswO00WBw418f9t5JxYwZ", uniqueId);
+        Assert.AreEqual("whqtswO00WBw418f9t5JxYwZ", message.UniqueId);
+      });
+    }
+
+    [Test]
+    public void TestTryGetUniqueIdServerNotSupportsUidl()
+    {
+      TestMessage(delegate(PopPseudoServer server, PopMessageInfo message) {
+        // UIDL
+        server.EnqueueResponse("-ERR\r\n");
+
+        string uniqueId;
+
+        Assert.IsFalse(message.TryGetUniqueId(out uniqueId), "method return value 1");
+        Assert.IsNull(uniqueId);
+
+        // retrieve again
+        Assert.IsFalse(message.TryGetUniqueId(out uniqueId), "method return value 1");
+        Assert.IsNull(uniqueId);
+        Assert.IsNull(message.UniqueId);
+      });
+    }
+
+    [Test, ExpectedException(typeof(InvalidOperationException))]
+    public void TestTryGetUniqueIdSessionClosed()
+    {
+      TestClosedSessionMessage(delegate(PopMessageInfo message) {
+        string discard;
+
+        message.TryGetUniqueId(out discard);
+      });
+    }
+
+    [Test, ExpectedException(typeof(PopMessageDeletedException))]
+    public void TestTryGetUniqueIdDeleted()
+    {
+      TestDeletedMessage(delegate(PopPseudoServer server, PopMessageInfo message) {
+        string discard;
+
+        message.TryGetUniqueId(out discard);
       });
     }
 
@@ -285,6 +405,117 @@ end of message
 
           Assert.AreEqual(server.DequeueRequest(), "STAT\r\n");
         }
+      });
+    }
+
+    private void TestReadAs(Action<PopMessageInfo, int, string> test)
+    {
+      TestMessage(delegate(PopPseudoServer server, PopMessageInfo message) {
+        int octets;
+        string messageBody, byteStuffedMessageBody;
+
+        GetMessageBody(out messageBody, out byteStuffedMessageBody, out octets);
+
+        // RETR
+        server.EnqueueResponse("+OK\r\n" +
+                               byteStuffedMessageBody +
+                               ".\r\n");
+
+        test(message, octets, messageBody);
+      });
+    }
+
+    [Test]
+    public void TestReadAsStreamConverter()
+    {
+      TestReadAs(delegate(PopMessageInfo message, int octets, string expectedMessageBody) {
+        var ret = message.ReadAs(delegate(Stream stream) {
+          Assert.IsNotNull(stream);
+          Assert.AreEqual(octets, stream.Length);
+
+          return stream.ReadToEnd();
+        });
+
+        Assert.AreEqual(NetworkTransferEncoding.Transfer7Bit.GetBytes(expectedMessageBody),
+                        ret);
+      });
+    }
+
+    [Test]
+    public void TestReadAsStreamFunc1()
+    {
+      TestReadAs(delegate(PopMessageInfo message, int octets, string expectedMessageBody) {
+        var ret = message.ReadAs(delegate(Stream stream, string arg1) {
+          Assert.IsNotNull(stream);
+          Assert.AreEqual(octets, stream.Length);
+
+          Assert.AreEqual("arg1", arg1);
+
+          return stream.ReadToEnd();
+        }, "arg1");
+
+        Assert.AreEqual(NetworkTransferEncoding.Transfer7Bit.GetBytes(expectedMessageBody),
+                        ret);
+      });
+    }
+
+    [Test]
+    public void TestReadAsStreamFunc2()
+    {
+      TestReadAs(delegate(PopMessageInfo message, int octets, string expectedMessageBody) {
+        var ret = message.ReadAs(delegate(Stream stream, string arg1, string arg2) {
+          Assert.IsNotNull(stream);
+          Assert.AreEqual(octets, stream.Length);
+
+          Assert.AreEqual("arg1", arg1);
+          Assert.AreEqual("arg2", arg2);
+
+          return stream.ReadToEnd();
+        }, "arg1", "arg2");
+
+        Assert.AreEqual(NetworkTransferEncoding.Transfer7Bit.GetBytes(expectedMessageBody),
+                        ret);
+      });
+    }
+
+    [Test]
+    public void TestReadAsStreamFunc3()
+    {
+      TestReadAs(delegate(PopMessageInfo message, int octets, string expectedMessageBody) {
+        var ret = message.ReadAs(delegate(Stream stream, string arg1, string arg2, string arg3) {
+          Assert.IsNotNull(stream);
+          Assert.AreEqual(octets, stream.Length);
+
+          Assert.AreEqual("arg1", arg1);
+          Assert.AreEqual("arg2", arg2);
+          Assert.AreEqual("arg3", arg3);
+
+          return stream.ReadToEnd();
+        }, "arg1", "arg2", "arg3");
+
+        Assert.AreEqual(NetworkTransferEncoding.Transfer7Bit.GetBytes(expectedMessageBody),
+                        ret);
+      });
+    }
+
+    [Test]
+    public void TestReadAsStreamFunc4()
+    {
+      TestReadAs(delegate(PopMessageInfo message, int octets, string expectedMessageBody) {
+        var ret = message.ReadAs(delegate(Stream stream, string arg1, string arg2, string arg3, string arg4) {
+          Assert.IsNotNull(stream);
+          Assert.AreEqual(octets, stream.Length);
+
+          Assert.AreEqual("arg1", arg1);
+          Assert.AreEqual("arg2", arg2);
+          Assert.AreEqual("arg3", arg3);
+          Assert.AreEqual("arg4", arg4);
+
+          return stream.ReadToEnd();
+        }, "arg1", "arg2", "arg3", "arg4");
+
+        Assert.AreEqual(NetworkTransferEncoding.Transfer7Bit.GetBytes(expectedMessageBody),
+                        ret);
       });
     }
 

@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -71,35 +71,34 @@ namespace Smdn.Net.Imap4.Client.Session {
 
       session = new ImapSession(authority.Host,
                                 authority.Port,
-                                true,
                                 profile.Timeout,
+                                profile.SendTimeout,
+                                profile.ReceiveTimeout,
+                                true,
                                 securePort
                                   ? createSslStreamCallback
                                   : null);
 
       session.HandlesIncapableAsException = false;
       session.HandlesReferralAsException = false;
-      session.TransactionTimeout  = profile.Timeout;
-      session.SendTimeout         = profile.SendTimeout;
-      session.ReceiveTimeout      = profile.ReceiveTimeout;
 
       if (session.ServerCapabilities.Count == 0)
         // try querying server capability (ignore error)
         session.Capability();
 
-      if (!session.ServerCapabilities.Has(ImapCapability.Imap4Rev1))
+      if (!session.ServerCapabilities.Contains(ImapCapability.Imap4Rev1))
         throw new ImapIncapableException(ImapCapability.Imap4Rev1);
 
-      if (profile.UseTlsIfAvailable && session.ServerCapabilities.Has(ImapCapability.StartTls) && !session.IsSecureConnection) {
+      if (profile.UseTlsIfAvailable && session.ServerCapabilities.Contains(ImapCapability.StartTls) && !session.IsSecureConnection) {
         var r = session.StartTls(createSslStreamCallback, true);
 
         if (r.Failed)
           throw new ImapSecureConnectionException(r.ResultText);
-        else if (!session.ServerCapabilities.Has(ImapCapability.Imap4Rev1))
+        else if (!session.ServerCapabilities.Contains(ImapCapability.Imap4Rev1))
           throw new ImapIncapableException(ImapCapability.Imap4Rev1);
       }
 
-      if (profile.UseDeflateIfAvailable && session.ServerCapabilities.Has(ImapCapability.CompressDeflate)) {
+      if (profile.UseDeflateIfAvailable && session.ServerCapabilities.Contains(ImapCapability.CompressDeflate)) {
         var r = session.Compress(ImapCompressionMechanism.Deflate);
 
         if (r.Failed)
@@ -234,7 +233,7 @@ namespace Smdn.Net.Imap4.Client.Session {
 
       if ((result == null || result.Failed) &&
           allowPlainTextMechanism &&
-          !session.ServerCapabilities.Has(ImapCapability.LoginDisabled))
+          !session.ServerCapabilities.Contains(ImapCapability.LoginDisabled))
         result = session.Login(credentials, username, true);
 
       return result;
@@ -295,7 +294,7 @@ namespace Smdn.Net.Imap4.Client.Session {
                                       true);
 
       if ((result == null || (result.Failed && canFallback)) &&
-          !session.ServerCapabilities.Has(ImapCapability.LoginDisabled))
+          !session.ServerCapabilities.Contains(ImapCapability.LoginDisabled))
         // try anonymous LOGIN
         result = session.Login(new NetworkCredential("anonymous", username),
                                null,

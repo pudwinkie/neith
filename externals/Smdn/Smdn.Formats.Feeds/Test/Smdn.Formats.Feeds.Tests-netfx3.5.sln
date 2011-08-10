@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Formats.Feeds.Tests-netfx3.5", "Smdn.Formats.Feeds.Tests-netfx3.5.csproj", "{2E699481-14EF-43CF-9A29-F1135D98896E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn-netfx3.5", "..\..\Smdn\Smdn-netfx3.5.csproj", "{94EE5515-F253-491B-8F0F-09F70D03B1B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Core.Standards-netfx3.5", "..\..\Smdn.Core.Standards\Smdn.Core.Standards-netfx3.5.csproj", "{A749376E-4C07-400D-9FDA-F6A9DF2E7B18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Xml-netfx3.5", "..\..\Smdn.Xml\Smdn.Xml-netfx3.5.csproj", "{470C9328-0BAD-4186-AA7B-4E11E84DF29B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Smdn.Formats.Feeds-netfx3.5", "..\Smdn.Formats.Feeds-netfx3.5.csproj", "{DEA7D58A-F7EA-4721-AFE8-16B89015EA8C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2E699481-14EF-43CF-9A29-F1135D98896E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E699481-14EF-43CF-9A29-F1135D98896E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E699481-14EF-43CF-9A29-F1135D98896E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E699481-14EF-43CF-9A29-F1135D98896E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{470C9328-0BAD-4186-AA7B-4E11E84DF29B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{470C9328-0BAD-4186-AA7B-4E11E84DF29B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{470C9328-0BAD-4186-AA7B-4E11E84DF29B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{470C9328-0BAD-4186-AA7B-4E11E84DF29B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94EE5515-F253-491B-8F0F-09F70D03B1B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94EE5515-F253-491B-8F0F-09F70D03B1B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94EE5515-F253-491B-8F0F-09F70D03B1B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94EE5515-F253-491B-8F0F-09F70D03B1B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A749376E-4C07-400D-9FDA-F6A9DF2E7B18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A749376E-4C07-400D-9FDA-F6A9DF2E7B18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A749376E-4C07-400D-9FDA-F6A9DF2E7B18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A749376E-4C07-400D-9FDA-F6A9DF2E7B18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEA7D58A-F7EA-4721-AFE8-16B89015EA8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEA7D58A-F7EA-4721-AFE8-16B89015EA8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEA7D58A-F7EA-4721-AFE8-16B89015EA8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEA7D58A-F7EA-4721-AFE8-16B89015EA8C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Smdn.Formats.Feeds.Tests-netfx3.5.csproj
+	EndGlobalSection
+EndGlobal

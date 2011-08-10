@@ -1,0 +1,25 @@
+<WorkspaceItem ctype="Workspace">
+  <Items>
+    <Item>Smdn/Test/Smdn.Tests-netfx2.0.sln</Item>
+    <Item>Smdn.Core.BinaryFormats/Test/Smdn.Core.BinaryFormats.Tests-netfx2.0.sln</Item>
+    <Item>Smdn.Core.Miscellaneous/Test/Smdn.Core.Miscellaneous.Tests-netfx2.0.sln</Item>
+    <Item>Smdn.Formats.Ini/Test/Smdn.Formats.Ini.Tests-netfx2.0.sln</Item>
+    <Item>Smdn.Formats.Mime/Test/Smdn.Formats.Mime.Tests-netfx2.0.sln</Item>
+    <Item>Smdn.Formats.Playlists/Test/Smdn.Formats.Playlists.Tests-netfx2.0.sln</Item>
+    <Item>Smdn.Formats.Thbgm/Test/Smdn.Formats.Thbgm.Tests-netfx2.0.sln</Item>
+    <Item>Smdn.Interop/Test/Smdn.Interop.Tests-netfx2.0.sln</Item>
+    <Item>Smdn.Net.Imap4/Test/Smdn.Net.Imap4.Tests-netfx2.0.sln</Item>
+    <Item>Smdn.Net.Imap4.Client/Test/Smdn.Net.Imap4.Client.Tests-netfx2.0.sln</Item>
+    <Item>Smdn.Net.Imap4.WebClients/Test/Smdn.Net.Imap4.WebClients.Tests-netfx2.0.sln</Item>
+    <Item>Smdn.Net.MessageAccessProtocols/Test/Smdn.Net.MessageAccessProtocols.Tests-netfx2.0.sln</Item>
+    <Item>Smdn.Net.Pop3/Test/Smdn.Net.Pop3.Tests-netfx2.0.sln</Item>
+    <Item>Smdn.Net.Pop3.Client/Test/Smdn.Net.Pop3.Client.Tests-netfx2.0.sln</Item>
+    <Item>Smdn.Net.Pop3.WebClients/Test/Smdn.Net.Pop3.WebClients.Tests-netfx2.0.sln</Item>
+    <Item>Smdn.Security.Authentication.Sasl/Test/Smdn.Security.Authentication.Sasl.Tests-netfx2.0.sln</Item>
+    <Item>Smdn.Core.Standards/Test/Smdn.Core.Standards.Tests-netfx2.0.sln</Item>
+    <Item>Smdn.Formats.Feeds/Test/Smdn.Formats.Feeds.Tests-netfx2.0.sln</Item>
+    <Item>Smdn.Imaging/Test/Smdn.Imaging.Tests-netfx2.0.sln</Item>
+    <Item>Smdn.Formats.Riff/Test/Smdn.Formats.Riff.Tests-netfx2.0.sln</Item>
+    <Item>Smdn.Formats.Earthsoft.PV4/Test/Smdn.Formats.Earthsoft.PV4.Tests-netfx2.0.sln</Item>
+  </Items>
+</WorkspaceItem>

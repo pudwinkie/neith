@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2010 smdn
+// Copyright (c) 2010-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -38,30 +38,6 @@ namespace Smdn.Net.Pop3.Client.Transaction.BuiltIn {
       IsResponseMultiline = true;
     }
 
-    protected override ProcessTransactionDelegate Reset()
-    {
-#if DEBUG
-      if (!RequestArguments.ContainsKey("msg"))
-        return ProcessArgumentNotSetted;
-      else if (this is TopTransaction && !RequestArguments.ContainsKey("n"))
-        return ProcessTopArgumentNotSetted;
-#endif
-
-      return ProcessRetrTop;
-    }
-
-#if DEBUG
-    private void ProcessArgumentNotSetted()
-    {
-      FinishError(PopCommandResultCode.RequestError, "arguments 'msg' must be setted");
-    }
-
-    private void ProcessTopArgumentNotSetted()
-    {
-      FinishError(PopCommandResultCode.RequestError, "arguments 'n' must be setted");
-    }
-#endif
-
     /*
      * 5. The TRANSACTION State
      * RETR msg
@@ -88,12 +64,23 @@ namespace Smdn.Net.Pop3.Client.Transaction.BuiltIn {
      *        +OK top of message follows
      *        -ERR no such message
      */
-    private void ProcessRetrTop()
+    protected override PopCommand PrepareCommand()
     {
+#if DEBUG
+      if (!RequestArguments.ContainsKey("msg")) {
+        FinishError(PopCommandResultCode.RequestError, "arguments 'msg' must be setted");
+        return null;
+      }
+      else if (this is TopTransaction && !RequestArguments.ContainsKey("n")) {
+        FinishError(PopCommandResultCode.RequestError, "arguments 'n' must be setted");
+        return null;
+      }
+#endif
+
       if (this is RetrTransaction)
-        SendCommand("RETR", ProcessReceiveResponse, RequestArguments["msg"]);
-      else if (this is TopTransaction)
-        SendCommand("TOP",  ProcessReceiveResponse, RequestArguments["msg"], RequestArguments["n"]);
+        return new PopCommand("RETR", RequestArguments["msg"]);
+      else /*if (this is TopTransaction)*/
+        return new PopCommand("TOP",  RequestArguments["msg"], RequestArguments["n"]);
     }
 
     protected override void OnStatusResponseReceived(PopStatusResponse status)
@@ -103,7 +90,13 @@ namespace Smdn.Net.Pop3.Client.Transaction.BuiltIn {
 
         base.OnStatusResponseReceived(status);
 
-        Transit(ProcessRetrieveMessage);
+        for (;;) {
+          if (!Connection.TryReceiveLine(body)) {
+            body.Position = 0L;
+            Finish(new PopCommandResult<Stream>(body, StatusResponse.ResponseText));
+            break;
+          }
+        }
       }
       else {
         base.OnStatusResponseReceived(status);

@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@
 // THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
 
 using Smdn.Net.Imap4.Protocol;
 using Smdn.Net.Imap4.Protocol.Client;
@@ -32,8 +33,12 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     FetchStoreTransactionBase<ImapMessageAttribute>,
     IImapExtension
   {
-    ImapCapability IImapExtension.RequiredCapability {
-      get { return storeModifiersCapabilityRequirement; }
+    IEnumerable<ImapCapability> IImapExtension.RequiredCapabilities {
+      get
+      {
+        if (storeModifiersCapabilityRequirement != null)
+          yield return storeModifiersCapabilityRequirement;
+      }
     }
 
     public StoreTransaction(ImapConnection connection, bool uid, ImapCapability storeModifiersCapabilityRequirement)
@@ -42,27 +47,6 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
       this.uid = uid;
       this.storeModifiersCapabilityRequirement = storeModifiersCapabilityRequirement;
     }
-
-    protected override ProcessTransactionDelegate Reset()
-    {
-#if DEBUG
-      if (!RequestArguments.ContainsKey("message set"))
-        return ProcessArgumentNotSetted;
-      else if (!RequestArguments.ContainsKey("message data item name"))
-        return ProcessArgumentNotSetted;
-      else if (!RequestArguments.ContainsKey("value for message data item"))
-        return ProcessArgumentNotSetted;
-      else
-#endif
-        return ProcessStore;
-    }
-
-#if DEBUG
-    private void ProcessArgumentNotSetted()
-    {
-      FinishError(ImapCommandResultCode.RequestError, "arguments 'message set', 'message data item name' and 'value for message data item' must be setted");
-    }
-#endif
 
     // RFC 4466 - Collected Extensions to IMAP4 ABNF
     // http://tools.ietf.org/html/rfc4466
@@ -75,24 +59,31 @@ namespace Smdn.Net.Imap4.Client.Transaction.BuiltIn {
     //    Result:     OK - store completed
     //                NO - store error: cannot store that data
     //                BAD - command unknown or arguments invalid
-    private void ProcessStore()
+    protected override ImapCommand PrepareCommand()
     {
+#if DEBUG
+      if (!RequestArguments.ContainsKey("message set") ||
+          !RequestArguments.ContainsKey("message data item name") ||
+          !RequestArguments.ContainsKey("value for message data item")) {
+        FinishError(ImapCommandResultCode.RequestError, "arguments 'message set', 'message data item name' and 'value for message data item' must be setted");
+        return null;
+      }
+#endif
+
       // STORE / UID STORE
       ImapString storeModifiers;
 
       if (RequestArguments.TryGetValue("store modifiers", out storeModifiers))
-        SendCommand(uid ? "UID STORE" : "STORE",
-                    ProcessReceiveResponse,
-                    RequestArguments["message set"],
-                    storeModifiers,
-                    RequestArguments["message data item name"],
-                    RequestArguments["value for message data item"]);
+        return Connection.CreateCommand(uid ? "UID STORE" : "STORE",
+                                        RequestArguments["message set"],
+                                        storeModifiers,
+                                        RequestArguments["message data item name"],
+                                        RequestArguments["value for message data item"]);
       else
-        SendCommand(uid ? "UID STORE" : "STORE",
-                    ProcessReceiveResponse,
-                    RequestArguments["message set"],
-                    RequestArguments["message data item name"],
-                    RequestArguments["value for message data item"]);
+        return Connection.CreateCommand(uid ? "UID STORE" : "STORE",
+                                        RequestArguments["message set"],
+                                        RequestArguments["message data item name"],
+                                        RequestArguments["value for message data item"]);
     }
 
     protected override void OnTaggedStatusResponseReceived(ImapTaggedStatusResponse tagged)

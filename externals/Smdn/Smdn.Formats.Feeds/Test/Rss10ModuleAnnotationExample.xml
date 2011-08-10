@@ -1,0 +1,54 @@
+<?xml version="1.0"?> 
+
+<rdf:RDF 
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" 
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:annotate="http://purl.org/rss/1.0/modules/annotate/"
+  xmlns="http://purl.org/rss/1.0/"
+> 
+
+  <channel rdf:about="http://www.monkeyfist.com/discuss/">
+    <title>Monkeyfist Discussion Group</title>
+    <link>http://www.monkeyfist.com/discuss/</link>
+    <description>
+      Monkeyfist is a Prosthetic Monkey production and contains the 
+      deranged rantings of geeks, freaks and academic snobs.
+    </description>
+  </channel>
+
+  <item rdf:about="http://www.monkeyfist.com/discuss/1" position="1">
+    <inchannel rdf:resource="http://www.monkeyfist.com/discuss/"/>
+    <title>Hello, World!</title>
+    <link>http://www.monkeyfist.com/discuss/1</link>
+    <dc:creator>Niel Bornstein (mailto:niel@bornstein.atlanta.ga.us)</dc:creator>
+    <dc:date>2000-08-17T08:22:13-05:00</dc:date>
+  </item>
+  
+  <item rdf:about="http://www.monkeyfist.com/discuss/2" position="2">
+    <inchannel rdf:resource="http://www.monkeyfist.com/discuss/"/>
+    <title>Re: Hello, World!</title>
+    <link>http://www.monkeyfist.com/discuss/2</link>
+    <annotate:reference rdf:resource="http://www.monkeyfist.com/discuss/1"/>
+    <dc:creator>Edd Dumbill (mailto:)</dc:creator>
+    <dc:date>2000-08-17T13:25:42Z</dc:date>
+  </item>
+
+  <item rdf:about="http://www.monkeyfist.com/discuss/3" position="3">
+    <inchannel rdf:resource="http://www.monkeyfist.com/discuss/"/>
+    <title>RSS 1.0 is cool</title>
+    <link>http://www.monkeyfist.com/discuss/3</link>
+    <annotate:reference rdf:resource="http://www.monkeyfist.com/discuss/2"/>
+    <dc:creator>Kendall Clark (mailto:kclark@ntlug.org)</dc:creator>
+    <dc:date>2000-08-17T07:29:03-06:00</dc:date>
+  </item>
+
+  <item rdf:about="http://www.monkeyfist.com/discuss/4" position="4">
+    <inchannel rdf:resource="http://www.monkeyfist.com/discuss/"/>
+    <title>Re: Re: Hello, World!</title>
+    <link>http://www.monkeyfist.com/discuss/2</link>
+    <annotate:reference rdf:resource="http://www.monkeyfist.com/discuss/2"/>
+    <dc:creator>Niel Bornstein (mailto:niel@bornstein.atlanta.ga.us)</dc:creator>
+    <dc:date>2000-08-17T08:38:03-05:00</dc:date>
+  </item>
+
+</rdf:RDF>

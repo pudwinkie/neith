@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -76,16 +76,12 @@ namespace Smdn.Net.Imap4.Protocol {
       fragments.Clear();
     }
 
-    protected void Enqueue(byte[] bytes)
-    {
-      fragments.Enqueue(bytes);
-    }
-
+    private static readonly byte[] BytesCrLf = Octets.GetCRLF();
     private static readonly byte[] BytesDelimiter = new[] {Octets.SP};
     private static readonly byte[] BytesOpenParen = new[] {ImapOctets.OpenParen};
     private static readonly byte[] BytesCloseParen = new[] {ImapOctets.CloseParen};
 
-    protected void Enqueue(IEnumerable<ImapString> args)
+    protected void Enqueue(bool terminateByCrLf, IEnumerable<ImapString> args)
     {
       var delim = false;
 
@@ -103,21 +99,13 @@ namespace Smdn.Net.Imap4.Protocol {
           if (parenthesize)
             fragments.Enqueue(BytesOpenParen);
 
-          Enqueue(str as ImapStringList);
+          Enqueue(false, str as ImapStringList);
 
           if (parenthesize)
             fragments.Enqueue(BytesCloseParen);
         }
         else {
-          if (str is ImapQuotedString) {
-            // quoted          = DQUOTE *QUOTED-CHAR DQUOTE
-            var quoted = string.Concat("\"",
-                                       (str as ImapQuotedString).Escaped,
-                                       "\"");
-
-            fragments.Enqueue(NetworkTransferEncoding.Transfer7Bit.GetBytes(quoted));
-          }
-          else if (str is IImapLiteralString) {
+          if (str is IImapLiteralString) {
             /*
              * RFC 3501 - INTERNET MESSAGE ACCESS PROTOCOL - VERSION 4rev1
              * http://tools.ietf.org/html/rfc3501
@@ -163,10 +151,16 @@ namespace Smdn.Net.Imap4.Protocol {
           }
           else {
             // atom            = 1*ATOM-CHAR
-            fragments.Enqueue(NetworkTransferEncoding.Transfer7Bit.GetBytes((string)str));
+            // quoted          = DQUOTE *QUOTED-CHAR DQUOTE
+            var escaped = str.GetEscaped();
+
+            fragments.Enqueue(NetworkTransferEncoding.Transfer7Bit.GetBytes(escaped));
           }
         }
       }
+
+      if (terminateByCrLf)
+        fragments.Enqueue(BytesCrLf);
     }
 
     private /*readonly*/ LineOrientedBufferedStream stream;

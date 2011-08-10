@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2009-2010 smdn
+// Copyright (c) 2009-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -35,19 +35,15 @@ namespace Smdn {
         byte* b = (byte*)&i;
 
         if (b[0] == 1)
-          endianness = Endianness.LittleEndian;
+          Endianness = Endianness.LittleEndian;
         else if (b[3] == 1)
-          endianness = Endianness.BigEndian;
+          Endianness = Endianness.BigEndian;
         else
-          endianness = Endianness.Unknown;
+          Endianness = Endianness.Unknown;
       }
     }
 
-    private static Endianness endianness;
-
-    public static Endianness Endianness {
-      get { return endianness; }
-    }
+    public static readonly Endianness Endianness;
 
     private static string kernelName = null;
 

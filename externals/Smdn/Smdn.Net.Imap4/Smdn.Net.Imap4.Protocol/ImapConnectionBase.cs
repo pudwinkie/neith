@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2008-2010 smdn
+// Copyright (c) 2008-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -49,26 +49,19 @@ namespace Smdn.Net.Imap4.Protocol {
     {
     }
 
-    protected override void Connect(string host, int port, UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
+    protected override void Connect(string host,
+                                    int port,
+                                    int millisecondsTimeout,
+                                    UpgradeConnectionStreamCallback createAuthenticatedStreamCallback)
     {
       try {
-        base.Connect(host, port, createAuthenticatedStreamCallback);
+        base.Connect(host,
+                     port,
+                     millisecondsTimeout,
+                     createAuthenticatedStreamCallback);
       }
       catch (ImapUpgradeConnectionException ex) {
         throw new ImapSecureConnectionException(ex.Message, ex);
-      }
-      catch (ConnectionException ex) {
-        throw new ImapConnectionException(ex.Message, ex.InnerException);
-      }
-    }
-
-    public override void UpgradeStream(UpgradeConnectionStreamCallback upgradeStreamCallback)
-    {
-      try {
-        base.UpgradeStream(upgradeStreamCallback);
-      }
-      catch (ConnectionException ex) {
-        throw new ImapUpgradeConnectionException(ex.Message, ex.InnerException);
       }
     }
 
@@ -80,6 +73,16 @@ namespace Smdn.Net.Imap4.Protocol {
       sender    = CreateSender(bufferedStream);
 
       return bufferedStream;
+    }
+
+    protected override Exception CreateConnectException(string message, Exception innerException)
+    {
+      return new ImapConnectionException(message, innerException);
+    }
+
+    protected override Exception CreateUpgradeStreamException(string message, Exception innerException)
+    {
+      return new ImapUpgradeConnectionException(message, innerException);
     }
 
     protected abstract ImapSender CreateSender(LineOrientedBufferedStream stream);

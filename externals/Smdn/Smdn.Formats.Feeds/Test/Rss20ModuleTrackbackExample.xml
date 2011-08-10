@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<rss version="2.0"
+  xmlns:trackback="http://madskills.com/public/xml/rss/module/trackback/">
+   <channel>
+      <title>Liftoff News</title>
+      <link>http://liftoff.msfc.nasa.gov/</link>
+      <description>Liftoff to Space Exploration.</description>
+      <language>en-us</language>
+      <pubDate>Tue, 10 Jun 2003 04:00:00 GMT</pubDate>
+
+      <lastBuildDate>Tue, 10 Jun 2003 09:41:01 GMT</lastBuildDate>
+      <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+      <generator>Weblog Editor 2.0</generator>
+      <managingEditor>editor@example.com</managingEditor>
+      <webMaster>webmaster@example.com</webMaster>
+
+	<!-- beginning of RSS document omitted for brevity -->
+	<item>
+		<title>RSS + TrackBack = Fun!</title>
+		<link>http://bar.com/weblog/rss_plus_trackback.html</link>
+		<description>I just found out that I can put TrackBack data in my RSS feed. How cool is that!?</description>
+		<trackback:ping>http://bar.com/tb.cgi?tb_id=rssplustrackback</trackback:ping>
+		<trackback:about>http://foo.com/trackback/tb.cgi?tb_id=20020923</trackback:about>
+	</item>
+	<!-- the rest of the RSS document continues below -->
+
+   </channel>
+</rss>

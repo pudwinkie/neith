@@ -4,6 +4,7 @@ using NUnit.Framework;
 namespace Smdn.Net.Imap4 {
   [TestFixture]
   public class ImapStringEnumTests {
+    [Serializable]
     private class StringEnum : ImapStringEnum {
       public StringEnum(string val)
         : base(val)
@@ -66,6 +67,17 @@ namespace Smdn.Net.Imap4 {
       Assert.IsFalse(str == new ImapCapability("IMAP4rev1"));
       Assert.IsFalse(str == new ImapCapability("IMAP4REV1"));
       Assert.IsFalse(str == new ImapCapability("imap4rev1"));
+    }
+
+    [Test]
+    public void TestSerializeBinary()
+    {
+      var str = new StringEnum("IMAP4rev1");
+
+      TestUtils.SerializeBinary(str, delegate(ImapString deserialized) {
+        Assert.AreNotSame(str, deserialized);
+        Assert.AreEqual(str, deserialized);
+      });
     }
   }
 }

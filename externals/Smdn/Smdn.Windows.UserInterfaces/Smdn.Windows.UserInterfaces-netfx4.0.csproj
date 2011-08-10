@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{EFE918F6-18E2-4600-9320-11D2918A5F73}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Smdn.Windows.UserInterfaces</RootNamespace>
+    <AssemblyName>Smdn.Windows.UserInterfaces</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <OutputPath>..\build\bin\</OutputPath>
+    <IntermediateOutputPath>..\build\obj\</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>NET_2_0;NET_3_5;NET_4_0;DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>3</WarningLevel>
+    <OutputType>Library</OutputType>
+    <OutputPath>..\build\bin\Debug\netfx4.0\</OutputPath>
+    <IntermediateOutputPath>..\build\obj\Debug\netfx4.0\</IntermediateOutputPath>
+    <RootNamespace>Smdn.Windows.UserInterfaces</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>NET_2_0;NET_3_5;NET_4_0</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>3</WarningLevel>
+    <OutputType>Library</OutputType>
+    <OutputPath>..\build\bin\Release\netfx4.0\</OutputPath>
+    <IntermediateOutputPath>..\build\obj\Release\netfx4.0\</IntermediateOutputPath>
+    <RootNamespace>Smdn.Windows.UserInterfaces</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Interop\InternetShortcutObject.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Interop\intshcut.h.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Interop\IUniformResourceLocator.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces\IconLocation.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces\Desktop.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces\WallpaperStyle.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Interop\kernel32.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Interop\shell32.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Interop\shellapi.h.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Interop\user32.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Interop\winuser.h.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Interop\winbase.h.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Interop\windef.h.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Interop\shlobj.h.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Interop\IShellLink.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Interop\ShellLinkObject.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Shells\SpecialFolderEntryInfo.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Shells\SpecialFolderInfo.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Shells\StartMenuFolderInfo.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Shells\ShellLink.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Shells\InternetShortcut.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Shells\RecycleBin.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Shells\DesktopIni.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Shells\SpecialFolderFileInfo.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Shells\AllUsersStartMenuFolderInfo.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Shells\CurrentUserStartMenuFolderInfo.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Shells\StartMenuTree.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Interop\dwmapi.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.DesktopWindowManager\DWM.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Interop\uxtheme.h.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Interop\dwmapi.h.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Shells\Explorer.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Shells\ControlPanels.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Shells\SystemTools.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Shells\ManagementConsoles.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Windowing\Window.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.UserInput\HotKey.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Shells\AltTabDialog.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces\Wallpaper.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces\FileWallpaper.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces\WallpaperRenderer.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces\DirectoryWallpaper.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Shells\Shortcut.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces\Resource.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Interop\IShellFolder.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Interop\IEnumIDList.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Interop\oleidl.h.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Interop\shtypes.h.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Interop\IExtractIcon.cs" />
+    <Compile Include="Smdn.Windows.UserInterfaces.Shells\ShellFolder.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <StandardHeader Text="&#xA;Author:&#xA;      ${AuthorName} &lt;${AuthorEmail}&gt;&#xA;&#xA;Copyright (c) 2009-${Year} ${CopyrightHolder}&#xA;&#xA;Permission is hereby granted, free of charge, to any person obtaining a copy&#xA;of this software and associated documentation files (the &quot;Software&quot;), to deal&#xA;in the Software without restriction, including without limitation the rights&#xA;to use, copy, modify, merge, publish, distribute, sublicense, and/or sell&#xA;copies of the Software, and to permit persons to whom the Software is&#xA;furnished to do so, subject to the following conditions:&#xA;&#xA;The above copyright notice and this permission notice shall be included in&#xA;all copies or substantial portions of the Software.&#xA;&#xA;THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR&#xA;IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,&#xA;FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE&#xA;AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER&#xA;LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,&#xA;OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN&#xA;THE SOFTWARE." inheritsSet="MITX11License" />
+          <ChangeLogPolicy UpdateMode="None" VcsIntegration="None" inheritsSet="Mono" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
+  <ItemGroup>
+    <ProjectReference Include="..\Smdn.Formats.Ini\Smdn.Formats.Ini-netfx4.0.csproj">
+      <Project>{3621C800-367E-49DF-BF87-99E0D60E4A62}</Project>
+      <Name>Smdn.Formats.Ini-netfx4.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Smdn.Imaging\Smdn.Imaging-netfx4.0.csproj">
+      <Project>{C9FA5D61-05D1-4FF4-A43F-9CE23F3919B5}</Project>
+      <Name>Smdn.Imaging-netfx4.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Smdn\Smdn-netfx4.0.csproj">
+      <Project>{3FDF8CFA-B168-466F-B303-AEDDBED87BB9}</Project>
+      <Name>Smdn-netfx4.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Smdn.Imaging.Formats.Ico\Smdn.Imaging.Formats.Ico-netfx4.0.csproj">
+      <Project>{4A77C1FA-98C7-4148-BC9E-56D02B4682CB}</Project>
+      <Name>Smdn.Imaging.Formats.Ico-netfx4.0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Smdn.Interop\Smdn.Interop-netfx4.0.csproj">
+      <Project>{3BCC0779-853E-4319-8523-8CD4D504CE64}</Project>
+      <Name>Smdn.Interop-netfx4.0</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Smdn.Windows.UserInterfaces.Shells\" />
+    <Folder Include="Smdn.Windows.UserInterfaces.DesktopWindowManager\" />
+    <Folder Include="Smdn.Windows.UserInterfaces.Windowing\" />
+    <Folder Include="Smdn.Windows.UserInterfaces.UserInput\" />
+  </ItemGroup>
+</Project>

@@ -1,8 +1,8 @@
 // 
 // Author:
-//       smdn <smdn@mail.invisiblefulmoon.net>
+//       smdn <smdn@smdn.jp>
 // 
-// Copyright (c) 2009-2010 smdn
+// Copyright (c) 2009-2011 smdn
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -48,7 +48,7 @@ namespace Smdn.IO {
       if (innerOrPartialStream == null)
         throw new ArgumentNullException("innerOrPartialStream");
       if (offset < 0)
-        throw new ArgumentOutOfRangeException("offset", offset, "must be zero or positive number");
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("offset", offset);
 
       if (innerOrPartialStream is PartialStream) {
         var partialStream = innerOrPartialStream as PartialStream;
@@ -67,19 +67,23 @@ namespace Smdn.IO {
     }
 
     public override bool CanSeek {
-      get { CheckDisposed(); return stream.CanSeek; }
+      get { return !IsClosed && stream.CanSeek; }
     }
 
     public override bool CanRead {
-      get { CheckDisposed(); return stream.CanRead; }
+      get { return !IsClosed && stream.CanRead; }
     }
 
     public override bool CanWrite {
-      get { CheckDisposed(); return writable && stream.CanWrite; }
+      get { return !IsClosed && writable && stream.CanWrite; }
     }
 
     public override bool CanTimeout {
-      get { CheckDisposed(); return stream.CanTimeout; }
+      get { return !IsClosed && stream.CanTimeout; }
+    }
+
+    private bool IsClosed {
+      get { return stream == null; }
     }
 
     public override long Position {
@@ -89,7 +93,7 @@ namespace Smdn.IO {
         CheckDisposed();
 
         if (value < 0)
-          throw new ArgumentOutOfRangeException("Position", value, "must be zero or positive number");
+          throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("Position", value);
         stream.Position = value + offset;
       }
     }
@@ -154,11 +158,11 @@ namespace Smdn.IO {
       if (innerStream == null)
         throw new ArgumentNullException("innerStream");
       if (!innerStream.CanSeek)
-        throw new ArgumentException("innerStream", "stream must be seekable");
+        throw ExceptionUtils.CreateArgumentMustBeSeekableStream("innerStream");
       if (offset < 0)
-        throw new ArgumentOutOfRangeException("offset", offset, "must be zero or positive number");
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("offset", offset);
       if (length.HasValue && length.Value < 0)
-        throw new ArgumentOutOfRangeException("length", length.Value, "must be zero or positive number");
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("length", length.Value);
 
       this.stream = innerStream;
       this.offset = offset;
@@ -172,7 +176,7 @@ namespace Smdn.IO {
 
     public override void Close()
     {
-      if (!leaveInnerStreamOpen)
+      if (!leaveInnerStreamOpen && stream != null)
         stream.Close();
 
       stream = null;
@@ -192,7 +196,7 @@ namespace Smdn.IO {
     {
       CheckDisposed();
 
-      throw new NotSupportedException();
+      throw ExceptionUtils.CreateNotSupportedSettingStreamLength();
     }
 
     public override long Seek(long offset, SeekOrigin origin)
@@ -218,10 +222,10 @@ namespace Smdn.IO {
             return stream.Seek(this.offset + position, SeekOrigin.Begin) - this.offset;
         }
         default:
-          throw new ArgumentException(string.Format("unsupported seek origin {0}", origin), "origin");
+          throw ExceptionUtils.CreateArgumentMustBeValidEnumValue("origin", origin);
       }
 
-      throw new IOException("Attempted to seek before start of PartialStream.");
+      throw ExceptionUtils.CreateIOAttemptToSeekBeforeStartOfStream();
     }
 
     public override void Flush()
@@ -231,17 +235,23 @@ namespace Smdn.IO {
 
       stream.Flush();
     }
+  
+    protected long GetRemainderLength()
+    {
+      if (length.HasValue)
+        return length.Value - (stream.Position - offset);
+      else
+        return long.MaxValue;
+    }
 
     public override int ReadByte()
     {
       CheckDisposed();
 
-      if (length == null)
+      if (0L < GetRemainderLength())
         return stream.ReadByte();
-      else if (length.Value <= Position)
-        return -1;
       else
-        return stream.ReadByte();
+        return -1;
     }
 
     public override int Read(byte[] buffer, int offset, int count)
@@ -249,19 +259,14 @@ namespace Smdn.IO {
       CheckDisposed();
 
       if (count < 0)
-        throw new ArgumentOutOfRangeException("count", count, "must be zero or positive number");
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("count", count);
 
-      if (length == null)
-        return stream.Read(buffer, offset, count);
+      var remainder = GetRemainderLength();
 
-      var remainder = (int)(length.Value - Position); // XXX: long -> int
-
-      if (remainder <= 0)
-        return 0;
-      else if (remainder < count)
-        return stream.Read(buffer, offset, remainder);
+      if (0L < remainder)
+        return stream.Read(buffer, offset, (int)Math.Min(count, remainder)); // XXX: long -> int
       else
-        return stream.Read(buffer, offset, count);
+        return 0;
     }
 
     public override void Write(byte[] buffer, int offset, int count)
@@ -270,31 +275,26 @@ namespace Smdn.IO {
       CheckWritable();
 
       if (count < 0)
-        throw new ArgumentOutOfRangeException("count", count, "must be zero or positive number");
+        throw ExceptionUtils.CreateArgumentMustBeZeroOrPositive("count", count);
 
-      if (length == null) {
+      var remainder = GetRemainderLength() - count;
+
+      if (remainder < 0L)
+        throw new IOException("attempted to write after end of stream");
+      else
         stream.Write(buffer, offset, count);
-      }
-      else {
-        var remainder = (int)(length.Value - Position); // XXX: long -> int
-
-        if (remainder <= 0 || remainder < count)
-          throw new IOException("end of stream");
-        else
-          stream.Write(buffer, offset, count);
-      }
     }
 
     private void CheckDisposed()
     {
-      if (stream == null)
+      if (IsClosed)
         throw new ObjectDisposedException(GetType().FullName);
     }
 
     private void CheckWritable()
     {
       if (!writable)
-        throw new NotSupportedException("stream is read only");
+        throw ExceptionUtils.CreateNotSupportedWritingStream();
     }
 
     private Stream stream;

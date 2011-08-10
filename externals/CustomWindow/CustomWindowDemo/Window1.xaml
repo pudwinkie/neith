@@ -1,0 +1,31 @@
+﻿<CustomWindow:StandardWindow x:Class="CustomWindowDemo.Window1"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:CustomWindow="clr-namespace:CustomWindow;assembly=CustomWindow"
+    Title="Window demo"
+    Height="300" Width="300">
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition Height="40" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Bottom" FontWeight="Bold">Standard Window</TextBlock>
+        <Button Content="Standard Window" Click="ButtonDemoWindow1_Click" Grid.Row="1" Grid.Column="0" Margin="5" />
+        <Button Click="ButtonDemoWindow2_Click" Grid.Row="1" Grid.Column="1" Margin="5">
+            <TextBlock>Hidden and disabled <LineBreak /> header buttons</TextBlock>
+        </Button>
+        <Button Content="Extended header" Click="ButtonDemoWindow3_Click" Grid.Row="2" Grid.Column="0" Margin="5" />
+        <Button Content="Extended content" Click="ButtonDemoWindow4_Click" Grid.Row="2" Grid.Column="1" Margin="5" />
+        <Button Content="Chrome like UI" Click="ButtonDemoWindow5_Click" Grid.Row="3" Grid.Column="0" Margin="5" />
+        <TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Bottom" FontWeight="Bold">Essential Window</TextBlock>
+        <Button Content="Essential Window" Click="ButtonDemoEssentialWindow1_Click" Grid.Row="5" Grid.Column="0" Margin="5,15,5,5" />
+    </Grid>
+</CustomWindow:StandardWindow>

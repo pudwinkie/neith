@@ -4,31 +4,35 @@ using NUnit.Framework;
 
 namespace Smdn.Net.Imap4.Client.Session {
   [TestFixture]
-  public class ImapSessionCommandsFetch : ImapSessionTestsBase {
+  public class ImapSessionCommandsFetchTests : ImapSessionTestsBase {
     [Test, ExpectedException(typeof(ArgumentException))]
     public void TestFetchEmptySequenceSet()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         ImapMessage[] messages;
 
         session.Fetch(ImapSequenceSet.CreateSet(new long[] {}), ImapFetchDataItem.Fast, out messages);
-      }
+
+        return -1;
+      });
     }
 
     [Test, ExpectedException(typeof(ArgumentException))]
     public void TestFetchEmptyUidSet()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         ImapMessage[] messages;
 
         session.Fetch(ImapSequenceSet.CreateUidSet(new long[] {}), ImapFetchDataItem.Fast, out messages);
-      }
+
+        return -1;
+      });
     }
 
     [Test]
     public void TestFetchResultMustBeInReceivedOrder()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // FETCH
         server.EnqueueResponse("* 3 FETCH (UID 3)\r\n" +
                                "* 2 FETCH (UID 2)\r\n" +
@@ -56,14 +60,14 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual(1L, messages[2].Sequence);
         Assert.AreEqual(new Uri(session.SelectedMailbox.Url.AbsoluteUri + "/;UID=1"), messages[2].Url);
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     public void TestFetchAttributes()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // FETCH
         server.EnqueueResponse("* 1 FETCH (" +
                                "UID 4 " + 
@@ -72,41 +76,41 @@ namespace Smdn.Net.Imap4.Client.Session {
                                "RFC822.SIZE 1716" + 
                                ")\r\n" + 
                                "0004 OK FETCH completed\r\n");
-  
+
         ImapMessageAttribute[] messages;
         ImapFetchDataItem dataItem =
           ImapFetchDataItem.Uid +
           ImapFetchDataItem.Flags +
           ImapFetchDataItem.InternalDate +
           ImapFetchDataItem.Rfc822Size;
-  
+
         Assert.IsTrue((bool)session.Fetch(ImapSequenceSet.CreateSet(1), dataItem, out messages));
-  
+
         Assert.AreEqual("0004 FETCH 1 (UID FLAGS INTERNALDATE RFC822.SIZE)\r\n",
                         server.DequeueRequest());
-  
+
         Assert.AreEqual(1, messages.Length);
-  
+
         ImapMessageAttribute message = messages[0];
-  
+
         //Assert.AreEqual(session.SelectedMailbox, message.Mailbox);
         Assert.AreEqual(4, message.Uid);
         Assert.AreEqual(1, message.Sequence);
         Assert.AreEqual(new Uri(session.SelectedMailbox.Url.AbsoluteUri + "/;UID=4"), message.Url);
 
-        Assert.IsTrue(message.Flags.Has(ImapMessageFlag.Answered));
-        Assert.IsTrue(message.Flags.Has("custom1"));
+        Assert.IsTrue(message.Flags.Contains(ImapMessageFlag.Answered));
+        Assert.IsTrue(message.Flags.Contains("custom1"));
         Assert.AreEqual(new DateTimeOffset(2008, 2, 19, 8, 15, 48, new TimeSpan(+9, 0, 0)), message.InternalDate);
         Assert.AreEqual(1716, message.Rfc822Size);
-  
-        CloseMailbox(session);
-      }
+
+        return 1;
+      });
     }
 
     [Test]
     public void TestFetchDynamicAttributes()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // FETCH
         server.EnqueueResponse("* 1 FETCH (FLAGS (\\Answered custom1))\r\n" + 
                                "0004 OK FETCH completed\r\n");
@@ -125,17 +129,17 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         Assert.AreEqual(1L, message.Sequence);
 
-        Assert.IsTrue(message.Flags.Has(ImapMessageFlag.Answered));
-        Assert.IsTrue(message.Flags.Has("custom1"));
+        Assert.IsTrue(message.Flags.Contains(ImapMessageFlag.Answered));
+        Assert.IsTrue(message.Flags.Contains("custom1"));
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     public void TestFetchEnvelope()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // FETCH
         server.EnqueueResponse("* 1 FETCH (ENVELOPE (" + 
                                "\"Tue, 19 Feb 2008 08:15:48 +0900\" " +
@@ -150,18 +154,18 @@ namespace Smdn.Net.Imap4.Client.Session {
                                "\"<message.id@mail.example.com>\" " + 
                                "))\r\n" +
                                "0004 OK FETCH completed\r\n");
-    
+
         ImapMessageStaticAttribute[] messages;
-    
+
         Assert.IsTrue((bool)session.Fetch(ImapSequenceSet.CreateSet(1), ImapFetchDataItem.Envelope, out messages));
-    
+
         Assert.AreEqual("0004 FETCH 1 (ENVELOPE)\r\n",
                         server.DequeueRequest());
-    
+
         Assert.AreEqual(1, messages.Length);
-    
+
         ImapMessageStaticAttribute message = messages[0];
-    
+
         //Assert.AreEqual(session.SelectedMailbox, message.Mailbox);
         Assert.AreEqual(0L, message.Uid);
         Assert.AreEqual(1L, message.Sequence);
@@ -185,15 +189,15 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual("bcc address", envelope.Bcc[0].Name);
         Assert.AreEqual("<in.reply.to@mail.example.com>", envelope.InReplyTo);
         Assert.AreEqual("<message.id@mail.example.com>", envelope.MessageId);
-    
-        CloseMailbox(session);
-      }
+
+        return 1;
+      });
     }
 
     [Test]
     public void TestFetchBodyStructureSinglePart()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // FETCH
         server.EnqueueResponse("* 1 FETCH (BODY (\"text\" \"plain\" (\"charset\" \"ISO-2022-JP\") NIL NIL \"7bit\" 22 1))\r\n" +
                                "0004 OK FETCH completed\r\n");
@@ -239,14 +243,14 @@ namespace Smdn.Net.Imap4.Client.Session {
         catch (NotSupportedException) {
         }
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     public void TestFetchBodyStructureMultiPart()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // FETCH
         server.EnqueueResponse("* 1 FETCH (UID 6 BODY "+
                                "((\"TEXT\" \"PLAIN\" (\"CHARSET\" \"US-ASCII\") NIL NIL \"7BIT\" 1152 " + 
@@ -316,14 +320,14 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual(73, part2.LineCount);
         Assert.AreEqual(new Uri(session.SelectedMailbox.Url.AbsoluteUri + "/;UID=6/;SECTION=2"), part2.Url);
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     public void TestFetchByMacro()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // FETCH
         server.EnqueueResponse("* 1 FETCH (" +
                                "FLAGS (\\Answered custom1) " +
@@ -331,42 +335,42 @@ namespace Smdn.Net.Imap4.Client.Session {
                                "RFC822.SIZE 1716" + 
                                ")\r\n" + 
                                "0004 OK FETCH completed\r\n");
-  
+
         ImapMessageAttribute[] messages;
-  
+
         Assert.IsTrue((bool)session.Fetch(ImapSequenceSet.CreateSet(1), ImapFetchDataItem.Fast, out messages));
-  
+
         Assert.AreEqual("0004 FETCH 1 FAST\r\n",
                         server.DequeueRequest());
-  
+
         Assert.AreEqual(1, messages.Length);
         Assert.AreEqual(new DateTimeOffset(2008, 2, 19, 8, 15, 48, new TimeSpan(+9, 0, 0)), messages[0].InternalDate);
-  
-        CloseMailbox(session);
-      }
+
+        return 1;
+      });
     }
 
     [Test]
     public void TestFetchBody()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // FETCH
         server.EnqueueResponse("* 1 FETCH (BODY[] {12}\r\ntest message)\r\n" +
                                "* 2 FETCH (BODY[] \"test message\")\r\n" +
                                "0004 OK FETCH completed\r\n");
-  
+
         ImapMessage[] messages;
-  
+
         Assert.IsTrue((bool)session.Fetch(ImapSequenceSet.CreateRangeSet(1, 2), ImapFetchDataItem.BodyPeek(), out messages));
-  
+
         Assert.AreEqual("0004 FETCH 1:2 (BODY.PEEK[])\r\n",
                         server.DequeueRequest());
-  
+
         Assert.AreEqual(2, messages.Length);
-  
+
         //Assert.AreEqual(session.SelectedMailbox, messages[0].Mailbox);
         //Assert.AreEqual(session.SelectedMailbox, messages[1].Mailbox);
-  
+
         Assert.AreEqual("test message", messages[0].GetFirstBodyAsString());
         Assert.AreEqual("test message", messages[1].GetFirstBodyAsString());
 
@@ -378,8 +382,8 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual(2L, messages[1].Sequence);
         Assert.AreEqual(new Uri(session.SelectedMailbox.Url.AbsoluteUri + "?2"), messages[1].Url);
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     private string CreateLiteral8(string body, Encoding encoding, int maxoctet)
@@ -407,78 +411,78 @@ namespace Smdn.Net.Imap4.Client.Session {
     [Test]
     public void TestFetchSection()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         var body = "From: from\r\n" +
           "To: to\r\n" +
           "Subect: subject\r\n" +
           "Date: Mon, 25 Feb 2008 15:01:12 +0900\r\n";
-  
+
         // FETCH
         server.EnqueueResponse("* 1 FETCH (BODY[HEADER.FIELDS (FROM TO SUBJECT DATE)] " +
                                CreateLiteral(body, Encoding.ASCII, 0) +
                                ")\r\n" +
                                "0004 OK FETCH completed\r\n");
-  
+
         ImapMessageBody[] messages;
-  
+
         Assert.IsTrue((bool)session.Fetch(ImapSequenceSet.CreateSet(1), ImapFetchDataItem.BodyPeek("header.fields (from to subject date)"), out messages));
-  
+
         Assert.AreEqual("0004 FETCH 1 (BODY.PEEK[header.fields (from to subject date)])\r\n",
                         server.DequeueRequest());
-  
+
         Assert.AreEqual(1, messages.Length);
-  
+
         //Assert.AreEqual(0L, messages[0].Uid);
         //Assert.AreEqual(1L, messages[0].Sequence);
         //Assert.AreEqual(new Uri(session.SelectedMailbox.Url.AbsoluteUri + "?1"), messages[0].Url);
 
         Assert.AreEqual(body, messages[0].GetFirstBodyAsString());
-  
-        CloseMailbox(session);
-      }
+
+        return 1;
+      });
     }
 
     [Test]
     public void TestFetchPartial()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         var body = "From: from\r\n" +
           "To: to\r\n" +
           "Subect: subject\r\n" +
           "Date: Mon, 25 Feb 2008 15:01:12 +0900\r\n";
         var octet = 10;
-  
+
         // FETCH
         server.EnqueueResponse("* 1 FETCH (BODY[HEADER.FIELDS (FROM TO SUBJECT DATE)] " +
                                CreateLiteral(body, Encoding.ASCII, octet) +
                                ")\r\n" +
                                "0004 OK FETCH completed\r\n");
-  
+
         ImapMessage[] messages;
-  
+
         var messageDataItems = ImapFetchDataItem.BodyText("header.fields (from to subject date)", 0, octet);
-  
+
         Assert.IsTrue((bool)session.Fetch(ImapSequenceSet.CreateSet(1), messageDataItems, out messages));
-  
+
         Assert.AreEqual("0004 FETCH 1 (BODY[header.fields (from to subject date)]<0." + octet.ToString() + ">)\r\n",
                         server.DequeueRequest());
-  
+
         Assert.AreEqual(1, messages.Length);
-  
+
         Assert.AreEqual(0L, messages[0].Uid);
         Assert.AreEqual(1L, messages[0].Sequence);
         Assert.AreEqual(new Uri(session.SelectedMailbox.Url.AbsoluteUri + "?1"), messages[0].Url);
 
         Assert.AreEqual(body.Substring(0, octet), messages[0].GetFirstBodyAsString());
-  
-        CloseMailbox(session);
-      }
+
+        return 1;
+      });
     }
 
     [Test]
     public void TestFetchReturnedInSeparatedResponse()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // FETCH
         server.EnqueueResponse("* 2 FETCH (INTERNALDATE \"24-Jan-2010 23:08:54 +0900\")\r\n" +
                                "* 2 FETCH (UID 399)\r\n" +
@@ -504,27 +508,27 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.IsTrue(messages[0].InternalDate.HasValue);
         Assert.AreEqual(new DateTimeOffset(2010, 1, 24, 23, 8, 54, new TimeSpan(9, 0, 0)), messages[0].InternalDate.Value);
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     public void TestFetchModSeq()
     {
-      using (var session = SelectMailbox("CONDSTORE")) {
+      SelectMailbox(new[] {"CONDSTORE"}, delegate(ImapSession session, ImapPseudoServer server) {
         // FETCH
         server.EnqueueResponse("* 1 FETCH (MODSEQ (624140003))\r\n" +
                                "* 2 FETCH (MODSEQ (624140007))\r\n" +
                                "* 3 FETCH (MODSEQ (624140005))\r\n" +
                                "0004 OK FETCH completed\r\n");
-  
+
         ImapMessageAttribute[] messages;
-  
+
         Assert.IsTrue((bool)session.Fetch(ImapSequenceSet.CreateRangeSet(1, 3), ImapFetchDataItem.ModSeq, out messages));
-  
+
         Assert.AreEqual("0004 FETCH 1:3 (MODSEQ)\r\n",
                         server.DequeueRequest());
-  
+
         Assert.AreEqual(3, messages.Length);
 
         Assert.AreEqual(0L, messages[0].Uid);
@@ -546,82 +550,86 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual(3L, messages[2].Sequence);
         Assert.AreEqual(new Uri(session.SelectedMailbox.Url.AbsoluteUri + "?3"), messages[2].Url);
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     [ExpectedException(typeof(ImapIncapableException))]
     public void TestFetchModSeqIncapable()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         session.HandlesIncapableAsException = true;
 
         // FETCH
         ImapMessage[] messages;
 
         session.Fetch(ImapSequenceSet.CreateRangeSet(1, 3), ImapFetchDataItem.Fast + ImapFetchDataItem.ModSeq, out messages);
-      }
+
+        return -1;
+      });
     }
 
     [Test]
     public void TestFetchChangedSince()
     {
-      using (var session = SelectMailbox("CONDSTORE")) {
+      SelectMailbox(new[] {"CONDSTORE"}, delegate(ImapSession session, ImapPseudoServer server) {
         // FETCH
         server.EnqueueResponse("* 1 FETCH (UID 4 MODSEQ (65402) FLAGS (\\Seen))\r\n" +
                                "* 2 FETCH (UID 6 MODSEQ (75403) FLAGS (\\Deleted))\r\n" +
                                "* 4 FETCH (UID 8 MODSEQ (29738) FLAGS ($NoJunk $AutoJunk $MDNSent))\r\n" +
                                "0004 OK FETCH completed\r\n");
-  
+
         ImapMessageAttribute[] messages;
-  
+
         Assert.IsTrue((bool)session.FetchChangedSince(ImapSequenceSet.CreateUidFromSet(1), ImapFetchDataItem.Flags, 12345UL, out messages));
-  
+
         Assert.AreEqual("0004 UID FETCH 1:* (FLAGS) (CHANGEDSINCE 12345)\r\n",
                         server.DequeueRequest());
-  
+
         Assert.AreEqual(3, messages.Length);
 
         Assert.AreEqual(1L, messages[0].Sequence);
         Assert.AreEqual(4L, messages[0].Uid);
         Assert.AreEqual(new Uri(session.SelectedMailbox.Url.AbsoluteUri + "/;UID=4"), messages[0].Url);
         Assert.AreEqual(65402UL, messages[0].ModSeq);
-        Assert.IsTrue(messages[0].Flags.Has(ImapMessageFlag.Seen));
+        Assert.IsTrue(messages[0].Flags.Contains(ImapMessageFlag.Seen));
 
         Assert.AreEqual(2L, messages[1].Sequence);
         Assert.AreEqual(6L, messages[1].Uid);
         Assert.AreEqual(new Uri(session.SelectedMailbox.Url.AbsoluteUri + "/;UID=6"), messages[1].Url);
         Assert.AreEqual(75403UL, messages[1].ModSeq);
-        Assert.IsTrue(messages[1].Flags.Has(ImapMessageFlag.Deleted));
+        Assert.IsTrue(messages[1].Flags.Contains(ImapMessageFlag.Deleted));
 
         Assert.AreEqual(4L, messages[2].Sequence);
         Assert.AreEqual(8L, messages[2].Uid);
         Assert.AreEqual(new Uri(session.SelectedMailbox.Url.AbsoluteUri + "/;UID=8"), messages[2].Url);
         Assert.AreEqual(29738UL, messages[2].ModSeq);
-        Assert.IsTrue(messages[2].Flags.Has("$NoJunk"));
-        Assert.IsTrue(messages[2].Flags.Has("$AutoJunk"));
-        Assert.IsTrue(messages[2].Flags.Has("$MDNSent"));
+        Assert.IsTrue(messages[2].Flags.Contains("$NoJunk"));
+        Assert.IsTrue(messages[2].Flags.Contains("$AutoJunk"));
+        Assert.IsTrue(messages[2].Flags.Contains("$MDNSent"));
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     [ExpectedException(typeof(ImapIncapableException))]
     public void TestFetchChangedSinceIncapable()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // FETCH
         ImapMessage[] messages;
         session.FetchChangedSince(ImapSequenceSet.CreateUidFromSet(1), ImapFetchDataItem.Flags, 12345UL, out messages);
-      }
+
+        return -1;
+      });
     }
 
     [Test]
     public void TestFetchBinary()
     {
-      using (var session = SelectMailbox("BINARY")) {
+      SelectMailbox(new[] {"BINARY"}, delegate(ImapSession session, ImapPseudoServer server) {
         var body = "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f" +
           "\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f";
 
@@ -646,14 +654,14 @@ namespace Smdn.Net.Imap4.Client.Session {
 
         Assert.AreEqual(body, messages[0].GetFirstBodyAsString());
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     public void TestFetchBinarySize()
     {
-      using (var session = SelectMailbox("BINARY")) {
+      SelectMailbox(new[] {"BINARY"}, delegate(ImapSession session, ImapPseudoServer server) {
         // FETCH
         server.EnqueueResponse("* 1 FETCH (BINARY.SIZE[1.1] 32)\r\n" +
                                "0004 OK FETCH completed\r\n");
@@ -674,19 +682,21 @@ namespace Smdn.Net.Imap4.Client.Session {
         Assert.AreEqual(32L, messages[0].GetBinarySizeOf("1.1"));
         Assert.AreEqual(32L, messages[0].BinarySize);
 
-        CloseMailbox(session);
-      }
+        return 1;
+      });
     }
 
     [Test]
     [ExpectedException(typeof(ImapIncapableException))]
     public void TestFetchBinaryIncapable()
     {
-      using (var session = SelectMailbox()) {
+      SelectMailbox(delegate(ImapSession session, ImapPseudoServer server) {
         // FETCH
         ImapMessage[] messages;
         session.Fetch(ImapSequenceSet.CreateUidFromSet(1), ImapFetchDataItem.Binary("1.1"), out messages);
-      }
+
+        return -1;
+      });
     }
   }
 }
