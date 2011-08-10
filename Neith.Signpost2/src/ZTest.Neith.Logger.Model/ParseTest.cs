@@ -3,6 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Neith.Logger.Model;
 using Neith.Growl.Daemon;
 using Neith.Growl.Connector;
 
@@ -52,27 +53,34 @@ FGHIJKLMNOPQRSTU
             var pw = new PasswordManager();
             var info = new RequestInfo();
             var parser = new GNTPParser(pw, false, true, true, true, info);
-            GNTPRequest reqData = null;
+            var items = new List<IGNTPRequest>();
             parser.MessageParsed += (req) =>
             {
-                reqData = req;
+                items.Add(req);
             };
             parser.Error += (error) =>
             {
                 Assert.Fail("ErrorCode={0}, Description={1}", error.ErrorCode, error.ErrorDescription);
             };
+            ParseAll(parser);
+            Assert.IsTrue(items.Count>0);
+            var nLog = NeithNotificationRec.FromHeaders(items[0].Headers);
+
+        }
+
+        private static void ParseAll(GNTPParser parser)
+        {
             var remain = TestBytes.Length;
             var index = 0;
             var length = 0;
             while (true) {
-                var data = GetBytes(index,length);
+                var data = GetBytes(index, length);
                 var s = Encoding.UTF8.GetString(data);
                 var next = parser.Parse(data);
                 if (!next.ShouldContinue) break;
                 index += length;
                 length = GetLength(next, index);
             }
-            Assert.IsNotNull(reqData);
         }
 
         private static byte[] GetBytes(int index, int length)
