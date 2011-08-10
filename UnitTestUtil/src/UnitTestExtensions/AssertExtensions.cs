@@ -13,6 +13,7 @@ namespace NUnit.Framework
         public static void AreEqual(this long actual, long expected) { Assert.AreEqual(expected, actual); }
         public static void AreEqual(this uint actual, uint expected) { Assert.AreEqual(expected, actual); }
         public static void AreEqual(this ulong actual, ulong expected) { Assert.AreEqual(expected, actual); }
+        public static void AreEqual(this string actual, string expected) { Assert.AreEqual(expected, actual); }
         public static void AreEqual(this object actual, object expected) { Assert.AreEqual(expected, actual); }
 
         public static void AreEqual(this double actual, double expected, double delta) { Assert.AreEqual(expected, actual, delta); }
@@ -24,6 +25,7 @@ namespace NUnit.Framework
         public static void AreNotEqual(this long actual, long expected) { Assert.AreNotEqual(expected, actual); }
         public static void AreNotEqual(this uint actual, uint expected) { Assert.AreNotEqual(expected, actual); }
         public static void AreNotEqual(this ulong actual, ulong expected) { Assert.AreNotEqual(expected, actual); }
+        public static void AreNotEqual(this string actual, string expected) { Assert.AreNotEqual(expected, actual); }
         public static void AreNotEqual(this object actual, object expected) { Assert.AreNotEqual(expected, actual); }
 
     }
