@@ -16,7 +16,7 @@ namespace Neith.Growl.Daemon
     /// It parses the incoming request, passes off control for displaying the notification,
     /// and then builds and sends the response.
     /// </remarks>
-    public class MessageHandler
+    public class MessageHandler : Neith.Growl.Daemon.IMessageHandler
     {
         /// <summary>
         /// Represents the method that will handle the <see cref="Error"/> event.

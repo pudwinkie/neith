@@ -7,9 +7,6 @@ namespace Neith.Growl.Daemon
     /// <summary>リクエスト情報</summary>
     public interface IGNTPRequest
     {
-        /// <summary>リクエストインフォメーション</summary>
-        IRequestInfo RequestInfo { get; }
-
         /// <summary>アプリケーション名</summary>
         string ApplicationName { get; }
 

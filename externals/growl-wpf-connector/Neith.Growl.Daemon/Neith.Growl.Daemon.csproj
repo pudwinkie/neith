@@ -27,7 +27,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\Growl.Daemon.xml</DocumentationFile>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -36,17 +36,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x86</PlatformTarget>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Mono|AnyCPU' ">
-    <OutputPath>bin\Mono\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
-    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
-    <ErrorReport>prompt</ErrorReport>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Zeroconf, Version=4.0.0.90, Culture=neutral, processorArchitecture=MSIL" />
@@ -70,6 +60,7 @@
     <Compile Include="AsyncSocket.cs" />
     <Compile Include="BonjourService.cs" />
     <Compile Include="CallbackInfo.cs" />
+    <Compile Include="CallbackInfoExtensions.cs" />
     <Compile Include="ConnectedSocket.cs" />
     <Compile Include="ConnectedSocketCollection.cs" />
     <Compile Include="Data.cs" />
@@ -84,6 +75,7 @@
     <Compile Include="GrowlServer.cs" />
     <Compile Include="HeaderExtensions.cs" />
     <Compile Include="IGNTPRequest.cs" />
+    <Compile Include="IMessageHandler.cs" />
     <Compile Include="ISubscriber.cs" />
     <Compile Include="ISubscriptionResponse.cs" />
     <Compile Include="MessageHandler.cs" />

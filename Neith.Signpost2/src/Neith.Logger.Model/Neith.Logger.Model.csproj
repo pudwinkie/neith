@@ -79,6 +79,7 @@
     <Compile Include="NeithHeaderKeys.cs" />
     <Compile Include="NeithNotificationRec.cs" />
     <Compile Include="NeithNotificationModel.cs" />
+    <Compile Include="NeithNotificationRecWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UniqueTime.cs" />
   </ItemGroup>
