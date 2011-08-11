@@ -52,9 +52,9 @@ namespace Neith.Growl.Daemon
         }
 
         /// <summary>
-        /// Creates a new <see cref="SubscriptionResponse"/> from a base <see cref="Response"/> and a list of headers
+        /// Creates a new <see cref="SubscriptionResponse"/> from a base <see cref="IResponse"/> and a list of headers
         /// </summary>
-        /// <param name="response">The base <see cref="Response"/></param>
+        /// <param name="response">The base <see cref="IResponse"/></param>
         /// <param name="headers">The <see cref="HeaderCollection"/> used to populate the response</param>
         /// <returns><see cref="SubscriptionResponse"/></returns>
         internal static ISubscriptionResponse FromResponse(IResponse response, HeaderCollection headers)

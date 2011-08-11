@@ -192,7 +192,7 @@ namespace Neith.Growl.Daemon
         /// <summary>
         /// Called when an 'OK' response occurs.
         /// </summary>
-        /// <param name="response">The <see cref="Response"/></param>
+        /// <param name="response">The <see cref="IResponse"/></param>
         protected void OnOKResponse(ISubscriptionResponse response)
         {
             if (this.OKResponse != null)
@@ -204,7 +204,7 @@ namespace Neith.Growl.Daemon
         /// <summary>
         /// Called when an 'ERROR' response occurs.
         /// </summary>
-        /// <param name="response">The <see cref="Response"/></param>
+        /// <param name="response">The <see cref="IResponse"/></param>
         protected void OnErrorResponse(ISubscriptionResponse response)
         {
             if (this.ErrorResponse != null)

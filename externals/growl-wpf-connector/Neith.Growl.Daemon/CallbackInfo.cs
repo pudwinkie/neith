@@ -15,7 +15,7 @@ namespace Neith.Growl.Daemon
         /// <summary>
         /// Handles the <see cref="CallbackInfo.ForwardedNotificationCallback"/> event
         /// </summary>
-        public delegate void ForwardedNotificationCallbackHandler(Growl.Connector.Response response, Growl.Connector.CallbackData callbackData, CallbackInfo callbackInfo);
+        public delegate void ForwardedNotificationCallbackHandler(IResponse response, CallbackData callbackData, CallbackInfo callbackInfo);
 
         /// <summary>
         /// Occurs when a forwarded notification triggers a callback from the forwarded destination
@@ -51,7 +51,7 @@ namespace Neith.Growl.Daemon
         /// <summary>
         /// Represents metadata about a received request such as when it was received, by whom, etc.
         /// </summary>
-        private RequestInfo requestInfo;
+        private IRequestInfo requestInfo;
 
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace Neith.Growl.Daemon
             {
                 return this.notificationID;
             }
-            internal set
+            set
             {
                 this.notificationID = value;
             }
@@ -115,7 +115,7 @@ namespace Neith.Growl.Daemon
             {
                 return this.alreadyResponded;
             }
-            internal set
+            set
             {
                 this.alreadyResponded = value;
             }
@@ -124,7 +124,7 @@ namespace Neith.Growl.Daemon
         /// <summary>
         /// Gets a list of all extended-information key/value pairs that should be returned with the callback response.
         /// </summary>
-        internal Dictionary<string, string> AdditionalInfo
+        public Dictionary<string, string> AdditionalInfo
         {
             get
             {
@@ -135,7 +135,7 @@ namespace Neith.Growl.Daemon
         /// <summary>
         /// Represents metadata about a received request such as when it was received, by whom, etc.
         /// </summary>
-        public RequestInfo RequestInfo
+        public IRequestInfo RequestInfo
         {
             get
             {
@@ -197,9 +197,9 @@ namespace Neith.Growl.Daemon
         /// <summary>
         /// Handles the callback from a forwarder.
         /// </summary>
-        /// <param name="response">The <see cref="Response"/> from the forwarder</param>
+        /// <param name="response">The <see cref="IResponse"/> from the forwarder</param>
         /// <param name="callbackData">The <see cref="CallbackData"/></param>
-        public void HandleCallbackFromForwarder(Response response, CallbackData callbackData)
+        public void HandleCallbackFromForwarder(IResponse response, CallbackData callbackData)
         {
             this.RequestInfo.SaveHandlingInfo(String.Format("Was responded to on {0} - Action: {1}", response.MachineName, callbackData.Result));
 

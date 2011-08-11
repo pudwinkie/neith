@@ -6,7 +6,7 @@ namespace Neith.Growl.Connector
     /// <summary>
     /// Represents metadata about a received request such as when it was received, by whom, etc.
     /// </summary>
-    public class RequestInfo
+    public class RequestInfo : IRequestInfo
     {
         /// <summary>
         /// The address from which the request was received
@@ -146,18 +146,6 @@ namespace Neith.Growl.Connector
         }
 
         /// <summary>
-        /// Saves arbitrary information about how the notification was handled.
-        /// </summary>
-        /// <param name="info">The information to save</param>
-        /// <remarks>
-        /// The handling information saved is primarily used for writing to the log file (if enabled)
-        /// </remarks>
-        public void SaveHandlingInfo(string info)
-        {
-            this.handlingInfo.Add(info);
-        }
-
-        /// <summary>
         /// Gets the collection of handling information strings associated with the request
         /// </summary>
         /// <value><see cref="List{TValue}"/></value>
@@ -169,18 +157,5 @@ namespace Neith.Growl.Connector
             }
         }
 
-        /// <summary>
-        /// Indicates if the request was forwarded from another machine
-        /// </summary>
-        /// <returns><c>true</c> if the request was forwarded from another machine;<c>false</c> otherwise</returns>
-        public bool WasForwarded()
-        {
-            if (this.previousReceivedHeaders != null && this.previousReceivedHeaders.Count > 0)
-            {
-                return true;
-            }
-            else
-                return false;
-        }
     }
 }

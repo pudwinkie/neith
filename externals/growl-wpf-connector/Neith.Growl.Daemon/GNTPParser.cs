@@ -38,11 +38,6 @@ namespace Neith.Growl.Daemon
         long tag;
 
         /// <summary>
-        /// éÛêMäJénéûçè(UTC)
-        /// </summary>
-        private DateTime utc;
-
-        /// <summary>
         /// Represents the method that will handle the <see cref="Error"/> event.
         /// </summary>
         public delegate void GNTPParserErrorEventHandler(IError error);
@@ -211,7 +206,7 @@ namespace Neith.Growl.Daemon
         /// <summary>
         /// The request info associated with the request
         /// </summary>
-        private RequestInfo requestInfo;
+        private IRequestInfo requestInfo;
 
         /// <summary>
         /// The text of the request after decryption (null if the request was not originally encrypted)
@@ -227,8 +222,8 @@ namespace Neith.Growl.Daemon
         /// <param name="allowNetworkNotifications">Indicates if network requests are allowed</param>
         /// <param name="allowBrowserConnections">Indicates if browser requests are allowed</param>
         /// <param name="allowSubscriptions">Indicates if SUBSCRIPTION requests are allowed</param>
-        /// <param name="requestInfo">The <see cref="RequestInfo"/> associated with this request</param>
-        public GNTPParser(PasswordManager passwordManager, bool passwordRequired, bool allowNetworkNotifications, bool allowBrowserConnections, bool allowSubscriptions, RequestInfo requestInfo)
+        /// <param name="requestInfo">The <see cref="IRequestInfo"/> associated with this request</param>
+        public GNTPParser(PasswordManager passwordManager, bool passwordRequired, bool allowNetworkNotifications, bool allowBrowserConnections, bool allowSubscriptions, IRequestInfo requestInfo)
         {
             this.passwordManager = passwordManager;
             this.passwordRequired = passwordRequired;
@@ -287,43 +282,34 @@ namespace Neith.Growl.Daemon
         /// </remarks>
         public NextIndicator Parse(byte[] inputBytes)
         {
-            try
-            {
+            try {
                 var data = new Data(inputBytes);
                 var s = data.ToString();
                 alreadyReceived.Append(s);
 
-                if (tag == ACCEPT_TAG)
-                {
+                if (tag == ACCEPT_TAG) {
                     // do nothing here but wait for more data
                     tag = GNTP_IDENTIFIER_TAG;
                     return NextIndicator.CRLF;
                 }
 
-                else if (tag == GNTP_IDENTIFIER_TAG)
-                {
+                else if (tag == GNTP_IDENTIFIER_TAG) {
                     var line = alreadyReceived.ToString();
                     var match = ParseGNTPHeaderLine(line, this.passwordRequired);
 
-                    if (match.Success)
-                    {
-                        this.utc = DateTime.UtcNow;
+                    if (match.Success) {
                         this.version = match.Groups["Version"].Value;
-                        if (version == MessageParser.GNTP_SUPPORTED_VERSION)
-                        {
+                        if (version == MessageParser.GNTP_SUPPORTED_VERSION) {
                             string d = match.Groups["Directive"].Value;
-                            if (Enum.IsDefined(typeof(RequestType), d))
-                            {
+                            if (Enum.IsDefined(typeof(RequestType), d)) {
                                 this.directive = (RequestType)Enum.Parse(typeof(RequestType), d);
 
                                 // check for supported but not allowed requests
-                                if (this.directive == RequestType.SUBSCRIBE && !this.allowSubscriptions)
-                                {
+                                if (this.directive == RequestType.SUBSCRIBE && !this.allowSubscriptions) {
                                     OnError(ErrorCode.NOT_AUTHORIZED, ErrorDescription.SUBSCRIPTIONS_NOT_ALLOWED);
                                     return NextIndicator.None;
                                 }
-                                else
-                                {
+                                else {
                                     this.encryptionAlgorithm = Cryptography.GetEncryptionType(match.Groups["EncryptionAlgorithm"].Value);
                                     this.ivHex = (match.Groups["IV"] != null ? match.Groups["IV"].Value : null);
                                     if (!String.IsNullOrEmpty(this.ivHex)) this.iv = Cryptography.HexUnencode(this.ivHex);
@@ -338,137 +324,111 @@ namespace Neith.Growl.Daemon
                                     // Additionally, even if a password is not required, it will be validated if the 
                                     // sending appplication includes one
                                     string errorDescription = ErrorDescription.INVALID_KEY;
-                                    if (this.passwordRequired || this.directive == RequestType.SUBSCRIBE || !String.IsNullOrEmpty(keyHash))
-                                    {
-                                        if (String.IsNullOrEmpty(keyHash))
-                                        {
+                                    if (this.passwordRequired || this.directive == RequestType.SUBSCRIBE || !String.IsNullOrEmpty(keyHash)) {
+                                        if (String.IsNullOrEmpty(keyHash)) {
                                             errorDescription = ErrorDescription.MISSING_KEY;
                                         }
-                                        else
-                                        {
+                                        else {
                                             string keyHashAlgorithmType = match.Groups["KeyHashAlgorithm"].Value;
                                             this.keyHashAlgorithm = Cryptography.GetKeyHashType(keyHashAlgorithmType);
                                             string salt = match.Groups["Salt"].Value.ToUpper();
                                             authorized = this.passwordManager.IsValid(keyHash, salt, this.keyHashAlgorithm, this.encryptionAlgorithm, out this.key);
                                         }
                                     }
-                                    else
-                                    {
+                                    else {
                                         authorized = true;
                                         this.key = Key.None;
                                     }
 
-                                    if (authorized)
-                                    {
-                                        if (this.encryptionAlgorithm == Cryptography.SymmetricAlgorithmType.PlainText)
-                                        {
+                                    if (authorized) {
+                                        if (this.encryptionAlgorithm == Cryptography.SymmetricAlgorithmType.PlainText) {
                                             tag = HEADER_TAG;
                                             return NextIndicator.CRLF;
                                             //socket.Read(AsyncSocket.CRLFData, TIMEOUT_GNTP_HEADER, HEADER_TAG);
                                         }
-                                        else
-                                        {
+                                        else {
                                             tag = ENCRYPTED_HEADERS_TAG;
                                             return NextIndicator.CRLFCRLF;
                                             //socket.Read(AsyncSocket.CRLFCRLFData, TIMEOUT_ENCRYPTED_HEADERS, ENCRYPTED_HEADERS_TAG);
                                         }
                                     }
-                                    else
-                                    {
+                                    else {
                                         OnError(ErrorCode.NOT_AUTHORIZED, errorDescription);
                                         return NextIndicator.None;
                                     }
                                 }
                             }
-                            else
-                            {
+                            else {
                                 OnError(ErrorCode.INVALID_REQUEST, ErrorDescription.UNSUPPORTED_DIRECTIVE, d);
                                 return NextIndicator.None;
                             }
                         }
-                        else
-                        {
+                        else {
                             OnError(ErrorCode.UNKNOWN_PROTOCOL_VERSION, ErrorDescription.UNSUPPORTED_VERSION, version);
                             return NextIndicator.None;
                         }
                     }
-                    else
-                    {
+                    else {
                         OnError(ErrorCode.UNKNOWN_PROTOCOL, ErrorDescription.MALFORMED_REQUEST);
                         return NextIndicator.None;
                     }
                 }
 
-                else if (tag == HEADER_TAG)
-                {
-                    if (s == MessageParser.BLANK_LINE)
-                    {
+                else if (tag == HEADER_TAG) {
+                    if (s == MessageParser.BLANK_LINE) {
                         // if this is a REGISTER message, check Notifications-Count value
                         // to see how many notification sections to expect
-                        if (this.directive == RequestType.REGISTER)
-                        {
-                            if (this.expectedNotifications > 0)
-                            {
+                        if (this.directive == RequestType.REGISTER) {
+                            if (this.expectedNotifications > 0) {
                                 tag = NOTIFICATION_TYPE_TAG;
                                 return NextIndicator.CRLF;
                                 //socket.Read(AsyncSocket.CRLFData, TIMEOUT_GNTP_HEADER, NOTIFICATION_TYPE_TAG);
                             }
-                            else
-                            {
+                            else {
                                 // a REGISTER request with no notifications is not valid
                                 OnError(ErrorCode.INVALID_REQUEST, ErrorDescription.NO_NOTIFICATIONS_REGISTERED);
                                 return NextIndicator.None;
                             }
                         }
-                        else
-                        {
+                        else {
                             // otherwise, check the number of resource pointers we got and start reading those
                             this.pointersExpected = GetNumberOfPointers();
-                            if (this.pointersExpected > 0)
-                            {
+                            if (this.pointersExpected > 0) {
                                 this.pointersExpectedRemaining = this.pointersExpected;
                                 this.currentPointer = 1;
                                 tag = RESOURCE_HEADER_TAG;
                                 return NextIndicator.CRLF;
                                 //socket.Read(AsyncSocket.CRLFData, TIMEOUT_GNTP_HEADER, RESOURCE_HEADER_TAG);
                             }
-                            else
-                            {
+                            else {
                                 OnMessageParsed();
                                 return NextIndicator.None;
                             }
                         }
                     }
-                    else
-                    {
+                    else {
                         var header = Header.ParseHeader(s);
-                        if (header != null)
-                        {
+                        if (header != null) {
                             var addHeader = true;
-                            if (header.Name == HeaderKeys.APPLICATION_NAME)
-                            {
+                            if (header.Name == HeaderKeys.APPLICATION_NAME) {
                                 this.applicationName = header.Value;
                             }
-                            if (header.Name == HeaderKeys.NOTIFICATIONS_COUNT)
-                            {
+                            if (header.Name == HeaderKeys.NOTIFICATIONS_COUNT) {
                                 this.expectedNotifications = Convert.ToInt32(header.Value);
                                 this.expectedNotificationsRemaining = this.expectedNotifications;
                                 this.currentNotification = 1;
                             }
-                            if (header.Name == HeaderKeys.NOTIFICATION_CALLBACK_CONTEXT)
-                            {
+                            if (header.Name == HeaderKeys.NOTIFICATION_CALLBACK_CONTEXT) {
                                 this.callbackData = header.Value;
                             }
-                            if (header.Name == HeaderKeys.NOTIFICATION_CALLBACK_CONTEXT_TYPE)
-                            {
+                            if (header.Name == HeaderKeys.NOTIFICATION_CALLBACK_CONTEXT_TYPE) {
                                 this.callbackDataType = header.Value;
                             }
                             if (header.Name == HeaderKeys.NOTIFICATION_CALLBACK_TARGET || header.Name == HeaderKeys.NOTIFICATION_CALLBACK_CONTEXT_TARGET)   // left in for compatibility
                             {
                                 this.callbackUrl = header.Value;
                             }
-                            if (header.Name == HeaderKeys.RECEIVED)
-                            {
+                            if (header.Name == HeaderKeys.RECEIVED) {
                                 this.requestInfo.PreviousReceivedHeaders.Add(header);
                                 addHeader = false;
                             }
@@ -481,41 +441,33 @@ namespace Neith.Growl.Daemon
                     }
                 }
 
-                else if (tag == NOTIFICATION_TYPE_TAG)
-                {
-                    if (s == MessageParser.BLANK_LINE)
-                    {
+                else if (tag == NOTIFICATION_TYPE_TAG) {
+                    if (s == MessageParser.BLANK_LINE) {
                         this.expectedNotificationsRemaining--;
-                        if (this.expectedNotificationsRemaining > 0)
-                        {
+                        if (this.expectedNotificationsRemaining > 0) {
                             this.currentNotification++;
                             tag = NOTIFICATION_TYPE_TAG;
                             return NextIndicator.CRLF;
                             //socket.Read(AsyncSocket.CRLFData, TIMEOUT_GNTP_HEADER, NOTIFICATION_TYPE_TAG);
                         }
-                        else
-                        {
+                        else {
                             // otherwise, check the number of resource pointers we got and start reading those
                             this.pointersExpected = GetNumberOfPointers();
-                            if (this.pointersExpected > 0)
-                            {
+                            if (this.pointersExpected > 0) {
                                 this.pointersExpectedRemaining = this.pointersExpected;
                                 this.currentPointer = 1;
                                 tag = RESOURCE_HEADER_TAG;
                                 return NextIndicator.CRLF;
                                 //socket.Read(AsyncSocket.CRLFData, TIMEOUT_GNTP_HEADER, RESOURCE_HEADER_TAG);
                             }
-                            else
-                            {
+                            else {
                                 OnMessageParsed();
                                 return NextIndicator.None;
                             }
                         }
                     }
-                    else
-                    {
-                        if (this.notificationsToBeRegistered.Count < this.currentNotification)
-                        {
+                    else {
+                        if (this.notificationsToBeRegistered.Count < this.currentNotification) {
                             this.notificationsToBeRegistered.Add(new HeaderCollection());
                         }
 
@@ -527,67 +479,55 @@ namespace Neith.Growl.Daemon
                     }
                 }
 
-                else if (tag == RESOURCE_HEADER_TAG)
-                {
-                    if (s == MessageParser.BLANK_LINE)
-                    {
+                else if (tag == RESOURCE_HEADER_TAG) {
+                    if (s == MessageParser.BLANK_LINE) {
                         // we should have found an Identifier header and Length header, or we are just starting a new section
                         Pointer p = this.pointers[this.currentPointer - 1];
-                        if (p.Identifier != null && p.Length > 0)
-                        {
+                        if (p.Identifier != null && p.Length > 0) {
                             // read #of bytes
                             int length = this.pointers[this.currentPointer - 1].Length;
                             tag = RESOURCE_TAG;
                             return new NextIndicator(length);
                             //socket.Read(length, TIMEOUT_GNTP_BINARY, RESOURCE_TAG);
                         }
-                        else
-                        {
+                        else {
                             tag = RESOURCE_HEADER_TAG;
                             return NextIndicator.CRLF;
                             //socket.Read(AsyncSocket.CRLFData, TIMEOUT_GNTP_HEADER, RESOURCE_HEADER_TAG);
                         }
                     }
-                    else
-                    {
+                    else {
                         var header = Header.ParseHeader(s);
                         // should be Identifer or Length
-                        if (header != null)
-                        {
+                        if (header != null) {
                             bool validHeader = false;
-                            if (header.Name == HeaderKeys.RESOURCE_IDENTIFIER)
-                            {
+                            if (header.Name == HeaderKeys.RESOURCE_IDENTIFIER) {
                                 this.pointers[this.currentPointer - 1].Identifier = header.Value;
                                 validHeader = true;
                             }
-                            else if (header.Name == HeaderKeys.RESOURCE_LENGTH)
-                            {
+                            else if (header.Name == HeaderKeys.RESOURCE_LENGTH) {
                                 this.pointers[this.currentPointer - 1].Length = Convert.ToInt32(header.Value);
                                 validHeader = true;
                             }
-                            else
-                            {
+                            else {
                                 OnError(ErrorCode.INVALID_REQUEST, ErrorDescription.UNRECOGNIZED_RESOURCE_HEADER, header.Name);
                                 return NextIndicator.None;
                             }
 
-                            if (validHeader)
-                            {
+                            if (validHeader) {
                                 tag = RESOURCE_HEADER_TAG;
                                 return NextIndicator.CRLF;
                                 //socket.Read(AsyncSocket.CRLFData, TIMEOUT_GNTP_HEADER, RESOURCE_HEADER_TAG);
                             }
                         }
-                        else
-                        {
+                        else {
                             OnError(ErrorCode.INVALID_REQUEST, ErrorDescription.UNRECOGNIZED_RESOURCE_HEADER);
                             return NextIndicator.None;
                         }
                     }
                 }
 
-                else if (tag == RESOURCE_TAG)
-                {
+                else if (tag == RESOURCE_TAG) {
                     // deal with data bytes
                     var bytes = this.key.Decrypt(data.ByteArray, this.iv);
 
@@ -597,28 +537,23 @@ namespace Neith.Growl.Daemon
                     ResourceCache.Add(this.applicationName, binaryData);
 
                     this.pointersExpectedRemaining--;
-                    if (this.pointersExpectedRemaining > 0)
-                    {
+                    if (this.pointersExpectedRemaining > 0) {
                         this.currentPointer++;
                         tag = RESOURCE_HEADER_TAG;
                         return NextIndicator.CRLF;
                         //socket.Read(AsyncSocket.CRLFData, TIMEOUT_GNTP_HEADER, RESOURCE_HEADER_TAG);
                     }
-                    else
-                    {
+                    else {
                         OnMessageParsed();
                         return NextIndicator.None;
                     }
                 }
 
-                else if (tag == ENCRYPTED_HEADERS_TAG)
-                {
+                else if (tag == ENCRYPTED_HEADERS_TAG) {
                     // see if a length was specified (the original spec did not require the main encrypted headers portion to specify a length)
-                    if (s.StartsWith(HeaderKeys.RESOURCE_LENGTH))
-                    {
+                    if (s.StartsWith(HeaderKeys.RESOURCE_LENGTH)) {
                         var header = Header.ParseHeader(s);
-                        if (header != null)
-                        {
+                        if (header != null) {
                             int len = Convert.ToInt32(header.Value);
                             tag = ENCRYPTED_HEADERS_TAG;
                             return new NextIndicator(len);
@@ -627,32 +562,27 @@ namespace Neith.Growl.Daemon
                     }
 
                     ParseEncryptedMessage(data.ByteArray);
-                    if (this.pointersExpected > 0)
-                    {
+                    if (this.pointersExpected > 0) {
                         tag = RESOURCE_HEADER_TAG;
                         return NextIndicator.CRLF;
                         //socket.Read(AsyncSocket.CRLFData, TIMEOUT_GNTP_HEADER, RESOURCE_HEADER_TAG);
                     }
-                    else
-                    {
+                    else {
                         OnMessageParsed();
                         return NextIndicator.None;
                     }
                 }
 
-                else
-                {
+                else {
                     OnError(ErrorCode.INVALID_REQUEST, ErrorDescription.MALFORMED_REQUEST);
                     return NextIndicator.None;
                 }
             }
-            catch (GrowlException gEx)
-            {
+            catch (GrowlException gEx) {
                 OnError(gEx.ErrorCode, gEx.Message, gEx.AdditionalInfo);
                 return NextIndicator.None;
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 OnError(ErrorCode.INVALID_REQUEST, ErrorDescription.MALFORMED_REQUEST, ex.Message);
                 return NextIndicator.None;
             }
@@ -672,13 +602,11 @@ namespace Neith.Growl.Daemon
             else if (!String.IsNullOrEmpty(this.callbackUrl))
                 context = new CallbackContext(this.callbackUrl);
 
-            if (this.MessageParsed != null)
-            {
-                var request = new GNTPRequest(this.utc, this.version, this.directive, this.key, this.headers, this.applicationName, this.notificationsToBeRegistered, context);
+            if (this.MessageParsed != null) {
+                var request = new GNTPRequest(this.requestInfo, this.version, this.directive, this.key, this.headers, this.applicationName, this.notificationsToBeRegistered, context);
                 this.MessageParsed(request);
             }
-            else
-            {
+            else {
                 // no handler - return some kind of error? (this should never really happen)
                 OnError(ErrorCode.INTERNAL_SERVER_ERROR, ErrorDescription.INTERNAL_SERVER_ERROR);
             }
@@ -696,18 +624,15 @@ namespace Neith.Growl.Daemon
             this.alreadyReceived.Append(PARTIAL_MESSAGE_NOTICE);
 
             // handle additional arguments
-            if (args != null)
-            {
-                foreach (object arg in args)
-                {
+            if (args != null) {
+                foreach (object arg in args) {
                     errorMessage += String.Format(" ({0})", arg);
                 }
             }
 
             // fire event
             var error = new Error(errorCode, errorMessage);
-            if (this.Error != null)
-            {
+            if (this.Error != null) {
                 this.Error(error);
             }
         }
@@ -721,8 +646,7 @@ namespace Neith.Growl.Daemon
         private static Match ParseGNTPHeaderLine(string line, bool passwordRequired)
         {
             Match match = null;
-            if (!passwordRequired)
-            {
+            if (!passwordRequired) {
                 // key not required
                 match = regExMessageHeader_Local.Match(line);
 
@@ -730,8 +654,7 @@ namespace Neith.Growl.Daemon
                 if (!match.Success)
                     match = regExMessageHeader_Remote.Match(line);
             }
-            else
-            {
+            else {
                 match = regExMessageHeader_Remote.Match(line);
 
                 // if there is no match, see if it is due to a missing password
@@ -864,28 +787,23 @@ namespace Neith.Growl.Daemon
              * they are included)
              * */
             var c = 0;
-            foreach (var header in this.headers.Pointers)
-            {
+            foreach (var header in this.headers.Pointers) {
                 var pointer = new Pointer(this.headers);
                 this.pointers.Add(pointer);
 
-                if (ResourceCache.IsCached(this.applicationName, header.GrowlResourcePointerID))
-                {
+                if (ResourceCache.IsCached(this.applicationName, header.GrowlResourcePointerID)) {
                     var data = ResourceCache.Get(this.applicationName, header.GrowlResourcePointerID);
                     pointer.Identifier = header.GrowlResourcePointerID;
                     pointer.ByteArray = data.Data;
                     c++;
                 }
             }
-            foreach (var notification in this.notificationsToBeRegistered)
-            {
-                foreach (var header in notification.Pointers)
-                {
+            foreach (var notification in this.notificationsToBeRegistered) {
+                foreach (var header in notification.Pointers) {
                     var pointer = new Pointer(notification);
                     this.pointers.Add(pointer);
 
-                    if (ResourceCache.IsCached(this.applicationName, header.GrowlResourcePointerID))
-                    {
+                    if (ResourceCache.IsCached(this.applicationName, header.GrowlResourcePointerID)) {
                         var data = ResourceCache.Get(this.applicationName, header.GrowlResourcePointerID);
                         pointer.Identifier = header.GrowlResourcePointerID;
                         pointer.ByteArray = data.Data;
@@ -900,18 +818,15 @@ namespace Neith.Growl.Daemon
 
             // check to see if all pointers were already cached
             if (p == c) p = 0;  // if #cached == total#, we dont need to read any
-            else
-            {
+            else {
                 // not all of the items are cached, so we have to re-read all of them.
                 // to do so, we have to clear any pointer data we may have set
-                foreach (var pointer in this.pointers)
-                {
+                foreach (var pointer in this.pointers) {
                     pointer.Clear();
                 }
             }
 
-            if (c > 0 && p == 0)
-            {
+            if (c > 0 && p == 0) {
                 requestInfo.SaveHandlingInfo("ALL BINARY RESOURCES ALREADY CACHED");
             }
 
