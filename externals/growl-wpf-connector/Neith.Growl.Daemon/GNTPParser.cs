@@ -603,7 +603,7 @@ namespace Neith.Growl.Daemon
                 context = new CallbackContext(this.callbackUrl);
 
             if (this.MessageParsed != null) {
-                var request = new GNTPRequest(this.requestInfo, this.version, this.directive, this.key, this.headers, this.applicationName, this.notificationsToBeRegistered, context);
+                var request = new GNTPRequest(this.version, this.directive, this.key, this.headers, this.applicationName, this.notificationsToBeRegistered, context);
                 this.MessageParsed(request);
             }
             else {

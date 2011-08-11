@@ -54,6 +54,7 @@
     <Compile Include="Disposables\CompositeDisposableExtensions.cs" />
     <Compile Include="Internal\Util.cs" />
     <Compile Include="IO\FileSystemWatcherRX.cs" />
+    <Compile Include="Linq\NeithObserble.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Windows\DepedencyPropertyRx.cs" />
   </ItemGroup>
