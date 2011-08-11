@@ -32,8 +32,9 @@ namespace System.Net.Sockets
         /// </summary>
         /// <param name="port"></param>
         /// <param name="ipAddress"></param>
+        /// <param name="backlog"></param>
         /// <returns></returns>
-        public static IObservable<Socket> RxAccept(int port, string ipAddress = null)
+        public static IObservable<Socket> RxAccept(int port, string ipAddress = null, int backlog = 64)
         {
             var ip = IPAddress.Any;
             if (!string.IsNullOrWhiteSpace(ipAddress)) ip = IPAddress.Parse(ipAddress);
@@ -41,10 +42,11 @@ namespace System.Net.Sockets
             var socket = new Socket(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             socket.Blocking = false;
             socket.Bind(endPoint);
-            socket.Listen(64);
+            socket.Listen(backlog);
             return socket
                 .RxAccept()
-                .Finally(() => {
+                .Finally(() =>
+                {
                     socket.Close();
                 });
         }
@@ -65,12 +67,17 @@ namespace System.Net.Sockets
                 result =>
                 {
                     var size = socket.EndReceive(result);
-                    return SubArray(buf, size);
+                    return buf.Copy(size);
                 });
-            return Observable.Defer(async);
+            return Observable
+                .Defer(async)
+                .Catch<byte[], ObjectDisposedException>(ex =>
+                {
+                    return Observable.Empty<byte[]>();
+                });
         }
 
-        private static byte[] SubArray(byte[] src, int length)
+        private static byte[] Copy(this byte[] src, int length)
         {
             var dst = new byte[length];
             Array.Copy(src, dst, length);

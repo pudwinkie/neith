@@ -47,26 +47,26 @@ namespace Neith.Growl.Daemon
         /// </summary>
         /// <param name="application">The <see cref="IApplication"/> that is registering</param>
         /// <param name="notificationTypes">A list of <see cref="NotificationType"/>s being registered</param>
-        /// <param name="requestInfo">The <see cref="RequestInfo"/> associated with the request</param>
-        /// <returns><see cref="Response"/></returns>
-        public delegate Response RegisterReceivedEventHandler(IApplication application, List<INotificationType> notificationTypes, RequestInfo requestInfo);
+        /// <param name="requestInfo">The <see cref="IRequestInfo"/> associated with the request</param>
+        /// <returns><see cref="IResponse"/></returns>
+        public delegate IResponse RegisterReceivedEventHandler(IApplication application, List<INotificationType> notificationTypes, IRequestInfo requestInfo);
 
         /// <summary>
         /// Represents the method that will handle the <see cref="NotifyReceived"/> event.
         /// </summary>
         /// <param name="notification">The <see cref="INotification"/> that was received</param>
         /// <param name="callbackInfo">The <see cref="CallbackInfo"/> for the notification</param>
-        /// <param name="requestInfo">The <see cref="RequestInfo"/> associated with the request</param>
-        /// <returns><see cref="Response"/></returns>
-        public delegate Response NotifyReceivedEventHandler(INotification notification, CallbackInfo callbackInfo, RequestInfo requestInfo);
+        /// <param name="requestInfo">The <see cref="IRequestInfo"/> associated with the request</param>
+        /// <returns><see cref="IResponse"/></returns>
+        public delegate IResponse NotifyReceivedEventHandler(INotification notification, CallbackInfo callbackInfo, IRequestInfo requestInfo);
 
         /// <summary>
         /// Represents the method that will handle the <see cref="SubscribeReceived"/> event.
         /// </summary>
         /// <param name="subscriber">The <see cref="ISubscriber"/> information</param>
-        /// <param name="requestInfo">The <see cref="RequestInfo"/> associated with the request</param>
+        /// <param name="requestInfo">The <see cref="IRequestInfo"/> associated with the request</param>
         /// <returns><see cref="ISubscriptionResponse"/></returns>
-        public delegate ISubscriptionResponse SubscribeReceivedEventHandler(ISubscriber subscriber, RequestInfo requestInfo);
+        public delegate ISubscriptionResponse SubscribeReceivedEventHandler(ISubscriber subscriber, IRequestInfo requestInfo);
 
         /// <summary>
         /// Represents the method that will handle the <see cref="ServerMessage"/> event.
@@ -502,8 +502,8 @@ namespace Neith.Growl.Daemon
             LogInfo("Accepted client {0}:{1}", newSocket.RemoteAddress, newSocket.RemotePort);
 
             // check origin
-            bool isLocal = IPAddress.IsLoopback(newSocket.RemoteAddress);
-            bool isLAN = Growl.CoreLibrary.IPUtilities.IsInSameSubnet(newSocket.LocalAddress, newSocket.RemoteAddress);
+            var isLocal = IPAddress.IsLoopback(newSocket.RemoteAddress);
+            var isLAN = Growl.CoreLibrary.IPUtilities.IsInSameSubnet(newSocket.LocalAddress, newSocket.RemoteAddress);
             if (!this.allowNetworkNotifications && !isLocal)
             {
                 // remote connections not allowed - Should we return a GNTP error response? i think this is better (no reply at all)
@@ -512,14 +512,14 @@ namespace Neith.Growl.Daemon
                 return;
             }
 
-            bool passwordRequired = true;
+            var passwordRequired = true;
             if (isLocal && !this.RequireLocalPassword) passwordRequired = false;
             else if (isLAN && !this.RequireLANPassword) passwordRequired = false;
 
             // SUPER IMPORTANT
             newSocket.AllowMultithreadedCallbacks = true;
 
-            MessageHandler mh = new MessageHandler(this.serverName, this.passwordManager, passwordRequired, this.logFolder, this.loggingEnabled, this.allowNetworkNotifications, this.allowWebNotifications, this.allowSubscriptions);
+            var mh = new MessageHandler(this.serverName, this.passwordManager, passwordRequired, this.logFolder, this.loggingEnabled, this.allowNetworkNotifications, this.allowWebNotifications, this.allowSubscriptions);
             newSocket.DidClose += new AsyncSocket.SocketDidClose(newSocket_DidClose);
             mh.MessageParsed += new MessageHandler.MessageHandlerMessageParsedEventHandler(mh_MessageParsed);
             mh.Error += new MessageHandler.MessageHandlerErrorEventHandler(mh_Error);
@@ -699,13 +699,13 @@ namespace Neith.Growl.Daemon
         /// </summary>
         /// <param name="application">The <see cref="IApplication"/> that is registering</param>
         /// <param name="notificationTypes">A list of <see cref="NotificationType"/>s being registered</param>
-        /// <param name="requestInfo">The <see cref="RequestInfo"/> associated with the request</param>
-        /// <returns><see cref="Response"/></returns>
-        protected virtual Response OnRegisterReceived(IApplication application, List<INotificationType> notificationTypes, RequestInfo requestInfo)
+        /// <param name="requestInfo">The <see cref="IRequestInfo"/> associated with the request</param>
+        /// <returns><see cref="IResponse"/></returns>
+        protected virtual IResponse OnRegisterReceived(IApplication application, List<INotificationType> notificationTypes, IRequestInfo requestInfo)
         {
             LogInfo("REGISTER RECEIVED: {0}", application.Name);
 
-            var response = new Response(ErrorCode.INTERNAL_SERVER_ERROR, ErrorDescription.INTERNAL_SERVER_ERROR);
+            IResponse response = new Response(ErrorCode.INTERNAL_SERVER_ERROR, ErrorDescription.INTERNAL_SERVER_ERROR);
             if (this.RegisterReceived != null)
             {
                 response = this.RegisterReceived(application, notificationTypes, requestInfo);
@@ -718,13 +718,13 @@ namespace Neith.Growl.Daemon
         /// </summary>
         /// <param name="notification">The <see cref="INotification"/> that was received</param>
         /// <param name="callbackInfo">The <see cref="CallbackInfo"/> for the notification</param>
-        /// <param name="requestInfo">The <see cref="RequestInfo"/> associated with the request</param>
-        /// <returns><see cref="Response"/></returns>
-        protected virtual IResponse OnNotifyReceived(INotification notification, CallbackInfo callbackInfo, RequestInfo requestInfo)
+        /// <param name="requestInfo">The <see cref="IRequestInfo"/> associated with the request</param>
+        /// <returns><see cref="IResponse"/></returns>
+        protected virtual IResponse OnNotifyReceived(INotification notification, CallbackInfo callbackInfo, IRequestInfo requestInfo)
         {
             LogInfo("NOTIFICATION RECEIVED: {0}", notification.Name);
 
-            var response = new Response(ErrorCode.INTERNAL_SERVER_ERROR, ErrorDescription.INTERNAL_SERVER_ERROR);
+            IResponse response = new Response(ErrorCode.INTERNAL_SERVER_ERROR, ErrorDescription.INTERNAL_SERVER_ERROR);
             if (this.NotifyReceived != null)
             {
                 response = this.NotifyReceived(notification, callbackInfo, requestInfo);
@@ -736,9 +736,9 @@ namespace Neith.Growl.Daemon
         /// Handles the <see cref="SubscribeReceived"/> event
         /// </summary>
         /// <param name="subscriber">The <see cref="ISubscriber"/> information</param>
-        /// <param name="requestInfo">The <see cref="RequestInfo"/> associated with the request</param>
-        /// <returns><see cref="Response"/></returns>
-        protected virtual IResponse OnSubscribeReceived(ISubscriber subscriber, RequestInfo requestInfo)
+        /// <param name="requestInfo">The <see cref="IRequestInfo"/> associated with the request</param>
+        /// <returns><see cref="IResponse"/></returns>
+        protected virtual IResponse OnSubscribeReceived(ISubscriber subscriber, IRequestInfo requestInfo)
         {
             LogInfo("SUBSCRIBE RECEIVED: {0}", subscriber.Name);
             IResponse response = new Response(ErrorCode.INTERNAL_SERVER_ERROR, ErrorDescription.INTERNAL_SERVER_ERROR);
@@ -752,7 +752,7 @@ namespace Neith.Growl.Daemon
         /// <summary>
         /// Adds some custom server-specific headers to the outgoing response
         /// </summary>
-        /// <param name="exObj">The <see cref="Response"/> or <see cref="IError"/> being returned</param>
+        /// <param name="exObj">The <see cref="IResponse"/> or <see cref="IError"/> being returned</param>
         private void AddServerHeaders(IExtensibleObject exObj)
         {
             if(!exObj.CustomTextAttributes.ContainsKey("Message-Daemon"))

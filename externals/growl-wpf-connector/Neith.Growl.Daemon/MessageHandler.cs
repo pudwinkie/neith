@@ -126,7 +126,7 @@ namespace Neith.Growl.Daemon
         /// <summary>
         /// The request info associated with the request
         /// </summary>
-        private RequestInfo requestInfo;
+        private IRequestInfo requestInfo;
 
         /// <summary>
         /// The socket used to receive the request and send the response and callback
@@ -185,7 +185,7 @@ namespace Neith.Growl.Daemon
         /// Gets the <see cref="RequestInfo"/> associated with the request.
         /// </summary>
         /// <value><see cref="RequestInfo"/></value>
-        public RequestInfo RequestInfo
+        public IRequestInfo RequestInfo
         {
             get
             {

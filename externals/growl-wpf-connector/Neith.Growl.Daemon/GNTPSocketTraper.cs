@@ -36,8 +36,8 @@ namespace Neith.Growl.Daemon
         /// <param name="allowNetworkNotifications">Indicates if network requests are allowed</param>
         /// <param name="allowBrowserConnections">Indicates if browser requests are allowed</param>
         /// <param name="allowSubscriptions">Indicates if SUBSCRIPTION requests are allowed</param>
-        /// <param name="requestInfo">The <see cref="RequestInfo"/> associated with this request</param>
-        public GNTPSocketTraper(AsyncSocket socket, PasswordManager passwordManager, bool passwordRequired, bool allowNetworkNotifications, bool allowBrowserConnections, bool allowSubscriptions, RequestInfo requestInfo)
+        /// <param name="requestInfo">The <see cref="IRequestInfo"/> associated with this request</param>
+        public GNTPSocketTraper(AsyncSocket socket, PasswordManager passwordManager, bool passwordRequired, bool allowNetworkNotifications, bool allowBrowserConnections, bool allowSubscriptions, IRequestInfo requestInfo)
         {
             this.parser = new GNTPParser(passwordManager, passwordRequired, allowNetworkNotifications, allowBrowserConnections, allowSubscriptions, requestInfo);
             parser.Error += new GNTPParser.GNTPParserErrorEventHandler(parser_Error);
