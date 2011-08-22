@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -202,6 +203,18 @@ namespace Neith.Growl.Daemon
             get
             {
                 return this.socket;
+            }
+        }
+
+        /// <summary>リモートエンドポイントを取得します</summary>
+        public EndPoint RemoteEndPoint { get { return RemoteIPEndPoint; } }
+
+        /// <summary>リモートIPエンドポイントを取得します</summary>
+        public IPEndPoint RemoteIPEndPoint
+        {
+            get
+            {
+                return new IPEndPoint(Socket.RemoteAddress, Socket.RemotePort);
             }
         }
 

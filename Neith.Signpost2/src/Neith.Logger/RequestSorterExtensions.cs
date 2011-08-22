@@ -11,7 +11,7 @@ using Neith.Growl.Connector;
 
 namespace Neith.Logger
 {
-    public static class RequestReceiverExtensions
+    public static class RequestSorterExtensions
     {
         /// <summary>
         /// MessageItemの配信を登録します。
@@ -19,9 +19,9 @@ namespace Neith.Logger
         /// <param name="rx"></param>
         /// <param name="receiver"></param>
         /// <returns></returns>
-        public static IDisposable Subscribe(this IObservable<MessageItem> rx, RequestReceiver receiver)
+        public static IDisposable Subscribe(this IObservable<MessageItem> rx, RequestSorter receiver)
         {
-            return receiver.Subscribe(rx);
+            return receiver.Register(rx);
         }
 
         /// <summary>
@@ -30,9 +30,9 @@ namespace Neith.Logger
         /// <param name="rx"></param>
         /// <param name="receiver"></param>
         /// <returns></returns>
-        public static IDisposable Subscribe(IObservable<RegisterItem> rx, RequestReceiver receiver)
+        public static IDisposable Subscribe(IObservable<RegisterItem> rx, RequestSorter receiver)
         {
-            return receiver.Subscribe(rx);
+            return receiver.Register(rx);
         }
 
         /// <summary>
@@ -41,9 +41,9 @@ namespace Neith.Logger
         /// <param name="rx"></param>
         /// <param name="receiver"></param>
         /// <returns></returns>
-        public static IDisposable Subscribe(IObservable<SubscriberItem> rx, RequestReceiver receiver)
+        public static IDisposable Subscribe(IObservable<SubscriberItem> rx, RequestSorter receiver)
         {
-            return receiver.Subscribe(rx);
+            return receiver.Register(rx);
         }
 
         /// <summary>
@@ -52,9 +52,9 @@ namespace Neith.Logger
         /// <param name="rx"></param>
         /// <param name="receiver"></param>
         /// <returns></returns>
-        public static IDisposable Subscribe(IObservable<NotificationItem> rx, RequestReceiver receiver)
+        public static IDisposable Subscribe(IObservable<NotificationItem> rx, RequestSorter receiver)
         {
-            return receiver.Subscribe(rx);
+            return receiver.Register(rx);
         }
 
     }

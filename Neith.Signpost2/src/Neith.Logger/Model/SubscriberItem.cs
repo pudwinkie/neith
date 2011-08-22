@@ -7,12 +7,12 @@ using Neith.Growl.Daemon;
 
 namespace Neith.Logger.Model
 {
-  public sealed  class SubscriberItem : MessageItem
+    public sealed class SubscriberItem : MessageItem
     {
-      public ISubscriber Subscriber { get; private set; }
+        public ISubscriber Subscriber { get; private set; }
 
-        public SubscriberItem(IMessageHandler mh, ISubscriber subscriber)
-            :base(mh)
+        public SubscriberItem(MessageItem mes, ISubscriber subscriber)
+            : base(mes)
         {
             Subscriber = subscriber;
         }

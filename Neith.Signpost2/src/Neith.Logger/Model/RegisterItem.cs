@@ -10,11 +10,15 @@ namespace Neith.Logger.Model
     public sealed class RegisterItem : MessageItem
     {
         public IApplication Application { get; private set; }
+        public IList<INotificationType> NotificationTypes { get; private set; }
 
-        public RegisterItem(IMessageHandler mh, IApplication app)
-            :base(mh)
+        public RegisterItem(
+            MessageItem mes, IApplication app,
+            IList<INotificationType> notificationTypes)
+            : base(mes)
         {
             Application = app;
+            NotificationTypes = notificationTypes;
         }
     }
 }
