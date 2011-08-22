@@ -606,7 +606,7 @@ namespace Neith.Growl.Daemon
                         break;
                     case RequestType.SUBSCRIBE:
                         var subscriber = Subscriber.FromHeaders(request.Headers);
-                        subscriber.IPAddress = mh.Socket.RemoteAddress.ToString();
+                        subscriber.EndPoint = mh.RemoteEndPoint;
                         subscriber.Key = new SubscriberKey(request.Key, subscriber.ID, request.Key.HashAlgorithm, request.Key.EncryptionAlgorithm);
                         response = this.OnSubscribeReceived(subscriber, mh.RequestInfo);
                         break;

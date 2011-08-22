@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Net;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Concurrency;
 using System.Reactive.Subjects;
 using Neith.Logger.Model;
 using Neith.Growl.Daemon;
@@ -14,7 +16,7 @@ namespace Neith.Logger
     /// <summary>
     /// リクエストの収集・振り分けエンジン。
     /// </summary>
-    public class RequestReceiver :IDisposable
+    public class RequestSorter : IDisposable, IObservable<ResponseItem>
     {
         #region 開放
         private readonly CompositeDisposable Tasks = new CompositeDisposable();
@@ -27,10 +29,11 @@ namespace Neith.Logger
 
         #endregion
         #region フィールド
-        private Subject<MessageItem> rxMessage;
-        private Subject<RegisterItem> rxRegester;
-        private Subject<SubscriberItem> rxSubscriber;
-        private Subject<NotificationItem> rxNotification;
+        private readonly Subject<MessageItem> rxMessage;
+        private readonly Subject<RegisterItem> rxRegester;
+        private readonly Subject<SubscriberItem> rxSubscriber;
+        private readonly Subject<NotificationItem> rxNotification;
+        private readonly Subject<ResponseItem> rxResponse;
 
 
         #endregion
@@ -39,12 +42,15 @@ namespace Neith.Logger
         /// <summary>
         /// コンストラクタ。
         /// </summary>
-        public RequestReceiver()
+        public RequestSorter()
         {
+            var sc = Scheduler.TaskPool;
             rxMessage = new Subject<MessageItem>().Add(Tasks);
             rxRegester = new Subject<RegisterItem>().Add(Tasks);
             rxSubscriber = new Subject<SubscriberItem>().Add(Tasks);
             rxNotification = new Subject<NotificationItem>().Add(Tasks);
+            rxResponse = new Subject<ResponseItem>().Add(Tasks);
+
             Tasks.Add(rxMessage.Subscribe(Receive));
             Tasks.Add(rxRegester.Subscribe(Receive));
             Tasks.Add(rxNotification.Subscribe(Receive));
@@ -60,7 +66,7 @@ namespace Neith.Logger
         /// </summary>
         /// <param name="rx"></param>
         /// <returns></returns>
-        public IDisposable Subscribe(IObservable<MessageItem> rx)
+        internal IDisposable Register(IObservable<MessageItem> rx)
         {
             return rx.Subscribe(a => rxMessage.OnNext(a));
         }
@@ -70,7 +76,7 @@ namespace Neith.Logger
         /// </summary>
         /// <param name="rx"></param>
         /// <returns></returns>
-        public IDisposable Subscribe(IObservable<RegisterItem> rx)
+        internal IDisposable Register(IObservable<RegisterItem> rx)
         {
             return rx.Subscribe(a => rxRegester.OnNext(a));
         }
@@ -80,7 +86,7 @@ namespace Neith.Logger
         /// </summary>
         /// <param name="rx"></param>
         /// <returns></returns>
-        public IDisposable Subscribe(IObservable<SubscriberItem> rx)
+        internal IDisposable Register(IObservable<SubscriberItem> rx)
         {
             return rx.Subscribe(a => rxSubscriber.OnNext(a));
         }
@@ -90,7 +96,7 @@ namespace Neith.Logger
         /// </summary>
         /// <param name="rx"></param>
         /// <returns></returns>
-        public IDisposable Subscribe(IObservable<NotificationItem> rx)
+        internal IDisposable Register(IObservable<NotificationItem> rx)
         {
             return rx.Subscribe(a => rxNotification.OnNext(a));
         }
@@ -104,65 +110,40 @@ namespace Neith.Logger
         /// <param name="item"></param>
         private void Receive(MessageItem item)
         {
-#if false
             var request = item.Request;
-
+            var mh = item.MessageHandler;
             try {
-                IResponse response = null;
                 switch (request.Directive) {
                     case RequestType.REGISTER:
-                        var application = Application.FromHeaders(request.Headers);
+                        var app = Application.FromHeaders(request.Headers);
                         var notificationTypes = new List<INotificationType>();
-                        for (int i = 0; i < request.NotificationsToBeRegistered.Count; i++) {
-                            var headers = request.NotificationsToBeRegistered[i];
+                        foreach (var headers in request.NotificationsToBeRegistered) {
                             notificationTypes.Add(NotificationType.FromHeaders(headers));
                         }
-                        response = this.OnRegisterReceived(application, notificationTypes, mh.RequestInfo);
-                        break;
+                        var regItem = new RegisterItem(item, app, notificationTypes);
+                        rxRegester.OnNext(regItem);
+                        return;
                     case RequestType.NOTIFY:
                         var notification = NeithNotificationModel.FromHeaders(request.Headers);
                         mh.CallbackInfo.NotificationID = notification.ID;
-                        response = this.OnNotifyReceived(notification, mh.CallbackInfo, mh.RequestInfo);
-                        break;
+                        var noteItem = new NotificationItem(item, notification);
+                        rxNotification.OnNext(noteItem);
+                        return;
                     case RequestType.SUBSCRIBE:
                         var subscriber = Subscriber.FromHeaders(request.Headers);
-                        subscriber.IPAddress = mh.Socket.RemoteAddress.ToString();
+                        subscriber.EndPoint = new IPEndPoint(mh.RemoteIPEndPoint.Address, subscriber.Port);
                         subscriber.Key = new SubscriberKey(request.Key, subscriber.ID, request.Key.HashAlgorithm, request.Key.EncryptionAlgorithm);
-                        response = this.OnSubscribeReceived(subscriber, mh.RequestInfo);
-                        break;
+                        var subItem = new SubscriberItem(item, subscriber);
+                        rxSubscriber.OnNext(subItem);
+                        return;
                 }
-
-
-                var responseType = ResponseType.ERROR;
-                if (response != null && response.IsOK) {
-                    responseType = ResponseType.OK;
-                    response.InResponseTo = request.Directive.ToString();
-                }
-
-                // no response
-                if (response == null)
-                    response = new Response(ErrorCode.INTERNAL_SERVER_ERROR, ErrorDescription.INTERNAL_SERVER_ERROR);
-
-                AddServerHeaders(response);
-                var mb = new MessageBuilder(responseType);
-                var responseHeaders = response.ToHeaders();
-                foreach (var header in responseHeaders) {
-                    mb.AddHeader(header);
-                }
-                // return any application-specific data headers that were received
-                RequestData rd = RequestData.FromHeaders(request.Headers);
-                AddRequestData(mb, rd);
-
-                bool requestComplete = !mh.CallbackInfo.ShouldKeepConnectionOpen();
-                mh.WriteResponse(mb, requestComplete);
             }
             catch (GrowlException gEx) {
-                mh.WriteError(gEx.ErrorCode, gEx.Message, gEx.AdditionalInfo);
+                rxResponse.OnNext(new ResponseItem(item, gEx.ErrorCode, gEx.Message, gEx.AdditionalInfo));
             }
             catch (Exception ex) {
-                mh.WriteError(ErrorCode.INTERNAL_SERVER_ERROR, ex.Message);
+                rxResponse.OnNext(new ResponseItem(item, ErrorCode.INTERNAL_SERVER_ERROR, ex.Message));
             }
-#endif
         }
 
         /// <summary>
@@ -193,6 +174,20 @@ namespace Neith.Logger
         }
 
 
+
+        #endregion
+
+        #region IObservable<ResponseItem> メンバー
+
+        /// <summary>
+        /// レスポンスの発行。
+        /// </summary>
+        /// <param name="observer"></param>
+        /// <returns></returns>
+        public IDisposable Subscribe(IObserver<ResponseItem> observer)
+        {
+            return rxResponse.Subscribe(observer);
+        }
 
         #endregion
     }

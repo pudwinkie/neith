@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using Neith.Growl.Connector;
 
 namespace Neith.Growl.Daemon
@@ -11,7 +12,13 @@ namespace Neith.Growl.Daemon
         event MessageHandler.MessageHandlerMessageParsedEventHandler MessageParsed;
         IGNTPRequest Request { get; }
         IRequestInfo RequestInfo { get; }
+
+        EndPoint RemoteEndPoint { get; }
+        IPEndPoint RemoteIPEndPoint { get; }
+
         void WriteError(int errorCode, string errorMessage, params object[] args);
         void WriteResponse(MessageBuilder mb, bool requestComplete);
+
+
     }
 }

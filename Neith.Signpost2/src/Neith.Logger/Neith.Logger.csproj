@@ -79,10 +79,11 @@
     <Compile Include="Model\NeithLogNotify.cs" />
     <Compile Include="Model\NotificationItem.cs" />
     <Compile Include="Model\RegisterItem.cs" />
+    <Compile Include="Model\ResponseItem.cs" />
     <Compile Include="Model\SubscriberItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RequestReceiver.cs" />
-    <Compile Include="RequestReceiverExtensions.cs" />
+    <Compile Include="RequestSorter.cs" />
+    <Compile Include="RequestSorterExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\externals\growl-wpf-connector\Neith.Growl.Connector\Neith.Growl.Connector.csproj">

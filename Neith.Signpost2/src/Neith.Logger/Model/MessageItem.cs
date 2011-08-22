@@ -18,10 +18,22 @@ namespace Neith.Logger.Model
         public IGNTPRequest Request { get { return MessageHandler.Request; } }
 
 
-        public MessageItem(IMessageHandler mh)
+        public MessageItem(IMessageHandler mh, IResponse res)
         {
             MessageHandler = mh;
+            Response = res;
         }
+
+        public MessageItem(IMessageHandler mh)
+            : this(mh, null)
+        {
+        }
+
+        public MessageItem(MessageItem item)
+            : this(item.MessageHandler, item.Response)
+        {
+        }
+
 
     }
 }

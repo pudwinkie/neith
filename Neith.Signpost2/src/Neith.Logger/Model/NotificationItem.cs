@@ -11,8 +11,8 @@ namespace Neith.Logger.Model
     {
         public INeithNotification Notification { get; private set; }
 
-        public NotificationItem(IMessageHandler mh, INeithNotification notification)
-            : base(mh)
+        public NotificationItem(MessageItem mes, INeithNotification notification)
+            : base(mes)
         {
             Notification = notification;
         }

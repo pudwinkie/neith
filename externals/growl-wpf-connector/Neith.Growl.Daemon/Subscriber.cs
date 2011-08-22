@@ -1,4 +1,6 @@
 using System;
+using System.Net;
+using net = System.Net;
 using System.Collections.Generic;
 using System.Text;
 using Neith.Growl.Connector;
@@ -22,19 +24,14 @@ namespace Neith.Growl.Daemon
         private string name;
 
         /// <summary>
-        /// The port the subscriber will listen on
-        /// </summary>
-        private int port;
-
-        /// <summary>
-        /// The IP address of the subscriber
-        /// </summary>
-        private string ipaddress;
-
-        /// <summary>
         /// The <see cref="Key"/> used to authenticate and encrypt messages
         /// </summary>
         private SubscriberKey key;
+        
+        /// <summary>
+        /// ê⁄ë±êÊ
+        /// </summary>
+        private EndPoint endPoint;
 
         /// <summary>
         /// Creates a new instance of the <see cref="Subscriber"/> class.
@@ -56,7 +53,7 @@ namespace Neith.Growl.Daemon
         {
             this.id = id;
             this.name = name;
-            this.port = port;
+            this.endPoint = new IPEndPoint(net::IPAddress.None, port);
         }
 
         /// <summary>
@@ -95,6 +92,13 @@ namespace Neith.Growl.Daemon
             }
         }
 
+        /// <summary>EndPoint</summary>
+        public EndPoint EndPoint
+        {
+            get {return endPoint; }
+            set { endPoint = value; }
+        }
+
         /// <summary>
         /// The port that the client will listen on
         /// </summary>
@@ -102,11 +106,9 @@ namespace Neith.Growl.Daemon
         {
             get
             {
-                return this.port;
-            }
-            set
-            {
-                this.port = value;
+                var ep = EndPoint as IPEndPoint;
+                if (ep == null) return -1;
+                return ep.Port;
             }
         }
 
@@ -120,11 +122,9 @@ namespace Neith.Growl.Daemon
         {
             get
             {
-                return this.ipaddress;
-            }
-            set
-            {
-                this.ipaddress = value;
+                var ep = EndPoint as IPEndPoint;
+                if (ep == null) return "";
+                return ep.Address.ToString();
             }
         }
 
