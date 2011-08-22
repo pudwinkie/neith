@@ -111,30 +111,16 @@ namespace Neith.Logger
         private void Receive(MessageItem item)
         {
             var request = item.Request;
-            var mh = item.MessageHandler;
             try {
                 switch (request.Directive) {
                     case RequestType.REGISTER:
-                        var app = Application.FromHeaders(request.Headers);
-                        var notificationTypes = new List<INotificationType>();
-                        foreach (var headers in request.NotificationsToBeRegistered) {
-                            notificationTypes.Add(NotificationType.FromHeaders(headers));
-                        }
-                        var regItem = new RegisterItem(item, app, notificationTypes);
-                        rxRegester.OnNext(regItem);
+                        rxRegester.OnNext(RegisterItem.Create(item));
                         return;
                     case RequestType.NOTIFY:
-                        var notification = NeithNotificationModel.FromHeaders(request.Headers);
-                        mh.CallbackInfo.NotificationID = notification.ID;
-                        var noteItem = new NotificationItem(item, notification);
-                        rxNotification.OnNext(noteItem);
+                        rxNotification.OnNext(NotificationItem.Create(item));
                         return;
                     case RequestType.SUBSCRIBE:
-                        var subscriber = Subscriber.FromHeaders(request.Headers);
-                        subscriber.EndPoint = new IPEndPoint(mh.RemoteIPEndPoint.Address, subscriber.Port);
-                        subscriber.Key = new SubscriberKey(request.Key, subscriber.ID, request.Key.HashAlgorithm, request.Key.EncryptionAlgorithm);
-                        var subItem = new SubscriberItem(item, subscriber);
-                        rxSubscriber.OnNext(subItem);
+                        rxSubscriber.OnNext(SubscriberItem.Create(item));
                         return;
                 }
             }
