@@ -51,12 +51,33 @@ namespace Neith.Logger
             rxNotification = new Subject<NotificationItem>().Add(Tasks);
             rxResponse = new Subject<ResponseItem>().Add(Tasks);
 
-            Tasks.Add(rxMessage.Subscribe(Receive));
-            Tasks.Add(rxRegester.Subscribe(Receive));
-            Tasks.Add(rxNotification.Subscribe(Receive));
-            Tasks.Add(rxSubscriber.Subscribe(Receive));
+            AddTask(rxMessage, Receive);
+            AddTask(rxRegester, ActRegister);
+            AddTask(rxNotification, ActNotify);
+            Tasks.Add(rxSubscriber.Subscribe(ActSubscribe));
         }
 
+        private void AddTask<T>(IObservable<T> rx, Action<T> act) where T : MessageItem
+        {
+            Tasks.Add(rx.Subscribe(a => ActOrCatch(a, act)));
+        }
+
+        /// <summary>
+        /// リクエストの例外フィルタ
+        /// </summary>
+        /// <param name="item"></param>
+        private void ActOrCatch<T>(T item, Action<T> act) where T : MessageItem
+        {
+            try {
+                act(item);
+            }
+            catch (GrowlException gEx) {
+                rxResponse.OnNext(ResponseItem.Create(item, gEx));
+            }
+            catch (Exception ex) {
+                rxResponse.OnNext(ResponseItem.Create(item, ex));
+            }
+        }
 
         #endregion
         #region 配信登録
@@ -76,7 +97,7 @@ namespace Neith.Logger
         /// </summary>
         /// <param name="rx"></param>
         /// <returns></returns>
-        internal IDisposable Register(IObservable<RegisterItem> rx)
+        internal IDisposable CreateSubscrive(IObservable<RegisterItem> rx)
         {
             return rx.Subscribe(a => rxRegester.OnNext(a));
         }
@@ -86,7 +107,7 @@ namespace Neith.Logger
         /// </summary>
         /// <param name="rx"></param>
         /// <returns></returns>
-        internal IDisposable Register(IObservable<SubscriberItem> rx)
+        internal IDisposable CreateSubscrive(IObservable<SubscriberItem> rx)
         {
             return rx.Subscribe(a => rxSubscriber.OnNext(a));
         }
@@ -96,7 +117,7 @@ namespace Neith.Logger
         /// </summary>
         /// <param name="rx"></param>
         /// <returns></returns>
-        internal IDisposable Register(IObservable<NotificationItem> rx)
+        internal IDisposable CreateSubscrive(IObservable<NotificationItem> rx)
         {
             return rx.Subscribe(a => rxNotification.OnNext(a));
         }
@@ -110,25 +131,16 @@ namespace Neith.Logger
         /// <param name="item"></param>
         private void Receive(MessageItem item)
         {
-            var request = item.Request;
-            try {
-                switch (request.Directive) {
-                    case RequestType.REGISTER:
-                        rxRegester.OnNext(RegisterItem.Create(item));
-                        return;
-                    case RequestType.NOTIFY:
-                        rxNotification.OnNext(NotificationItem.Create(item));
-                        return;
-                    case RequestType.SUBSCRIBE:
-                        rxSubscriber.OnNext(SubscriberItem.Create(item));
-                        return;
-                }
-            }
-            catch (GrowlException gEx) {
-                rxResponse.OnNext(new ResponseItem(item, gEx.ErrorCode, gEx.Message, gEx.AdditionalInfo));
-            }
-            catch (Exception ex) {
-                rxResponse.OnNext(new ResponseItem(item, ErrorCode.INTERNAL_SERVER_ERROR, ex.Message));
+            switch (item.Request.Directive) {
+                case RequestType.REGISTER:
+                    rxRegester.OnNext(RegisterItem.Create(item));
+                    return;
+                case RequestType.NOTIFY:
+                    rxNotification.OnNext(NotificationItem.Create(item));
+                    return;
+                case RequestType.SUBSCRIBE:
+                    rxSubscriber.OnNext(SubscriberItem.Create(item));
+                    return;
             }
         }
 
@@ -136,7 +148,7 @@ namespace Neith.Logger
         /// アプリケーション登録処理
         /// </summary>
         /// <param name="item"></param>
-        private void Receive(RegisterItem item)
+        private void ActRegister(RegisterItem item)
         {
 
         }
@@ -145,7 +157,7 @@ namespace Neith.Logger
         /// 購買登録処理
         /// </summary>
         /// <param name="item"></param>
-        private void Receive(SubscriberItem item)
+        private void ActSubscribe(SubscriberItem item)
         {
 
         }
@@ -154,7 +166,7 @@ namespace Neith.Logger
         /// 通知処理
         /// </summary>
         /// <param name="item"></param>
-        private void Receive(NotificationItem item)
+        private void ActNotify(NotificationItem item)
         {
 
         }

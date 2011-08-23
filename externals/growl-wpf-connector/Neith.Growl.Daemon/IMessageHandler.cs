@@ -4,6 +4,10 @@ using Neith.Growl.Connector;
 
 namespace Neith.Growl.Daemon
 {
+    /// <summary>
+    /// 通知元とのやりとりを行うためのインターフェース。
+    /// 固有の通信メソッドを隠匿します。
+    /// </summary>
     public interface IMessageHandler
     {
         CallbackInfo CallbackInfo { get; }

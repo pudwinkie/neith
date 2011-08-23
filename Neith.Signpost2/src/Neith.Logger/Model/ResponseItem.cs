@@ -9,20 +9,20 @@ namespace Neith.Logger.Model
 {
     public sealed class ResponseItem : MessageItem
     {
-        public ResponseItem(MessageItem mes)
-            : base(mes)
+        public ResponseItem(MessageItem item)
+            : base(item)
         {
         }
 
 
-        public ResponseItem(MessageItem mes, IResponse res)
-            : base(mes)
+        public ResponseItem(MessageItem item, IResponse res)
+            : base(item)
         {
             Response = res;
         }
 
-        public ResponseItem(MessageItem mes, int errorCode, string errorDescription, params object[] errorInfo)
-            : this(mes, CreateError(errorCode, errorDescription, errorInfo))
+        private ResponseItem(MessageItem item, int errorCode, string errorDescription, params object[] errorInfo)
+            : this(item, CreateError(errorCode, errorDescription, errorInfo))
         {
         }
 
@@ -38,6 +38,15 @@ namespace Neith.Logger.Model
             return res;
         }
 
+        public static ResponseItem Create(MessageItem item, GrowlException ex)
+        {
+            return new ResponseItem(item, ex.ErrorCode, ex.Message, ex.AdditionalInfo);
+        }
+
+        public static ResponseItem Create(MessageItem item, Exception ex)
+        {
+            return new ResponseItem(item, ErrorCode.INTERNAL_SERVER_ERROR, ex.Message);
+        }
 
     }
 }
