@@ -33,7 +33,7 @@ namespace Neith.Growl.Connector
         /// <summary>
         /// The algorithm used when encrypting values.
         /// </summary>
-        private Cryptography.SymmetricAlgorithmType encryptionAlgorithm = Cryptography.SymmetricAlgorithmType.AES;
+        private Cryptography.SymmetricAlgorithmType encryptionAlgorithm = Cryptography.SymmetricAlgorithmType.PlainText;
 
         /// <summary>
         /// The key used for encryption and decryption
