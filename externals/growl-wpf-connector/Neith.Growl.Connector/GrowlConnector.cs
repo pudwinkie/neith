@@ -147,42 +147,48 @@ namespace Neith.Growl.Connector
         /// <param name="state">An optional state object that will be passed into the response events associated with this request</param>
         public virtual void Register(IApplication application, IEnumerable<INotificationType> notificationTypes, RequestData requestData, object state)
         {
+            var mb = CreateRegister(application, notificationTypes, requestData);
+            Send(mb, OnResponseReceived, false, state);
+        }
+
+        /// <summary>
+        /// 登録メッセージを作成します。
+        /// </summary>
+        /// <param name="application"></param>
+        /// <param name="notificationTypes"></param>
+        /// <param name="requestData"></param>
+        /// <returns></returns>
+        public MessageBuilder CreateRegister(IApplication application, IEnumerable<INotificationType> notificationTypes, RequestData requestData)
+        {
             var appHeaders = application.ToHeaders();
             var notifications = new List<HeaderCollection>();
-            foreach (var notificationType in notificationTypes)
-            {
+            foreach (var notificationType in notificationTypes) {
                 HeaderCollection notificationHeaders = notificationType.ToHeaders();
                 notifications.Add(notificationHeaders);
             }
 
             var mb = new MessageBuilder(RequestType.REGISTER, this.GetKey());
-            foreach (var header in appHeaders)
-            {
+            foreach (var header in appHeaders) {
                 mb.AddHeader(header);
             }
             mb.AddHeader(new Header(HeaderKeys.NOTIFICATIONS_COUNT, notificationTypes.Count().ToString()));
 
             // handle any additional request data
-            if (requestData != null)
-            {
+            if (requestData != null) {
                 var requestDataHeaders = requestData.ToHeaders();
-                foreach (var header in requestDataHeaders)
-                {
+                foreach (var header in requestDataHeaders) {
                     mb.AddHeader(header);
                 }
             }
 
-            foreach (var headers in notifications)
-            {
+            foreach (var headers in notifications) {
                 var ms = new MessageSection();
-                foreach (var header in headers)
-                {
+                foreach (var header in headers) {
                     ms.AddHeader(header);
                 }
                 mb.AddMessageSection(ms);
             }
-
-            Send(mb, OnResponseReceived, false, state);
+            return mb;
         }
 
         /// <summary>
@@ -266,23 +272,34 @@ namespace Neith.Growl.Connector
         /// <param name="state">An optional state object that will be passed into the response events associated with this request</param>
         public virtual void Notify(INotification notification, ICallbackContext callbackContext, RequestData requestData, object state)
         {
-            bool waitForCallback = false;
+            bool waitForCallback;
+            var mb = CreateNotify(notification, callbackContext, requestData, out waitForCallback);
+            Send(mb, OnResponseReceived, waitForCallback, state);
+        }
+
+        /// <summary>
+        /// Notifyメッセージを作成します。
+        /// </summary>
+        /// <param name="notification"></param>
+        /// <param name="callbackContext"></param>
+        /// <param name="requestData"></param>
+        /// <param name="waitForCallback"></param>
+        /// <returns></returns>
+        public MessageBuilder CreateNotify(INotification notification, ICallbackContext callbackContext, RequestData requestData, out bool waitForCallback)
+        {
+            waitForCallback = false;
             var notificationHeaders = notification.ToHeaders();
             var mb = new MessageBuilder(RequestType.NOTIFY, this.GetKey());
-            foreach (var header in notificationHeaders)
-            {
+            foreach (var header in notificationHeaders) {
                 mb.AddHeader(header);
             }
 
-            if (callbackContext != null)
-            {
+            if (callbackContext != null) {
                 var url = callbackContext.CallbackUrl;
-                if (!String.IsNullOrEmpty(url))
-                {
+                if (!String.IsNullOrEmpty(url)) {
                     mb.AddHeader(new Header(HeaderKeys.NOTIFICATION_CALLBACK_TARGET, url));
                 }
-                else
-                {
+                else {
                     mb.AddHeader(new Header(HeaderKeys.NOTIFICATION_CALLBACK_CONTEXT, callbackContext.Data));
                     mb.AddHeader(new Header(HeaderKeys.NOTIFICATION_CALLBACK_CONTEXT_TYPE, callbackContext.Type.ToString()));
                     waitForCallback = true;
@@ -290,16 +307,13 @@ namespace Neith.Growl.Connector
             }
 
             // handle any additional request data
-            if (requestData != null)
-            {
+            if (requestData != null) {
                 var requestDataHeaders = requestData.ToHeaders();
-                foreach (var header in requestDataHeaders)
-                {
+                foreach (var header in requestDataHeaders) {
                     mb.AddHeader(header);
                 }
             }
-
-            Send(mb, OnResponseReceived, waitForCallback, state);
+            return mb;
         }
 
         /// <summary>

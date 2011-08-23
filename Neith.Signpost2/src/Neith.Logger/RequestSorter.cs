@@ -51,7 +51,7 @@ namespace Neith.Logger
             rxNotification = new Subject<NotificationItem>().Add(Tasks);
             rxResponse = new Subject<ResponseItem>().Add(Tasks);
 
-            AddTask(rxMessage, Receive);
+            AddTask(rxMessage, ActReceive);
             AddTask(rxRegester, ActRegister);
             AddTask(rxNotification, ActNotify);
             Tasks.Add(rxSubscriber.Subscribe(ActSubscribe));
@@ -129,7 +129,7 @@ namespace Neith.Logger
         /// リクエストの処理
         /// </summary>
         /// <param name="item"></param>
-        private void Receive(MessageItem item)
+        private void ActReceive(MessageItem item)
         {
             switch (item.Request.Directive) {
                 case RequestType.REGISTER:

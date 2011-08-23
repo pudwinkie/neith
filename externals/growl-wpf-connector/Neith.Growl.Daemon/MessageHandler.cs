@@ -233,6 +233,10 @@ namespace Neith.Growl.Daemon
             }
         }
 
+        /// <summary>レスポンス情報</summary>
+        public IResponse Response { get; set; }
+
+
         /// <summary>
         /// Performs an initial read of the received data to see if it looks like a
         /// valid request.
@@ -450,6 +454,14 @@ namespace Neith.Growl.Daemon
                 OnSocketUsageComplete(socket);
                 socket.CloseAfterWriting();
             }
+        }
+
+        /// <summary>
+        /// 通信処理を発行します。
+        /// </summary>
+        public void Dispose()
+        {
+
         }
 
         # region socket shutdown code
