@@ -32,7 +32,7 @@ namespace Neith.Logger
         /// <returns></returns>
         public static IDisposable Subscribe(IObservable<RegisterItem> rx, RequestSorter receiver)
         {
-            return receiver.Register(rx);
+            return receiver.CreateSubscrive(rx);
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Neith.Logger
         /// <returns></returns>
         public static IDisposable Subscribe(IObservable<SubscriberItem> rx, RequestSorter receiver)
         {
-            return receiver.Register(rx);
+            return receiver.CreateSubscrive(rx);
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Neith.Logger
         /// <returns></returns>
         public static IDisposable Subscribe(IObservable<NotificationItem> rx, RequestSorter receiver)
         {
-            return receiver.Register(rx);
+            return receiver.CreateSubscrive(rx);
         }
 
     }
