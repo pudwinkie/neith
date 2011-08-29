@@ -1,0 +1,9 @@
+﻿<Window xmlns:my="clr-namespace:DiningPhilosophers"  x:Class="DiningPhilosophers.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Dining Philosophers" Height="569" Width="598" Background="Tan">
+    <Grid>
+        <my:CircularPanel x:Name="diningTable" VerticalAlignment="Stretch" Opacity="100">
+        </my:CircularPanel>
+    </Grid>
+</Window>

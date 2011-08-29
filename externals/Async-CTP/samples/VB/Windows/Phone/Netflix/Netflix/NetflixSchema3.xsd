@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.microsoft.com/ado/2007/08/dataservices" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" />
+  <xs:element name="AverageRating">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute xmlns:q1="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q1:type" use="required" />
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReleaseYear">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:unsignedShort">
+          <xs:attribute xmlns:q2="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q2:type" use="required" />
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Url" type="xs:string" />
+  <xs:element name="Runtime">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:unsignedShort">
+          <xs:attribute xmlns:q3="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q3:type" use="required" />
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Rating" type="xs:string" />
+  <xs:element name="BoxArt">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="SmallUrl" type="xs:string" />
+        <xs:element name="MediumUrl" type="xs:string" />
+        <xs:element name="LargeUrl" type="xs:string" />
+        <xs:element name="HighDefinitionUrl">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute xmlns:q4="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q4:null" use="optional" />
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute xmlns:q5="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q5:type" use="required" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

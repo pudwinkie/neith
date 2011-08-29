@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://www.w3.org/2005/Atom" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xs:import namespace="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" />
+  <xs:element name="feed">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="title">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute name="type" type="xs:string" use="required" />
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="id" type="xs:string" />
+        <xs:element name="updated" type="xs:dateTime" />
+        <xs:element name="link">
+          <xs:complexType>
+            <xs:attribute name="rel" type="xs:string" use="required" />
+            <xs:attribute name="title" type="xs:string" use="required" />
+            <xs:attribute name="href" type="xs:string" use="required" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element maxOccurs="unbounded" name="entry">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="id" type="xs:string" />
+              <xs:element name="title">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="type" type="xs:string" use="required" />
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="summary">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="type" type="xs:string" use="required" />
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="updated" type="xs:dateTime" />
+              <xs:element name="author">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="name" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element maxOccurs="unbounded" name="link">
+                <xs:complexType>
+                  <xs:attribute ref="m:etag" use="optional" />
+                  <xs:attribute name="rel" type="xs:string" use="required" />
+                  <xs:attribute name="title" type="xs:string" use="required" />
+                  <xs:attribute name="href" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="category">
+                <xs:complexType>
+                  <xs:attribute name="term" type="xs:string" use="required" />
+                  <xs:attribute name="scheme" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="content">
+                <xs:complexType>
+                  <xs:attribute name="type" type="xs:string" use="required" />
+                  <xs:attribute name="src" type="xs:string" use="required" />
+                </xs:complexType>
+              </xs:element>
+              <xs:element ref="m:properties" />
+            </xs:sequence>
+            <xs:attribute ref="m:etag" use="required" />
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute ref="xml:base" use="required" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.microsoft.com/ado/2007/08/dataservices" />
+  <xs:attribute name="etag" type="xs:string" />
+  <xs:element name="properties">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.microsoft.com/ado/2007/08/dataservices" ref="q1:AverageRating" />
+        <xs:element xmlns:q2="http://schemas.microsoft.com/ado/2007/08/dataservices" ref="q2:ReleaseYear" />
+        <xs:element xmlns:q3="http://schemas.microsoft.com/ado/2007/08/dataservices" ref="q3:Url" />
+        <xs:element xmlns:q4="http://schemas.microsoft.com/ado/2007/08/dataservices" ref="q4:Runtime" />
+        <xs:element xmlns:q5="http://schemas.microsoft.com/ado/2007/08/dataservices" ref="q5:Rating" />
+        <xs:element xmlns:q6="http://schemas.microsoft.com/ado/2007/08/dataservices" ref="q6:BoxArt" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:attribute name="type" type="xs:string" />
+  <xs:attribute name="null" type="xs:boolean" />
+</xs:schema>

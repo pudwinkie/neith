@@ -1,0 +1,62 @@
+﻿<Application 
+    x:Class="Concert_Finder.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"       
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:resources="clr-namespace:Concert_Finder.ConcertFinder.Resources"
+    xmlns:converters="clr-namespace:Concert_Finder.ConcertFinder.Converters">
+
+    <!--Application Resources-->
+    <Application.Resources>
+        <resources:Resources x:Key="Resources"/>
+        
+        <converters:BooleanOpacityConverter x:Key="BooleanOpacityConverter"/>
+        <converters:BooleanVisibilityConverter x:Key="BooleanVisibilityConverter"/>
+        <converters:ImageConverter x:Key="ImageConverter"/>
+        <converters:SearchableTypeConverter x:Key="SearchableTypeConverter"/>
+        <converters:TimeConverter x:Key="TimeConverter"/>
+
+        <DataTemplate x:Key="EventListItemTemplate">
+            <Border Width="480">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="{Binding Converter={StaticResource ImageConverter}, ConverterParameter=Default}"
+                           Width="100"
+                           Height="100"
+                           VerticalAlignment="Stretch"
+                           Margin="0, 0, 12, 0"/>
+                    <Image Source="{Binding Image}" 
+                           Width="100"
+                           Height="100"
+                           VerticalAlignment="Stretch"
+                           Margin="-124, 0, 0, 0"/>
+                    <StackPanel Orientation="Vertical"
+                                VerticalAlignment="Stretch"
+                                Margin="0, -12, 0, 0">
+                        <TextBlock Text="{Binding Name}"
+                                   FontSize="{StaticResource PhoneFontSizeLarge}"/>
+                        <TextBlock Text="{Binding Location}"
+                                   Foreground="{StaticResource PhoneSubtleBrush}"/>
+                        <TextBlock Text="{Binding StartTime, Converter={StaticResource TimeConverter}, ConverterParameter=D}"
+                                   Foreground="{StaticResource PhoneSubtleBrush}"/>
+                        <TextBlock Text="{Binding EndTime, Converter={StaticResource TimeConverter}, ConverterParameter=D}"
+                                   Foreground="{StaticResource PhoneSubtleBrush}"
+                                   Visibility="{Binding IsSingleDay, Converter={StaticResource BooleanVisibilityConverter}, ConverterParameter=IsInverted}"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+
+        <Style x:Key="EventListItemContainerStyle" TargetType="ListBoxItem">
+            <Setter Property="Margin" Value="0, 0, 0, 24"/>
+        </Style>
+    </Application.Resources>
+
+    <Application.ApplicationLifetimeObjects>
+        <!--Required object that handles lifetime events for the application-->
+        <shell:PhoneApplicationService 
+            Launching="Application_Launching" Closing="Application_Closing" 
+            Activated="Application_Activated" Deactivated="Application_Deactivated"/>
+    </Application.ApplicationLifetimeObjects>
+
+</Application>

@@ -1,0 +1,39 @@
+﻿<phone:PhoneApplicationPage 
+    x:Class="AsyncBackgroundThreads.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="768"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    shell:SystemTray.IsVisible="True">
+
+    <Grid x:Name="LayoutRoot" Background="WhiteSmoke">
+        <Grid x:Name="ContentGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="*" ></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Margin="12,0,0,0" VerticalAlignment="Center" x:Name="statusTextBlock" Foreground="Black" FontSize="{StaticResource PhoneFontSizeMediumLarge}"/>
+            <TextBlock Grid.Row="1" Margin="12,18,0,10" VerticalAlignment="Center" Foreground="Brown" FontSize="36">Windows Phone Blog RSS</TextBlock>
+            <ListBox  Grid.Row="2" Margin="12,0,0,0"  x:Name="itemsListBox" Foreground="Black" SelectionChanged="DeferredLoadListBox_SelectionChanged">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="0,0,0,8" >
+                            <TextBlock TextWrapping="NoWrap" Text="{Binding Title}" FontSize="{StaticResource PhoneFontSizeMediumLarge}" FontFamily="Segoe WP Semibold" Foreground="DarkBlue" />
+                            <TextBlock  Margin="12,0,0,0"    Text="{Binding PubDate}" FontSize="{StaticResource PhoneFontSizeSmall}" Foreground="DimGray" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+
+            </ListBox>
+        </Grid>
+        <phone:WebBrowser x:Name="webBrowser" Visibility="Collapsed" />
+    </Grid>
+</phone:PhoneApplicationPage>
