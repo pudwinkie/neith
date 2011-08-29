@@ -20,7 +20,8 @@ namespace Neith.Logger.Parsers
         public bool IsText { get { return Text != null; } }
 
         /// <summary>byte配列の連結結果</summary>
-        public byte[] Bytes { get { return ByteSegments.ToCombineArray(); } }
+        public byte[] Bytes { get { return LazyBytes.Value; } }
+        private readonly Lazy<byte[]> LazyBytes;
 
         /// <summary>
         /// コンストラクタ。
@@ -31,6 +32,7 @@ namespace Neith.Logger.Parsers
         {
             ByteSegments = segs;
             Text = text;
+            LazyBytes = new Lazy<byte[]>(() => ByteSegments.ToCombineArray());
         }
 
         /// <summary>
