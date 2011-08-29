@@ -81,8 +81,10 @@
     <Compile Include="Model\RegisterItem.cs" />
     <Compile Include="Model\ResponseItem.cs" />
     <Compile Include="Model\SubscriberItem.cs" />
+    <Compile Include="Parsers\IPacketReader.cs" />
     <Compile Include="Parsers\Packet.cs" />
     <Compile Include="Parsers\ParserUtil.cs" />
+    <Compile Include="Parsers\SocketPacketReader.cs" />
     <Compile Include="Parsers\Stage1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestSorter.cs" />
