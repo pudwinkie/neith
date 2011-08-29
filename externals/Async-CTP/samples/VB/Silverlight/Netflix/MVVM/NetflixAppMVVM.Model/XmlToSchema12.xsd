@@ -1,0 +1,253 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.microsoft.com/ado/2007/08/dataservices" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" />
+  <xs:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xs:element name="Id" type="xs:string" />
+  <xs:element name="Synopsis">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute ref="xml:space" use="optional" />
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ShortSynopsis">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute xmlns:q1="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q1:null" use="optional" />
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AverageRating">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:decimal">
+          <xs:attribute xmlns:q2="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q2:type" use="required" />
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReleaseYear">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:unsignedShort">
+          <xs:attribute xmlns:q3="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q3:type" use="required" />
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Url" type="xs:string" />
+  <xs:element name="Runtime">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute xmlns:q4="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q4:type" use="required" />
+          <xs:attribute xmlns:q5="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q5:null" use="optional" />
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Rating" type="xs:string" />
+  <xs:element name="Type" type="xs:string" />
+  <xs:element name="ShortName" type="xs:string" />
+  <xs:element name="Name" type="xs:string" />
+  <xs:element name="TinyUrl" type="xs:string" />
+  <xs:element name="WebsiteUrl">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute xmlns:q6="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q6:null" use="optional" />
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NetflixApiId" type="xs:string" />
+  <xs:element name="BoxArt">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="SmallUrl" type="xs:string" />
+        <xs:element name="MediumUrl" type="xs:string" />
+        <xs:element name="LargeUrl" type="xs:string" />
+        <xs:element name="HighDefinitionUrl">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute xmlns:q7="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q7:null" use="optional" />
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute xmlns:q8="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q8:type" use="required" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Instant">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Available">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:boolean">
+                <xs:attribute xmlns:q9="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q9:type" use="required" />
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="AvailableFrom">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute xmlns:q10="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q10:type" use="required" />
+                <xs:attribute xmlns:q11="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q11:null" use="optional" />
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="AvailableTo">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute xmlns:q12="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q12:type" use="required" />
+                <xs:attribute xmlns:q13="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q13:null" use="optional" />
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="HighDefinitionAvailable">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:boolean">
+                <xs:attribute xmlns:q14="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q14:type" use="required" />
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Runtime">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute xmlns:q15="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q15:type" use="required" />
+                <xs:attribute xmlns:q16="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q16:null" use="optional" />
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Rating">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute xmlns:q17="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q17:null" use="optional" />
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute xmlns:q18="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q18:type" use="required" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Dvd">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Available">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:boolean">
+                <xs:attribute xmlns:q19="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q19:type" use="required" />
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="AvailableFrom">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute xmlns:q20="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q20:type" use="required" />
+                <xs:attribute xmlns:q21="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q21:null" use="optional" />
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="AvailableTo">
+          <xs:complexType>
+            <xs:attribute xmlns:q22="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q22:type" use="required" />
+            <xs:attribute xmlns:q23="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q23:null" use="required" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Runtime">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute xmlns:q24="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q24:type" use="required" />
+                <xs:attribute xmlns:q25="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q25:null" use="optional" />
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Rating">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute xmlns:q26="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q26:null" use="optional" />
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute xmlns:q27="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q27:type" use="required" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BluRay">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Available">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:boolean">
+                <xs:attribute xmlns:q28="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q28:type" use="required" />
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="AvailableFrom">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute xmlns:q29="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q29:type" use="required" />
+                <xs:attribute xmlns:q30="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q30:null" use="optional" />
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="AvailableTo">
+          <xs:complexType>
+            <xs:attribute xmlns:q31="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q31:type" use="required" />
+            <xs:attribute xmlns:q32="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q32:null" use="required" />
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Runtime">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute xmlns:q33="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q33:type" use="required" />
+                <xs:attribute xmlns:q34="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q34:null" use="optional" />
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Rating">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute xmlns:q35="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q35:null" use="optional" />
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute xmlns:q36="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q36:type" use="required" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.microsoft.com/ado/2007/08/dataservices" />
+  <xs:element name="count" type="xs:unsignedShort" />
+  <xs:attribute name="etag" type="xs:string" />
+  <xs:element name="properties">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.microsoft.com/ado/2007/08/dataservices" ref="q1:Id" />
+        <xs:element xmlns:q2="http://schemas.microsoft.com/ado/2007/08/dataservices" ref="q2:Synopsis" />
+        <xs:element xmlns:q3="http://schemas.microsoft.com/ado/2007/08/dataservices" ref="q3:ShortSynopsis" />
+        <xs:element xmlns:q4="http://schemas.microsoft.com/ado/2007/08/dataservices" ref="q4:AverageRating" />
+        <xs:element xmlns:q5="http://schemas.microsoft.com/ado/2007/08/dataservices" ref="q5:ReleaseYear" />
+        <xs:element xmlns:q6="http://schemas.microsoft.com/ado/2007/08/dataservices" ref="q6:Url" />
+        <xs:element xmlns:q7="http://schemas.microsoft.com/ado/2007/08/dataservices" ref="q7:Runtime" />
+        <xs:element xmlns:q8="http://schemas.microsoft.com/ado/2007/08/dataservices" ref="q8:Rating" />
+        <xs:element xmlns:q9="http://schemas.microsoft.com/ado/2007/08/dataservices" ref="q9:Type" />
+        <xs:element xmlns:q10="http://schemas.microsoft.com/ado/2007/08/dataservices" ref="q10:ShortName" />
+        <xs:element xmlns:q11="http://schemas.microsoft.com/ado/2007/08/dataservices" ref="q11:Name" />
+        <xs:element xmlns:q12="http://schemas.microsoft.com/ado/2007/08/dataservices" ref="q12:TinyUrl" />
+        <xs:element xmlns:q13="http://schemas.microsoft.com/ado/2007/08/dataservices" ref="q13:WebsiteUrl" />
+        <xs:element xmlns:q14="http://schemas.microsoft.com/ado/2007/08/dataservices" ref="q14:NetflixApiId" />
+        <xs:element xmlns:q15="http://schemas.microsoft.com/ado/2007/08/dataservices" ref="q15:BoxArt" />
+        <xs:element xmlns:q16="http://schemas.microsoft.com/ado/2007/08/dataservices" ref="q16:Instant" />
+        <xs:element xmlns:q17="http://schemas.microsoft.com/ado/2007/08/dataservices" ref="q17:Dvd" />
+        <xs:element xmlns:q18="http://schemas.microsoft.com/ado/2007/08/dataservices" ref="q18:BluRay" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:attribute name="type" type="xs:string" />
+  <xs:attribute name="null" type="xs:boolean" />
+</xs:schema>

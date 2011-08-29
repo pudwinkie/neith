@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectTypeGuids>{BAA0C2D2-18E2-41B9-852F-F413020CAA33};{F184B08F-C81C-45F6-A57F-5ABD9991F28F}</ProjectTypeGuids>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <RootNamespace>OptionPricingVB</RootNamespace>
+    <AssemblyName>OptionPricingVB</AssemblyName>
+    <VSTO_HostDocumentName>OptionPricingVB.xlsx</VSTO_HostDocumentName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <DefineConstants>VSTO40</DefineConstants>
+    <OfficeApplication>Excel</OfficeApplication>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <BootstrapperComponentsLocation>HomeSite</BootstrapperComponentsLocation>
+    <ProjectGuid>{90498386-EC4E-4A6A-A40A-E0FB33BE6F2D}</ProjectGuid>
+    <SolutionID>7d274d50-8369-4eb6-ac60-f7e573a52d12</SolutionID>
+  </PropertyGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 Client Profile %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.VSTORuntime.4.0">
+      <Visible>false</Visible>
+      <ProductName>Microsoft Visual Studio 2010 Tools for Office Runtime %28x86 and x64%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <PropertyGroup>
+    <VSTO_EmbedTypeLibraryInAssembly>false</VSTO_EmbedTypeLibraryInAssembly>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DefineConstants>$(DefineConstants)</DefineConstants>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>OptionPricingVB.xml</DocumentationFile>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DefineConstants>
+    </DefineConstants>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>OptionPricingVB.xml</DocumentationFile>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionExplicit>On</OptionExplicit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionCompare>Binary</OptionCompare>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionStrict>Off</OptionStrict>
+  </PropertyGroup>
+  <PropertyGroup>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>OptionPricingVB_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>80308E267856651AFE3A29BA000430DB41E34A3D</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AsyncCtpLibrary">
+      <HintPath>..\AsyncCtpLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Office.Tools.v4.0.Framework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Tools.Applications.Runtime, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Office.Tools, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Office.Tools.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Office.Tools.Excel, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Office.Tools.Common.v4.0.Utilities, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Office.Tools.Excel.v4.0.Utilities, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Office, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <Private>False</Private>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Vbe.Interop, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <Private>False</Private>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=14.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <Private>False</Private>
+      <EmbedInteropTypes>true</EmbedInteropTypes>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Text" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="Microsoft.Office.Tools.Excel" />
+    <Import Include="Microsoft.VisualStudio.Tools.Applications.Runtime" />
+    <Import Include="Office = Microsoft.Office.Core" />
+    <Import Include="Excel = Microsoft.Office.Interop.Excel" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ExcelInterop.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="Sheet1.Designer.vb">
+      <DependentUpon>Sheet1.Designer.xml</DependentUpon>
+    </Compile>
+    <Compile Include="Sheet1.vb">
+      <DependentUpon>OptionPricingVB.xlsx</DependentUpon>
+    </Compile>
+    <Compile Include="ThisWorkbook.Designer.vb">
+      <DependentUpon>ThisWorkbook.Designer.xml</DependentUpon>
+    </Compile>
+    <Compile Include="ThisWorkbook.vb">
+      <DependentUpon>OptionPricingVB.xlsx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Sheet1.resx">
+      <DependentUpon>Sheet1.vb</DependentUpon>
+    </EmbeddedResource>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <None Include="OptionPricingVB.xlsx" />
+    <None Include="OptionPricingVB_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ThisWorkbook.Designer.xml">
+      <DependentUpon>ThisWorkbook.vb</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Sheet1.Designer.xml">
+      <DependentUpon>Sheet1.vb</DependentUpon>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\OfficeTools\Microsoft.VisualStudio.Tools.Office.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{BAA0C2D2-18E2-41B9-852F-F413020CAA33}">
+        <ProjectProperties HostName="OptionPricingVB.xlsx" HostPackage="{825100CF-0BA7-47EA-A084-DCF3308DAF74}" OfficeVersion="14.0" VstxVersion="4.0" ApplicationType="XLS" Language="VB" TemplatesPath="VSTOTemplates" DebugInfoExeName="C:\Program Files\Microsoft Office\Office14\Excel.exe" DebugInfoCommandLine="&quot;[$OUTPUT]OptionPricingVB.xlsx&quot;" />
+        <Host Name="Excel Document" Path=".\OptionPricingVB.xlsx">
+          <HostItem Name="Sheet1" Code="Sheet1.vb" CanonicalName="Sheet1" DisplayName="Sheet1" Blueprint="Sheet1.Designer.xml" GeneratedCode="Sheet1.Designer.vb" />
+          <HostItem Name="ThisWorkbook" Code="ThisWorkbook.vb" CanonicalName="ThisWorkbook" Blueprint="ThisWorkbook.Designer.xml" GeneratedCode="ThisWorkbook.Designer.vb" />
+        </Host>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!--
+    To modify your build process, add your task inside one of the targets below and uncomment it.
+    Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

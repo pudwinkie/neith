@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.microsoft.com/ado/2007/08/dataservices" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" />
+  <xs:element name="Url" type="xs:string" />
+  <xs:element name="BoxArt">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="SmallUrl" type="xs:string" />
+        <xs:element name="MediumUrl" type="xs:string" />
+        <xs:element name="LargeUrl" type="xs:string" />
+        <xs:element name="HighDefinitionUrl">
+          <xs:complexType>
+            <xs:attribute xmlns:q1="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q1:null" use="required" />
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute xmlns:q2="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" ref="q2:type" use="required" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

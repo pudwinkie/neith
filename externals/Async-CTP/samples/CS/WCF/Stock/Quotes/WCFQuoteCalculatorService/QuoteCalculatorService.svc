@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="WCFTaskAsyncSample.QuoteCalculatorService" CodeBehind="QuoteCalculatorService.svc.cs" %>

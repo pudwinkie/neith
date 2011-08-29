@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCFQuoteCalculatorService", "WCFQuoteCalculatorService\WCFQuoteCalculatorService.csproj", "{AFDB8948-6AAA-4FCD-A95F-760B764A06F9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientApp", "ClientApp\ClientApp.csproj", "{B5540B57-0E17-4581-ACE0-AFF688DA8623}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AFDB8948-6AAA-4FCD-A95F-760B764A06F9} = {AFDB8948-6AAA-4FCD-A95F-760B764A06F9}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskWsdlImportExtension", "TaskWsdlImportExtension\TaskWsdlImportExtension.csproj", "{CA1EA978-90BC-4DA8-A661-55534239A426}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AFDB8948-6AAA-4FCD-A95F-760B764A06F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFDB8948-6AAA-4FCD-A95F-760B764A06F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFDB8948-6AAA-4FCD-A95F-760B764A06F9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{AFDB8948-6AAA-4FCD-A95F-760B764A06F9}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{AFDB8948-6AAA-4FCD-A95F-760B764A06F9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AFDB8948-6AAA-4FCD-A95F-760B764A06F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFDB8948-6AAA-4FCD-A95F-760B764A06F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFDB8948-6AAA-4FCD-A95F-760B764A06F9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{AFDB8948-6AAA-4FCD-A95F-760B764A06F9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{AFDB8948-6AAA-4FCD-A95F-760B764A06F9}.Release|x86.ActiveCfg = Release|Any CPU
+		{B5540B57-0E17-4581-ACE0-AFF688DA8623}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{B5540B57-0E17-4581-ACE0-AFF688DA8623}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{B5540B57-0E17-4581-ACE0-AFF688DA8623}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{B5540B57-0E17-4581-ACE0-AFF688DA8623}.Debug|x86.ActiveCfg = Debug|x86
+		{B5540B57-0E17-4581-ACE0-AFF688DA8623}.Debug|x86.Build.0 = Debug|x86
+		{B5540B57-0E17-4581-ACE0-AFF688DA8623}.Release|Any CPU.ActiveCfg = Release|x86
+		{B5540B57-0E17-4581-ACE0-AFF688DA8623}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{B5540B57-0E17-4581-ACE0-AFF688DA8623}.Release|Mixed Platforms.Build.0 = Release|x86
+		{B5540B57-0E17-4581-ACE0-AFF688DA8623}.Release|x86.ActiveCfg = Release|x86
+		{B5540B57-0E17-4581-ACE0-AFF688DA8623}.Release|x86.Build.0 = Release|x86
+		{CA1EA978-90BC-4DA8-A661-55534239A426}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA1EA978-90BC-4DA8-A661-55534239A426}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA1EA978-90BC-4DA8-A661-55534239A426}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{CA1EA978-90BC-4DA8-A661-55534239A426}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{CA1EA978-90BC-4DA8-A661-55534239A426}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CA1EA978-90BC-4DA8-A661-55534239A426}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA1EA978-90BC-4DA8-A661-55534239A426}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA1EA978-90BC-4DA8-A661-55534239A426}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{CA1EA978-90BC-4DA8-A661-55534239A426}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{CA1EA978-90BC-4DA8-A661-55534239A426}.Release|x86.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

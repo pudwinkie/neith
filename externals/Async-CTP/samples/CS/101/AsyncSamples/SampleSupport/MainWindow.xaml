@@ -1,0 +1,94 @@
+﻿<Window x:Class="SampleSupport.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{StaticResource AppTitle}" DataContext="{StaticResource Samples}" Height="600" Width="800"
+        WindowState="Maximized" Icon="Images/Samples.ico">
+    <Window.Resources>
+        <HierarchicalDataTemplate x:Key="SampleDataTemplate">
+            <StackPanel Orientation="Horizontal" MouseLeftButtonDown="Sample_MouseLeftButtonDown">
+                <Image Width="16" Height="16" Source="Images/Sample.png" Margin="0,0,4,0" />
+                <TextBlock Text="{Binding Title}"/>
+            </StackPanel>
+        </HierarchicalDataTemplate>
+        <HierarchicalDataTemplate x:Key="CategoryDataTemplate" ItemsSource="{Binding Samples}" ItemTemplate="{StaticResource SampleDataTemplate}">
+            <StackPanel Orientation="Horizontal">
+                <Image Width="16" Height="16" Source="Images/Category.png" Margin="0,0,4,0" />
+                <TextBlock Text="{Binding Category}"/>
+            </StackPanel>
+        </HierarchicalDataTemplate>
+        <HierarchicalDataTemplate x:Key="HarnessDataTemplate" ItemsSource="{Binding Categories}" ItemTemplate="{StaticResource CategoryDataTemplate}">
+            <StackPanel Orientation="Horizontal">
+                <Image Width="16" Height="16" Source="Images/Harness.png" Margin="0,0,4,0" />
+                <TextBlock Text="{Binding Title}"/>
+            </StackPanel>
+        </HierarchicalDataTemplate>
+    </Window.Resources>
+
+    <Grid x:Name="LayoutRoot" Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="125" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" MinHeight="75" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="150" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <TextBlock Text="Samples:" Margin="4" />
+        <TreeView Grid.Row="1" Grid.RowSpan="7" Name="SamplesTreeView" SelectedItemChanged="SamplesTreeView_SelectedItemChanged">
+            <TreeViewItem Name="RootNode" ItemsSource="{Binding}" ItemTemplate="{StaticResource HarnessDataTemplate}" Loaded="RootNode_Loaded" IsExpanded="True">
+                <TreeViewItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="16" Height="16" Source="Images/Root.png" Margin="0,0,4,0" />
+                        <TextBlock Text="{StaticResource AppTitle}"/>
+                    </StackPanel>
+                </TreeViewItem.Header>
+            </TreeViewItem>
+        </TreeView>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Width="10" Grid.RowSpan="8" />
+        <TextBlock Text="Description:" Grid.Column="2" Margin="4" Grid.ColumnSpan="2" />
+        <TextBox Grid.Column="2" Grid.Row="1" Name="DescriptionTextBox" IsReadOnly="True" Background="LightGray" Grid.ColumnSpan="2" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" />
+        <GridSplitter Grid.Column="2" Grid.Row="2" Height="10" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.ColumnSpan="2" />
+        <StackPanel Grid.Column="2" Grid.Row="3" Orientation="Horizontal" Grid.ColumnSpan="2" Height="24">
+            <TextBlock Text="Code:" VerticalAlignment="Center" Margin="4" />
+            <RadioButton Content="Before" Height="16" Name="BeforeRadioButton" Margin="4,6,4,4" Checked="BeforeRadioButton_Checked" />
+            <RadioButton Content="After" Height="16" Name="AfterRadioButton" Foreground="Blue" FontWeight="Bold" Margin="4" FontFamily="Consolas" FontSize="14" Checked="AfterRadioButton_Checked" />
+        </StackPanel>
+        <RichTextBox Name="CodeRichTextBox" FontFamily="Consolas" Grid.Column="2" Grid.Row="4" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" />
+        <GridSplitter Grid.Column="2" Grid.Row="5" Height="10" HorizontalAlignment="Stretch" Grid.ColumnSpan="2" />
+        <Grid Grid.Row="6" Grid.Column="3" Grid.RowSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" MinHeight="100" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal">
+                <Button Name="RunButton" Width="100" Margin="4" Click="RunButton_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="16" Height="16" Source="Images/Run.png" Margin="0,0,4,0" />
+                        <TextBlock>Run Sample</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button Name="CancelButton" Width="75" Margin="4" Click="CancelButton_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="16" Height="16" Source="Images/Cancel.png" Margin="0,0,4,0" />
+                        <TextBlock>Cancel</TextBlock>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <ProgressBar Name="ProgressBar" Grid.Column="1" Margin="4" />
+            <TextBlock Text="Output:" Margin="4" Grid.Row="1" Grid.ColumnSpan="2"/>
+            <TextBox Name="OutputTextBox" IsReadOnly="True" Background="LightGray" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Grid.Row="2" Grid.ColumnSpan="2" TextWrapping="Wrap" />
+        </Grid>
+    </Grid>
+</Window>

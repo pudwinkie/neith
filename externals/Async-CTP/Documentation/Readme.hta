@@ -1,0 +1,320 @@
+<html> 
+<head> 
+<title>Microsoft Visual Studio Async CTP</title> 
+<HTA:APPLICATION ID="idAsyncNET" ICON="images/icon.ico" APPLICATIONNAME="Async CTP" SINGLEINSTANCE="yes"/>
+<script language="javascript">
+    function runcmd(s) {
+        var sh = new ActiveXObject("WScript.Shell");
+        var path = document.location.pathname;
+        path = path.substr(0, path.lastIndexOf("\\")+1);
+        var fn = ('"' + path + s + '"').replace(/%20/g," ");
+        sh.run(fn);
+        return false;
+    }
+
+    function runeither(vb, cs) {
+        var e = window.event;
+        var d = document.getElementById("popup");
+        d.style.backgroundColor = "white";
+        var top = Math.max(document.documentElement.scrollTop, document.body.scrollTop);
+        var left = Math.max(document.documentElement.scrollLeft, document.body.scrollLeft);
+        d.style.left = (e.clientX - 4 + left) + "px";
+        d.style.top = (e.clientY - 4 + top) + "px";
+        var d1 = document.getElementById("popup1");
+        d1.onclick = function () { d.style.backgroundColor = "gray";  return runcmd(cs); };
+        var d2 = document.getElementById("popup2");
+        d2.onclick = function () { d.style.backgroundColor = "gray";  return runcmd(vb); };
+        d.style.display = "block";
+        return false;
+    }
+</script>
+<style type="text/css"> 
+body {background-color: white; color:rgb(32,32,32); font-family:Calibri;} 
+td {font-size: smaller; padding: 5px; vertical-align: top;} 
+td a {font-size: larger; font-weight: bold;} 
+a {text-decoration:none; font-weight: bold;} 
+a:hover {text-decoration:underline;} 
+em {font-weight: bold; font-size: larger; color:blue; background-color:rgb(220,230,255);} 
+h1, h2 {background-color:rgb(150,190,250);} 
+table, td {border: solid 1px black; border-collapse: collapse; width: 840px;}
+td img {float:left; width:64px; height:64px;}
+img {border: 0px;}
+</style> 
+</head> 
+<body> 
+<h1>Microsoft Visual Studio Async CTP</h1> 
+<p>This CTP is installed under <b>My Documents > Microsoft Visual Studio Async CTP</b>.</p>
+
+
+<table cellspacing="0"> 
+<tr>
+<td colspan="4" style="background-color:rgb(150,190,250);">
+<h2 style="margin-bottom: 0;">Getting Started</h2>
+</td>
+</tr>
+<tr>
+
+<td colspan="4">
+  <a href='#' onclick="return runeither('..\\Samples\\(VB 101) Tutorial walkthrough\\TutorialVB.sln', '..\\Samples\\(C# 101) Tutorial walkthrough\\TutorialCS.sln');">
+  <img src="images/icon_movies_wpf.png" width="64" height="64" alt="Movies"/>Find Movies</a>
+  - This simple app connects to Netflix to find a list of movies that match your search criteria.<br />
+  <a href="http://go.microsoft.com/fwlink/?LinkId=203988">Walkthrough</a> [online] - shows how to make
+  the app asynchronous, so it doesn't freeze the UI.<br />
+  <a href='#' onclick="return runcmd('..\\Samples\\(C# 101) Tutorial walkthrough\\TutorialCS.sln');">C#</a> /
+  <a href='#' onclick="return runcmd('..\\Samples\\(VB 101) Tutorial walkthrough\\TutorialVB.sln');">VB</a> - source code that
+  accompanies the walkthrough.</i>
+</td>
+
+</tr>
+
+<tr>
+<td colspan="4" style="background-color:rgb(150,190,250);">
+<h2 style="margin-bottom: 0;">Samples</h2>
+<p style="margin-top:0;">(under
+<a href="#" onclick="return runcmd('..\\Samples');">My Documents &gt; Microsoft Visual Studio Async CTP &gt; Samples</a>)
+</td>
+</tr>
+<tr> 
+
+<td style="width:25%"> 
+  <a href="#" onclick="return runeither('..\\Samples\\(VB 101) AsyncSamples\\AsyncSamplesVB.sln', '..\\Samples\\(C# 101) AsyncSamples\\AsyncSamplesCS.sln');">
+  <img src="images/icon_101.png"/>101 Asyncs</a> -  
+  Remember the 101 LINQ samples? You'll like this!
+  Many of the code snippets also show versions "before" and "after" Async.
+</td> 
+
+<td style="width:25%"> 
+  <a href='#' onclick="return runeither('..\\Samples\\(VB Windows Phone) Netflix\\Netflix.sln', '..\\Samples\\(C# Windows Phone) Netflix\\Netflix.sln');">
+  <img src="images/icon_movies_phone.png"/>Windows Phone</a> - uses async for an 
+    easier way to code a responsive UI, in this movie-finding phone application.
+</td> 
+
+<td style="width:25%"> 
+  <a href="#" onclick="return runeither('..\\Samples\\(VB Anders) Rss Aggregator\\RssAggregator.sln', '..\\Samples\\(C# Anders) Rss Aggregator\\RssAggregator.sln');">
+  <img src="images/icon_asp.png"/>ASP.NET</a> - 
+  The Async CTP makes for an easier way to create async web sites. These scale better under load.
+</td> 
+
+<td style="width:25%"> 
+  <a href="#" onclick="return runeither('..\\Samples\\(VB Game) PaddleGame\\PaddleGame.sln', '..\\Samples\\(C# Game) PaddleGame2\\PaddleGame2.sln');">
+  <img src="images/icon_paddlegame2.png"/>PaddleGame</a> - 
+  This game uses "await" to simplify its control structure --
+  rather than an explicit state machine, async lets it just use while loops 
+  and if blocks.
+</td> 
+
+
+</tr> 
+<tr> 
+
+
+<td style="width:25%"> 
+  <a href='#' onclick="return runeither('..\\Samples\\(VB Testing) Unit Testing\\Unit Testing VB.sln', '..\\Samples\\(C# Testing) Unit Testing\\Unit Testing CS.sln');">
+  <img src="images/icon_testing.png"/>Unit Tests</a> - Ways to do unit testing of async code.
+</td> 
+
+<td style="width:25%"> 
+  <a href='#' onclick="return runeither('..\\Samples\\(VB Windows Phone) Concert Finder\\Concert Finder.sln', '..\\Samples\\(C# Windows Phone) Concert Finder\\Concert Finder.sln');">
+  <img src="images/icon_concert.png"/>Concert Finder</a> - This Phone app uses async to look for concerts.
+</td> 
+
+<td>
+  <a href='#' onclick="return runeither('..\\Samples\\(VB Silverlight) Netflix MVVM\\NetflixAppMVVM.sln', '..\\Samples\\(C# Silverlight) Netflix MVVM\\NetflixApp.sln');">
+  <img src="images/icon_movies_mvvm.png"/>MVVM</a> - shows how async composes in a 
+    Silverlight MVVM movie finder.</td>
+
+<td>
+  <a href='#' onclick="return runeither('..\\Samples\\(VB WinForms) Game of Life\\GameOfLife.sln', '..\\Samples\\(C# WinForms) Game of Life\\GameOfLife.sln');">
+  <img src="images/icon_gameoflife.png"/>Life</a> - 
+  A smoother UI, by computing each frame on a background thread and awaiting it.
+</td>
+
+
+</tr>
+<tr>
+
+
+<td style="width:25%"> 
+  <a href='#' onclick="return runeither('..\\Samples\\(VB Anders) Netflix Sync vs Async\\NetflixVB.sln', '..\\Samples\\(C# Anders) Netflix Sync vs Async\\NetflixCS.sln');">
+  <img src="images/icon_movies_wpf.png"/>Sync vs Async</a> - How does async change the way you code? Before and after.
+</td> 
+
+<td style="width:25%"> 
+  <a href='#' onclick="return runeither('..\\Samples\\(VB Windows Phone) Async Background Threads\\AsyncBackgroundThreads.sln', '..\\Samples\\(C# Windows Phone) Async Background Threads\\AsyncPhoneBackgroundThreads.sln');">
+  <img src="images/icon_threads.png"/>Phone threads</a> - How async works with background threads on the phone.
+</td> 
+
+<td>
+  <a href='#' onclick="return runeither('..\\Samples\\(VB WCF) Stock Quotes\\WCFClientAndServerTasks.sln', '..\\Samples\\(C# WCF) Stock Quotes\\WCFClientAndServerTasks.sln');">
+  <img src="images/icon_stockquotes.png"/>WCF</a> -
+  Async makes for easier client-server communication, here to get stock quotes.
+</td>
+
+<td>
+  <a href='#' onclick="return runeither('..\\Samples\\(VB WPF) Boids\\Boids.sln', '..\\Samples\\(C# WPF) Boids\\Boids.sln');">
+  <img src="images/icon_boids.png"/>Boids</a> - 
+  uses "await" to locally implement timed changes in the simulation.
+</td>
+
+
+</tr>
+<tr>
+
+
+<td>
+  <a href='#' onclick="return runeither('..\\Samples\\(VB Xpert) CancellationAndProgress\\ProgressAndCancellationVB.sln', '..\\Samples\\(C# Xpert) CancellationAndProgress\\ProgressAndCancellation.sln');">
+  <img src="images/icon_progress.png"/>Progress</a> - 
+  advanced techniques to "pull" progress reports from a long-running task.
+</td>
+
+<td>
+  <a href='#' onclick="return runeither('..\\Samples\\(VB Dataflow) Real Estate\\RealEstate.sln', '..\\Samples\\(C# Dataflow) Real Estate\\RealEstate.sln');">
+  <img src="images/icon_realestate.png"/>DataFlow</a> - 
+  Uses async "Dataflow" to model interacting concurrent agents.
+</td>
+
+<td>
+  <a href='#' onclick="return runeither('..\\Samples\\(VB Excel) OptionPricing\\OptionPricingVB.sln', '..\\Samples\\(C# Excel) OptionPricing\\OptionPricing.sln');">
+  <img src="images/icon_excel.png"/>Excel</a> -
+  This sheet runs heavy calcul- ations but stays responsive.
+</td>
+
+<td>
+  <a href='#' onclick="return runeither('..\\Samples\\(VB Dataflow) Dining Philosophers\\DiningPhilosophers.sln', '..\\Samples\\(C# Dataflow) Dining Philosophers\\DiningPhilosophers.sln');">
+  <img src="images/icon_philosophers.png"/>Philosophers</a> - 
+  an async/dataflow take on the classic 'dining philosophers' exercise.
+</td>
+
+
+
+
+</tr>
+
+<tr>
+<td colspan="4" style="background-color:rgb(150,190,250);">
+<h2 style="margin-bottom: 0;">Documentation</h2>
+<p style="margin-top: 0;">(To use Async in your own projects,
+reference 
+<a href="#" onclick="return runcmd('..\\Samples');">AsyncCtpLibrary.dll</a>
+from the Samples directory, or AsyncCtpLibrary_Silverlight.dll</b>.
+</td>
+
+</tr>
+
+
+<tr>
+
+<td colspan="2" style="width:420px;">
+  <a href="#" onclick="return runcmd('(Whitepaper) Asynchrony in .NET.docx');">
+  <img src="images/icon_word.png"/>White-paper overview about Async</a> -
+  a high-level introduction. This paper explains what's wrong with the async
+  world today, and how the Async CTP will help.
+</td>
+
+<td colspan="2" style="width:420px;">
+  <a href="#" onclick="return runcmd('(Framework) Task-based Asynchronous Pattern.docx');">
+  <img src="images/icon_dotnet.png"/>The new Async Framework API pattern</a> -
+  Documentation on the new framework types that support Async, plus
+  the types that the compiler's "async" feature binds to.
+</td>
+
+</tr>
+<tr>
+
+<td colspan="2" style="width:420px;">
+  <a href="#" onclick="return runcmd('(C# Spec) Asynchronous Functions.docx');">
+  <img src="images/icon_csharp.png">C# language spec</a> -
+  the specification for the "async" and "await" keywords.
+</td>
+
+<td colspan="2" style="width:420px;">
+  <a href="#" onclick="return runcmd('(VB Spec) Asynchronous and Iterator Functions.docx');">
+  <img src="images/icon_vb.png">VB language spec</a> -
+  for the Async, Await, Iterator and Yield keywords.
+</td>
+
+</tr>
+<tr>
+
+<td colspan="2" style="width:420px;">
+  <a href="#" onclick="return runcmd('(Dataflow) Introduction to TPL Dataflow.docx');">
+  <img src="images/icon_word.png">TPL Dataflow</a> -
+  an introduction to the new library from TPL, for building concurrent applications.<br />
+  Also <a href="#" onclick="return runcmd('(Dataflow) Reference.chm');">Reference.chm</a>
+</td>
+
+<td colspan="2" style="width:420px;">
+  <img src="images/icon_internet.png"/><a href="http://blogs.msdn.com/b/pfxteam/">Parallel Programming team blog</a><br />
+  <a href="http://blogs.msdn.com/b/ericlippert/">C# - Eric Lippert's blog</a><br />
+  <a href="http://blogs.msdn.com/b/lucian/">VB - Lucian Wischik's blog</a>
+</td>
+
+</tr>
+</table>
+
+<p><b>PRIVACY NOTICE</b><br />Many of the samples above request data from Internet services,
+such as Netflix, in order to demonstrate asynchronous network requests.</p>
+
+<p><b>NOTE ON "AS IS" LICENSE</b></br/>
+<i>While the Async CTP license does not prevent you using it at your own risk in production environments,
+we advise you not to.</i>
+The goal of this CTP is solely to gather feedback on our intended async design.
+We did not design or build it to be used in production environments, and did not test it
+as thoroughly as is needed for use in production environments, and we believe it has too many flaws
+to be fit for use in production environments.
+We gratefully appreciate feedback on the Async CTP, but we do not plan to make any fixes
+to the Async CTP itself:
+the fixes we make will only appear in the eventual supported released product.</p>
+
+
+<p><b>KNOWN ISSUES</b></p> 
+<ol>
+<li><b>Asynchrony does <i>NOT</i> imply background thread</b>. Merely sticking the "Async" modifier will not make
+a method run on the background thread. That is correct and by design. If you want to run code on a background
+thread, use TaskEx.Run(). Please read the overview for an explanation of asynchrony.</li>
+<li><b>Debugging</b> is not yet implemented.</li>
+<ol>
+<li>Exceptions: please go to Tools &gt; Options &gt; Debugging and disable "Just My Code". (Otherwise,
+you'll be warned about unhandled exceptions even when they are handled).</li>
+<li>Stepping - Pressing  "F10" on an Await statement doesn’t currently do what it should. 
+<li>Local variables - in VB, local variables in async+iterator methods don't currently show up in VB's watch window and you can't inspect them.</li>
+</ol>
+<li><b>Framework extensions</b></li>
+<ol>
+<li><b>Await TaskEx.Delay</b>(ms) is the async equivalent of Thread.Sleep(ms). If you
+forget the "await" keyword here, it will create a task that delays, but your 
+own function will carry on immediately – usually not the intention!
+<li><b>Await WebClient.DownloadStringTaskAsync</b>(uri) is the async equivalent of
+WebClient.DownloadStringAsync(uri)
+<li>TaskEx - this CTP uses System.Threading.Tasks.TaskEx for its additions to the normal System.Threading.Tasks.Task. 
+That's because we didn’t want to modify existing framework DLLs for the CTP. TaskEx will not be their permanent home.
+</ol>
+<li><b>Language issues</b> - there are several corners of the async feature that are not yet implemented in VB or C#.</li>
+<ol>
+<li>All the new keywords will be contextual keywords so as to avoid backwards-compatibility breaks. But in the current CTP,
+they're currently reserved keywords.</li>
+<li>In edge cases it gets the wrong order of evaluation. For instance, "f() + await 
+g()" will evaluate g() before f(). In particular, for a given statement, it 
+evaluates all "await" subexpressions prior to the rest of the statement. 
+<li>Overload resolution is not yet implemented for async or iterator lambdas.
+For instance, if there are two overloads f(Action) and f(Func&lt;Task&gt;) and you invoke it with "f(async delegate {})"
+then it should pick the latter but currently picks the former.<li>Generic method inference is not yet implemented for async or iterator lambdas.
+For instance, if there a method g&lt;T&gt;(Func&lt;T&gt;)
+and you invoke it with "f(async delegate {return 5;})", then it should infer T=integer but currently doesn't
+<li>Async expression lambdas are not yet implemented in the current CTP</li>
+<li>Late-bound await expressions are not yet implemented in the current CTP</li>
+</ol>
+
+</ol> 
+<p><b>UNINSTALL</b></p> 
+<ol><li>Uninstall is under <b>Start &gt; Control Panel &gt; Uninstall &gt; View installed updates</b> - search for all the
+updates with "Async" in their name.
+</ol> 
+
+<table id="popup" style="z-index:1; position:absolute; background-color:white; color:black; display:none; width:4em;"
+  onmouseleave="document.getElementById('popup').style.display='none';">
+<tr><td style="padding: 1ex;"><a href="#" id="popup1">C#</a></td><td style="padding: 1ex;"><a href="#" id="popup2">VB</a></td></tr>
+</table>
+
+</body> 
+</html> 
