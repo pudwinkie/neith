@@ -39,6 +39,9 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AsyncCtpLibrary">
+      <HintPath>..\..\Async-CTP\samples\AsyncCtpLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="Mono.Zeroconf, Version=4.0.0.90, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="Mono.Zeroconf.Providers.Bonjour, Version=4.0.0.90, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="PresentationCore" />

@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AsyncCtpLibrary">
+      <HintPath>..\..\..\externals\Async-CTP\samples\AsyncCtpLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.0.0.0\lib\NET40\NLog.dll</HintPath>
     </Reference>

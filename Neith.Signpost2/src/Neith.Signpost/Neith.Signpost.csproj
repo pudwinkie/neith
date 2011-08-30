@@ -66,6 +66,9 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AsyncCtpLibrary">
+      <HintPath>..\..\..\externals\Async-CTP\samples\AsyncCtpLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Expression.Effects" />
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.0.0.0\lib\NET40\NLog.dll</HintPath>
