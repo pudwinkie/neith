@@ -10,8 +10,8 @@ namespace Neith.Logger.Parsers
     /// </summary>
     public static class ParserUtil
     {
-        private const byte CR = 0x0d;
-        private const byte LF = 0x0a;
+        public const byte CR = 0x0d;
+        public const byte LF = 0x0a;
         private const int INVALID_INDEX = -1;
         private static readonly ArraySegment<byte> ZERO_SEG = new ArraySegment<byte>(new byte[0]);
 
@@ -72,6 +72,17 @@ namespace Neith.Logger.Parsers
             remain = new ArraySegment<byte>(seg.Array, seg.Offset + size, seg.Count - size);
             buffer.Add(addSeg.ToArray());
             return true;
+        }
+
+        /// <summary>
+        /// 指定場所の要素を返します。
+        /// </summary>
+        /// <param name="seg"></param>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        public static byte ElementAt(this ArraySegment<byte> seg,int index)
+        {
+            return seg.Array[seg.Offset + index];
         }
 
 

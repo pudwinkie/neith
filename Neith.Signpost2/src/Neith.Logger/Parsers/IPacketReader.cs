@@ -13,10 +13,12 @@ namespace Neith.Logger.Parsers
     {
         /// <summary>
         /// 指定されたバッファにパケットを読み込み、結果を返します。
+        /// 1byte以上のデータを返すことを保証します。
         /// </summary>
-        /// <param name="buffers">バッファ</param>
-        /// <param name="langth">最大読み込みサイズ</param>
-        /// <returns>読み込んだバイト数。</returns>
-        Task<int> ReceiveTaskAsync(IList<ArraySegment<byte>> buffers, int langth);
+        /// <param name="buffer">バッファ</param>
+        /// <returns>読み込んだデータ。</returns>
+        Task<ArraySegment<byte>> ReadAsync(ArraySegment<byte> buffer);
+
+
     }
 }
