@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Neith.Logger.Parsers
+namespace Neith.Logger.GNTP.GNTP.Parsers
 {
     /// <summary>
     /// 解析単位パケット。１行又は１区切りのバイトデータ。

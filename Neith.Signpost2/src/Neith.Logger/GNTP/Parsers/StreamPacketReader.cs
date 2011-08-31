@@ -6,7 +6,7 @@ using System.Text;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Neith.Logger.Parsers
+namespace Neith.Logger.GNTP.Parsers
 {
     public class StreamPacketReader : IPacketReader
     {

@@ -78,17 +78,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GNTP\GNTPException.cs" />
     <Compile Include="Model\MessageItem.cs" />
     <Compile Include="Model\NeithLogNotify.cs" />
     <Compile Include="Model\NotificationItem.cs" />
     <Compile Include="Model\RegisterItem.cs" />
     <Compile Include="Model\ResponseItem.cs" />
     <Compile Include="Model\SubscriberItem.cs" />
-    <Compile Include="Parsers\IPacketReader.cs" />
-    <Compile Include="Parsers\Packet.cs" />
-    <Compile Include="Parsers\ParserUtil.cs" />
-    <Compile Include="Parsers\StreamPacketReader.cs" />
-    <Compile Include="Parsers\Stage1.cs" />
+    <Compile Include="GNTP\Parsers\IPacketReader.cs" />
+    <Compile Include="GNTP\Parsers\Packet.cs" />
+    <Compile Include="GNTP\Parsers\ParserException.cs" />
+    <Compile Include="GNTP\Parsers\ParserUtil.cs" />
+    <Compile Include="GNTP\Parsers\StreamPacketReader.cs" />
+    <Compile Include="GNTP\Parsers\Stage1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestSorter.cs" />
     <Compile Include="RequestSorterExtensions.cs" />

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Neith.Logger.Parsers
+namespace Neith.Logger.GNTP.Parsers
 {
     /// <summary>
     /// パーサ部品

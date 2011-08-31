@@ -9,66 +9,76 @@ namespace Neith.Growl.Connector
     /// </summary>
     public static class ErrorCode
     {
-        /*
-        /// <summary>
-        /// An unknown error or an error not covered by one of the other error codes
-        /// </summary>
-        public const int UNKNOWN = 100;
-         * */
-
-        /// <summary>
-        /// The server timed out waiting for the request to complete
-        /// </summary>
+        /// <summary>タイムアウト。</summary>
         public const int TIMED_OUT = 200;
 
-        /// <summary>
-        /// The server was unavailable or the client could not reach the server for any reason
-        /// </summary>
+        /// <summary>通信障害。</summary>
         public const int NETWORK_FAILURE = 201;
 
-        /// <summary>
-        /// The request contained an unsupported directive, invalid headers or values, or was otherwise malformed
-        /// </summary>
+        /// <summary>サポートしないヘッダ又は値が設定されました。</summary>
         public const int INVALID_REQUEST = 300;
 
-        /// <summary>
-        /// The request was not a GNTP request
-        /// </summary>
+        /// <summary>GNTPリクエストではありません。</summary>
         public const int UNKNOWN_PROTOCOL = 301;
 
-        /// <summary>
-        /// The request specified an unknown or unsupported GNTP version
-        /// </summary>
+        /// <summary>未対応のGNTPバージョンです。</summary>
         public const int UNKNOWN_PROTOCOL_VERSION = 302;
 
-        /// <summary>
-        /// The request was missing required information
-        /// </summary>
+        /// <summary>ヘッダの必須項目が足りません。</summary>
         public const int REQUIRED_HEADER_MISSING = 303;
 
-        /// <summary>
-        /// The request supplied a missing or wrong password/key or was otherwise not authorized
-        /// </summary>
+        /// <summary>認証に失敗しました。</summary>
         public const int NOT_AUTHORIZED = 400;
 
-        /// <summary>
-        /// Application is not registered to send notifications
-        /// </summary>
+        /// <summary>未登録のアプリケーションからの通知です。</summary>
         public const int UNKNOWN_APPLICATION = 401;
 
-        /// <summary>
-        /// Notification type is not registered by the application
-        /// </summary>
+        /// <summary>アプリケーション登録時に指定されていない通知です。</summary>
         public const int UNKNOWN_NOTIFICATION = 402;
 
-        /// <summary>
-        /// The original request was already processed by this receiver (Normally, a request was forwarded back to a machine that already forwarded it)
-        /// </summary>
+        /// <summary>同一通知を既に受信しています。</summary>
         public const int ALREADY_PROCESSED = 403;
 
-        /// <summary>
-        /// An internal server error occurred while processing the request
-        /// </summary>
+        /// <summary>内部エラーが発生しました。</summary>
         public const int INTERNAL_SERVER_ERROR = 500;
+    }
+
+    /// <summary>
+    /// GNTPレスポンスのエラータイプ。
+    /// </summary>
+    public enum ErrorType
+    {
+        /// <summary>タイムアウト。</summary>
+        TimedOut = ErrorCode.TIMED_OUT,
+
+        /// <summary>通信障害。</summary>
+        NetworkFailure = ErrorCode.NETWORK_FAILURE,
+
+        /// <summary>サポートしないヘッダ又は値が設定されました。</summary>
+        InvalidRequest = ErrorCode.INVALID_REQUEST,
+
+        /// <summary>GNTPリクエストではありません。</summary>
+        UnknownProtocol = ErrorCode.UNKNOWN_PROTOCOL,
+
+        /// <summary>未対応のGNTPバージョンです。</summary>
+        UnknownProtocolVersion = ErrorCode.UNKNOWN_PROTOCOL_VERSION,
+
+        /// <summary>ヘッダの必須項目が足りません。</summary>
+        RequiredHeaderMissing = ErrorCode.REQUIRED_HEADER_MISSING,
+
+        /// <summary>認証に失敗しました。</summary>
+        NotAuthorized = ErrorCode.NOT_AUTHORIZED,
+
+        /// <summary>未登録のアプリケーションからの通知です。</summary>
+        UnknownApplication = ErrorCode.UNKNOWN_APPLICATION,
+
+        /// <summary>アプリケーション登録時に指定されていない通知です。</summary>
+        UnknownNotification = ErrorCode.UNKNOWN_NOTIFICATION,
+
+        /// <summary>同一通知を既に受信しています。</summary>
+        AlreadyProcessed = ErrorCode.ALREADY_PROCESSED,
+
+        /// <summary>内部エラーが発生しました。</summary>
+        InternalServerError = ErrorCode.INTERNAL_SERVER_ERROR,
     }
 }

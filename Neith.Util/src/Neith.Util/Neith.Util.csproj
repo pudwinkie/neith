@@ -67,6 +67,7 @@
     <Compile Include="BigEndianBitConverter.cs" />
     <Compile Include="Bool2DimCollection.cs" />
     <Compile Include="BoolCollection.cs" />
+    <Compile Include="ByteSearch.cs" />
     <Compile Include="CodeDom\ExpressionBuilder\BuilderArrayIndex.cs" />
     <Compile Include="CodeDom\ExpressionBuilder\BuilderBinaryOperator.cs" />
     <Compile Include="CodeDom\ExpressionBuilder\BuilderField.cs" />
