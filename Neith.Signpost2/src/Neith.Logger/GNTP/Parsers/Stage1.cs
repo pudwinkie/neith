@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Neith.Growl.Connector;
+using Neith.Util;
 
-namespace Neith.Logger.Parsers
+namespace Neith.Logger.GNTP.Parsers
 {
     /// <summary>
     /// パーサステージ１。暗号解釈を担当する。
@@ -27,6 +29,8 @@ namespace Neith.Logger.Parsers
         private const int BUFFER_SIZE_L = 4096;
         private const int BUFFER_SIZE_S = 256;
         private static readonly byte[] ARRAY_LF = new byte[] { ParserUtil.LF };
+        private static readonly ByteSearch ScanCRLFCRLF
+            = new ByteSearch(new byte[] { ParserUtil.CR, ParserUtil.LF, ParserUtil.CR, ParserUtil.LF });
 
         private readonly ArraySegment<byte> BufferL;
         private readonly ArraySegment<byte> BufferS;
@@ -34,6 +38,11 @@ namespace Neith.Logger.Parsers
         private ArraySegment<byte> BufferRemain { get; set; }
 
         public IPacketReader Reader { get; private set; }
+
+        public Key Key { get; set; }
+
+        /// <summary>平文ならtrue</summary>
+        public bool IsPlainText { get { return Key.EncryptionAlgorithm == Cryptography.SymmetricAlgorithmType.PlainText; } }
 
         private Stage1()
         {
@@ -132,6 +141,113 @@ namespace Neith.Logger.Parsers
             }
             return Encoding.UTF8.GetString(textBuffer.ToCombineArray());
         }
+
+
+        /// <summary>
+        /// 改行を検出。改行でなければInvalidCharException。
+        /// </summary>
+        /// <exception cref="InvalidCharException">改行コードではない</exception>
+        /// <returns></returns>
+        public async void ReadCRLF()
+        {
+            var count = 0;
+            while (true) {
+                var index = 0;
+                var read = await ReadS();
+                if (count == 0) {
+                    if (ParserUtil.CR != read.ElementAt(index))
+                        throw new InvalidCharException();
+                    index++;
+                    count++;
+                }
+                if (count == 1 && read.Count > index) {
+                    if (ParserUtil.LF != read.ElementAt(index))
+                        throw new InvalidCharException();
+                    UpdateRemain(index + 1);
+                    return;
+                }
+                ClearRemain();
+            }
+        }
+
+        /// <summary>
+        /// 空改行で終わるテキストブロックを読み込みます。
+        /// </summary>
+        /// <returns></returns>
+        public Task<string> ReadTextBlock()
+        {
+            if (IsPlainText) return ReadTextBlockPlain();
+            else return ReadTextBlockEncryption();
+        }
+
+        /// <summary>
+        /// 指定長のバイナリ領域を読み込みます。
+        /// </summary>
+        /// <returns></returns>
+        public Task<byte[]> ReadBinBlock(int count)
+        {
+            if (IsPlainText) return ReadBinBlockPlain(count);
+            else return ReadBinBlockEncryption(count);
+        }
+
+        #region 平文の読み込み処理
+
+        /// <summary>
+        /// [CRLF][CRLF]を検出するまで読み込み、テキストとして出力します。
+        /// </summary>
+        /// <returns></returns>
+        private async Task<string> ReadTextBlockPlain()
+        {
+            var textBuffer = new List<byte[]>();
+            var target = new List<ArraySegment<byte>>();
+            var targetCount = 0;
+            while (true) {
+                var read = await ReadL();
+                targetCount += read.Count;
+                if (targetCount < 4) {
+                    var a = new ArraySegment<byte>(read.ToArray());
+                    target.Add(a);
+                    continue;
+                }
+                target.Add(read);
+                var index = ScanCRLFCRLF.IndexOf(target.ToList());
+                if (index >= 0) {
+                    var count = index + 4;
+                    textBuffer.Add(target.ToCombineArray(count));
+                    UpdateRemain(count - (targetCount - read.Count));
+                    break;
+                }
+                ClearRemain();
+                target.Clear();
+                var tail = new byte[3];
+                Buffer.BlockCopy(read.Array, read.Offset + read.Count - 3, tail, 0, 3);
+                target.Add(new ArraySegment<byte>(tail));
+                targetCount = 3;
+            }
+            return Encoding.UTF8.GetString(textBuffer.ToCombineArray());
+        }
+
+        private async Task<byte[]> ReadBinBlockPlain(int count)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        #endregion
+        #region 暗号の読み込み処理
+
+        private async Task<string> ReadTextBlockEncryption()
+        {
+            throw new NotImplementedException();
+        }
+
+
+        private async Task<byte[]> ReadBinBlockEncryption(int count)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
 
     }
 }

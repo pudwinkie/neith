@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Neith.Logger.Parsers
+namespace Neith.Logger.GNTP.Parsers
 {
     /// <summary>
     /// パケット読込インターフェース。
