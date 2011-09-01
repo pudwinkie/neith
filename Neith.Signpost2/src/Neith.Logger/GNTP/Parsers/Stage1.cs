@@ -41,6 +41,8 @@ namespace Neith.Logger.GNTP.Parsers
 
         public Key Key { get; set; }
 
+        public byte[] IV { get; set; }
+
         /// <summary>平文ならtrue</summary>
         public bool IsPlainText { get { return Key.EncryptionAlgorithm == Cryptography.SymmetricAlgorithmType.PlainText; } }
 
@@ -110,7 +112,8 @@ namespace Neith.Logger.GNTP.Parsers
             var array = BufferRemain.Array;
             var offset = BufferRemain.Offset + readCount;
             var count = BufferRemain.Count - readCount;
-            BufferRemain = new ArraySegment<byte>(array, offset, count);
+            if (count == 0) ClearRemain();
+            else BufferRemain = new ArraySegment<byte>(array, offset, count);
         }
 
 
@@ -118,7 +121,7 @@ namespace Neith.Logger.GNTP.Parsers
         /// ヘッダ行（平文）を検出して読み出す。
         /// </summary>
         /// <returns></returns>
-        public async Task<string> ReadHeaderAsync()
+        public async Task<string> ReadHeader()
         {
             var textBuffer = new List<byte[]>();
             var isLastCR = false;
@@ -174,20 +177,20 @@ namespace Neith.Logger.GNTP.Parsers
         /// 空改行で終わるテキストブロックを読み込みます。
         /// </summary>
         /// <returns></returns>
-        public Task<string> ReadTextBlock()
+        public async Task<string> ReadTextBlock()
         {
-            if (IsPlainText) return ReadTextBlockPlain();
-            else return ReadTextBlockEncryption();
+            if (IsPlainText) return await ReadTextBlockPlain();
+            else return await ReadTextBlockEncryption();
         }
 
         /// <summary>
         /// 指定長のバイナリ領域を読み込みます。
         /// </summary>
         /// <returns></returns>
-        public Task<byte[]> ReadBinBlock(int count)
+        public async Task<byte[]> ReadBinBlock(int count)
         {
-            if (IsPlainText) return ReadBinBlockPlain(count);
-            else return ReadBinBlockEncryption(count);
+            if (IsPlainText) return await ReadBinBlockPlain(count);
+            else return await ReadBinBlockEncryption(count);
         }
 
         #region 平文の読み込み処理
@@ -202,14 +205,17 @@ namespace Neith.Logger.GNTP.Parsers
             var target = new List<ArraySegment<byte>>();
             var targetCount = 0;
             while (true) {
+                // ターゲットが4byteを超えるまで読み込む。
                 var read = await ReadL();
                 targetCount += read.Count;
                 if (targetCount < 4) {
                     var a = new ArraySegment<byte>(read.ToArray());
                     target.Add(a);
+                    ClearRemain();
                     continue;
                 }
                 target.Add(read);
+                // 検索と発見時の処理
                 var index = ScanCRLFCRLF.IndexOf(target.ToList());
                 if (index >= 0) {
                     var count = index + 4;
@@ -217,19 +223,41 @@ namespace Neith.Logger.GNTP.Parsers
                     UpdateRemain(count - (targetCount - read.Count));
                     break;
                 }
-                ClearRemain();
+                // 発見できなければ最後の3byteを切りだして次の検索へ
                 target.Clear();
                 var tail = new byte[3];
                 Buffer.BlockCopy(read.Array, read.Offset + read.Count - 3, tail, 0, 3);
                 target.Add(new ArraySegment<byte>(tail));
                 targetCount = 3;
+                ClearRemain();
             }
             return Encoding.UTF8.GetString(textBuffer.ToCombineArray());
         }
 
+        /// <summary>
+        /// 固定ブロックの読み込み
+        /// </summary>
+        /// <param name="count"></param>
+        /// <returns></returns>
         private async Task<byte[]> ReadBinBlockPlain(int count)
         {
-            throw new NotImplementedException();
+            var textBuffer = new List<byte[]>();
+            while (count > 0) {
+                ArraySegment<byte> read;
+                if (count > BUFFER_SIZE_S) read = await ReadL();
+                else read = await ReadS();
+                count -= read.Count;
+                if (count >= 0) {
+                    textBuffer.Add(read.ToArray());
+                    ClearRemain();
+                }
+                else {
+                    var readCount = read.Count + count;
+                    textBuffer.Add(read.ToArray(readCount));
+                    UpdateRemain(readCount);
+                }
+            }
+            return textBuffer.ToCombineArray();
         }
 
 
@@ -238,13 +266,39 @@ namespace Neith.Logger.GNTP.Parsers
 
         private async Task<string> ReadTextBlockEncryption()
         {
-            throw new NotImplementedException();
+            var textBuffer = new List<byte>();
+            var target = new byte[16];
+            var targetOffset = 0;
+            while (true) {
+                // 16byte読み込む
+                var read = await ReadS();
+                var readCount = read.Count;
+                if (readCount > 16 - targetOffset) readCount = 16 - targetOffset;
+                Buffer.BlockCopy(read.Array, read.Offset, target, targetOffset, readCount);
+                targetOffset += readCount;
+                UpdateRemain(readCount);
+                if (targetOffset < 16) continue;
+                // 復号
+                var dec = Key.Decrypt(target, IV);
+                var index = Array.IndexOf<byte>(dec, 0);
+                if (index >=0) {
+                    textBuffer.AddRange(dec.Take(index));
+                    break;
+                }
+                textBuffer.AddRange(dec);
+                targetOffset = 0;
+            }
+            return Encoding.UTF8.GetString(textBuffer.ToArray()) + "\r\n\r\n";
         }
-
 
         private async Task<byte[]> ReadBinBlockEncryption(int count)
         {
-            throw new NotImplementedException();
+            // データは16byte単位でパディングされるため、サイズの調整
+            var readCount = (count / 16 + count % 16 == 0 ? 0 : 1) * 16;
+            var read = await ReadBinBlockPlain(readCount);
+            var dec = Key.Decrypt(read, IV);
+            var seg = new ArraySegment<byte>(dec, 0, count);
+            return seg.ToArray();
         }
 
         #endregion
