@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Neith.Logger.GNTP.Parsers
 {
@@ -84,8 +85,6 @@ namespace Neith.Logger.GNTP.Parsers
         {
             return seg.Array[seg.Offset + index];
         }
-
-
 
     }
 }
