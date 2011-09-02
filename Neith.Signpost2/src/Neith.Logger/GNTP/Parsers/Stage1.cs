@@ -28,6 +28,8 @@ namespace Neith.Logger.GNTP.Parsers
     {
         private const int BUFFER_SIZE_L = 4096;
         private const int BUFFER_SIZE_S = 256;
+        private const int CryptoBlockSize = 16;
+
         private static readonly byte[] ARRAY_LF = new byte[] { ParserUtil.LF };
         private static readonly ByteSearch ScanCRLFCRLF
             = new ByteSearch(new byte[] { ParserUtil.CR, ParserUtil.LF, ParserUtil.CR, ParserUtil.LF });
@@ -267,34 +269,54 @@ namespace Neith.Logger.GNTP.Parsers
         private async Task<string> ReadTextBlockEncryption()
         {
             var textBuffer = new List<byte>();
-            var target = new byte[16];
+            var target = new byte[CryptoBlockSize];
             var targetOffset = 0;
             while (true) {
-                // 16byte読み込む
+                // CryptoBlockSize読み込む
                 var read = await ReadS();
                 var readCount = read.Count;
-                if (readCount > 16 - targetOffset) readCount = 16 - targetOffset;
+                if (readCount > CryptoBlockSize - targetOffset)
+                    readCount = CryptoBlockSize - targetOffset;
                 Buffer.BlockCopy(read.Array, read.Offset, target, targetOffset, readCount);
                 targetOffset += readCount;
                 UpdateRemain(readCount);
-                if (targetOffset < 16) continue;
+                if (targetOffset < CryptoBlockSize) continue;
                 // 復号
                 var dec = Key.Decrypt(target, IV);
-                var index = Array.IndexOf<byte>(dec, 0);
-                if (index >=0) {
-                    textBuffer.AddRange(dec.Take(index));
+                // パディングなら終了
+                var padSize = CryptoBlockSize;
+                for (var i = 0; i < CryptoBlockSize; i++) {
+                    if (dec[i] == padSize) continue;
+                    else if (dec[i] == CryptoBlockSize - i) padSize = CryptoBlockSize - i;
+                    else padSize = CryptoBlockSize - i - 1;
+                }
+                if (padSize > 0) {
+                    if (CryptoBlockSize > padSize) {
+                        textBuffer.AddRange(dec.Take(CryptoBlockSize - padSize));
+                    }
                     break;
                 }
                 textBuffer.AddRange(dec);
                 targetOffset = 0;
             }
-            return Encoding.UTF8.GetString(textBuffer.ToArray()) + "\r\n\r\n";
+            // テキスト取得＆CRLFCRLFで終わることを保証
+            var text = Encoding.UTF8.GetString(textBuffer.ToArray());
+            if (!text.EndsWith("\r\n\r\n")) {
+                var skipSize = 4;
+                if (text.EndsWith("\r\n")) {
+                    skipSize = 2;
+                    text += "\r\n";
+                }
+                else text += "\r\n\r\n";
+                var skipData = await ReadBinBlockPlain(skipSize);
+            }
+            return text;
         }
 
         private async Task<byte[]> ReadBinBlockEncryption(int count)
         {
-            // データは16byte単位でパディングされるため、サイズの調整
-            var readCount = (count / 16 + count % 16 == 0 ? 0 : 1) * 16;
+            // データはCryptoBlockSize単位でパディングされるため、サイズの調整
+            var readCount = (count / CryptoBlockSize + count % CryptoBlockSize == 0 ? 0 : 1) * CryptoBlockSize;
             var read = await ReadBinBlockPlain(readCount);
             var dec = Key.Decrypt(read, IV);
             var seg = new ArraySegment<byte>(dec, 0, count);

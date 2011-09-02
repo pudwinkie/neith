@@ -80,6 +80,7 @@
   <ItemGroup>
     <Compile Include="GNTP\GNTPException.cs" />
     <Compile Include="GNTP\Parsers\Stage2.cs" />
+    <Compile Include="GNTP\Parsers\Stage3.cs" />
     <Compile Include="Model\MessageItem.cs" />
     <Compile Include="Model\NeithLogNotify.cs" />
     <Compile Include="Model\NotificationItem.cs" />

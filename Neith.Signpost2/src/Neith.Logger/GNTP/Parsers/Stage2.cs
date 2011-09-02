@@ -8,6 +8,9 @@ using Neith.Growl.Connector;
 
 namespace Neith.Logger.GNTP.Parsers
 {
+    /// <summary>
+    /// パーサ：ステージ２。構文チェックを行う。
+    /// </summary>
     public class Stage2
     {
         /// <summary>
@@ -68,7 +71,7 @@ namespace Neith.Logger.GNTP.Parsers
         /// <summary>
         /// ヘッダを解釈します。
         /// </summary>
-        public async void ReadHeader()
+        public async Task<Stage2> ReadHeader()
         {
             var text = await Reader.ReadHeader();
             var m = RegHeader.Match(text);
@@ -80,6 +83,7 @@ namespace Neith.Logger.GNTP.Parsers
             KeyHashAlgorithm = m.Groups["KeyHashAlgorithm"].Value;
             KeyHash = m.Groups["KeyHash"].Value;
             Salt = m.Groups["Salt"].Value;
+            return this;
         }
 
         /// <summary>
