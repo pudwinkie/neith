@@ -82,7 +82,7 @@ namespace Neith.Logger.GNTP.Parsers
             IV = m.Groups["IV"].Value;
             KeyHashAlgorithm = m.Groups["KeyHashAlgorithm"].Value;
             KeyHash = m.Groups["KeyHash"].Value;
-            Salt = m.Groups["Salt"].Value;
+            Salt = m.Groups["Salt"].Value.ToUpper();
             return this;
         }
 
