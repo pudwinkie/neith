@@ -472,6 +472,9 @@ namespace Neith.Growl.Connector
         /// <returns><see cref="Cryptography.HashAlgorithmType"/></returns>
         public static Cryptography.HashAlgorithmType GetKeyHashType(string name)
         {
+            if (String.IsNullOrWhiteSpace(name)) {
+                return HashAlgorithmType.NONE;
+            }
             if (!String.IsNullOrEmpty(name) && hashTypes.ContainsKey(name))
                 return hashTypes[name];
             else
@@ -531,6 +534,11 @@ namespace Neith.Growl.Connector
         /// </summary>
         public enum HashAlgorithmType
         {
+            /// <summary>
+            /// None(0-bit)
+            /// </summary>
+            [DisplayName("NONE")]
+            NONE = 0,
             /// <summary>
             /// MD5 hash algorithm (128-bit)
             /// </summary>

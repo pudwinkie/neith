@@ -70,6 +70,9 @@
       <HintPath>..\..\..\externals\Async-CTP\samples\AsyncCtpLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Expression.Effects" />
+    <Reference Include="Microsoft.Surface, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Surface.Presentation, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Surface.Presentation.Generic, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="NLog">
       <HintPath>..\packages\NLog.2.0.0.0\lib\NET40\NLog.dll</HintPath>
     </Reference>
@@ -132,6 +135,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="MainSurfaceWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -157,6 +164,9 @@
     <Compile Include="Converters\ToVisibilityConverter.cs" />
     <Compile Include="LogWindow.xaml.cs">
       <DependentUpon>LogWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainSurfaceWindow.xaml.cs">
+      <DependentUpon>MainSurfaceWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
