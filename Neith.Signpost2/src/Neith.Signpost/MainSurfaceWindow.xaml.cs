@@ -34,6 +34,17 @@ namespace Neith.Signpost
             AddWindowAvailabilityHandlers();
         }
 
+        private void SurfaceWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+#if !DEBUG
+            WindowStyle = System.Windows.WindowStyle.None;
+            WindowState = System.Windows.WindowState.Maximized;
+#else
+            WindowStyle = System.Windows.WindowStyle.SingleBorderWindow;
+            WindowState = System.Windows.WindowState.Normal;
+#endif
+        }
+
         /// <summary>
         /// Occurs when the window is about to close. 
         /// </summary>
@@ -104,5 +115,6 @@ namespace Neith.Signpost
         {
             Application.Current.Shutdown();
         }
+
     }
 }
