@@ -7,8 +7,8 @@
   <Grid>
     <Image HorizontalAlignment="Left" Margin="0" VerticalAlignment="Bottom" Source="Images/neith.ico" Width="48" Height="48"/>
 
-    <s:ElementMenu Height="Auto" Margin="8,8,0,0" Width="Auto" ActivationMode="AlwaysActive" HorizontalAlignment="Left" VerticalAlignment="Bottom">
-      <s:ElementMenuItem d:LayoutOverrides="Width, Height" Header="終了" HorizontalAlignment="Left" VerticalAlignment="Center" Click="ElementMenuItem_Click" />
+    <s:ElementMenu Height="Auto" Margin="-24,0,0,-24" Width="Auto" ActivationMode="AlwaysActive" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="{x:Null}" Opacity="0">
+      <s:ElementMenuItem d:LayoutOverrides="Width, Height" Header="終了" HorizontalAlignment="Left" VerticalAlignment="Center" Click="ElementMenuItem_Click" Icon="{StaticResource IconClose}" />
     </s:ElementMenu>
 
   </Grid>

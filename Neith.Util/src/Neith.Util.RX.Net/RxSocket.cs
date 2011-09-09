@@ -21,10 +21,10 @@ namespace System.Net.Sockets
         /// <returns></returns>
         public static IObservable<Socket> RxAccept(this Socket socket)
         {
-            var async = Observable.FromAsyncPattern(
+            var rx = Observable.FromAsyncPattern(
                 (callback, state) => socket.BeginAccept(callback, state),
                 result => socket.EndAccept(result));
-            return Observable.Defer(async);
+            return Observable.Defer(rx);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace System.Net.Sockets
         public static IObservable<byte[]> RxReceive(this Socket socket, int maxSize, SocketFlags flags = SocketFlags.None)
         {
             var buf = new byte[maxSize];
-            var async = Observable.FromAsyncPattern(
+            var rx = Observable.FromAsyncPattern(
                 (callback, state) => socket.BeginReceive(buf, 0, maxSize, flags, callback, state),
                 result =>
                 {
@@ -70,7 +70,7 @@ namespace System.Net.Sockets
                     return buf.Copy(size);
                 });
             return Observable
-                .Defer(async)
+                .Defer(rx)
                 .Catch<byte[], ObjectDisposedException>(ex =>
                 {
                     return Observable.Empty<byte[]>();
@@ -93,10 +93,10 @@ namespace System.Net.Sockets
         /// <returns></returns>
         public static IObservable<int> RxSend(this IObservable<byte[]> rxBuf, Socket socket, SocketFlags flags = SocketFlags.None)
         {
-            var async = Observable.FromAsyncPattern<byte[], int>(
+            var rx = Observable.FromAsyncPattern<byte[], int>(
                 (buf, callback, state) => socket.BeginSend(buf, 0, buf.Length, flags, callback, state),
                 result => socket.EndSend(result));
-            return rxBuf.SelectMany(buf => async(buf));
+            return rxBuf.SelectMany(buf => rx(buf));
         }
 
     }
