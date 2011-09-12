@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.ComponentModel;
 
 namespace Neith.Signpost.Proxy
 {
@@ -19,9 +20,26 @@ namespace Neith.Signpost.Proxy
     /// </summary>
     public partial class SettingPage : UserControl
     {
+        public static object Setting { get { return _Setting.Value; } set { return; } }
+        private static readonly Lazy<object> _Setting = new Lazy<object>(() =>
+        {
+            if (DesignerProperties.GetIsInDesignMode(new DependencyObject())) return new DummySetting();
+            return Properties.Settings.Default;
+        });
+
         public SettingPage()
         {
+            if (DesignerProperties.GetIsInDesignMode(this)) DataContext = new DummySetting();
+            else DataContext = Properties.Settings.Default;
             InitializeComponent();
+        }
+
+        public class DummySetting : INotifyPropertyChanged
+        {
+            public string ChannelName { get { return _ChannelName; } set { _ChannelName = value; } }
+            private string _ChannelName = "DUMMY_ChannelName";
+
+            public event PropertyChangedEventHandler PropertyChanged;
         }
     }
 }
