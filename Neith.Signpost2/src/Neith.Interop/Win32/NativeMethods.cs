@@ -269,6 +269,10 @@ namespace Neith.Interop.Win32
             IntPtr wParam,
             IntPtr lParam);
 
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern int MapVirtualKey(int uCode, int uMapType);
+
         #endregion
     }
 
