@@ -102,52 +102,79 @@ namespace Neith.Interop.Win32
             return inputs;
         }
 
+        /// <summary>
+        /// Alt + ? を実行。
+        /// </summary>
+        /// <param name="c">組み合わせ文字。アルファベットの場合は大文字を使う。</param>
         public static void SendAlt(this char c)
         {
-            Key.LeftAlt.SendCtrlInput(c);
+          c.SendCtrlInput(Key.LeftAlt);
         }
+
+        /// <summary>
+        /// Ctrl + ? を実行。
+        /// </summary>
+        /// <param name="c">組み合わせ文字。アルファベットの場合は大文字を使う。</param>
         public static void SendCtrl(this char c)
         {
-            Key.LeftCtrl.SendCtrlInput(c);
+            c.SendCtrlInput(Key.LeftCtrl);
         }
+
+        /// <summary>
+        /// Shift + ? を実行。
+        /// </summary>
+        /// <param name="c">組み合わせ文字。アルファベットの場合は大文字を使う。</param>
         public static void SendShift(this char c)
         {
-            Key.LeftShift.SendCtrlInput(c);
+            c.SendCtrlInput(Key.LeftShift);
         }
 
 
-        public static void SendCtrlInput(this Key ctrlKey, char c)
+        public static void SendCtrlInput(this char c, params Key[] ctrlKeys)
         {
-            var ctrlVK = (ushort)KeyInterop.VirtualKeyFromKey(ctrlKey);
-            var ctrlSC = (ushort)MapVirtualKeyEx(ctrlVK, MAPVK_VK_TO_VSC, GetKeyboardLayout(0));
+            var layout=GetKeyboardLayout(0);
+            var qCtrl = from a in ctrlKeys
+                        let VK = (ushort)KeyInterop.VirtualKeyFromKey(a)
+                        let SC = (ushort)MapVirtualKeyEx(VK, MAPVK_VK_TO_VSC, layout)
+                        select new { VK, SC };
+            var aCtrl = qCtrl.ToArray();
 
             var charVK = (ushort)c;
             var charSC = (ushort)MapVirtualKey(charVK, 0);
 
-            var inputs = new INPUT[4];
+            var inputs = new INPUT[(aCtrl.Length+1)*2];
             var extraInfo = GetMessageExtraInfo();
             for (var i = 0; i < inputs.Length; i++) inputs[i].ki.dwExtraInfo = extraInfo;
 
-            inputs[0].type = INPUT_KEYBOARD;
-            inputs[0].ki.wVk = ctrlVK;
-            inputs[0].ki.wScan = ctrlSC;
-            inputs[0].ki.dwFlags = KEYEVENTF_EXTENDEDKEY;
-
-            inputs[1].type = INPUT_KEYBOARD;
-            inputs[1].ki.wVk = charVK;
-            inputs[1].ki.wScan = charSC;
-            inputs[1].ki.dwFlags = KEYEVENTF_EXTENDEDKEY;
-
-            inputs[2].type = INPUT_KEYBOARD;
-            inputs[2].ki.wVk = charVK;
-            inputs[2].ki.wScan = charSC;
-            inputs[2].ki.dwFlags = KEYEVENTF_KEYUP;
-
-            inputs[3].type = INPUT_KEYBOARD;
-            inputs[3].ki.wVk = ctrlVK;
-            inputs[3].ki.wScan = ctrlSC;
-            inputs[3].ki.dwFlags = KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP;
-
+            var j=0;
+            foreach (var a in aCtrl) {
+                inputs[j].type = INPUT_KEYBOARD;
+                inputs[j].ki.wVk = a.VK;
+                inputs[j].ki.wScan = a.SC;
+                inputs[j].ki.dwFlags = KEYEVENTF_EXTENDEDKEY;
+                j++;
+            }
+            {
+                inputs[j].type = INPUT_KEYBOARD;
+                inputs[j].ki.wVk = charVK;
+                inputs[j].ki.wScan = charSC;
+                inputs[j].ki.dwFlags = KEYEVENTF_EXTENDEDKEY;
+                j++;
+            }
+            {
+                inputs[j].type = INPUT_KEYBOARD;
+                inputs[j].ki.wVk = charVK;
+                inputs[j].ki.wScan = charSC;
+                inputs[j].ki.dwFlags = KEYEVENTF_KEYUP;
+                j++;
+            }
+            foreach (var a in aCtrl.Reverse()) {
+                inputs[j].type = INPUT_KEYBOARD;
+                inputs[j].ki.wVk = a.VK;
+                inputs[j].ki.wScan = a.SC;
+                inputs[j].ki.dwFlags = KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP;
+                j++;
+            }
             SendInput(inputs.Length, inputs, Marshal.SizeOf(typeof(INPUT)));
         }
 

@@ -12,8 +12,8 @@ namespace Neith.Signpost.Proxy
     public class SignpostProxy : BaseSignpostService
     {
 
-        public SignpostProxy(string name)
-            : base(name)
+        public SignpostProxy()
+            : base()
         {
 
         }

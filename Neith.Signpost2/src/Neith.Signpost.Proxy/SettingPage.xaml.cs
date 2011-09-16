@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.ComponentModel;
+using ReactiveUI;
 
 namespace Neith.Signpost.Proxy
 {
@@ -20,6 +11,7 @@ namespace Neith.Signpost.Proxy
     /// </summary>
     public partial class SettingPage : UserControl
     {
+        /// <summary>設定オブジェクトへの参照</summary>
         public static object Setting { get { return _Setting.Value; } set { return; } }
         private static readonly Lazy<object> _Setting = new Lazy<object>(() =>
         {
@@ -27,6 +19,9 @@ namespace Neith.Signpost.Proxy
             return Properties.Settings.Default;
         });
 
+        /// <summary>
+        /// コンストラクタ。
+        /// </summary>
         public SettingPage()
         {
             if (DesignerProperties.GetIsInDesignMode(this)) DataContext = new DummySetting();
@@ -34,12 +29,13 @@ namespace Neith.Signpost.Proxy
             InitializeComponent();
         }
 
-        public class DummySetting : INotifyPropertyChanged
+        /// <summary>
+        /// ダミーの設定オブジェクト。
+        /// </summary>
+        public class DummySetting : ReactiveObject
         {
-            public string ChannelName { get { return _ChannelName; } set { _ChannelName = value; } }
+            public string ChannelName { get { return _ChannelName; } set { this.RaiseAndSetIfChanged(a => a.ChannelName, value); } }
             private string _ChannelName = "DUMMY_ChannelName";
-
-            public event PropertyChangedEventHandler PropertyChanged;
         }
     }
 }
