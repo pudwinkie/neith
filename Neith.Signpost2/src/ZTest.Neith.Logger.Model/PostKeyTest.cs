@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Text;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Windows.Input;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Neith.Interop.Win32;
-using System.Windows.Input;
 
 namespace ZTest.Neith.Logger.Model
 {

@@ -2,70 +2,51 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Neith.Signpost.Proxy
 {
     public abstract class BaseSignpostService : ISignpostService, IDisposable
     {
+        #region 開放
         public void Dispose()
         {
-            Channel.Leave(Name);
         }
 
-        /// <summary>名前</summary>
-        public string Name { get; private set; }
+        #endregion
+        #region プロパティ
 
-        public ISignpostServiceChannel Channel
+
+        #endregion
+
+
+        protected BaseSignpostService()
         {
-            get { return _Channel; }
-            set
-            {
-                if (_Channel != null) _Channel.Leave(Name);
-                _Channel = value;
-                if (_Channel != null) _Channel.Join(Name);
-            }
         }
-        private ISignpostServiceChannel _Channel = null;
-
-        /// <summary>状態確認履歴</summary>
-        private Queue<DateTime> EchoTimeQueue = new Queue<DateTime>();
-        private DateTime LastEchoTime = DateTime.MinValue;
-        private DateTime NextEchoTime = DateTime.MinValue;
 
 
-        /// <summary>サービス辞書</summary>
-        public Dictionary<string, DateTime> ServiceDic { get; private set; }
+        #region ISignpostActionService メンバー
 
-        protected BaseSignpostService(string name)
+        public virtual void SendAlt( char c)
         {
-            Name = name;
-            ServiceDic = new Dictionary<string, DateTime>();
+            throw new NotImplementedException();
         }
 
-        public void Join(string name)
+        public virtual void SendCtrl(char c)
         {
-            ServiceDic[name] = DateTime.UtcNow;
+            throw new NotImplementedException();
         }
 
-        public void Leave(string name)
+        public virtual void SendShift( char c)
         {
-            ServiceDic.Remove(name);
+            throw new NotImplementedException();
         }
 
-        public void RequestEcho(string name)
+        public virtual void SendCtrlInput(char c, params Key[] ctrlKey)
         {
-            Join(name);
-            Channel.ResponseEcho(Name);
-
+            throw new NotImplementedException();
         }
-        public void ResponseEcho(string name)
-        {
-            Join(name);
-        }
-
-
-
-        #region IDisposable メンバー
 
         #endregion
     }
