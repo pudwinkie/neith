@@ -7,3 +7,6 @@ glob:*/data/xfn/*
 syntax: glob
 *.docstates
 */TestResults/*
+*/Bin/*
+*/ClientBin/*
+*/Generated_Code/*
