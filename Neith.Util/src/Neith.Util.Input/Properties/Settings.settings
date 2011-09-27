@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="InputUtil.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="KeyboardConfig" Type="System.String" Scope="User">
+      <Value Profile="(Default)">config\scancode_106.txt</Value>
+    </Setting>
+    <Setting Name="KanjiMacroConfig" Type="System.String" Scope="User">
+      <Value Profile="(Default)">config\kanji_macro.csv</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
