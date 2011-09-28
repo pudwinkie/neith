@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -30,19 +31,30 @@ namespace Neith.Signpost.SL
         {
             var ctrl = sender as TextBlock;
             try {
-                var sv = new SignpostContext();
+                var sv = SignpostContext.Create();
                 sv.GetServerTime(rc =>
                 {
                     if (rc.IsComplete) ctrl.Text = string.Format("サーバ時刻={0}", rc.Value);
                     if (rc.HasError) {
-                        ctrl.Text = rc.Error.ToString();
+                        WriteError(ctrl, rc.Error);
                         rc.MarkErrorAsHandled();
                     }
                 }, null);
             }
             catch (Exception ex) {
-                ctrl.Text = ex.ToString();
+                WriteError(ctrl, ex);
             }
+        }
+
+        private static void WriteError(TextBlock ctrl, Exception ex)
+        {
+            var buf = new StringBuilder();
+            buf.AppendLine("---* 例外 *---");
+            buf.AppendLine(ex.ToString());
+            buf.AppendLine();
+            buf.AppendLine("---* 設定情報 *---");
+            buf.AppendLine("SERVICE URI:" + SignpostContext.ServiceUrl);
+            ctrl.Text = buf.ToString();
         }
     }
 }
