@@ -1,5 +1,6 @@
 ﻿using System.Reactive.Disposables;
 using System.Windows;
+using Neith.Signpost.Services;
 
 namespace Neith.Signpost
 {

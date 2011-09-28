@@ -6,7 +6,7 @@
             <StackPanel x:Name="ContentStackPanel">
 
                 <TextBlock x:Name="HeaderText" Style="{StaticResource HeaderTextStyle}" Text="バージョン情報"/>
-                <TextBlock x:Name="ContentText" Style="{StaticResource ContentTextStyle}" Text="ページのコンテンツの情報"/>
+                <TextBlock x:Name="ContentText" Style="{StaticResource ContentTextStyle}" Text="ページのコンテンツの情報(2)"/>
 
             </StackPanel>
 
