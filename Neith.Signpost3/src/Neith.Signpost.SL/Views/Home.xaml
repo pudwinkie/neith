@@ -6,7 +6,7 @@
             <StackPanel x:Name="ContentStackPanel">
 
                 <TextBlock x:Name="HeaderText" Style="{StaticResource HeaderTextStyle}" Text="ホーム"/>
-                <TextBlock x:Name="ContentText" Style="{StaticResource ContentTextStyle}" Text="ホーム ページのコンテンツ" Loaded="ContentText_Loaded" />
+                <TextBox x:Name="ContentText" Text="ホーム ページのコンテンツ" Loaded="ContentText_Loaded" IsReadOnly="True" TextWrapping="Wrap" />
 
             </StackPanel>
 

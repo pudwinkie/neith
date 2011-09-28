@@ -24,7 +24,7 @@ namespace Neith.Signpost
         private static readonly string BaseUrlString = string.Format("http://localhost:{0}/", Port);
 
         private static readonly Uri BaseUri = new Uri(BaseUrlString);
-        private static readonly Uri ServiceUrl = new Uri(BaseUrlString + SignpostContext.BaseUrlString);
+        private static readonly Uri ServiceUrl = new Uri(BaseUrlString + "ClientBin/" + SignpostContext.ServiceNameString);
 
         public void Dispose()
         {
@@ -45,6 +45,16 @@ namespace Neith.Signpost
             });
         }
 
+        private class MyDomainFactory : DomainServiceHostFactory
+        {
+            public ServiceHost CreateSignpostServiceHost(params Uri[] baseAddresses)
+            {
+                var host = CreateServiceHost(typeof(SignpostService), baseAddresses);
+                host.Description.Behaviors.Remove<AspNetCompatibilityRequirementsAttribute>();
+                return host;
+            }
+        }
+
         /// <summary>
         /// ドメインサービスの起動。
         /// </summary>
@@ -53,20 +63,25 @@ namespace Neith.Signpost
             try {
                 Hosts = new List<ServiceHost>();
                 {
-                    var host = new DomainServiceHost(typeof(SignpostService), ServiceUrl);
-                    host.Description.Behaviors.Remove<AspNetCompatibilityRequirementsAttribute>();
+                    Debug.WriteLine("## host setting start ##");
+                    var fact = new MyDomainFactory();
+                    var host = fact.CreateSignpostServiceHost(ServiceUrl);
                     Hosts.Add(host);
+                    Debug.WriteLine("## host setting end ##");
                 }
                 {
+                    Debug.WriteLine("## host setting start ##");
                     var host = new ServiceHost(typeof(SignpostService), BaseUri);
                     host
                         .AddServiceEndpoint(typeof(IStaticContents), new WebHttpBinding(), "")
                         .Behaviors.Add(new WebHttpBehavior());
                     Hosts.Add(host);
+                    Debug.WriteLine("## host setting end ##");
                 }
                 foreach (var h in Hosts) {
+                    Debug.WriteLine("## host[{0}] Open...");
                     await h.OpenAsync();
-                    Debug.WriteLine("host[{0}] Open.. Status={1}, SingletonInstance={2}",
+                    Debug.WriteLine("## host[{0}] Opened. Status={1}, SingletonInstance={2}",
                         h.BaseAddresses.FirstOrDefault(),
                         h.State, h.SingletonInstance);
                 }
