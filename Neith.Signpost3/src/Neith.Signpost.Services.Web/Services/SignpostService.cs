@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -18,7 +19,17 @@ namespace Neith.Signpost.Services
         [Invoke]
         public DateTimeOffset GetServerTime()
         {
-            return DateTimeOffset.Now;
+            var now = DateTimeOffset.Now;
+            Debug.WriteLine("SignpostService::GetServerTime " + now);
+            return now;
+        }
+
+        [Invoke]
+        public bool GetBool()
+        {
+            var now = DateTimeOffset.Now;
+            Debug.WriteLine("SignpostService::GetBool " + now);
+            return true;
         }
 
 
@@ -38,7 +49,6 @@ namespace Neith.Signpost.Services
 
         public Stream GetHtml(string a)
         {
-            var path = BaseDir.PathCombine("Neith.Signpost.SLTestPage.html");
             var st = new MemoryStream(CacheHTML.Value);
             WebOperationContext.Current.OutgoingResponse.ContentType = "text/html; charset=utf-8";
             return st;
