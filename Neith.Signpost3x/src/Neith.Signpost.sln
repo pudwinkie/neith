@@ -8,6 +8,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neith.Signpost.Services", "Neith.Signpost.Services\Neith.Signpost.Services.csproj", "{E20A6ABF-89E7-42FD-9E1F-94D062927667}"
 	ProjectSection(ProjectDependencies) = postProject
 		{0E48898E-0855-4E25-8F98-BE9797A3D1B5} = {0E48898E-0855-4E25-8F98-BE9797A3D1B5}
+		{0E48898E-0855-4E25-8F98-BE9797A3D1B5} = {0E48898E-0855-4E25-8F98-BE9797A3D1B5}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neith.Signpost.SL", "Neith.Signpost.SL\Neith.Signpost.SL.csproj", "{DF83B1FA-5F97-4BAF-A7E3-D5816530BDD2}"
