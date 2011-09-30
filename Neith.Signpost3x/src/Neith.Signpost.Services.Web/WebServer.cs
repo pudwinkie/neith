@@ -17,7 +17,7 @@ namespace Neith.Signpost
     /// </summary>
     public class WebServer : IDisposable
     {
-        public List<ServiceHost> Hosts { get; private set; }
+        internal List<ServiceHost> Hosts { get; private set; }
 
         private const int Port = 14080;
 
@@ -71,7 +71,7 @@ namespace Neith.Signpost
                 }
                 {
                     Debug.WriteLine("## host setting start ##");
-                    var host = new ServiceHost(typeof(SignpostService), BaseUri);
+                    var host = new ServiceHost(typeof(StaticContentsService), BaseUri);
                     host
                         .AddServiceEndpoint(typeof(IStaticContents), new WebHttpBinding(), "")
                         .Behaviors.Add(new WebHttpBehavior());
