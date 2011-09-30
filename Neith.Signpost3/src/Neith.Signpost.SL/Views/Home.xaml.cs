@@ -12,16 +12,20 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Threading.Tasks;
 using Neith.Signpost.Services;
+using System.Reactive.Linq;
+using System.Reactive.Concurrency;
 
 namespace Neith.Signpost
 {
     public partial class Home : Page
     {
         private ISignpostChannel ch;
+        private DispatcherScheduler sc;
 
         public Home()
         {
             InitializeComponent();
+            sc = new DispatcherScheduler(this.Dispatcher);
         }
 
         // ユーザーがこのページに移動したときに実行されます。
@@ -40,11 +44,17 @@ namespace Neith.Signpost
             try {
                 if (ch == null) ch = await Channels.CreateSignpostChannelAsync();
                 var time = await ch.GetServerTimeAsync();
-                ctrl.Text = string.Format("server time={0}", time);
+                Observable.Start(() =>
+                {
+                    ctrl.Text = string.Format("server time={0}", time);
+                }, sc);
             }
             catch (Exception ex) {
-                var win = new ErrorWindow(ex);
-                win.Show();
+                Observable.Start(() =>
+                {
+                    var win = new ErrorWindow(ex);
+                    win.Show();
+                }, sc);
             }
         }
 
