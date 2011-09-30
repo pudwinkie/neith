@@ -1,0 +1,67 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neith.Signpost", "Neith.Signpost\Neith.Signpost.csproj", "{8B211AE4-F041-4BEF-9754-4DE90C0646CD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{73919012-021B-4D5E-9846-D67E9D6C9357} = {73919012-021B-4D5E-9846-D67E9D6C9357}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neith.Signpost.SL", "Neith.Signpost.SL\Neith.Signpost.SL.csproj", "{73919012-021B-4D5E-9846-D67E9D6C9357}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neith.Signpost.Services", "Neith.Signpost.Services\Neith.Signpost.Services.csproj", "{EB3132DB-7653-4FEF-A575-F4E40E7E5DA1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neith.Util", "..\..\Neith.Util\src\Neith.Util\Neith.Util.csproj", "{B5385976-C31F-42DF-B1DB-54EA0F98FDC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neith.Util.Extend", "..\..\Neith.Util\src\Neith.Util.Extend\Neith.Util.Extend.csproj", "{7CCFE4BD-A210-41E1-8589-80C3AC49DB2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neith.Util.Extensions", "..\..\Neith.Util\src\Neith.Util.Extensions\Neith.Util.Extensions.csproj", "{BDAA1A4C-C085-49B4-969D-84E1B2428E9D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Util", "Util", "{361C60DC-153B-4533-942A-410D4858D532}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{6813B7F4-E541-4441-815A-E4A6FA1DFCD1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MVVM", "MVVM", "{4C913BDA-3562-4D1A-A867-73A3AB25F254}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8B211AE4-F041-4BEF-9754-4DE90C0646CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B211AE4-F041-4BEF-9754-4DE90C0646CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B211AE4-F041-4BEF-9754-4DE90C0646CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B211AE4-F041-4BEF-9754-4DE90C0646CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73919012-021B-4D5E-9846-D67E9D6C9357}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73919012-021B-4D5E-9846-D67E9D6C9357}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73919012-021B-4D5E-9846-D67E9D6C9357}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73919012-021B-4D5E-9846-D67E9D6C9357}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB3132DB-7653-4FEF-A575-F4E40E7E5DA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB3132DB-7653-4FEF-A575-F4E40E7E5DA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB3132DB-7653-4FEF-A575-F4E40E7E5DA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB3132DB-7653-4FEF-A575-F4E40E7E5DA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5385976-C31F-42DF-B1DB-54EA0F98FDC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5385976-C31F-42DF-B1DB-54EA0F98FDC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5385976-C31F-42DF-B1DB-54EA0F98FDC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5385976-C31F-42DF-B1DB-54EA0F98FDC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CCFE4BD-A210-41E1-8589-80C3AC49DB2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CCFE4BD-A210-41E1-8589-80C3AC49DB2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CCFE4BD-A210-41E1-8589-80C3AC49DB2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CCFE4BD-A210-41E1-8589-80C3AC49DB2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDAA1A4C-C085-49B4-969D-84E1B2428E9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDAA1A4C-C085-49B4-969D-84E1B2428E9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDAA1A4C-C085-49B4-969D-84E1B2428E9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDAA1A4C-C085-49B4-969D-84E1B2428E9D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B5385976-C31F-42DF-B1DB-54EA0F98FDC3} = {361C60DC-153B-4533-942A-410D4858D532}
+		{7CCFE4BD-A210-41E1-8589-80C3AC49DB2E} = {361C60DC-153B-4533-942A-410D4858D532}
+		{BDAA1A4C-C085-49B4-969D-84E1B2428E9D} = {361C60DC-153B-4533-942A-410D4858D532}
+		{8B211AE4-F041-4BEF-9754-4DE90C0646CD} = {6813B7F4-E541-4441-815A-E4A6FA1DFCD1}
+		{EB3132DB-7653-4FEF-A575-F4E40E7E5DA1} = {4C913BDA-3562-4D1A-A867-73A3AB25F254}
+		{73919012-021B-4D5E-9846-D67E9D6C9357} = {4C913BDA-3562-4D1A-A867-73A3AB25F254}
+	EndGlobalSection
+EndGlobal
