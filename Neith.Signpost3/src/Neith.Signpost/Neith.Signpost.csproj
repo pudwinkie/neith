@@ -36,6 +36,9 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Images\neith.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -122,6 +125,12 @@
     <Content Include="Contents\Silverlight.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Images\neith.ico" />
+    <Resource Include="Images\iconImage016.png" />
+    <Resource Include="Images\iconImage032.png" />
+    <Resource Include="Images\iconImage048.png" />
+    <Resource Include="Images\iconImage128.png" />
+    <Resource Include="Images\iconImage256.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

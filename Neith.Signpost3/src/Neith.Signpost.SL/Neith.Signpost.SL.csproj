@@ -25,7 +25,7 @@
     <TestPageFileName>TestPage.html</TestPageFileName>
     <CreateTestPage>true</CreateTestPage>
     <ValidateXaml>true</ValidateXaml>
-    <EnableOutOfBrowser>false</EnableOutOfBrowser>
+    <EnableOutOfBrowser>true</EnableOutOfBrowser>
     <OutOfBrowserSettingsFile>Properties\OutOfBrowserSettings.xml</OutOfBrowserSettingsFile>
     <UsePlatformExtensions>false</UsePlatformExtensions>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
@@ -188,7 +188,22 @@
     <None Include="Properties\AppManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="readme.txt" />
+    <None Include="Properties\OutOfBrowserSettings.xml" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="..\Neith.Signpost\Images\iconImage016.png">
+      <Link>Images\iconImage016.png</Link>
+    </Resource>
+    <Resource Include="..\Neith.Signpost\Images\iconImage032.png">
+      <Link>Images\iconImage032.png</Link>
+    </Resource>
+    <Resource Include="..\Neith.Signpost\Images\iconImage048.png">
+      <Link>Images\iconImage048.png</Link>
+    </Resource>
+    <Resource Include="..\Neith.Signpost\Images\iconImage128.png">
+      <Link>Images\iconImage128.png</Link>
+    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
