@@ -10,3 +10,4 @@ syntax: glob
 */Bin/*
 */ClientBin/*
 */Generated_Code/*
+Neith.Signpost.SL.xap
