@@ -14,11 +14,12 @@ namespace Neith.Signpost.Services
 {
     public static class ASyncServices
     {
-        public static async Task<DateTimeOffset> GetServerTimeAsync(this ISignpostContext THIS)
+        public static Task<DateTimeOffset> GetServerTimeAsync(this ISignpostContext THIS)
         {
-            return await Task.Factory.FromAsync(
-                new Func<AsyncCallback, object, IAsyncResult>(THIS.BeginGetServerTime),
-                new Func<IAsyncResult, DateTimeOffset>(THIS.EndGetServerTime), null);
+            return Task.Factory.FromAsync<DateTimeOffset>(
+                THIS.BeginGetServerTime,
+                THIS.EndGetServerTime,
+                null);
         }
 
     }
