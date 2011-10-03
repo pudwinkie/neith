@@ -39,6 +39,7 @@
       <HintPath>..\..\..\externals\Async-CTP\samples\AsyncCtpLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="ReactiveUI">
       <HintPath>..\packages\reactiveui-core.2.4.5.0\lib\Net4\ReactiveUI.dll</HintPath>
     </Reference>
@@ -61,8 +62,10 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
     <Reference Include="Wintellect.Sterling.Server">
       <HintPath>..\packages\Sterling.1.5.0.0\lib\net40\Wintellect.Sterling.Server.dll</HintPath>
     </Reference>
