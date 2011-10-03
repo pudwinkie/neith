@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -29,18 +29,17 @@ namespace Neith.Signpost
 
         private void Application_UnhandledException(object sender, ApplicationUnhandledExceptionEventArgs e)
         {
-            // アプリケーションがデバッガーの外側で実行されている場合、ChildWindow コントロール
-            // によって例外が報告されます。
+            // If the app is running outside of the debugger then report the exception using
+            // a ChildWindow control.
             if (!System.Diagnostics.Debugger.IsAttached) {
-                // メモ : これにより、アプリケーションは例外がスローされた後も実行され続け、例外は
-                // ハンドルされません。 
-                // 実稼動アプリケーションでは、このエラー処理は、Web サイトにエラーを報告し、
-                // アプリケーションを停止させるものに置換される必要があります。
+                // NOTE: This will allow the application to continue running after an exception has been thrown
+                // but not handled. 
+                // For production applications this error handling should be replaced with something that will 
+                // report the error to the website and stop the application.
                 e.Handled = true;
                 ChildWindow errorWin = new ErrorWindow(e.ExceptionObject);
                 errorWin.Show();
             }
         }
-
     }
 }

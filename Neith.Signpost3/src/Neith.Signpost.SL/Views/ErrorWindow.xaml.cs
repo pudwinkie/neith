@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -18,7 +18,7 @@ namespace Neith.Signpost
         {
             InitializeComponent();
             if (uri != null) {
-                ErrorTextBox.Text = "ページが見つかりません: \"" + uri.ToString() + "\"";
+                ErrorTextBox.Text = "Page not found: \"" + uri.ToString() + "\"";
             }
         }
 

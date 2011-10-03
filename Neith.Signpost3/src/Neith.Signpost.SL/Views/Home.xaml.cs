@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -8,32 +8,34 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Navigation;
 using System.Threading.Tasks;
 using Neith.Signpost.Services;
-using System.Reactive.Linq;
-using System.Reactive.Concurrency;
 
 namespace Neith.Signpost
 {
     public partial class Home : Page
     {
-        private ISignpostChannel ch;
-        private DispatcherScheduler sc;
+        private static ISignpostChannel ch = null;
 
         public Home()
         {
             InitializeComponent();
-            sc = new DispatcherScheduler(this.Dispatcher);
         }
 
-        // ユーザーがこのページに移動したときに実行されます。
+        private void BeginInvoke(Action act)
+        {
+            Dispatcher.BeginInvoke(act);
+        }
+
+
+        // Executes when the user navigates to this page.
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
         }
 
-        private void ContentText_Loaded(object sender, RoutedEventArgs e)
+        private void tbTest_Loaded(object sender, RoutedEventArgs e)
         {
             var ctrl = sender as TextBox;
             TaskEx.Run(() => AsyncJob(ctrl));
@@ -44,17 +46,14 @@ namespace Neith.Signpost
             try {
                 if (ch == null) ch = await Channels.CreateSignpostChannelAsync();
                 var time = await ch.GetServerTimeAsync();
-                Observable.Start(() =>
-                {
-                    ctrl.Text = string.Format("server time={0}", time);
-                }, sc);
+                BeginInvoke(() => ctrl.Text = string.Format("server time={0}", time));
             }
             catch (Exception ex) {
-                Observable.Start(() =>
+                BeginInvoke(() =>
                 {
                     var win = new ErrorWindow(ex);
                     win.Show();
-                }, sc);
+                });
             }
         }
 

@@ -9,20 +9,25 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
-using System.Windows.Navigation;
 
 namespace Neith.Signpost
 {
-    public partial class About : Page
+    public partial class ChildWindow1 : ChildWindow
     {
-        public About()
+        public ChildWindow1()
         {
             InitializeComponent();
         }
 
-        // Executes when the user navigates to this page.
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        private void OKButton_Click(object sender, RoutedEventArgs e)
         {
+            this.DialogResult = true;
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.DialogResult = false;
         }
     }
 }
+
