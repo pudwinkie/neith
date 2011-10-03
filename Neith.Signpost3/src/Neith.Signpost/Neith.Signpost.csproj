@@ -116,15 +116,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Contents\Neith.Signpost.SL.xap">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Contents\Neith.Signpost.SLTestPage.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Contents\Silverlight.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Resource Include="Contents\Neith.Signpost.SL.xap" />
+    <Resource Include="Contents\Neith.Signpost.SLTestPage.html" />
+    <Resource Include="Contents\Silverlight.js" />
     <Resource Include="Images\neith.ico" />
     <Resource Include="Images\iconImage016.png" />
     <Resource Include="Images\iconImage032.png" />

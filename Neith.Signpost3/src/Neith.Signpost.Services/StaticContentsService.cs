@@ -2,6 +2,7 @@
 using System.IO;
 using System.ServiceModel.Web;
 using Neith.Util.Reflection;
+using System.Windows;
 
 namespace Neith.Signpost.Services
 {
@@ -12,23 +13,28 @@ namespace Neith.Signpost.Services
     {
         #region 静的ファイルの操作
 
-        private static readonly string BaseDir =
-            AssemblyUtil.GetCallingAssemblyDirctory()
-            .PathCombine("Contents");
+        private static Stream GetStream(string name)
+        {
+            var uri = new Uri("/Contents/" + name,  UriKind.Relative);
+            var info = Application.GetResourceStream(uri);
+            return info.Stream;
+        }
 
-        private static readonly Lazy<byte[]> CacheHTML
-            = new Lazy<byte[]>(() => File.ReadAllBytes(BaseDir.PathCombine("Neith.Signpost.SLTestPage.html")));
 
-        private static readonly Lazy<byte[]> CacheJS
-            = new Lazy<byte[]>(() => File.ReadAllBytes(BaseDir.PathCombine("Silverlight.js")));
+        private static readonly Lazy<Stream> CacheHTML
+            = new Lazy<Stream>(() => GetStream("Neith.Signpost.SLTestPage.html"));
 
-        private static readonly Lazy<byte[]> CacheXAP
-            = new Lazy<byte[]>(() => File.ReadAllBytes(BaseDir.PathCombine("Neith.Signpost.SL.xap")));
+        private static readonly Lazy<Stream> CacheJS
+            = new Lazy<Stream>(() => GetStream("Silverlight.js"));
+
+        private static readonly Lazy<Stream> CacheXAP
+            = new Lazy<Stream>(() => GetStream("Neith.Signpost.SL.xap"));
 
 
         public Stream GetHtml(string a)
         {
-            var st = new MemoryStream(CacheHTML.Value);
+            var st = CacheHTML.Value;
+            st.Seek(0, SeekOrigin.Begin);
             WebOperationContext.Current.OutgoingResponse.ContentType = "text/html; charset=utf-8";
             return st;
         }
@@ -36,7 +42,8 @@ namespace Neith.Signpost.Services
         public Stream GetJS(string a)
         {
             if (a != "Silverlight") throw new ArgumentException("not Silverlight.js");
-            var st = new MemoryStream(CacheJS.Value);
+            var st = CacheJS.Value;
+            st.Seek(0, SeekOrigin.Begin);
             WebOperationContext.Current.OutgoingResponse.ContentType = "text/javascript; charset=utf-8";
             return st;
         }
@@ -44,7 +51,8 @@ namespace Neith.Signpost.Services
         public Stream GetXap(string a)
         {
             if (a != "Neith.Signpost.SL") throw new ArgumentException("not Neith.Signpost.SL.xap");
-            var st = new MemoryStream(CacheXAP.Value);
+            var st = CacheXAP.Value;
+            st.Seek(0, SeekOrigin.Begin);
             WebOperationContext.Current.OutgoingResponse.ContentType = "application/x-silverlight-app";
             return st;
         }
