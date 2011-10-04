@@ -104,21 +104,12 @@
     <Reference Include="System.Windows.Controls.Navigation" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Neith.Signpost.Services\Const.cs">
-      <Link>Services\Const.cs</Link>
-    </Compile>
-    <Compile Include="..\Neith.Signpost.Services\ISignpostContext.cs">
-      <Link>Services\ISignpostContext.cs</Link>
-    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Services\ASyncServices.cs" />
-    <Compile Include="Services\Channels.cs" />
-    <Compile Include="Services\WebGetAttribute.cs" />
     <Compile Include="Views\ChildWindow1.xaml.cs">
       <DependentUpon>ChildWindow1.xaml</DependentUpon>
     </Compile>
@@ -190,7 +181,12 @@
   <ItemGroup>
     <None Include="Properties\OutOfBrowserSettings.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Neith.Signpost.Services.SL\Neith.Signpost.Services.SL.csproj">
+      <Project>{856B7049-9B9C-4F1E-9207-51FBA5C3E99F}</Project>
+      <Name>Neith.Signpost.Services.SL</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="..\Neith.Signpost\Images\iconImage016.png">
       <Link>Images\iconImage016.png</Link>
