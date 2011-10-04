@@ -17,9 +17,18 @@ namespace Neith.Signpost.Services
     {
         internal List<ServiceHost> Hosts { get; private set; }
 
+        /// <summary>起動中ならtrue</summary>
+        public bool IsOpen { get; private set; }
+
+        /// <summary>Disposeされたならtrue</summary>
+        public bool IsDisposed { get; private set; }
+
+        private readonly Queue<Action> OpenCallBack = new Queue<Action>();
 
         public void Dispose()
         {
+            IsDisposed = true;
+            IsOpen = false;
             if (Hosts != null) {
                 Hosts
                     .AsParallel()
@@ -69,6 +78,7 @@ namespace Neith.Signpost.Services
                         h.BaseAddresses.FirstOrDefault(),
                         h.State, h.SingletonInstance);
                 }
+                FinLoad();
             }
             catch (AddressAccessDeniedException aadEx) {
                 var buf = new StringBuilder();
@@ -86,5 +96,35 @@ namespace Neith.Signpost.Services
                 Debug.WriteLine(buf.ToString());
             }
         }
+
+        /// <summary>
+        /// 初期化終了時に呼び出して欲しいコールバックを登録します。
+        /// </summary>
+        /// <param name="act"></param>
+        public void AddLoadedCallback(Action act)
+        {
+            if (IsDisposed) return;
+            lock (OpenCallBack) {
+                if (!IsOpen) {
+                    OpenCallBack.Enqueue(act);
+                    return;
+                }
+            }
+            // 即時実行
+            act();
+        }
+
+        /// <summary>
+        /// ロード完了処理。
+        /// </summary>
+        private void FinLoad()
+        {
+            lock (OpenCallBack) {
+                IsOpen = true;
+                foreach(var act in OpenCallBack) act();
+                OpenCallBack.Clear();
+            }
+        }
+
     }
 }
