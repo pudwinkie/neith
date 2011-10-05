@@ -4,11 +4,56 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:navigation="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Navigation"
     d:DesignWidth="640" d:DesignHeight="300" mc:Ignorable="d"
-    Style="{StaticResource PageStyle}">
+    Style="{StaticResource PageStyle}" SizeChanged="Page_SizeChanged">
 
-    <Grid x:Name="LayoutRoot">
-        <ScrollViewer x:Name="PageScrollViewer" Style="{StaticResource PageScrollViewerStyle}">
-        </ScrollViewer>
-    </Grid>
+  <Grid x:Name="LayoutRoot">
+    <ScrollViewer x:Name="PageScrollViewer" Style="{StaticResource PageScrollViewerStyle}">
+      <Grid x:Name="TileGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Width="540" Height="540">
+        <Grid.RowDefinitions>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition/>
+          <RowDefinition Height="0"/>
+          <RowDefinition Height="0"/>
+          <RowDefinition Height="0"/>
+          <RowDefinition Height="0"/>
+          <RowDefinition Height="0"/>
+          <RowDefinition Height="0"/>
+          <RowDefinition Height="0"/>
+          <RowDefinition Height="0"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
+          <ColumnDefinition/>
+          <ColumnDefinition Width="0"/>
+          <ColumnDefinition Width="0"/>
+          <ColumnDefinition Width="0"/>
+          <ColumnDefinition Width="0"/>
+          <ColumnDefinition Width="0"/>
+          <ColumnDefinition Width="0"/>
+          <ColumnDefinition Width="0"/>
+          <ColumnDefinition Width="0"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0" Grid.ColumnSpan="1" Grid.Row="0" Grid.RowSpan="1" Margin="6">
+          <TextBlock x:Name="tbSize" Text="size" HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Grid>
+        <Grid Grid.Column="1" Grid.ColumnSpan="1" Grid.Row="0" Grid.RowSpan="1" Margin="6">
+          <ToggleButton Content="Toggle1"/>
+        </Grid>
+        <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Grid.RowSpan="1" Margin="6">
+          <ToggleButton Content="Toggle2"/>
+        </Grid>
+        <Grid Grid.Column="2" Grid.ColumnSpan="1" Grid.Row="0" Grid.RowSpan="2" Margin="6">
+          <ToggleButton Content="Toggle3"/>
+        </Grid>
+        <Grid Grid.Column="3" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="2" Margin="6">
+          <Button Content="Button"/>
+        </Grid>
+      </Grid>
+    </ScrollViewer>
+  </Grid>
 
 </navigation:Page>
