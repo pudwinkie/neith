@@ -255,12 +255,21 @@
                 <VisualState x:Name="Unfocused"/>
               </VisualStateGroup>
             </VisualStateManager.VisualStateGroups>
+            <!--
             <Border x:Name="Background" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="3"/>
             <Rectangle x:Name="DisabledVisualElement" Fill="{StaticResource ControlsDisabledBrush}" IsHitTestVisible="false" Opacity="0" RadiusY="3" RadiusX="3"/>
             <Border x:Name="MouseOverBorder" Background="{StaticResource GrayBrush8}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3.5" Opacity="0"/>
             <Border x:Name="PressedBorder" Background="{StaticResource GrayBrush5}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3.5" Opacity="0"/>
             <Rectangle x:Name="FocusRectangle" Stroke="{StaticResource TextBoxMouseOverInnerBorderBrush}" RadiusY="4" RadiusX="4" Margin="-1" Opacity="0" />
             <Rectangle x:Name="FocusInnerRectangle" StrokeThickness="{TemplateBinding BorderThickness}" Stroke="{StaticResource TextBoxMouseOverBorderBrush}" RadiusX="3" RadiusY="3" Opacity="0" />
+            <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            -->
+            <Border x:Name="Background" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}"/>
+            <Rectangle x:Name="DisabledVisualElement" Fill="{StaticResource ControlsDisabledBrush}" IsHitTestVisible="false" Opacity="0"/>
+            <Border x:Name="MouseOverBorder" Background="{StaticResource GrayBrush8}" BorderThickness="{TemplateBinding BorderThickness}" Opacity="0"/>
+            <Border x:Name="PressedBorder" Background="{StaticResource GrayBrush5}" BorderThickness="{TemplateBinding BorderThickness}" Opacity="0"/>
+            <Rectangle x:Name="FocusRectangle" Stroke="{StaticResource TextBoxMouseOverInnerBorderBrush}" Margin="-1" Opacity="0" />
+            <Rectangle x:Name="FocusInnerRectangle" StrokeThickness="{TemplateBinding BorderThickness}" Stroke="{StaticResource TextBoxMouseOverBorderBrush}" Opacity="0" />
             <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
           </Grid>
         </ControlTemplate>
@@ -2190,6 +2199,7 @@
                 <VisualState x:Name="Unfocused"/>
               </VisualStateGroup>
             </VisualStateManager.VisualStateGroups>
+            <!--
             <Border x:Name="Background" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" CornerRadius="3"/>
             <Rectangle x:Name="DisabledVisualElement" Fill="{StaticResource WhiteColorBrush}" IsHitTestVisible="false" Opacity="0" RadiusY="3" RadiusX="3"/>
             <Border x:Name="MouseOverBorder" Background="{StaticResource GrayBrush8}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="3.5" Opacity="0"/>
@@ -2199,6 +2209,17 @@
             <Rectangle x:Name="FocusInnerRectangle" StrokeThickness="{TemplateBinding BorderThickness}" Stroke="{StaticResource TextBoxMouseOverBorderBrush}" RadiusX="3" RadiusY="3" Opacity="0" />
             <Rectangle x:Name="CheckedRectangle" Stroke="{StaticResource GrayBrush1}" RadiusY="4" RadiusX="4" Margin="-1" Opacity="0" />
             <Rectangle x:Name="CheckedInnerRectangle" Fill="{StaticResource GrayBrush2}" StrokeThickness="{TemplateBinding BorderThickness}" Stroke="{StaticResource GrayBrush2}" RadiusX="3" RadiusY="3" Opacity="0" />
+            <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            -->
+            <Border x:Name="Background" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}"/>
+            <Rectangle x:Name="DisabledVisualElement" Fill="{StaticResource WhiteColorBrush}" IsHitTestVisible="false" Opacity="0" />
+            <Border x:Name="MouseOverBorder" Background="{StaticResource GrayBrush8}" BorderThickness="{TemplateBinding BorderThickness}" Opacity="0"/>
+            <Border x:Name="PressedBorder"  Background="{StaticResource GrayBrush5}" BorderThickness="{TemplateBinding BorderThickness}" Opacity="0"/>
+            <Border x:Name="CheckedBorder"  Background="{StaticResource GrayBrush5}" BorderThickness="{TemplateBinding BorderThickness}" Opacity="0"/>
+            <Rectangle x:Name="FocusRectangle" Stroke="{StaticResource TextBoxMouseOverInnerBorderBrush}" Margin="-1" Opacity="0" />
+            <Rectangle x:Name="FocusInnerRectangle" StrokeThickness="{TemplateBinding BorderThickness}" Stroke="{StaticResource TextBoxMouseOverBorderBrush}" Opacity="0" />
+            <Rectangle x:Name="CheckedRectangle" Stroke="{StaticResource GrayBrush1}" Margin="-1" Opacity="0" />
+            <Rectangle x:Name="CheckedInnerRectangle" Fill="{StaticResource GrayBrush2}" StrokeThickness="{TemplateBinding BorderThickness}" Stroke="{StaticResource GrayBrush2}" Opacity="0" />
             <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
           </Grid>
         </ControlTemplate>
