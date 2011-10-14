@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Text;
-using System.Reactive.Linq;
 using System.ComponentModel;
+using System.Linq.Expressions;
+using System.Reactive.Linq;
 
 namespace Neith.ComponentModel
 {
@@ -24,6 +20,24 @@ namespace Neith.ComponentModel
                 .FromEventPattern<PropertyChangedEventArgs>(src, "PropertyChanged")
                 .Where(a => a.EventArgs.PropertyName == name)
                 .Select(a => a.EventArgs);
+        }
+
+        /// <summary>
+        /// プロパティ値通知を作成します。
+        /// </summary>
+        /// <typeparam name="TSender"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="src"></param>
+        /// <param name="property"></param>
+        /// <returns></returns>
+        public static IObservable<string> RxPropertyChanged<TSender, TValue>(
+            this TSender src, Expression<Func<TSender, TValue>> property)
+            where TSender : INotifyPropertyChanged
+        {
+            var name = property.ToPropertyName();
+            return src
+                .RxNotifyPropertyChanged(name)
+                .Select(a => name);
         }
 
         /// <summary>
