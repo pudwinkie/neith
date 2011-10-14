@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Threading;
+using System.Collections.Generic;
 
 namespace Neith.ComponentModel
 {
@@ -9,7 +10,7 @@ namespace Neith.ComponentModel
     /// 通知処理はコンストラクタで指定したスレッドに行われます。
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class NotifyProperty<T> : INotifyPropertyChanged
+    public class NotifyProperty<T> : INotifyPropertyChanged, IValue
         where T : IEquatable<T>
     {
         private T nowValue;
@@ -58,11 +59,20 @@ namespace Neith.ComponentModel
             get { return nowValue; }
             set
             {
-                if (nowValue.Equals(value)) return;
+                if (Comparer.Equals(nowValue, value)) return;
                 nowValue = value;
                 RaiseChanged();
             }
         }
+
+        private static readonly IEqualityComparer<T> Comparer = EqualityComparer<T>.Default;
+
+        object IValue.Value
+        {
+            get { return (T)Value; }
+            set { Value = (T)value; }
+        }
+
 
         /// <summary>
         /// 通知処理の実装。

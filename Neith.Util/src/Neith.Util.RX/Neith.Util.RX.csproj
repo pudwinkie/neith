@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ComponentModel\INotifyPropertyExtensions.cs" />
+    <Compile Include="ComponentModel\IValue.cs" />
     <Compile Include="ComponentModel\NotifyProperty.cs" />
     <Compile Include="ComponentModel\RxCommand.cs" />
     <Compile Include="ComponentModel\RxProperty.cs" />
