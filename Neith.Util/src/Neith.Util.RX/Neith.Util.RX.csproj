@@ -35,13 +35,16 @@
     <Reference Include="AsyncCtpLibrary">
       <HintPath>..\..\..\externals\Async-CTP\samples\AsyncCtpLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Reactive, Version=1.1.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\neith\Neith.Signpost2\src\packages\Rx_Experimental-Main.1.1.10621\lib\Net4\System.Reactive.dll</HintPath>
+    <Reference Include="System.Reactive, Version=1.1.11011.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Neith.Signpost3\src\packages\Rx_Experimental-Main.1.1.11011\lib\Net4\System.Reactive.dll</HintPath>
     </Reference>
     <Reference Include="System.Reactive.Windows.Threading, Version=1.1.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\neith\Neith.Signpost2\src\packages\Rx_Experimental-WPF.1.1.10621\lib\Net4\System.Reactive.Windows.Threading.dll</HintPath>
+      <HintPath>..\..\..\Neith.Signpost3\src\packages\Rx_Experimental-Xaml.1.1.10621\lib\Net4\System.Reactive.Windows.Threading.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -52,6 +55,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ComponentModel\INotifyPropertyExtensions.cs" />
+    <Compile Include="ComponentModel\NotifyProperty.cs" />
+    <Compile Include="ComponentModel\RxCommand.cs" />
+    <Compile Include="ComponentModel\RxProperty.cs" />
+    <Compile Include="ComponentModel\RxValidationProperty.cs" />
     <Compile Include="Concurrency\DispatcherPriorityScheduler.cs" />
     <Compile Include="Concurrency\ScheduleCounter.cs" />
     <Compile Include="Disposables\CompositeDisposableExtensions.cs" />
