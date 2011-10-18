@@ -17,8 +17,6 @@ namespace Neith.Signpost
 {
     public partial class Home : Page
     {
-        private static ISignpostChannel ch = null;
-
         public Home()
         {
             InitializeComponent();
@@ -44,7 +42,7 @@ namespace Neith.Signpost
         private async void AsyncJob(TextBox ctrl)
         {
             try {
-                if (ch == null) ch = await Channels.CreateSignpostChannelAsync();
+                var ch = await Channels.GetSignpostChannelAsync();
                 var time = await ch.GetServerTimeAsync();
                 BeginInvoke(() => ctrl.Text = string.Format("server time={0}", time));
             }

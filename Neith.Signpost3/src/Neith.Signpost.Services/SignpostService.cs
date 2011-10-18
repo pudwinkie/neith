@@ -14,32 +14,24 @@ namespace Neith.Signpost.Services
     /// </summary>
     public class SignpostService : ISignpostContext
     {
-        public DateTimeOffset GetServerTime()
+        #region サーバ時刻取得
+        public static DateTimeOffset GetServerTime()
         {
             var now = DateTimeOffset.Now;
             Debug.WriteLine("[SignpostService::GetServerTime] " + now);
             return now;
         }
-        private static readonly TaskFactory tf = new TaskFactory();
 
         public IAsyncResult BeginGetServerTime(AsyncCallback callback, object state)
         {
-            var t1 = new Task<DateTimeOffset>(st => GetServerTime(), state);
-            t1.Start();
-            var t2 = tf.ContinueWhenAll(new[] { t1 }, a => callback(t1));
-            return t1;
+            return GetServerTimeFunc.BeginInvoke(callback, state);
         }
-
         public DateTimeOffset EndGetServerTime(IAsyncResult result)
         {
-            var task = result as Task<DateTimeOffset>;
-            return task.Result;
+            return GetServerTimeFunc.EndInvoke(result);
         }
-
-
-
-
-
+        private delegate DateTimeOffset DelegateGetServerTime();
+        private readonly DelegateGetServerTime GetServerTimeFunc = new DelegateGetServerTime(GetServerTime);
 
 
         public CompositeType GetDataUsingDataContract(CompositeType composite)
@@ -52,5 +44,28 @@ namespace Neith.Signpost.Services
             }
             return composite;
         }
+
+
+        #endregion
+        #region キーイベントを発行
+
+
+
+        public IAsyncResult BeginSendKeys(string command, AsyncCallback callback, object state)
+        {
+            var t1 = Neith.Util.Input.SendKeyInput.SendKeysAsync(command);
+            Task<TimeSpan> t2 = new Task<TimeSpan>(a => t1.Result, state);
+            t1.ContinueWith(a => t2.Start());
+            t2.ContinueWith(a => callback(t2));
+            return t2;
+        }
+
+        public TimeSpan EndSendKeys(IAsyncResult result)
+        {
+            var task = result as Task<TimeSpan>;
+            return task.Result;
+        }
+
+        #endregion
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Net;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Navigation;
+using Neith.Signpost.Services;
 
 namespace Neith.Signpost
 {
@@ -18,6 +20,11 @@ namespace Neith.Signpost
         public About()
         {
             InitializeComponent();
+        }
+
+        private void BeginInvoke(Action act)
+        {
+            Dispatcher.BeginInvoke(act);
         }
 
         // Executes when the user navigates to this page.
@@ -68,5 +75,22 @@ namespace Neith.Signpost
             }
 
         }
+
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            var command = tbCommand.Text;
+            SendKeyTestAsync(command).Start();
+        }
+
+        private async Task SendKeyTestAsync(string command)
+        {
+            var ch = await Channels.GetSignpostChannelAsync();
+            var time = await ch.SendKeysAsync(command);
+            BeginInvoke(() =>
+            {
+                lbResult.Text = string.Format("[SendKeysAsync]time = {0}", time);
+            });
+        }
+
     }
 }

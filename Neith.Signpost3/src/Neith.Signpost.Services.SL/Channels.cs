@@ -15,7 +15,18 @@ namespace Neith.Signpost.Services
 {
     public class Channels
     {
-        public static async Task<ISignpostChannel> CreateSignpostChannelAsync()
+        private static ISignpostChannel signpostCH = null;
+        private static readonly Task<ISignpostChannel> initTask = CreateSignpostChannelAsync();
+
+        public static async Task<ISignpostChannel> GetSignpostChannelAsync()
+        {
+            if (signpostCH == null) {
+                signpostCH = await TaskEx.RunEx(() => initTask);
+            }
+            return signpostCH;
+        }
+
+        private static async Task<ISignpostChannel> CreateSignpostChannelAsync()
         {
             var fact = new ChannelFactory<ISignpostChannel>(new BasicHttpBinding(), new EndpointAddress(Const.SignpostServiceUrlString));
             var ch = fact.CreateChannel();
