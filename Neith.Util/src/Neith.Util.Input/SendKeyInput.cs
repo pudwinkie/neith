@@ -424,16 +424,23 @@ namespace Neith.Util.Input
         #endregion
         #region APIの非同期呼び出し
 
+        /// <summary>
+        /// キー入力の送信。
+        /// </summary>
+        /// <param name="nInputs"></param>
+        /// <param name="pInputs"></param>
+        /// <param name="cbSize"></param>
+        /// <returns></returns>
         static private Task<int> SendInputAsync(int nInputs, Input[] pInputs, int cbSize)
         {
+            var func = new AsyncSendInputCaller(SendInput);
             return Task.Factory.FromAsync<int, Input[], int, int>(
-                AsyncSendInputMethod.BeginInvoke,
-                AsyncSendInputMethod.EndInvoke,
+                func.BeginInvoke,
+                func.EndInvoke,
                 nInputs, pInputs, cbSize,
                 null);
         }
         private delegate int AsyncSendInputCaller(int nInputs, Input[] pInputs, int cbSize);
-        private static readonly AsyncSendInputCaller AsyncSendInputMethod = new AsyncSendInputCaller(SendInput);
 
 
         /// <summary>
@@ -454,6 +461,14 @@ namespace Neith.Util.Input
         }
 
 
+        /// <summary>
+        /// SendMessage。
+        /// </summary>
+        /// <param name="window"></param>
+        /// <param name="msg"></param>
+        /// <param name="wParam"></param>
+        /// <param name="lParam"></param>
+        /// <returns></returns>
         static private Task<uint> SendMessageAsync(IntPtr window, int msg, IntPtr wParam, IntPtr lParam)
         {
             var param = new SendMessageParam()
@@ -463,9 +478,10 @@ namespace Neith.Util.Input
                 wParam = wParam,
                 lParam = lParam
             };
+            var func = new AsyncSendMessageCaller(SendMessageP);
             return Task.Factory.FromAsync<SendMessageParam, uint>(
-                AsyncSendMessageMethod.BeginInvoke,
-                AsyncSendMessageMethod.EndInvoke,
+                func.BeginInvoke,
+                func.EndInvoke,
                 param,
                 null);
         }
@@ -481,7 +497,7 @@ namespace Neith.Util.Input
             return SendMessage(param.window, param.msg, param.wParam, param.lParam);
         }
         private delegate uint AsyncSendMessageCaller(SendMessageParam param);
-        private static readonly AsyncSendMessageCaller AsyncSendMessageMethod = new AsyncSendMessageCaller(SendMessageP);
+
 
         /// <summary>
         /// キーをフラッシュして指定時間待ちます。
@@ -672,24 +688,26 @@ namespace Neith.Util.Input
         /// 特殊キーモードで利用しているキーを押したいとき
         /// * + 押したいキーでエスケープ
         /// </remarks>
-        /// <param name="text"></param>
-        public static async Task SendKeysAsync(string text)
+        /// <param name="command">マクロテキスト</param>
+        /// <returns>再生時間</returns>
+        public static async Task<TimeSpan> SendKeysAsync(string command)
         {
-            Debug.WriteLine("*---------------[SendKeys]: " + text);
+            var startData = DateTime.Now;
+            Debug.WriteLine("*---------------[SendKeys]: " + command);
 
-            Input[] inputs = new Input[1];
+            var inputs = new Input[1];
 
-            bool shift = false;
-            bool ctrl = false;
-            bool alt = false;
-            bool l_shift = false;
-            bool l_ctrl = false;
-            bool l_alt = false;
+            var shift = false;
+            var ctrl = false;
+            var alt = false;
+            var l_shift = false;
+            var l_ctrl = false;
+            var l_alt = false;
             var winHandle = new Lazy<IntPtr>(GetForegroundWindow);
 
-            int ex = 0;
-            int keyPushWaitMS = 0;
-            foreach (char c in text) {
+            var ex = 0;
+            var keyPushWaitMS = 0;
+            foreach (char c in command) {
                 VK vkey;
                 switch (ex) {
                     case 0: // 特殊モードに入るかどうか判定
@@ -785,6 +803,8 @@ namespace Neith.Util.Input
             if (l_ctrl) await SendInputAsync(inputs, VK.CONTROL, KEYEVENTF.KEYUP);
             if (l_shift) await SendInputAsync(inputs, VK.SHIFT, KEYEVENTF.KEYUP);
             if (l_alt) await SendInputAsync(inputs, VK.MENU, KEYEVENTF.KEYUP);
+
+            return DateTime.Now - startData;
         }
 
 
