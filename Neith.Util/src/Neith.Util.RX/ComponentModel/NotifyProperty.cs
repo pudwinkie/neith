@@ -11,7 +11,6 @@ namespace Neith.ComponentModel
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class NotifyProperty<T> : INotifyPropertyChanged, IValue
-        where T : IEquatable<T>
     {
         private T nowValue;
 

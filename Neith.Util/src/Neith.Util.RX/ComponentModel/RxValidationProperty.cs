@@ -9,7 +9,6 @@ using System.Text;
 namespace Neith.ComponentModel
 {
     public class RxValidationProperty<T> : RxProperty<T>, IDataErrorInfo
-        where T : IEquatable<T>
     {
 
         /// <summary>
