@@ -28,6 +28,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neith.Signpost.Phone", "Nei
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neith.Util.RX", "..\..\Neith.Util\src\Neith.Util.RX\Neith.Util.RX.csproj", "{C8B06C95-1B5D-4811-99C4-341B7109BC30}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neith.Util.Input", "..\..\Neith.Util\src\Neith.Util.Input\Neith.Util.Input.csproj", "{A565D9FB-64E0-420C-A8A9-5F852EBA440E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,6 +74,10 @@ Global
 		{C8B06C95-1B5D-4811-99C4-341B7109BC30}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8B06C95-1B5D-4811-99C4-341B7109BC30}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8B06C95-1B5D-4811-99C4-341B7109BC30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A565D9FB-64E0-420C-A8A9-5F852EBA440E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A565D9FB-64E0-420C-A8A9-5F852EBA440E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A565D9FB-64E0-420C-A8A9-5F852EBA440E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A565D9FB-64E0-420C-A8A9-5F852EBA440E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -86,5 +92,6 @@ Global
 		{BDAA1A4C-C085-49B4-969D-84E1B2428E9D} = {361C60DC-153B-4533-942A-410D4858D532}
 		{B5385976-C31F-42DF-B1DB-54EA0F98FDC3} = {361C60DC-153B-4533-942A-410D4858D532}
 		{C8B06C95-1B5D-4811-99C4-341B7109BC30} = {361C60DC-153B-4533-942A-410D4858D532}
+		{A565D9FB-64E0-420C-A8A9-5F852EBA440E} = {361C60DC-153B-4533-942A-410D4858D532}
 	EndGlobalSection
 EndGlobal

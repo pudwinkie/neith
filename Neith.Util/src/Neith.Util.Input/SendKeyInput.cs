@@ -2,11 +2,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Diagnostics;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Neith.Util.Input
 {
@@ -404,6 +405,7 @@ namespace Neith.Util.Input
         [DllImport("user32.dll", SetLastError = true)]
         static private extern int SendInput(int nInputs, Input[] pInputs, int cbSize);
 
+
         [DllImport("user32.dll")]
         static private extern IntPtr GetMessageExtraInfo();
 
@@ -418,6 +420,80 @@ namespace Neith.Util.Input
 
         [DllImport("user32.dll")]
         public static extern IntPtr GetForegroundWindow();
+
+        #endregion
+        #region APIの非同期呼び出し
+
+        static private Task<int> SendInputAsync(int nInputs, Input[] pInputs, int cbSize)
+        {
+            return Task.Factory.FromAsync<int, Input[], int, int>(
+                AsyncSendInputMethod.BeginInvoke,
+                AsyncSendInputMethod.EndInvoke,
+                nInputs, pInputs, cbSize,
+                null);
+        }
+        private delegate int AsyncSendInputCaller(int nInputs, Input[] pInputs, int cbSize);
+        private static readonly AsyncSendInputCaller AsyncSendInputMethod = new AsyncSendInputCaller(SendInput);
+
+
+        /// <summary>
+        /// キー入力の送信
+        /// </summary>
+        /// <param name="inputs"></param>
+        /// <param name="vk"></param>
+        /// <param name="flags"></param>
+        /// <returns></returns>
+        private static async Task<int> SendInputAsync(Input[] inputs, VK vk, KEYEVENTF flags)
+        {
+            var input = InputKeyboard(vk, flags);
+            Debug.WriteLine(string.Format(
+              "  KEYBOARD: VK[{0}] SCAN[0x{1:X2}] FLAG[{2}]",
+              input.ki.wVk, input.ki.wScan, input.ki.dwFlags));
+            inputs[0] = input;
+            return await SendInputAsync(inputs.Length, inputs, Marshal.SizeOf(typeof(Input)));
+        }
+
+
+        static private Task<uint> SendMessageAsync(IntPtr window, int msg, IntPtr wParam, IntPtr lParam)
+        {
+            var param = new SendMessageParam()
+            {
+                window = window,
+                msg = msg,
+                wParam = wParam,
+                lParam = lParam
+            };
+            return Task.Factory.FromAsync<SendMessageParam, uint>(
+                AsyncSendMessageMethod.BeginInvoke,
+                AsyncSendMessageMethod.EndInvoke,
+                param,
+                null);
+        }
+        private struct SendMessageParam
+        {
+            public IntPtr window;
+            public int msg;
+            public IntPtr wParam;
+            public IntPtr lParam;
+        }
+        private static uint SendMessageP(SendMessageParam param)
+        {
+            return SendMessage(param.window, param.msg, param.wParam, param.lParam);
+        }
+        private delegate uint AsyncSendMessageCaller(SendMessageParam param);
+        private static readonly AsyncSendMessageCaller AsyncSendMessageMethod = new AsyncSendMessageCaller(SendMessageP);
+
+        /// <summary>
+        /// キーをフラッシュして指定時間待ちます。
+        /// </summary>
+        /// <param name="dueTime"></param>
+        /// <returns></returns>
+        private static async Task FlushDelay(int dueTime)
+        {
+            await TaskEx.Run(System.Windows.Forms.SendKeys.Flush);
+            await TaskEx.Delay(dueTime);
+        }
+
 
 
         #endregion
@@ -461,146 +537,6 @@ namespace Neith.Util.Input
             ushort[] rc = new ushort[256];
             for (int i = 0; i < rc.Length; i++) rc[i] = (ushort)MapVirtualKey(i, 0);
             return rc;
-        }
-
-        /// <summary>
-        /// 文字列よりInput構造体を列挙します。
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        private static IEnumerable<Input> CreateKeys(string text)
-        {
-
-            bool shift = false;
-            bool ctrl = false;
-            bool alt = false;
-            bool l_shift = false;
-            bool l_ctrl = false;
-            bool l_alt = false;
-            IntPtr window = IntPtr.Zero;
-
-            int ex = 0;
-            int keyPushWaitMS = 0;
-            foreach (char c in text) {
-                VK vkey;
-
-                // 特殊キーモード
-                //  *x →[x:F1～F12(1～0,-,^)] FUNCキーを押して離す
-                //       1～0 F1～F10
-                //       -    F11
-                //       ^    F12
-                //  [x →[x:C,A,X] 特殊キーを押す
-                //       C CTRL
-                //       A ALT
-                //       X CTRL+ALT
-                //  ]  →特殊キーを離す
-                //  |  →[漢字]キーを押す
-                //  \  →[ESC]キーを押す
-                //  ~  →[Enter]キーを押す
-                //  +  →[Shift+0]キーを押す
-                //  @  →SendMessageを利用して前面窓に[Enter]キーを押す
-                //  _  →キー入力キューをすべて処理し、その後約50ms待機する
-                //  :  →次のキーのとき、押して離す間に50ms待機する
-                // 特殊キーモードで利用しているキーを押したいとき
-                // * + 押したいキーでエスケープ
-                switch (ex) {
-                    case 0: // 特殊モードに入るかどうか判定
-                        switch (c) {
-                            case '*': ex = 1; continue;
-                            case '[': ex = 2; continue;
-                            case ']': ctrl = false; alt = false; continue;
-                            case '|': vkey = VK.KANJI; goto SHIFT_DOWN;
-                            case '\\': vkey = VK.ESCAPE; goto SHIFT_DOWN;
-                            case '~': vkey = VK.RETURN; goto SHIFT_DOWN;
-                            case ':': keyPushWaitMS += 50; continue;
-                            case '_':
-                                System.Windows.Forms.SendKeys.Flush();
-                                Thread.Sleep(50);
-                                continue;
-                            case '@':
-                                vkey = VK.CMD_EX_ENTER_KEY;
-                                goto SHIFT_DOWN;
-                            case '+':
-                                vkey = VK._0;
-                                shift = true;
-                                goto EXT_KEY_CHANGE;
-                        }
-                        break;
-
-                    case 1: // FUNCキーモード
-                        ex = 0;
-                        switch (c) {
-                            case '1': vkey = VK.F1; goto SHIFT_DOWN;
-                            case '2': vkey = VK.F2; goto SHIFT_DOWN;
-                            case '3': vkey = VK.F3; goto SHIFT_DOWN;
-                            case '4': vkey = VK.F4; goto SHIFT_DOWN;
-                            case '5': vkey = VK.F5; goto SHIFT_DOWN;
-                            case '6': vkey = VK.F6; goto SHIFT_DOWN;
-                            case '7': vkey = VK.F7; goto SHIFT_DOWN;
-                            case '8': vkey = VK.F8; goto SHIFT_DOWN;
-                            case '9': vkey = VK.F9; goto SHIFT_DOWN;
-                            case '0': vkey = VK.F10; goto SHIFT_DOWN;
-                            case '-': vkey = VK.F11; goto SHIFT_DOWN;
-                            case '^': vkey = VK.F12; goto SHIFT_DOWN;
-                        }
-                        break;
-
-                    case 2: // 特殊キーモード
-                        ex = 0;
-                        switch (c) {
-                            case 'C': ctrl = true; continue;
-                            case 'A': alt = true; continue;
-                            case 'X': ctrl = true; alt = true; continue;
-                        }
-                        break;
-                }
-
-                // キーペア取得
-                KeyValuePair<VK, bool> pair = GetVCode(c);
-                shift = pair.Value;
-                vkey = pair.Key;
-                goto EXT_KEY_CHANGE;
-
-            SHIFT_DOWN:
-                shift = false;
-
-            EXT_KEY_CHANGE:
-                // 特殊キーの状態変更
-                if (l_ctrl != ctrl) {
-                    yield return InputKeyboard(VK.CONTROL, ctrl ? KEYEVENTF.KEYDOWN : KEYEVENTF.KEYUP);
-                    // CTRLキーは反応が鈍いのでWait入れておく
-                    System.Windows.Forms.SendKeys.Flush();
-                    Thread.Sleep(50);
-                }
-                if (l_shift != shift) yield return InputKeyboard(VK.SHIFT, shift ? KEYEVENTF.KEYDOWN : KEYEVENTF.KEYUP);
-                if (l_alt != alt) yield return InputKeyboard(VK.MENU, alt ? KEYEVENTF.KEYDOWN : KEYEVENTF.KEYUP);
-                l_shift = shift;
-                l_ctrl = ctrl;
-                l_alt = alt;
-
-                // 特定窓にエンターを送信
-                if (vkey == VK.CMD_EX_ENTER_KEY) {
-                    System.Windows.Forms.SendKeys.Flush();
-                    if (window == IntPtr.Zero) window = GetForegroundWindow();
-                    SendEnterToWindow(window, keyPushWaitMS);
-                    keyPushWaitMS = 0;
-                    continue;
-                }
-
-                // キーを押して離す
-                yield return InputKeyboard(vkey, KEYEVENTF.KEYDOWN);
-                if (keyPushWaitMS != 0) {
-                    System.Windows.Forms.SendKeys.Flush();
-                    Thread.Sleep(keyPushWaitMS);
-                    keyPushWaitMS = 0;
-                }
-                yield return InputKeyboard(vkey, KEYEVENTF.KEYUP);
-            }
-            // 終了処理：特殊キーが押されたままなら最後に離す
-            if (l_ctrl || l_alt) System.Windows.Forms.SendKeys.Flush();
-            if (l_ctrl) yield return InputKeyboard(VK.CONTROL, KEYEVENTF.KEYUP);
-            if (l_shift) yield return InputKeyboard(VK.SHIFT, KEYEVENTF.KEYUP);
-            if (l_alt) yield return InputKeyboard(VK.MENU, KEYEVENTF.KEYUP);
         }
 
         /// <summary>
@@ -737,28 +673,133 @@ namespace Neith.Util.Input
         /// * + 押したいキーでエスケープ
         /// </remarks>
         /// <param name="text"></param>
-        public static void SendKeys(string text)
+        public static async Task SendKeysAsync(string text)
         {
             Debug.WriteLine("*---------------[SendKeys]: " + text);
+
             Input[] inputs = new Input[1];
-            foreach (Input input in CreateKeys(text)) {
-                Debug.WriteLine(string.Format(
-                  "  KEYBOARD: VK[{0}] SCAN[0x{1:X2}] FLAG[{2}]",
-                  input.ki.wVk, input.ki.wScan, input.ki.dwFlags));
-                inputs[0] = input;
-                SendInput(inputs.Length, inputs, Marshal.SizeOf(typeof(Input)));
+
+            bool shift = false;
+            bool ctrl = false;
+            bool alt = false;
+            bool l_shift = false;
+            bool l_ctrl = false;
+            bool l_alt = false;
+            var winHandle = new Lazy<IntPtr>(GetForegroundWindow);
+
+            int ex = 0;
+            int keyPushWaitMS = 0;
+            foreach (char c in text) {
+                VK vkey;
+                switch (ex) {
+                    case 0: // 特殊モードに入るかどうか判定
+                        switch (c) {
+                            case '*': ex = 1; continue;
+                            case '[': ex = 2; continue;
+                            case ']': ctrl = false; alt = false; continue;
+                            case '|': vkey = VK.KANJI; goto SHIFT_DOWN;
+                            case '\\': vkey = VK.ESCAPE; goto SHIFT_DOWN;
+                            case '~': vkey = VK.RETURN; goto SHIFT_DOWN;
+                            case ':': keyPushWaitMS += 50; continue;
+                            case '_':
+                                await FlushDelay(50);
+                                continue;
+                            case '@':
+                                vkey = VK.CMD_EX_ENTER_KEY;
+                                goto SHIFT_DOWN;
+                            case '+':
+                                vkey = VK._0;
+                                shift = true;
+                                goto EXT_KEY_CHANGE;
+                        }
+                        break;
+
+                    case 1: // FUNCキーモード
+                        ex = 0;
+                        switch (c) {
+                            case '1': vkey = VK.F1; goto SHIFT_DOWN;
+                            case '2': vkey = VK.F2; goto SHIFT_DOWN;
+                            case '3': vkey = VK.F3; goto SHIFT_DOWN;
+                            case '4': vkey = VK.F4; goto SHIFT_DOWN;
+                            case '5': vkey = VK.F5; goto SHIFT_DOWN;
+                            case '6': vkey = VK.F6; goto SHIFT_DOWN;
+                            case '7': vkey = VK.F7; goto SHIFT_DOWN;
+                            case '8': vkey = VK.F8; goto SHIFT_DOWN;
+                            case '9': vkey = VK.F9; goto SHIFT_DOWN;
+                            case '0': vkey = VK.F10; goto SHIFT_DOWN;
+                            case '-': vkey = VK.F11; goto SHIFT_DOWN;
+                            case '^': vkey = VK.F12; goto SHIFT_DOWN;
+                        }
+                        break;
+
+                    case 2: // 特殊キーモード
+                        ex = 0;
+                        switch (c) {
+                            case 'C': ctrl = true; continue;
+                            case 'A': alt = true; continue;
+                            case 'X': ctrl = true; alt = true; continue;
+                        }
+                        break;
+                }
+
+                // キーペア取得
+                KeyValuePair<VK, bool> pair = GetVCode(c);
+                shift = pair.Value;
+                vkey = pair.Key;
+                goto EXT_KEY_CHANGE;
+
+            SHIFT_DOWN:
+                shift = false;
+
+            EXT_KEY_CHANGE:
+                // 特殊キーの状態変更
+                if (l_ctrl != ctrl) {
+                    await SendInputAsync(inputs, VK.CONTROL, ctrl ? KEYEVENTF.KEYDOWN : KEYEVENTF.KEYUP);
+                    // CTRLキーは反応が鈍いのでWait入れておく
+                    await FlushDelay(50);
+                }
+                if (l_shift != shift) await SendInputAsync(inputs, VK.SHIFT, shift ? KEYEVENTF.KEYDOWN : KEYEVENTF.KEYUP);
+                if (l_alt != alt) await SendInputAsync(inputs, VK.MENU, alt ? KEYEVENTF.KEYDOWN : KEYEVENTF.KEYUP);
+                l_shift = shift;
+                l_ctrl = ctrl;
+                l_alt = alt;
+
+                // 特定窓にエンターを送信
+                if (vkey == VK.CMD_EX_ENTER_KEY) {
+                    await TaskEx.Run(System.Windows.Forms.SendKeys.Flush);
+                    await SendEnterToWindowAsync(winHandle.Value, keyPushWaitMS);
+                    keyPushWaitMS = 0;
+                    continue;
+                }
+
+                // キーを押して離す
+                await SendInputAsync(inputs, vkey, KEYEVENTF.KEYDOWN);
+                if (keyPushWaitMS != 0) {
+                    await FlushDelay(keyPushWaitMS);
+                    keyPushWaitMS = 0;
+                }
+                await SendInputAsync(inputs, vkey, KEYEVENTF.KEYUP);
             }
+            // 終了処理：特殊キーが押されたままなら最後に離す
+            if (l_ctrl || l_alt) await TaskEx.Run(System.Windows.Forms.SendKeys.Flush);
+            if (l_ctrl) await SendInputAsync(inputs, VK.CONTROL, KEYEVENTF.KEYUP);
+            if (l_shift) await SendInputAsync(inputs, VK.SHIFT, KEYEVENTF.KEYUP);
+            if (l_alt) await SendInputAsync(inputs, VK.MENU, KEYEVENTF.KEYUP);
         }
+
+
 
         /// <summary>
         /// keybd_eventを発行します。
         /// </summary>
         /// <param name="bVk"></param>
         /// <param name="dwFlags"></param>
-        public static void SendKeyEvent(byte bVk, int dwFlags)
+        public static async Task SendKeyEventAsync(byte bVk, int dwFlags)
         {
-            keybd_event(bVk, 0, dwFlags, ExtraInfoMark);
+            await TaskEx.Run(() => keybd_event(bVk, 0, dwFlags, ExtraInfoMark));
         }
+
+
 
         /// <summary>
         /// 指定したウィンドウにENTER入力を送信します。
@@ -766,26 +807,28 @@ namespace Neith.Util.Input
         /// </summary>
         /// <param name="window"></param>
         /// <param name="waitMS"></param>
-        public static void SendEnterToWindow(IntPtr window, int waitMS)
+        public static async Task SendEnterToWindowAsync(IntPtr window, int waitMS)
         {
             IntPtr wParam = new IntPtr((int)VK.RETURN);
             IntPtr lParam = IntPtr.Zero;
-            SendMessage(window, (int)WM.KEYDOWN, wParam, lParam);
-            Thread.Sleep(waitMS);
+            await SendMessageAsync(window, (int)WM.KEYDOWN, wParam, lParam);
+            await TaskEx.Delay(waitMS);
 
             lParam = new IntPtr(
               (1 << 0) |
               (1 << 30) |
               (1 << 31)
               );
-            SendMessage(window, (int)WM.KEYUP, wParam, lParam);
+            await SendMessageAsync(window, (int)WM.KEYUP, wParam, lParam);
         }
+
+
 
         /// <summary>
         /// Unicode文字をキー入力します。最後にEnterを送信します。
         /// </summary>
         /// <param name="text"></param>
-        public static void SendUnicode(string text)
+        public static async Task<int> SendUnicodeAsync(string text)
         {
             Input[] input = new Input[text.Length + 2];
             // UNICODE
@@ -814,7 +857,7 @@ namespace Neith.Util.Input
             input[p].ki.dwExtraInfo = ExtraInfoMark;
             input[p].ki.time = 0;
 
-            SendInput(input.Length, input, Marshal.SizeOf(typeof(Input)));
+            return await SendInputAsync(input.Length, input, Marshal.SizeOf(typeof(Input)));
         }
 
 

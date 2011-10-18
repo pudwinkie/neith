@@ -12,7 +12,6 @@ namespace Neith.ComponentModel
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class RxProperty<T> : NotifyProperty<T>, IObservable<T>, IDisposable
-        where T : IEquatable<T>
     {
         public CompositeDisposable Tasks { get; private set; }
         internal protected Subject<T> trigger;
@@ -91,7 +90,7 @@ namespace Neith.ComponentModel
         /// <param name="dispatcher"></param>
         /// <param name="initValue"></param>
         /// <returns></returns>
-        public static RxProperty<T> ToRxProperty<T>(this IObservable<T> source, Dispatcher dispatcher, T initValue) where T : IEquatable<T>
+        public static RxProperty<T> ToRxProperty<T>(this IObservable<T> source, Dispatcher dispatcher, T initValue)
         {
             var rc = new RxProperty<T>(dispatcher, initValue);
             source
@@ -110,7 +109,7 @@ namespace Neith.ComponentModel
         /// <param name="source"></param>
         /// <param name="dispatcher"></param>
         /// <returns></returns>
-        public static RxProperty<T> ToRxProperty<T>(this IObservable<T> source, Dispatcher dispatcher) where T : IEquatable<T>
+        public static RxProperty<T> ToRxProperty<T>(this IObservable<T> source, Dispatcher dispatcher)
         {
             return source.ToRxProperty(dispatcher, default(T));
         }
@@ -122,7 +121,7 @@ namespace Neith.ComponentModel
         /// <param name="source"></param>
         /// <param name="initValue"></param>
         /// <returns></returns>
-        public static RxProperty<T> ToRxProperty<T>(this IObservable<T> source, T initValue) where T : IEquatable<T>
+        public static RxProperty<T> ToRxProperty<T>(this IObservable<T> source, T initValue)
         {
             return source.ToRxProperty(Dispatcher.CurrentDispatcher, initValue);
         }
@@ -133,7 +132,7 @@ namespace Neith.ComponentModel
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
         /// <returns></returns>
-        public static RxProperty<T> ToRxProperty<T>(this IObservable<T> source) where T : IEquatable<T>
+        public static RxProperty<T> ToRxProperty<T>(this IObservable<T> source)
         {
             return source.ToRxProperty(Dispatcher.CurrentDispatcher);
         }
