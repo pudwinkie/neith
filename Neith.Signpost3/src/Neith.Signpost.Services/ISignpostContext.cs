@@ -19,16 +19,10 @@ namespace Neith.Signpost.Services
         [OperationContract]
         CompositeType GetDataUsingDataContract(CompositeType composite);
 #endif
-
-#if SILVERLIGHT
         [OperationContract(AsyncPattern = true)]
         IAsyncResult BeginGetServerTime(AsyncCallback callback, object state);
         DateTimeOffset EndGetServerTime(IAsyncResult result);
-#else
-        [OperationContract]
-        [WebGet]
-        DateTimeOffset GetServerTime();
-#endif
+
     }
 
     // サービス操作に複合型を追加するには、以下のサンプルに示すようにデータ コントラクトを使用します。
