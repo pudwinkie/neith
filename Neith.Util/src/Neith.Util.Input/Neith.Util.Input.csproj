@@ -8,8 +8,8 @@
     <ProjectGuid>{A565D9FB-64E0-420C-A8A9-5F852EBA440E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Neith.Util.Unput</RootNamespace>
-    <AssemblyName>Neith.Util.Unput</AssemblyName>
+    <RootNamespace>Neith.Util.Input</RootNamespace>
+    <AssemblyName>Neith.Util.Input</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -63,6 +63,8 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums.cs" />
+    <Compile Include="InputBuilder.cs" />
     <Compile Include="KeyboardHook.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -73,6 +75,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="SendKeyInput.cs" />
+    <Compile Include="API.cs" />
+    <Compile Include="SendKeysWinform.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="config\scancode_106.txt">
