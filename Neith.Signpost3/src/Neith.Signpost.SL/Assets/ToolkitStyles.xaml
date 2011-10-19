@@ -31,7 +31,7 @@
     <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
     <Setter Property="FontFamily" Value="{StaticResource ContentFontFamily}"/>
     <Setter Property="FontSize" Value="{StaticResource ContentFontSize}"/>
-    <Setter Property="TextOptions.TextHintingMode" Value="Animated"/>
+    <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
     <Setter Property="BorderBrush" Value="{x:Null}"/>
     <Setter Property="HorizontalAlignment" Value="Left"/>
     <Setter Property="VerticalAlignment" Value="Top"/>
@@ -83,7 +83,7 @@
     <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
     <Setter Property="FontFamily" Value="{StaticResource ContentFontFamily}"/>
     <Setter Property="FontSize" Value="{StaticResource ContentFontSize}"/>
-    <Setter Property="TextOptions.TextHintingMode" Value="Animated"/>
+    <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
     <Setter Property="Background" Value="{StaticResource WhiteBrush}"/>
     <Setter Property="HorizontalAlignment" Value="Stretch"/>
     <Setter Property="VerticalAlignment" Value="Stretch"/>
@@ -805,7 +805,7 @@
     <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
     <Setter Property="FontFamily" Value="{StaticResource ContentFontFamily}"/>
     <Setter Property="FontSize" Value="{StaticResource ContentFontSize}"/>
-    <Setter Property="TextOptions.TextHintingMode" Value="Animated"/>
+    <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
     <Setter Property="Height" Value="26"/>
     <Setter Property="IsTabStop" Value="False"/>
     <Setter Property="MinWidth" Value="100"/>
@@ -1734,7 +1734,7 @@
     <Setter Property="Padding" Value="2"/>
     <Setter Property="FontFamily" Value="{StaticResource ContentFontFamily}"/>
     <Setter Property="FontSize" Value="{StaticResource ContentFontSize}"/>
-    <Setter Property="TextOptions.TextHintingMode" Value="Animated"/>
+    <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
     <Setter Property="BorderThickness" Value="1"/>
     <Setter Property="MinHeight" Value="26"/>
     <Setter Property="Background" Value="{StaticResource ControlBackgroundBrush}"/>
@@ -1852,7 +1852,7 @@
     <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
     <Setter Property="FontFamily" Value="{StaticResource ContentFontFamily}"/>
     <Setter Property="FontSize" Value="{StaticResource ContentFontSize}"/>
-    <Setter Property="TextOptions.TextHintingMode" Value="Animated"/>
+    <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
     <Setter Property="Background">
       <Setter.Value>
         <SolidColorBrush Color="{StaticResource WhiteColor}"/>
@@ -1962,7 +1962,7 @@
     <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
     <Setter Property="FontFamily" Value="{StaticResource ContentFontFamily}"/>
     <Setter Property="FontSize" Value="{StaticResource ContentFontSize}"/>
-    <Setter Property="TextOptions.TextHintingMode" Value="Animated"/>
+    <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
     <Setter Property="MinHeight" Value="50"/>
     <Setter Property="Template">
       <Setter.Value>
@@ -2494,7 +2494,7 @@
     <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
     <Setter Property="FontFamily" Value="{StaticResource ContentFontFamily}"/>
     <Setter Property="FontSize" Value="{StaticResource ContentFontSize}"/>
-    <Setter Property="TextOptions.TextHintingMode" Value="Animated"/>
+    <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
     <Setter Property="BorderThickness" Value="1" />
     <Setter Property="Background">
       <Setter.Value>
@@ -2782,7 +2782,7 @@
     <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
     <Setter Property="FontFamily" Value="{StaticResource ContentFontFamily}"/>
     <Setter Property="FontSize" Value="{StaticResource ContentFontSize}"/>
-    <Setter Property="TextOptions.TextHintingMode" Value="Animated"/>
+    <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
     <Setter Property="BorderThickness" Value="0"/>
     <Setter Property="BorderBrush" Value="{StaticResource ThumbBrush}"/>
     <Setter Property="DescriptionViewerPosition" Value="Auto"/>
@@ -3107,7 +3107,7 @@
     <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
     <Setter Property="FontFamily" Value="{StaticResource ContentFontFamily}"/>
     <Setter Property="FontSize" Value="{StaticResource ContentFontSize}"/>
-    <Setter Property="TextOptions.TextHintingMode" Value="Animated"/>
+    <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
     <Setter Property="FontSize" Value="{StaticResource LabelFontSize}"/>
     <Setter Property="BorderThickness" Value="1"/>
     <Setter Property="MinWidth" Value="200"/>
@@ -3184,7 +3184,7 @@
     <Setter Property="Foreground" Value="{StaticResource LabelTextBrush}"/>
     <Setter Property="FontFamily" Value="{StaticResource ContentFontFamily}"/>
     <Setter Property="FontSize" Value="{StaticResource LabelFontSize}"/>
-    <Setter Property="TextOptions.TextHintingMode" Value="Animated"/>
+    <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
     <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
     <Setter Property="BorderBrush" Value="{StaticResource SliderTrackBrush}"/>
     <Setter Property="BorderThickness" Value="1"/>
@@ -3369,7 +3369,7 @@
     <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
     <Setter Property="FontFamily" Value="{StaticResource ContentFontFamily}"/>
     <Setter Property="FontSize" Value="{StaticResource ContentFontSize}"/>
-    <Setter Property="TextOptions.TextHintingMode" Value="Animated"/>
+    <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
     <Setter Property="IsTabStop" Value="False"/>
     <Setter Property="OverlayStyle">
       <Setter.Value>

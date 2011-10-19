@@ -99,7 +99,7 @@
     <Setter Property="Foreground" Value="{StaticResource LabelTextBrush}"/>
     <Setter Property="FontFamily" Value="{StaticResource ContentFontFamily}"/>
     <Setter Property="FontSize" Value="{StaticResource LabelFontSize}"/>
-    <Setter Property="TextOptions.TextHintingMode" Value="Animated"/>
+    <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
   </Style>
 
   <!--ValidationToolTipTemplate Style-->
@@ -204,7 +204,7 @@
     <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
     <Setter Property="FontFamily" Value="{StaticResource ContentFontFamily}"/>
     <Setter Property="FontSize" Value="{StaticResource ContentFontSize}"/>
-    <Setter Property="TextOptions.TextHintingMode" Value="Animated"/>
+    <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
     <Setter Property="FontWeight" Value="SemiBold"/>
     <Setter Property="Padding" Value="5,6"/>
     <Setter Property="BorderThickness" Value="1"/>
@@ -282,7 +282,7 @@
     <Setter Property="Foreground" Value="{StaticResource HighlightBrush}"/>
     <Setter Property="FontFamily" Value="{StaticResource ContentFontFamily}"/>
     <Setter Property="FontSize" Value="{StaticResource HyperlinkFontSize}"/>
-    <Setter Property="TextOptions.TextHintingMode" Value="Animated"/>
+    <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
     <Setter Property="Padding" Value="2,0,2,0"/>
     <Setter Property="Cursor" Value="Hand"/>
     <Setter Property="HorizontalContentAlignment" Value="Left"/>
@@ -370,7 +370,7 @@
   <Style TargetType="TextBox" x:Key="DefaultTextBoxStyle">
     <Setter Property="FontFamily" Value="{StaticResource ContentFontFamily}"/>
     <Setter Property="FontSize" Value="{StaticResource ContentFontSize}"/>
-    <Setter Property="TextOptions.TextHintingMode" Value="Animated"/>
+    <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
     <Setter Property="BorderThickness" Value="1"/>
     <Setter Property="MinHeight" Value="26"/>
     <Setter Property="Background" Value="{StaticResource ControlBackgroundBrush}"/>
@@ -495,7 +495,7 @@
     <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
     <Setter Property="FontFamily" Value="{StaticResource ContentFontFamily}"/>
     <Setter Property="FontSize" Value="{StaticResource ContentFontSize}"/>
-    <Setter Property="TextOptions.TextHintingMode" Value="Animated"/>
+    <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
     <Setter Property="Background">
       <Setter.Value>
         <SolidColorBrush Color="{StaticResource Gray7}" />
@@ -783,7 +783,7 @@
     <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
     <Setter Property="FontFamily" Value="{StaticResource ContentFontFamily}"/>
     <Setter Property="FontSize" Value="{StaticResource ContentFontSize}"/>
-    <Setter Property="TextOptions.TextHintingMode" Value="Animated"/>
+    <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
   </Style>
 
   <!--ScrollBar Style-->
@@ -1175,7 +1175,7 @@
     <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
     <Setter Property="FontFamily" Value="{StaticResource ContentFontFamily}"/>
     <Setter Property="FontSize" Value="{StaticResource ContentFontSize}"/>
-    <Setter Property="TextOptions.TextHintingMode" Value="Animated"/>
+    <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
     <Setter Property="Background" Value="{StaticResource ControlBackgroundBrush}"/>
     <Setter Property="HorizontalContentAlignment" Value="Left"/>
     <Setter Property="VerticalContentAlignment" Value="Top"/>
@@ -1263,7 +1263,7 @@
   <Style TargetType="ListBoxItem" x:Key="DefaultListBoxItemStyle">
     <Setter Property="FontFamily" Value="{StaticResource ContentFontFamily}"/>
     <Setter Property="FontSize" Value="{StaticResource ContentFontSize}"/>
-    <Setter Property="TextOptions.TextHintingMode" Value="Animated"/>
+    <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
     <Setter Property="Padding" Value="10"/>
     <Setter Property="Margin" Value="0"/>
     <Setter Property="HorizontalContentAlignment" Value="Left"/>
@@ -1494,7 +1494,7 @@
   <Style TargetType="PasswordBox" x:Key="DefaultPasswordBoxStyle">
     <Setter Property="FontFamily" Value="{StaticResource ContentFontFamily}"/>
     <Setter Property="FontSize" Value="{StaticResource ContentFontSize}"/>
-    <Setter Property="TextOptions.TextHintingMode" Value="Animated"/>
+    <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
     <Setter Property="BorderThickness" Value="1"/>
     <Setter Property="MinHeight" Value="26"/>
     <Setter Property="Background" Value="{StaticResource ControlBackgroundBrush}"/>
@@ -1848,7 +1848,7 @@
     <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
     <Setter Property="FontFamily" Value="{StaticResource ContentFontFamily}"/>
     <Setter Property="FontSize" Value="{StaticResource ContentFontSize}"/>
-    <Setter Property="TextOptions.TextHintingMode" Value="Animated"/>
+    <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
     <Setter Property="FontWeight" Value="SemiBold"/>
     <Setter Property="Padding" Value="5,6"/>
     <Setter Property="BorderThickness" Value="1"/>
@@ -2136,7 +2136,7 @@
     <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
     <Setter Property="FontFamily" Value="{StaticResource ContentFontFamily}"/>
     <Setter Property="FontSize" Value="{StaticResource ContentFontSize}"/>
-    <Setter Property="TextOptions.TextHintingMode" Value="Animated"/>
+    <Setter Property="TextOptions.TextHintingMode" Value="Fixed"/>
     <Setter Property="FontWeight" Value="SemiBold"/>
     <Setter Property="Padding" Value="5,6"/>
     <Setter Property="BorderThickness" Value="1"/>
