@@ -81,6 +81,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Neith.Util\src\Neith.Util.Async\Neith.Util.Async.csproj">
+      <Project>{C613478F-0EE8-4FA3-A781-6A9D4CE6F460}</Project>
+      <Name>Neith.Util.Async</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Neith.Util\src\Neith.Util.Extend\Neith.Util.Extend.csproj">
       <Project>{7CCFE4BD-A210-41E1-8589-80C3AC49DB2E}</Project>
       <Name>Neith.Util.Extend</Name>

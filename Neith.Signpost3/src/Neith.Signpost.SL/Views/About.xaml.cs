@@ -79,7 +79,7 @@ namespace Neith.Signpost
         private void TextBox_GotFocus(object sender, RoutedEventArgs e)
         {
             var command = tbCommand.Text;
-            SendKeyTestAsync(command).Start();
+            SendKeyTestAsync(command);
         }
 
         private async Task SendKeyTestAsync(string command)

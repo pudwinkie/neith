@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
+using Neith.Threading.Tasks;
 
 namespace Neith.Signpost.Services
 {
@@ -15,23 +16,23 @@ namespace Neith.Signpost.Services
     public class SignpostService : ISignpostContext
     {
         #region サーバ時刻取得
-        public static DateTimeOffset GetServerTime()
+        public static  DateTimeOffset GetServerTime()
         {
             var now = DateTimeOffset.Now;
             Debug.WriteLine("[SignpostService::GetServerTime] " + now);
             return now;
         }
+        private static readonly Func<DateTimeOffset> ApmGetServerTime = GetServerTime;
+
 
         public IAsyncResult BeginGetServerTime(AsyncCallback callback, object state)
         {
-            return GetServerTimeFunc.BeginInvoke(callback, state);
+            return ApmGetServerTime.BeginInvoke(callback, state);
         }
         public DateTimeOffset EndGetServerTime(IAsyncResult result)
         {
-            return GetServerTimeFunc.EndInvoke(result);
+            return ApmGetServerTime.EndInvoke(result);
         }
-        private delegate DateTimeOffset DelegateGetServerTime();
-        private readonly DelegateGetServerTime GetServerTimeFunc = new DelegateGetServerTime(GetServerTime);
 
 
         public CompositeType GetDataUsingDataContract(CompositeType composite)
@@ -48,22 +49,18 @@ namespace Neith.Signpost.Services
 
         #endregion
         #region キーイベントを発行
-
-
+        //private static readonly IApm<string, TimeSpan> ApmSendKeys = NeithTaskEx.ToApm<string, TimeSpan>(Neith.Util.Input.SendKeyInput.SendKeysAsync);
+        private static readonly IApm<string, TimeSpan> ApmSendKeys = NeithTaskEx.ToApm<string, TimeSpan>(Neith.Util.Input.SendKeysWinform.SendWaitExAsync);
 
         public IAsyncResult BeginSendKeys(string command, AsyncCallback callback, object state)
         {
-            var t1 = Neith.Util.Input.SendKeyInput.SendKeysAsync(command);
-            Task<TimeSpan> t2 = new Task<TimeSpan>(a => t1.Result, state);
-            t1.ContinueWith(a => t2.Start());
-            t2.ContinueWith(a => callback(t2));
-            return t2;
+            Debug.WriteLine("[SignpostService::BeginSendKeys] command=" + command);
+            return ApmSendKeys.BeginInvoke(command, callback, state);
         }
 
         public TimeSpan EndSendKeys(IAsyncResult result)
         {
-            var task = result as Task<TimeSpan>;
-            return task.Result;
+            return ApmSendKeys.EndInvoke(result);
         }
 
         #endregion

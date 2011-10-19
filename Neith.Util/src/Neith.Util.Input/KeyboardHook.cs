@@ -39,8 +39,8 @@ namespace Neith.Util.Input
         ///<summary>このライブラリのSendKeyInputで生成された情報かを表す値を取得または設定する。</summary>
         public bool OwnCreated
         {
-            get { return state.ExtraInfo == SendKeyInput.ExtraInfoMark; }
-            set { state.ExtraInfo = value ? SendKeyInput.ExtraInfoMark : IntPtr.Zero; }
+            get { return state.ExtraInfo == API.GetMessageExtraInfo(); }
+            set { state.ExtraInfo = value ? API.GetMessageExtraInfo() : IntPtr.Zero; }
         }
 
         /// <summary>
