@@ -49,7 +49,6 @@ namespace Neith.Signpost.Services
 
         #endregion
         #region キーイベントを発行
-        //private static readonly IApm<string, TimeSpan> ApmSendKeys = NeithTaskEx.ToApm<string, TimeSpan>(Neith.Util.Input.SendKeyInput.SendKeysAsync);
         private static readonly IApm<string, TimeSpan> ApmSendKeys = NeithTaskEx.ToApm<string, TimeSpan>(Neith.Util.Input.SendKeysWinform.SendWaitExAsync);
 
         public IAsyncResult BeginSendKeys(string command, AsyncCallback callback, object state)

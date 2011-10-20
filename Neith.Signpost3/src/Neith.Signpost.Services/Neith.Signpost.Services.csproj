@@ -54,6 +54,9 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Threading.Tasks.Dataflow">
+      <HintPath>..\..\..\externals\Async-CTP\samples\System.Threading.Tasks.Dataflow.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
@@ -67,6 +70,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Const.cs" />
+    <Compile Include="Flows\FlowDispatcher.cs" />
+    <Compile Include="Flows\FlowItem.cs" />
+    <Compile Include="Flows\IFlowItem.cs" />
+    <Compile Include="Flows\IFlowTargetBlock.cs" />
     <Compile Include="ISignpostContext.cs" />
     <Compile Include="IStaticContents.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
