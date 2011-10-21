@@ -57,5 +57,20 @@ namespace Neith.Signpost.Logger.Model
         /// <summary>ログのオリジナルソース</summary>
         public object Source { get; set; }
 
+
+        public override string ToString()
+        {
+            var localTime = Time.ToLocalTime();
+            var sender = ToNullEmpty(Sender);
+            var target = ToNullEmpty(Target);
+            var title = ToNullEmpty(Title);
+            var body = ToNullEmpty(Body);
+            return string.Format("{0:o} ({1}->{2}) [{3}] {4}", localTime, sender, target, title, body);
+        }
+        private static string ToNullEmpty(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text)) return "";
+            return text.Trim();
+        }
     }
 }

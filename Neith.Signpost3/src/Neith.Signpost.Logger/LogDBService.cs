@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Reactive.Disposables;
+using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
+using Neith.Signpost.Logger.Model;
 using Wintellect.Sterling;
 using Wintellect.Sterling.Database;
-using Neith.Signpost.Logger.Model;
 
 namespace Neith.Signpost.Logger
 {
     public class LogDBService : IDisposable
     {
+
+
         public static LogDBService Instance { get; private set; }
 
         static LogDBService()
@@ -27,11 +31,18 @@ namespace Neith.Signpost.Logger
             // 終了ログを作る
             var item = new NeithLog
             {
+                Time = Neith.Util.DateTimeUtil.GetUniqueTimeStamp(),
                 Application = "Neith.Signpost.Logger",
                 Sender = "Neith.Signpost.Logger",
                 Title = "END SERVICE",
             };
-            Post(item);
+            AddLogBlock.SendAsync(item).Wait();
+
+            // 全ログを列挙
+            foreach (var kv in Database.AllLogsKV) {
+                var l = kv.LazyValue.Value;
+                Debug.WriteLine(l);
+            }
 
             // 終了
             Tasks.Dispose();
@@ -39,17 +50,24 @@ namespace Neith.Signpost.Logger
 
 
         public SterlingEngine DBEngine { get; private set; }
-        public LogDBFileInstance Current { get; private set; }
+        public LogDBFileInstance Database { get; private set; }
         private ActionBlock<NeithLog> AddLogBlock { get; set; }
 
 
         private LogDBService()
         {
+            // ルートパスを切り替える
+            var rootPath = Neith.Util.Reflection.AssemblyUtil
+                .GetCallingAssemblyDirctory()
+                .PathCombine("database");
+            Neith.Sterling.Server.FileSystem.PathProvider.RootPath = rootPath;
+
+            // DB作成
             DBEngine = new SterlingEngine().Add(Tasks);
             DBEngine.Activate();
-            Current = new LogDBFileInstance(this, DateTime.UtcNow);
+            Database = new LogDBFileInstance(this, DateTime.UtcNow);
 
-            var instance = Current.Instance;
+            var instance = Database.Instance;
 
             AddLogBlock = new ActionBlock<NeithLog>(log =>
             {
@@ -58,22 +76,22 @@ namespace Neith.Signpost.Logger
             });
 
             // 開始ログを作る
-            var item = new NeithLog
+            Post(new NeithLog
             {
+                Time = Neith.Util.DateTimeUtil.GetUniqueTimeStamp(),
                 Application = "Neith.Signpost.Logger",
                 Sender = "Neith.Signpost.Logger",
                 Title = "START SERVICE",
-            };
-            Post(item);
+            });
         }
 
         /// <summary>
         /// ログを保存します。
         /// </summary>
         /// <param name="log"></param>
-        public void Post(NeithLog log)
+        public bool Post(NeithLog log)
         {
-            AddLogBlock.Post(log);
+            return AddLogBlock.Post(log);
         }
 
     }

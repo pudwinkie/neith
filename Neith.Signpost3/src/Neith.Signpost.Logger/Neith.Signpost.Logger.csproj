@@ -44,6 +44,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Rx_Experimental-Main.1.1.11011\lib\Net4\System.Reactive.dll</HintPath>
     </Reference>
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Channels" />
     <Reference Include="System.Threading.Tasks.Dataflow">
       <HintPath>..\..\..\externals\Async-CTP\samples\System.Threading.Tasks.Dataflow.dll</HintPath>
     </Reference>
@@ -64,6 +66,8 @@
     <Compile Include="LogDBFileInstance.cs" />
     <Compile Include="LogDBService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service.cs" />
+    <Compile Include="XIV\WatchService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -72,6 +76,10 @@
     <ProjectReference Include="..\..\..\externals\FFXIVRuby\FFXIVRuby.csproj">
       <Project>{0B48D7FB-E505-4697-8467-000693B52D88}</Project>
       <Name>FFXIVRuby</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Neith.Util\src\Neith.Sterling\Neith.Sterling.csproj">
+      <Project>{9C8383C1-3C40-4A7A-8AA5-41FF21720C7B}</Project>
+      <Name>Neith.Sterling</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Neith.Util\src\Neith.Util.Async\Neith.Util.Async.csproj">
       <Project>{C613478F-0EE8-4FA3-A781-6A9D4CE6F460}</Project>

@@ -38,8 +38,8 @@ namespace Neith.Signpost.Services
         {
             TaskEx.Run(() =>
             {
+                Neith.Signpost.Logger.Service.Instance.Add(Tasks);
                 StartupDomainService();
-                Neith.Signpost.Logger.LogDBService.Instance.Add(Tasks);
             });
         }
 

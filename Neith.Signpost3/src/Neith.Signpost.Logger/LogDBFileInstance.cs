@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Reactive.Disposables;
 using Wintellect.Sterling;
-using Wintellect.Sterling.Server.FileSystem;
+using Wintellect.Sterling.Keys;
+using Neith.Sterling.Server.FileSystem;
+using Neith.Signpost.Logger.Model;
 
 namespace Neith.Signpost.Logger
 {
@@ -16,6 +18,7 @@ namespace Neith.Signpost.Logger
 
         public ISterlingDatabaseInstance Instance { get; private set; }
 
+        public List<TableKey<NeithLog, DateTime>> AllLogsKV { get { return Instance.Query<NeithLog, DateTime>(); } }
 
         internal LogDBFileInstance(LogDBService service, DateTime date)
         {
