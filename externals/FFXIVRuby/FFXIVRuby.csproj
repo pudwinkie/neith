@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0B48D7FB-E505-4697-8467-000693B52D88}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FFXIVRuby</RootNamespace>
+    <AssemblyName>FFXIVRuby</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AsyncCtpLibrary">
+      <HintPath>..\Async-CTP\samples\AsyncCtpLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="NLog">
+      <HintPath>..\..\Neith.Signpost3\src\packages\NLog.2.0.0.2000\lib\net40\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Reactive, Version=1.1.11011.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Neith.Signpost3\src\packages\Rx_Experimental-Main.1.1.11011\lib\Net4\System.Reactive.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Dataflow">
+      <HintPath>..\Async-CTP\samples\System.Threading.Tasks.Dataflow.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BinaryReaderExtensions.cs" />
+    <Compile Include="DataDisguiser.cs" />
+    <Compile Include="FFXILogMessageType.cs" />
+    <Compile Include="FFXIVLog.cs" />
+    <Compile Include="FFXIVLogReader.cs" />
+    <Compile Include="FFXIVMemoryProvidor.cs" />
+    <Compile Include="FFXIVProcess.cs" />
+    <Compile Include="FFXIVRuby.cs" />
+    <Compile Include="FixedFormSentenceLibraryDataSet.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="LogStatusFoundEvent.cs" />
+    <Compile Include="LogStatusSearcher.cs" />
+    <Compile Include="Memory.cs" />
+    <Compile Include="ProcessMemoryWalk.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TABConvertor.cs" />
+    <Compile Include="TabJapanese.cs" />
+    <Compile Include="Watcher\XIVWathcer.cs" />
+    <Compile Include="Watcher\XIVWathcer_Log.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Neith.Util\src\Neith.Util.Async\Neith.Util.Async.csproj">
+      <Project>{C613478F-0EE8-4FA3-A781-6A9D4CE6F460}</Project>
+      <Name>Neith.Util.Async</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Neith.Util\src\Neith.Util.Extensions\Neith.Util.Extensions.csproj">
+      <Project>{BDAA1A4C-C085-49B4-969D-84E1B2428E9D}</Project>
+      <Name>Neith.Util.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Neith.Util\src\Neith.Util.RX\Neith.Util.RX.csproj">
+      <Project>{C8B06C95-1B5D-4811-99C4-341B7109BC30}</Project>
+      <Name>Neith.Util.RX</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Neith.Util\src\Neith.Util\Neith.Util.csproj">
+      <Project>{B5385976-C31F-42DF-B1DB-54EA0F98FDC3}</Project>
+      <Name>Neith.Util</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
