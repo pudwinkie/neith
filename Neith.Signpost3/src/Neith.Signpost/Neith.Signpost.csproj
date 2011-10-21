@@ -98,18 +98,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Neith.Util\src\Neith.Util.Extend\Neith.Util.Extend.csproj">
-      <Project>{7CCFE4BD-A210-41E1-8589-80C3AC49DB2E}</Project>
-      <Name>Neith.Util.Extend</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Neith.Util\src\Neith.Util.Extensions\Neith.Util.Extensions.csproj">
-      <Project>{BDAA1A4C-C085-49B4-969D-84E1B2428E9D}</Project>
-      <Name>Neith.Util.Extensions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Neith.Util\src\Neith.Util\Neith.Util.csproj">
-      <Project>{B5385976-C31F-42DF-B1DB-54EA0F98FDC3}</Project>
-      <Name>Neith.Util</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Neith.Signpost.Services\Neith.Signpost.Services.csproj">
       <Project>{EB3132DB-7653-4FEF-A575-F4E40E7E5DA1}</Project>
       <Name>Neith.Signpost.Services</Name>

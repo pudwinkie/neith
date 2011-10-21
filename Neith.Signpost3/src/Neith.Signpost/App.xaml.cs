@@ -5,7 +5,6 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 using Neith.Signpost.Services;
-using Neith.Util;
 
 namespace Neith.Signpost
 {

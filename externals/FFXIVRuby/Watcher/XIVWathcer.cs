@@ -28,6 +28,11 @@ namespace FFXIVRuby.Watcher
         {
             log.Info("XIVWathcer Start");
             logBroadcast = new BroadcastBlock<FFXIVLog>(a => a);
+            Start();
+        }
+
+        private void Start()
+        {
             TaskEx.RunEx(LogWatch).Add(Tasks);
         }
     }
