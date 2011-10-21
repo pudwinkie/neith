@@ -10,7 +10,7 @@ namespace Neith.Util
     public static class DateTimeUtil
     {
         /// <summary>
-        /// DateTime.Nowを返します。但し前回と同じか過去の時刻だった場合に、
+        /// DateTime.UtcNowを返します。但し前回と同じか過去の時刻だった場合に、
         /// 前回返した時刻に1tick加算した価を返し、ユニークであることを保障します。
         /// </summary>
         /// <returns></returns>
@@ -28,7 +28,7 @@ namespace Neith.Util
 
             public static DateTime Create()
             {
-                DateTime rc = DateTime.Now;
+                DateTime rc = DateTime.UtcNow;
                 lock (typeof(GetUniqueTimeStampImpl)) {
                     if (last >= rc) {
                         rc = last.AddTicks(1);

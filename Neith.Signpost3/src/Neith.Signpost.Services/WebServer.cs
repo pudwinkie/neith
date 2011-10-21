@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using System.Reactive.Disposables;
 using Neith.Signpost.Services;
 using System.ServiceModel.Description;
 
@@ -15,26 +16,21 @@ namespace Neith.Signpost.Services
     /// </summary>
     public class WebServer : IDisposable
     {
+        private CompositeDisposable Tasks = new CompositeDisposable();
         internal List<ServiceHost> Hosts { get; private set; }
 
         /// <summary>起動中ならtrue</summary>
         public bool IsOpen { get; private set; }
 
         /// <summary>Disposeされたならtrue</summary>
-        public bool IsDisposed { get; private set; }
+        public bool IsDisposed { get { return Tasks.IsDisposed; } }
 
         private readonly Queue<Action> OpenCallBack = new Queue<Action>();
 
         public void Dispose()
         {
-            IsDisposed = true;
             IsOpen = false;
-            if (Hosts != null) {
-                Hosts
-                    .AsParallel()
-                    .Where(a => a.State == CommunicationState.Opened)
-                    .ForAll(a => a.Close());
-            }
+            Tasks.Dispose();
         }
 
 
@@ -43,6 +39,7 @@ namespace Neith.Signpost.Services
             TaskEx.Run(() =>
             {
                 StartupDomainService();
+                Neith.Signpost.Logger.LogDBService.Instance.Add(Tasks);
             });
         }
 
@@ -54,6 +51,13 @@ namespace Neith.Signpost.Services
         {
             try {
                 Hosts = new List<ServiceHost>();
+                Disposable.Create(() =>
+                {
+                    Hosts
+                        .AsParallel()
+                        .Where(a => a.State == CommunicationState.Opened)
+                        .ForAll(a => a.Close());
+                }).Add(Tasks);
                 {
                     Debug.WriteLine("## host setting start ##");
                     var host = new ServiceHost(typeof(SignpostService), Const.ServiceUrl);

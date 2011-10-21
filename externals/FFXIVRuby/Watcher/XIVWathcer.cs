@@ -1,7 +1,11 @@
 ﻿using System;
-using System.Reactive.Disposables;
-using System.Reactive.Subjects;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
+using System.Reactive.Disposables;
+using System.Diagnostics;
 using NLog;
 
 namespace FFXIVRuby.Watcher
@@ -23,7 +27,7 @@ namespace FFXIVRuby.Watcher
         public XIVWathcer()
         {
             log.Info("XIVWathcer Start");
-            LogSubject = new Subject<FFXIVLog>().Add(Tasks);
+            logBroadcast = new BroadcastBlock<FFXIVLog>(a => a);
             TaskEx.RunEx(LogWatch).Add(Tasks);
         }
     }
