@@ -112,6 +112,10 @@
       <Project>{B5385976-C31F-42DF-B1DB-54EA0F98FDC3}</Project>
       <Name>Neith.Util</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Neith.Signpost.Logger\Neith.Signpost.Logger.csproj">
+      <Project>{3D345814-F3CF-4B93-917E-B65B5B01F29B}</Project>
+      <Name>Neith.Signpost.Logger</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

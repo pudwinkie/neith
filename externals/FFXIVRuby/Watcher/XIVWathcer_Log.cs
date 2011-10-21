@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Reactive.Linq;
+using System.Threading.Tasks.Dataflow;
 using System.Reactive.Disposables;
-using System.Reactive.Subjects;
 using System.Diagnostics;
 using NLog;
 
@@ -16,12 +15,11 @@ namespace FFXIVRuby.Watcher
     /// </summary>
     public partial class XIVWathcer 
     {
-        private readonly Subject<FFXIVLog> LogSubject;
+        /// <summary>ログ配信。</summary>
+        private readonly BroadcastBlock<FFXIVLog> logBroadcast;
 
-        /// <summary>ログ通知。</summary>
-        public IObservable<FFXIVLog> RxLog { get { return LogSubject; } }
-
-
+        /// <summary>ログ配信。</summary>
+        public ISourceBlock<FFXIVLog> LogSource { get { return logBroadcast; } }
 
         private async Task LogWatch()
         {
@@ -86,12 +84,12 @@ namespace FFXIVRuby.Watcher
                 var to = reader.TerminalPoint;
                 if (from > to) from = reader.EntryPoint;
                 foreach (var item in reader.GetLogs(from, to)) {
-                    LogSubject.OnNext(item);
+                    logBroadcast.Post(item);
                 }
                 from = to;
             }
         }
-        private static readonly TimeSpan WaitReadLog = TimeSpan.FromMilliseconds(50);
+        private static readonly TimeSpan WaitReadLog = TimeSpan.FromMilliseconds(20);
 
 
 
