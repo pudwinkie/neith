@@ -24,7 +24,12 @@ namespace Neith.Signpost.Logger.Model
 
 
         /// <summary>行為名</summary>
-        public string Title { get; set; }
+        public string Action { get; set; }
+
+        /// <summary>行為グループ</summary>
+        public string ActionGroup { get; set; }
+
+
 
         /// <summary>行為の詳細</summary>
         public string Body { get; set; }
@@ -58,14 +63,18 @@ namespace Neith.Signpost.Logger.Model
         public object Source { get; set; }
 
 
+        public NeithLog()
+        {
+        }
+
         public override string ToString()
         {
             var localTime = Time.ToLocalTime();
             var sender = ToNullEmpty(Sender);
             var target = ToNullEmpty(Target);
-            var title = ToNullEmpty(Title);
+            var action = ToNullEmpty(Action);
             var body = ToNullEmpty(Body);
-            return string.Format("{0:o} ({1}->{2}) [{3}] {4}", localTime, sender, target, title, body);
+            return string.Format("{0:o} ({1}->{2}) [{3}] {4}", localTime, sender, target, action, body);
         }
         private static string ToNullEmpty(string text)
         {

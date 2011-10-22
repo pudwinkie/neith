@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using System.Reactive.Disposables;
@@ -13,7 +14,7 @@ namespace FFXIVRuby.Watcher
     /// <summary>
     /// FFXIVの監視タスク。
     /// </summary>
-    public partial class XIVWathcer 
+    public partial class XIVWathcer
     {
         /// <summary>ログ配信。</summary>
         private readonly BroadcastBlock<FFXIVLog> logBroadcast;
@@ -21,13 +22,13 @@ namespace FFXIVRuby.Watcher
         /// <summary>ログ配信。</summary>
         public ISourceBlock<FFXIVLog> LogSource { get { return logBroadcast; } }
 
-        private async Task LogWatch()
+        private async Task LogWatch(CancellationToken token)
         {
-            while (true) {
-                var xiv = await ScanProcess();
-                var reader = await SearchLogArea(xiv);
-                if (reader == null) continue;
-                await ReadLog(reader);
+            while (!token.IsCancellationRequested)
+            {
+                var xiv = await ScanProcess(token); if (xiv == null) continue;
+                var reader = await SearchLogArea(xiv, token); if (reader == null) continue;
+                await ReadLog(reader, token);
             }
         }
 
@@ -35,17 +36,20 @@ namespace FFXIVRuby.Watcher
         /// プロセスを検索します。
         /// </summary>
         /// <returns></returns>
-        private async Task<FFXIVProcess> ScanProcess()
+        private async Task<FFXIVProcess> ScanProcess(CancellationToken token)
         {
-            log.Trace("Scan XIV...");
-            while (true) {
+            logger.Trace("Scan XIV...");
+            while (!token.IsCancellationRequested)
+            {
                 Process p = FFXIVMemoryProvidor.GetFFXIVGameProcess();
-                if (p != null) {
-                    log.Trace("FFXIV found.");
+                if (p != null)
+                {
+                    logger.Trace("FFXIV found.");
                     return new FFXIVProcess(p);
                 }
-                await TaskEx.Delay(WaitScanProcess);
+                await TaskEx.Delay(WaitScanProcess, token);
             }
+            return null;
         }
         private static readonly TimeSpan WaitScanProcess = TimeSpan.FromSeconds(5);
 
@@ -56,13 +60,15 @@ namespace FFXIVRuby.Watcher
         /// </summary>
         /// <param name="en14"></param>
         /// <returns></returns>
-        private async Task<FFXIVLogReader> SearchLogArea(FFXIVProcess xiv)
+        private async Task<FFXIVLogReader> SearchLogArea(FFXIVProcess xiv, CancellationToken token)
         {
-            for (var i = 0; i < 10; i++) {
+            for (var i = 0; i < 10; i++)
+            {
+                if (token.IsCancellationRequested) return null;
                 var search = new LogStatusSearcher(xiv);
-                var reader = search.SearchPLINQ();
+                var reader = search.SearchPLINQ(token);
                 if (reader != null) return reader;
-                await TaskEx.Delay(WaitScanProcess);
+                await TaskEx.Delay(WaitScanProcess, token);
             }
             return null;
         }
@@ -71,19 +77,24 @@ namespace FFXIVRuby.Watcher
         /// ログを読み込みます。
         /// </summary>
         /// <returns></returns>
-        private async Task ReadLog(FFXIVLogReader reader)
+        private async Task ReadLog(FFXIVLogReader reader, CancellationToken token)
         {
-            log.Trace("Read XIV log...");
+            logger.Trace("Read XIV log...");
             var from = int.MaxValue;
             var proc = reader.FFXIV.Proc;
-            while (!proc.HasExited) {
-                if (from == reader.TerminalPoint) {
-                    await TaskEx.Delay(WaitReadLog);
+            while (!proc.HasExited)
+            {
+                if (token.IsCancellationRequested) return;
+                if (from == reader.TerminalPoint)
+                {
+                    await TaskEx.Delay(WaitReadLog, token);
                     continue;
                 }
                 var to = reader.TerminalPoint;
                 if (from > to) from = reader.EntryPoint;
-                foreach (var item in reader.GetLogs(from, to)) {
+                foreach (var item in reader.GetLogs(from, to))
+                {
+                    if (token.IsCancellationRequested) return;
                     logBroadcast.Post(item);
                 }
                 from = to;

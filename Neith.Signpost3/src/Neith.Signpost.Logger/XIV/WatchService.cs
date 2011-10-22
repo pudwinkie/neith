@@ -5,6 +5,7 @@ using System.Text;
 using System.Reactive.Disposables;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
+using FFXIVRuby.Watcher;
 using Neith.Signpost.Logger;
 using Neith.Signpost.Logger.Model;
 
@@ -18,53 +19,60 @@ namespace Neith.Signpost.Logger.XIV
             Tasks.Dispose();
         }
 
+        private XIVWathcer Watcher { get; set; }
+        private ISourceBlock<NeithLog> LogSource { get; set; }
+
+
         public WatchService()
         {
+            var Watcher = new XIVWathcer().Add(Tasks);
+            var trans = new TransformBlock<FFXIVRuby.FFXIVLog, NeithLog>(a => a.ToNeithLog());
+            Watcher.LogSource.LinkTo(trans, false).Add(Tasks);
+            LogSource = trans;
+        }
 
-
+        public void Start()
+        {
+            Watcher.Start();
         }
 
 
 
-        #region ISourceBlock<NeithLog> メンバー
+        #region ISourceBlock<NeithLog>
 
         public NeithLog ConsumeMessage(DataflowMessageHeader messageHeader, ITargetBlock<NeithLog> target, out bool messageConsumed)
         {
-            throw new NotImplementedException();
+            return LogSource.ConsumeMessage(messageHeader, target, out  messageConsumed);
         }
 
         public IDisposable LinkTo(ITargetBlock<NeithLog> target, bool unlinkAfterOne)
         {
-            throw new NotImplementedException();
+            return LogSource.LinkTo(target, unlinkAfterOne);
         }
 
         public void ReleaseReservation(DataflowMessageHeader messageHeader, ITargetBlock<NeithLog> target)
         {
-            throw new NotImplementedException();
+            LogSource.ReleaseReservation(messageHeader, target);
         }
 
         public bool ReserveMessage(DataflowMessageHeader messageHeader, ITargetBlock<NeithLog> target)
         {
-            throw new NotImplementedException();
+            return LogSource.ReserveMessage(messageHeader, target);
         }
-
-        #endregion
-
-        #region IDataflowBlock メンバー
 
         public void Complete()
         {
-            throw new NotImplementedException();
+            LogSource.Complete();
         }
 
         public Task Completion
         {
-            get { throw new NotImplementedException(); }
+            get { return LogSource.Completion; }
         }
 
         public void Fault(Exception exception)
         {
-            throw new NotImplementedException();
+            LogSource.Fault(exception);
         }
 
         #endregion

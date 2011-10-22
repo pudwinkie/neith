@@ -38,12 +38,6 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Wintellect.Sterling.Server">
-      <HintPath>..\..\..\Neith.Signpost3\src\packages\Sterling.1.5.0.0\lib\net40\Wintellect.Sterling.Server.dll</HintPath>
-    </Reference>
-    <Reference Include="Wintellect.Sterling.Server.FileSystem">
-      <HintPath>..\..\..\Neith.Signpost3\src\packages\Sterling.1.5.0.0\lib\net40\Wintellect.Sterling.Server.FileSystem.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -54,7 +48,10 @@
     <Compile Include="Server\FileSystem\SterlingFileSystemException.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\..\..\externals\sterling\src\SterlingSln\Wintellect.Sterling.Server\Wintellect.Sterling.Server.csproj">
+      <Project>{0119E739-C888-41C6-81CA-8D86C014BA85}</Project>
+      <Name>Wintellect.Sterling.Server</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

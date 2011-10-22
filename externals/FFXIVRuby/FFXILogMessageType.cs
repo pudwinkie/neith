@@ -51,10 +51,11 @@ namespace FFXIVRuby
         TALK_NPC3 = 0x0028,
         SYSTEM_INFO = 0x001D,
         SYSTEM_MY_ACTION = 0x0020,
-        SYSTEM_2 = 0x0021,
 
         MY_GAIN = 0x0042,
         MY_ENEMY_DOWNED = 0x0044,
+
+
         MY_HIT = 0x0050,
         MY_DAMAGE = 0x0051,
         MY_MISS = 0x0056,
@@ -83,6 +84,28 @@ namespace FFXIVRuby
         OTHER_EFFECT_REMOVED = 0x0067,
         OTHER_ENFEEBLE2 = 0x006C,
         OTHER_ENFEEBLE1 = 0x006D,
+
+        /// <summary>他人が回復アクションを行った・受けた</summary>
+        OTHER_HEAL = 0x0060,
+
+        /// <summary>味方が回復アクションを開始した</summary>
+        PARTY_HEAL_START = 0x005D,
+
+        /// <summary>自分への敵対アクションが失敗した</summary>
+
+
+        /// <summary>味方の強化ステータスが切れた</summary>
+        PARTY_EFFECT_REMOVED = 0x0065,
+
+        /// <summary>自分が制作を行った</summary>
+        MY_CRAFT = 0x0046,
+
+        /// <summary>他人が制作を行った</summary>
+        OTHER_CRAFT = 0x0047,
+
+        /// <summary>システムからのエラーメッセージ</summary>
+        SYSTEM_ERROR = 0x0021,
+
     }
 
     public static class FFXILogMessageTypeExtensions

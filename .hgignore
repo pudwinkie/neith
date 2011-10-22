@@ -11,3 +11,4 @@ syntax: glob
 */ClientBin/*
 */Generated_Code/*
 Neith.Signpost.SL.xap
+*.vspscc

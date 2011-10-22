@@ -14,6 +14,9 @@ namespace FFXIVRuby
         private int Entry;
         public FFXIVProcess FFXIV { get; private set; }
 
+        private static readonly Encoding TextEncoding = Encoding.UTF8;
+
+
         public override string ToString()
         {
             return string.Format("FFXIVLogStatus Entry=0x{0,8:X}", Entry);
@@ -32,7 +35,7 @@ namespace FFXIVRuby
         /// <returns></returns>
         public IEnumerable<FFXIVLog> GetLogs()
         {
-            return GetLogs(GetLogData(), Encoding.GetEncoding("utf-8"), FFXIV);
+            return GetLogs(GetLogData(), TextEncoding, FFXIV);
         }
 
         /// <summary>
@@ -42,7 +45,7 @@ namespace FFXIVRuby
         /// <returns></returns>
         public IEnumerable<FFXIVLog> GetLogs(int from)
         {
-            return GetLogs(GetLogData(from, TerminalPoint - from), Encoding.GetEncoding("utf-8"), FFXIV);
+            return GetLogs(GetLogData(from, TerminalPoint - from), TextEncoding, FFXIV);
         }
 
         /// <summary>
@@ -52,7 +55,7 @@ namespace FFXIVRuby
         /// <returns></returns>
         public IEnumerable<FFXIVLog> GetLogs(int from, int to)
         {
-            return GetLogs(GetLogData(from, to - from), Encoding.GetEncoding("utf-8"), FFXIV);
+            return GetLogs(GetLogData(from, to - from), TextEncoding, FFXIV);
         }
 
         /// <summary>
@@ -73,13 +76,15 @@ namespace FFXIVRuby
                 var strArray2 = strArray[j].Split(new char[] { ':' }, 2, StringSplitOptions.None);
                 var strType = matchs[j - 1].Value.TrimEnd(new char[] { ':' });
                 var numType = int.Parse(strType, NumberStyles.AllowHexSpecifier);
-                var strWho = strArray2[0].Replace("\0", "").Trim();
+                var strWho = strArray2[0].Replace("\0", "").Trim(); 
                 var strMes = strArray2[1].Replace("\0", "");
-                var item = new FFXIVLog(ff14, numType, strWho, strMes);
+                var item = new FFXIVLog(numType, strWho, strMes);
                 yield return item;
             }
         }
         private static Regex regex = new Regex("[0-9A-F]{4}:");
+
+
 
         public static IEnumerable<FFXIVLog> GetLogs(string path, Encoding enc)
         {

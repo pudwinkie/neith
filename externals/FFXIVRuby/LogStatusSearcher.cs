@@ -17,6 +17,7 @@ namespace FFXIVRuby
         private Regex reLogEntry = new Regex(@"[0-9A-F]{4}::\w+|^[0-9A-F]{4}:[()\w\s\0]{32}:");
         private List<Thread> threadList = new List<Thread>();
         private const uint READ_BLOCK_SIZE = 0x10000;
+        private static readonly Encoding TextEncoding = Encoding.UTF8;
 
         // Events
         /// <summary>
@@ -34,10 +35,12 @@ namespace FFXIVRuby
             Log.Trace("OnLogStatusFound({0})", stat);
 
             _stat = stat;
-            if (LogStatusFound != null) {
+            if (LogStatusFound != null)
+            {
                 LogStatusFound(this, new LogStatusFoundEventArgs(stat));
             }
-            if (Completed != null) {
+            if (Completed != null)
+            {
                 Completed(this, EventArgs.Empty);
             }
         }
@@ -60,8 +63,10 @@ namespace FFXIVRuby
         Label_0018:
             if (this._stat != null) return _stat;
 
-            foreach (Thread thread in threadList) {
-                if (thread.IsAlive) {
+            foreach (Thread thread in threadList)
+            {
+                if (thread.IsAlive)
+                {
                     Thread.Sleep(100);
                     goto Label_0018;
                 }
@@ -72,19 +77,26 @@ namespace FFXIVRuby
         public void StartSearch()
         {
             new Memory();
-            foreach (var info in this.ffxiv.GetMemoryBasicInfos()) {
+            foreach (var info in this.ffxiv.GetMemoryBasicInfos())
+            {
                 if (this._stat != null) return;
 
-                if (info.Protect == Memory.MEMORY_ALLOCATION_PROTECT.PAGE_READWRITE) {
-                    for (int i = (int)((uint)info.BaseAddress); i < (((uint)info.BaseAddress) + ((int)info.RegionSize)); i += 0x10000) {
+                if (info.Protect == Memory.MEMORY_ALLOCATION_PROTECT.PAGE_READWRITE)
+                {
+                    for (int i = (int)((uint)info.BaseAddress); i < (((uint)info.BaseAddress) + ((int)info.RegionSize)); i += 0x10000)
+                    {
                         int num2 = 0x10000;
-                        if ((i + num2) > (((uint)info.BaseAddress) + ((int)info.RegionSize))) {
+                        if ((i + num2) > (((uint)info.BaseAddress) + ((int)info.RegionSize)))
+                        {
                             num2 = (((int)((uint)info.BaseAddress)) + ((int)info.RegionSize)) - i;
                         }
                         // スレッドが１０個を超えたら、終了スレッドを管理外に
-                        while (this.threadList.Count > 10) {
-                            for (int j = this.threadList.Count - 1; j >= 0; j--) {
-                                if (!this.threadList[j].IsAlive) {
+                        while (this.threadList.Count > 10)
+                        {
+                            for (int j = this.threadList.Count - 1; j >= 0; j--)
+                            {
+                                if (!this.threadList[j].IsAlive)
+                                {
                                     this.threadList.RemoveAt(j);
                                 }
                             }
@@ -106,18 +118,23 @@ namespace FFXIVRuby
             input.Write(buffer, 0, buffer.Length);
             input.Position = 0L;
             var reader = new BinaryReader(input);
-            for (int i = 0; i < (size - 4); i += 4) {
-                if (this._stat != null) {
+            for (int i = 0; i < (size - 4); i += 4)
+            {
+                if (this._stat != null)
+                {
                     return;
                 }
                 var address = reader.ReadInt32() + 0x40;
                 var num3 = ffxiv.ReadInt32(address);
-                if ((num3 >= 0x10000) && (num3 <= 0x7ffff000)) {
+                if ((num3 >= 0x10000) && (num3 <= 0x7ffff000))
+                {
                     var bytes = this.ffxiv.ReadBytes(num3, 5);
-                    if (((bytes[4] == 0x3a) && (bytes[0] == 0x30)) && (bytes[1] == 0x30)) {
+                    if (((bytes[4] == 0x3a) && (bytes[0] == 0x30)) && (bytes[1] == 0x30))
+                    {
                         bytes = this.ffxiv.ReadBytes(num3, 50);
-                        string str = Encoding.GetEncoding("utf-8").GetString(bytes);
-                        if (this.reLogEntry.IsMatch(str)) {
+                        string str = TextEncoding.GetString(bytes);
+                        if (this.reLogEntry.IsMatch(str))
+                        {
                             var status = new FFXIVLogReader(this.ffxiv, address);
                             OnLogStatusFound(status);
                         }
@@ -131,12 +148,12 @@ namespace FFXIVRuby
         /// PLINQ版メモリサーチ。
         /// </summary>
         /// <returns></returns>
-        public FFXIVLogReader SearchPLINQ()
+        public FFXIVLogReader SearchPLINQ(CancellationToken token)
         {
             _stat = null;
-            var st = EnRangePair()
+            var st = EnRangePair(token)
                 .AsParallel()
-                .SelectMany(a => EnSearch(a.Entry, a.Size, 0x40))
+                .SelectMany(a => EnSearch(a.Entry, a.Size, 0x40, token))
                 .FirstOrDefault();
             if (st != null) OnLogStatusFound(st);
             _stat = st;
@@ -154,9 +171,10 @@ namespace FFXIVRuby
         /// 検索範囲の列挙。64KB単位で切り出す。
         /// </summary>
         /// <returns></returns>
-        private IEnumerable<SearchRange> EnRangePair()
+        private IEnumerable<SearchRange> EnRangePair(CancellationToken token)
         {
-            foreach (var info in ffxiv.GetMemoryBasicInfos()) {
+            foreach (var info in ffxiv.GetMemoryBasicInfos())
+            {
                 // ワーク領域以外はスキャン対象外
                 if (info.Protect != Memory.MEMORY_ALLOCATION_PROTECT.PAGE_READWRITE) continue;
 
@@ -165,7 +183,9 @@ namespace FFXIVRuby
                 if (!IsValidAddress((int)start)) continue;
                 uint size = (uint)info.RegionSize;
                 uint end = start + size;
-                for (uint i = start; i < end; i += READ_BLOCK_SIZE) {
+                for (uint i = start; i < end; i += READ_BLOCK_SIZE)
+                {
+                    if (token.IsCancellationRequested) yield break;
                     uint num2 = READ_BLOCK_SIZE;
                     if ((i + num2) > end) num2 = end - i;
                     yield return new SearchRange((int)i, (int)num2);
@@ -178,14 +198,16 @@ namespace FFXIVRuby
         /// </summary>
         /// <param name="ent"></param>
         /// <param name="size"></param>
-        private IEnumerable<FFXIVLogReader> EnSearch(int ent, int size, int offset)
+        private IEnumerable<FFXIVLogReader> EnSearch(int ent, int size, int offset, CancellationToken token)
         {
 #if true
             var tid = Thread.CurrentThread.ManagedThreadId;
             Log.Trace("EnSearch[{0,2}](0x{1,8:X}, 0x{2,6:X})",
                 tid, ent, size);
 #endif
-            foreach (var ptr in ffxiv.ReadBytesOrNull(ent, size).EnReadInt32()) {
+            foreach (var ptr in ffxiv.ReadBytesOrNull(ent, size).EnReadInt32())
+            {
+                if (token.IsCancellationRequested) yield break;
                 // ptr値が妥当なアドレスか？
                 if (!IsValidAddress(ptr)) continue;
 

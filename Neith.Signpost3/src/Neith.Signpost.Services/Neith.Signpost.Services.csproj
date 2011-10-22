@@ -61,12 +61,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
-    <Reference Include="Wintellect.Sterling.Server">
-      <HintPath>..\packages\Sterling.1.5.0.0\lib\net40\Wintellect.Sterling.Server.dll</HintPath>
-    </Reference>
-    <Reference Include="Wintellect.Sterling.Server.FileSystem">
-      <HintPath>..\packages\Sterling.1.5.0.0\lib\net40\Wintellect.Sterling.Server.FileSystem.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Const.cs" />
