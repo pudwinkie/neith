@@ -1,0 +1,217 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{4D69AB6D-1B8C-473D-B382-F7FEC9ACC0F9}</ProjectGuid>
+    <ProjectTypeGuids>{C089C8C0-30E0-4E22-80C0-CE093F111A43};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Wintellect.Sterling.WindowsPhone.IsolatedStorage.Test</RootNamespace>
+    <AssemblyName>Wintellect.Sterling.WindowsPhone.IsolatedStorage.Test</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <TargetFrameworkProfile>WindowsPhone</TargetFrameworkProfile>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <SilverlightApplication>true</SilverlightApplication>
+    <SupportedCultures>
+    </SupportedCultures>
+    <XapOutputs>true</XapOutputs>
+    <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
+    <XapFilename>Wintellect.Sterling.WindowsPhone.IsolatedStorage.Test.xap</XapFilename>
+    <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
+    <SilverlightAppEntry>Wintellect.Sterling.WindowsPhone.IsolatedStorage.Test.App</SilverlightAppEntry>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Phone" />
+    <Reference Include="Microsoft.Phone.Interop" />
+    <Reference Include="Microsoft.Silverlight.Testing">
+      <HintPath>..\Wintellect.Sterling.WindowsPhone.Test\External\Microsoft.Silverlight.Testing.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight">
+      <HintPath>..\Wintellect.Sterling.WindowsPhone.Test\External\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Database\TestActivation.cs">
+      <Link>Database\TestActivation.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Database\TestAggregateList.cs">
+      <Link>Database\TestAggregateList.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Database\TestArrays.cs">
+      <Link>Database\TestArrays.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Database\TestAsync.cs">
+      <Link>Database\TestAsync.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Database\TestBackupRestore.cs">
+      <Link>Database\TestBackupRestore.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Database\TestByteStreamInterceptor.cs">
+      <Link>Database\TestByteStreamInterceptor.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Database\TestCycle.cs">
+      <Link>Database\TestCycle.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Database\TestDelete.cs">
+      <Link>Database\TestDelete.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Database\TestDictionary.cs">
+      <Link>Database\TestDictionary.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Database\TestDirtyFlag.cs">
+      <Link>Database\TestDirtyFlag.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Database\TestEnum.cs">
+      <Link>Database\TestEnum.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Database\TestField.cs">
+      <Link>Database\TestField.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Database\TestIndexQuery.cs">
+      <Link>Database\TestIndexQuery.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Database\TestInterfaceProperty.cs">
+      <Link>Database\TestInterfaceProperty.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Database\TestLists.cs">
+      <Link>Database\TestLists.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Database\TestNullable.cs">
+      <Link>Database\TestNullable.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Database\TestPersonBill.cs">
+      <Link>Database\TestPersonBill.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Database\TestPurge.cs">
+      <Link>Database\TestPurge.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Database\TestQuery.cs">
+      <Link>Database\TestQuery.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Database\TestRegistration.cs">
+      <Link>Database\TestRegistration.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Database\TestSaveAndLoad.cs">
+      <Link>Database\TestSaveAndLoad.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Database\TestSerializers.cs">
+      <Link>Database\TestSerializers.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Database\TestTriggers.cs">
+      <Link>Database\TestTriggers.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Database\TestTruncate.cs">
+      <Link>Database\TestTruncate.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Database\TestWriteableBitmap.cs">
+      <Link>Database\TestWriteableBitmap.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Indexes\TestSingleIndex.cs">
+      <Link>Indexes\TestSingleIndex.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Keys\TestCompositeKey.cs">
+      <Link>Keys\TestCompositeKey.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Keys\TestCompositeKeyWithKeyClass.cs">
+      <Link>Keys\TestCompositeKeyWithKeyClass.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\Keys\TestKeyCollection.cs">
+      <Link>Keys\TestKeyCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Wintellect.Sterling.IsolatedStorage.Test\TestIsoHelper.cs">
+      <Link>TestIsoHelper.cs</Link>
+    </Compile>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
+    <Page Include="MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\AppManifest.xml" />
+    <None Include="Properties\WMAppManifest.xml">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ApplicationIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Background.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SplashScreenImage.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Wintellect.Sterling.WindowsPhone.IsolatedStorage\Wintellect.Sterling.WindowsPhone.IsolatedStorage.csproj">
+      <Project>{E4E978F2-3A8B-45D3-8157-4002A9BECF2B}</Project>
+      <Name>Wintellect.Sterling.WindowsPhone.IsolatedStorage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Wintellect.Sterling.WindowsPhone.Test.Helpers\Wintellect.Sterling.WindowsPhone.Test.Helpers.csproj">
+      <Project>{EE8F8C13-3C64-4E87-8A55-17DAD6B31485}</Project>
+      <Name>Wintellect.Sterling.WindowsPhone.Test.Helpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Wintellect.Sterling.WindowsPhone\Wintellect.Sterling.WindowsPhone.csproj">
+      <Project>{7842BE18-DAE7-408A-8863-7C0DE2FFB9D8}</Project>
+      <Name>Wintellect.Sterling.WindowsPhone</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions />
+</Project>

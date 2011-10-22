@@ -17,6 +17,8 @@ namespace Neith.Signpost.Logger
         private Service()
         {
             LogDBService.Instance.Add(Tasks);
+            var watch = new XIV.WatchService().Add(Tasks);
+            watch.LinkTo(LogDBService.Instance, false).Add(Tasks);
         }
 
 

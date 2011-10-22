@@ -11,15 +11,13 @@ namespace FFXIVRuby
 {
     public class FFXIVLog
     {
-        public DateTime Time { get; private set; }
+        public DateTime Time { get; set; }
 
-        public FFXIVProcess FFXIV { get; private set; }
+        public int MessageTypeID { get; set; }
 
-        public int MessageTypeID { get; private set; }
+        public string Who { get; set; }
 
-        public string Who { get; private set; }
-
-        public string Message { get; private set; }
+        public string Message { get; set; }
 
         public FFXILogMessageType MessageType
         {
@@ -30,15 +28,14 @@ namespace FFXIVRuby
                 return FFXILogMessageType.UNNONE;
             }
         }
-
+         
         public bool IsUnnone { get { return MessageType == FFXILogMessageType.UNNONE; } }
 
 
         // Methods
-        public FFXIVLog(FFXIVProcess ffxiv, int messageId, string who, string message)
+        public FFXIVLog(int messageId, string who, string message)
         {
             Time = DateTimeUtil.GetUniqueTimeStamp();
-            FFXIV = ffxiv;
             MessageTypeID = messageId;
             Who = who;
             Message = message;
@@ -47,6 +44,8 @@ namespace FFXIVRuby
             if (string.IsNullOrEmpty(Message)) Message = string.Empty;
         }
 
+        public FFXIVLog() { }
+
         public override string ToString()
         {
             return GetLogString(MessageType, MessageTypeID, Who, Message);
@@ -54,7 +53,8 @@ namespace FFXIVRuby
 
         public static string GetLogString(FFXILogMessageType type, int id, string who, string mes)
         {
-            switch (type) {
+            switch (type)
+            {
                 case FFXILogMessageType.TALK_TELL: return string.Format("{0} >> {1}", who, mes);
                 case FFXILogMessageType.TALK_TELL_SELF: return string.Format(">> {0} : {1}", who, mes);
 
