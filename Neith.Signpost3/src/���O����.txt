@@ -1,0 +1,1280 @@
+2011-10-23 16:14:14.7927|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-23T16:14:14.7937772+09:00 (->) [SYSTEM_MY_ACTION] 「�������&&&イクサル柳木貨��」×1がHug Coinの戦利品目録に加わった。
+
+30       | 0
+30       | 0
+32       | 2
+30       | 0
+3A       | :
+3A       | :
+E3 80 8C | 「
+
+02 13
+06 FE FF F3 F3 F3 03 02 
+14 06 FE FF 26 26 26 03 
+
+E3 82 A4 | イ
+E3 82 AF | ク
+E3 82 B5 | サ
+E3 83 AB | ル
+E6 9F B3 | 柳
+E6 9C A8 | 木
+E8 B2 A8 | 貨
+
+02 14 
+02 EC 03 02 13 02 EC 03 
+
+E3 80 8D | 」
+C3 97    | ×
+31       | 1
+E3 81 8C | が
+48       | H
+75       | u
+67       | g
+20       |  
+43       | C
+6F       | o
+69       | i
+6E       | n
+E3 81 AE | の
+E6 88 A6 | 戦
+E5 88 A9 | 利
+E5 93 81 | 品
+E7 9B AE | 目
+E9 8C B2 | 録
+E3 81 AB | に
+E5 8A A0 | 加
+E3 82 8F | わ
+E3 81 A3 | っ
+E3 81 9F | た
+E3 80 82 | 。
+
+
+
+
+
+
+
+
+
+
+スレッド 'vshost.LoadReference' (0x3278) はコード 0 (0x0) で終了しました。
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'D:\home\Documents\hg\neith\Neith.Signpost3\src\Neith.Signpost\bin\Debug\Neith.Signpost.exe が読み込まれました。シンボルが読み込まれました。
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.Configuration\v4.0_4.0.0.0__b03f5f7f11d50a3a\System.Configuration.dll' が読み込まれ、シンボルの読み込みがスキップされました。モジュールは最適化されていて、デバッグ オプションの [マイ コードのみ] 設定が有効になっています。
+ステップ イン: 非ユーザー コード 'Neith.Signpost.App.App' をステップ オーバーしています
+ステップ イン: 非ユーザー コード 'Neith.Signpost.App.InitializeComponent' をステップ オーバーしています
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'D:\home\Documents\hg\neith\Neith.Signpost3\src\Neith.Signpost\bin\Debug\Neith.Signpost.Services.dll が読み込まれました。シンボルが読み込まれました。
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'D:\home\Documents\hg\neith\Neith.Signpost3\src\Neith.Signpost\bin\Debug\System.Reactive.dll' が読み込まれました
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'D:\home\Documents\hg\neith\Neith.Signpost3\src\Neith.Signpost\bin\Debug\AsyncCtpLibrary.dll' が読み込まれました
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'D:\home\Documents\hg\neith\Neith.Signpost3\src\Neith.Signpost\bin\Debug\Neith.Signpost.Logger.dll が読み込まれました。シンボルが読み込まれました。
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'D:\home\Documents\hg\neith\Neith.Signpost3\src\Neith.Signpost\bin\Debug\Neith.Util.RX.dll が読み込まれました。シンボルが読み込まれました。
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'D:\home\Documents\hg\neith\Neith.Signpost3\src\Neith.Signpost\bin\Debug\System.Threading.Tasks.Dataflow.dll' が読み込まれました
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'D:\home\Documents\hg\neith\Neith.Signpost3\src\Neith.Signpost\bin\Debug\Neith.Signpost.Logger.Model.dll が読み込まれました。シンボルが読み込まれました。
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'D:\home\Documents\hg\neith\Neith.Signpost3\src\Neith.Signpost\bin\Debug\NLog.dll' が読み込まれました
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\PresentationFramework.Aero\v4.0_4.0.0.0__31bf3856ad364e35\PresentationFramework.Aero.dll' が読み込まれ、シンボルの読み込みがスキップされました。モジュールは最適化されていて、デバッグ オプションの [マイ コードのみ] 設定が有効になっています。
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.ServiceModel\v4.0_4.0.0.0__b77a5c561934e089\System.ServiceModel.dll' が読み込まれました
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.Runtime.Serialization\v4.0_4.0.0.0__b77a5c561934e089\System.Runtime.Serialization.dll' が読み込まれ、シンボルの読み込みがスキップされました。モジュールは最適化されていて、デバッグ オプションの [マイ コードのみ] 設定が有効になっています。
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'D:\home\Documents\hg\neith\Neith.Signpost3\src\Neith.Signpost\bin\Debug\Neith.Util.dll が読み込まれました。シンボルが読み込まれました。
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'D:\home\Documents\hg\neith\Neith.Signpost3\src\Neith.Signpost\bin\Debug\Neith.Util.Extensions.dll が読み込まれました。シンボルが読み込まれました。
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'D:\home\Documents\hg\neith\Neith.Signpost3\src\Neith.Signpost\bin\Debug\Neith.Sterling.dll が読み込まれました。シンボルが読み込まれました。
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'D:\home\Documents\hg\neith\Neith.Signpost3\src\Neith.Signpost\bin\Debug\Wintellect.Sterling.Server.dll が読み込まれました。シンボルが読み込まれました。
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'D:\home\Documents\hg\neith\Neith.Signpost3\src\Neith.Signpost\bin\Debug\FFXIVRuby.dll が読み込まれました。シンボルが読み込まれました。
+2011-10-24 00:44:52.3495|INFO|FFXIVRuby.Watcher.XIVWathcer|XIVWathcer Start
+2011-10-24 00:44:52.3495|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:52.3235807+09:00 (Neith.Signpost.Logger->) [START SERVICE] 
+2011-10-24 00:44:52.3865|TRACE|FFXIVRuby.Watcher.XIVWathcer|Scan XIV...
+2011-10-24 00:44:52.3905|TRACE|FFXIVRuby.Watcher.XIVWathcer|FFXIV found.
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.ServiceModel.Web\v4.0_4.0.0.0__31bf3856ad364e35\System.ServiceModel.Web.dll' が読み込まれました
+## host setting start ##
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\SMDiagnostics\v4.0_4.0.0.0__b77a5c561934e089\SMDiagnostics.dll' が読み込まれ、シンボルの読み込みがスキップされました。モジュールは最適化されていて、デバッグ オプションの [マイ コードのみ] 設定が有効になっています。
+2011-10-24 00:44:52.4385|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x   10000, 0x 10000)
+2011-10-24 00:44:52.4385|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x   30000, 0x  3000)
+2011-10-24 00:44:52.4385|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x   89000, 0x  7000)
+2011-10-24 00:44:52.4385|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x  186000, 0x  A000)
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.Runtime.DurableInstancing\v4.0_4.0.0.0__31bf3856ad364e35\System.Runtime.DurableInstancing.dll' が読み込まれ、シンボルの読み込みがスキップされました。モジュールは最適化されていて、デバッグ オプションの [マイ コードのみ] 設定が有効になっています。
+2011-10-24 00:44:52.4715|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x  1B0000, 0x  1000)
+2011-10-24 00:44:52.4715|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x  230000, 0x  1000)
+2011-10-24 00:44:52.4715|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x  240000, 0x  1000)
+2011-10-24 00:44:52.4715|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x  250000, 0x  6000)
+2011-10-24 00:44:52.4715|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x  290000, 0x 10000)
+2011-10-24 00:44:52.4715|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x  2B0000, 0x 10000)
+2011-10-24 00:44:52.4925|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x  2C0000, 0x  2000)
+2011-10-24 00:44:52.4925|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x  2D0000, 0x 10000)
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'C:\Windows\Microsoft.Net\assembly\GAC_64\System.Transactions\v4.0_4.0.0.0__b77a5c561934e089\System.Transactions.dll' が読み込まれ、シンボルの読み込みがスキップされました。モジュールは最適化されていて、デバッグ オプションの [マイ コードのみ] 設定が有効になっています。
+2011-10-24 00:44:52.5255|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x  2E0000, 0x 10000)
+2011-10-24 00:44:52.5465|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x  2F0000, 0x 10000)
+2011-10-24 00:44:52.5465|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x  300000, 0x 10000)
+2011-10-24 00:44:52.5465|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x  310000, 0x 10000)
+2011-10-24 00:44:52.5465|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x  320000, 0x 10000)
+2011-10-24 00:44:52.5465|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x  330000, 0x 10000)
+2011-10-24 00:44:52.5465|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x  340000, 0x 10000)
+2011-10-24 00:44:52.5465|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x  350000, 0x  1000)
+2011-10-24 00:44:52.5465|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x  360000, 0x 10000)
+2011-10-24 00:44:52.5615|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x  370000, 0x 10000)
+2011-10-24 00:44:52.5615|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x  380000, 0x 10000)
+2011-10-24 00:44:52.5615|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x  390000, 0x 10000)
+2011-10-24 00:44:52.5615|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x  3A0000, 0x 10000)
+2011-10-24 00:44:52.5615|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x  3B0000, 0x 10000)
+2011-10-24 00:44:52.5615|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x  3C0000, 0x 10000)
+2011-10-24 00:44:52.5615|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x  3D0000, 0x  1000)
+2011-10-24 00:44:52.5615|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 11E2000, 0x  5000)
+2011-10-24 00:44:52.5835|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 11E8000, 0x  2000)
+2011-10-24 00:44:52.5835|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 11ED000, 0x  1000)
+2011-10-24 00:44:52.5935|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 1229000, 0x  1000)
+2011-10-24 00:44:52.5935|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 122C000, 0x  4000)
+2011-10-24 00:44:52.6095|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 1238000, 0x  1000)
+2011-10-24 00:44:52.6095|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 1243000, 0x  1000)
+2011-10-24 00:44:52.6095|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 124D000, 0x  1000)
+2011-10-24 00:44:52.6095|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 124F000, 0x  3000)
+2011-10-24 00:44:52.6295|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 1253000, 0x  6000)
+2011-10-24 00:44:52.6465|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 125A000, 0x  6000)
+2011-10-24 00:44:52.6636|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 1266000, 0x  1000)
+2011-10-24 00:44:52.6636|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 1269000, 0x  2000)
+2011-10-24 00:44:52.6726|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 126D000, 0x  1000)
+2011-10-24 00:44:52.6726|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 1278000, 0x  2000)
+2011-10-24 00:44:52.6726|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 127B000, 0x  1000)
+2011-10-24 00:44:52.6726|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 127F000, 0x  1000)
+2011-10-24 00:44:52.6856|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 1291000, 0x  1000)
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.IdentityModel\v4.0_4.0.0.0__b77a5c561934e089\System.IdentityModel.dll' が読み込まれました
+2011-10-24 00:44:52.6856|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 1293000, 0x  7000)
+2011-10-24 00:44:52.6856|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 129C000, 0x 10000)
+2011-10-24 00:44:52.7136|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 12AC000, 0x 10000)
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.WorkflowServices\v4.0_4.0.0.0__31bf3856ad364e35\System.WorkflowServices.dll' が読み込まれました
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.ServiceModel.Discovery\v4.0_4.0.0.0__31bf3856ad364e35\System.ServiceModel.Discovery.dll' が読み込まれ、シンボルの読み込みがスキップされました。モジュールは最適化されていて、デバッグ オプションの [マイ コードのみ] 設定が有効になっています。
+2011-10-24 00:44:52.7296|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 12BC000, 0x 10000)
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.ServiceModel.Activities\v4.0_4.0.0.0__31bf3856ad364e35\System.ServiceModel.Activities.dll' が読み込まれ、シンボルの読み込みがスキップされました。モジュールは最適化されていて、デバッグ オプションの [マイ コードのみ] 設定が有効になっています。
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.ServiceModel.Routing\v4.0_4.0.0.0__31bf3856ad364e35\System.ServiceModel.Routing.dll' が読み込まれ、シンボルの読み込みがスキップされました。モジュールは最適化されていて、デバッグ オプションの [マイ コードのみ] 設定が有効になっています。
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\Microsoft.VisualStudio.Diagnostics.ServiceModelSink\v4.0_4.0.0.0__b03f5f7f11d50a3a\Microsoft.VisualStudio.Diagnostics.ServiceModelSink.dll' が読み込まれました
+2011-10-24 00:44:52.7486|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 12CC000, 0x  6000)
+2011-10-24 00:44:52.7486|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 12D3000, 0x  2000)
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.ServiceModel.Channels\v4.0_4.0.0.0__31bf3856ad364e35\System.ServiceModel.Channels.dll' が読み込まれ、シンボルの読み込みがスキップされました。モジュールは最適化されていて、デバッグ オプションの [マイ コードのみ] 設定が有効になっています。
+2011-10-24 00:44:52.7486|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 12D7000, 0x  B000)
+2011-10-24 00:44:52.7736|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 12E3000, 0x  3000)
+2011-10-24 00:44:52.7736|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 14A0000, 0x  1000)
+2011-10-24 00:44:52.7736|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 14B0000, 0x 10000)
+2011-10-24 00:44:52.7846|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 14C0000, 0x 10000)
+2011-10-24 00:44:52.7846|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 14D0000, 0x 10000)
+2011-10-24 00:44:52.7846|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 14E0000, 0x 10000)
+2011-10-24 00:44:52.7846|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 14F0000, 0x 10000)
+2011-10-24 00:44:52.8236|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 1500000, 0x 10000)
+2011-10-24 00:44:52.8396|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 1510000, 0x 10000)
+## host setting end ##
+## host setting start ##
+2011-10-24 00:44:52.8596|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 1520000, 0x 10000)
+## host setting end ##
+## host[{0}] Open...
+2011-10-24 00:44:52.8596|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 1530000, 0x 10000)
+2011-10-24 00:44:52.8816|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 1540000, 0x 10000)
+2011-10-24 00:44:52.8976|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 1550000, 0x 10000)
+2011-10-24 00:44:52.9076|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 1560000, 0x 10000)
+2011-10-24 00:44:52.9076|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 1570000, 0x 10000)
+2011-10-24 00:44:52.9076|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 1580000, 0x 10000)
+2011-10-24 00:44:52.9076|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 1590000, 0x 10000)
+2011-10-24 00:44:52.9256|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 15A0000, 0x 10000)
+2011-10-24 00:44:52.9376|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2B40000, 0x 10000)
+2011-10-24 00:44:52.9376|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2B50000, 0x 10000)
+2011-10-24 00:44:52.9376|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2B60000, 0x 10000)
+2011-10-24 00:44:52.9376|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2B70000, 0x 10000)
+2011-10-24 00:44:52.9576|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2B80000, 0x 10000)
+2011-10-24 00:44:52.9696|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2B90000, 0x 10000)
+2011-10-24 00:44:52.9696|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2BA0000, 0x 10000)
+2011-10-24 00:44:52.9836|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2BB0000, 0x 10000)
+2011-10-24 00:44:52.9836|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2BC0000, 0x 10000)
+2011-10-24 00:44:52.9836|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2BD0000, 0x 10000)
+2011-10-24 00:44:53.0006|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2BE0000, 0x 10000)
+2011-10-24 00:44:53.0006|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2BF0000, 0x 10000)
+2011-10-24 00:44:53.0006|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2C00000, 0x 10000)
+2011-10-24 00:44:53.0006|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2C10000, 0x 10000)
+2011-10-24 00:44:53.0176|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2C20000, 0x 10000)
+2011-10-24 00:44:53.0176|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2C30000, 0x  8000)
+2011-10-24 00:44:53.0296|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2C40000, 0x 10000)
+2011-10-24 00:44:53.0296|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2C50000, 0x 10000)
+2011-10-24 00:44:53.0526|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2C60000, 0x 10000)
+2011-10-24 00:44:53.0626|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2C70000, 0x 10000)
+2011-10-24 00:44:53.0626|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2C80000, 0x 10000)
+2011-10-24 00:44:53.0796|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2C90000, 0x 10000)
+2011-10-24 00:44:53.0796|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2CA0000, 0x 10000)
+2011-10-24 00:44:53.1026|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2CB0000, 0x 10000)
+2011-10-24 00:44:53.1156|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2CC0000, 0x 10000)
+2011-10-24 00:44:53.1276|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2CD0000, 0x 10000)
+2011-10-24 00:44:53.1406|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2CE0000, 0x  7000)
+2011-10-24 00:44:53.1406|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2D20000, 0x  9000)
+2011-10-24 00:44:53.1406|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2D30000, 0x 10000)
+2011-10-24 00:44:53.1406|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2D40000, 0x 10000)
+2011-10-24 00:44:53.1536|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2D50000, 0x 10000)
+2011-10-24 00:44:53.1536|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2D60000, 0x 10000)
+2011-10-24 00:44:53.1536|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2DAC000, 0x  4000)
+2011-10-24 00:44:53.1536|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 2DC0000, 0x  3000)
+2011-10-24 00:44:53.1536|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 31D0000, 0x 10000)
+2011-10-24 00:44:53.1716|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 31E0000, 0x 10000)
+2011-10-24 00:44:53.1716|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 31F0000, 0x 10000)
+2011-10-24 00:44:53.1966|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3200000, 0x 10000)
+2011-10-24 00:44:53.2096|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3210000, 0x 10000)
+2011-10-24 00:44:53.2236|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3220000, 0x 10000)
+2011-10-24 00:44:53.2366|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3230000, 0x 10000)
+2011-10-24 00:44:53.2496|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3240000, 0x 10000)
+2011-10-24 00:44:53.2496|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3250000, 0x 10000)
+2011-10-24 00:44:53.2656|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3260000, 0x 10000)
+2011-10-24 00:44:53.2836|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3270000, 0x 10000)
+2011-10-24 00:44:53.2986|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3280000, 0x 10000)
+2011-10-24 00:44:53.3126|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3290000, 0x 10000)
+'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.resources\v4.0_4.0.0.0_ja_b77a5c561934e089\System.resources.dll' が読み込まれました
+2011-10-24 00:44:53.3276|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 32A0000, 0x 10000)
+2011-10-24 00:44:53.3416|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 32B0000, 0x 10000)
+2011-10-24 00:44:53.3566|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 32C0000, 0x 10000)
+2011-10-24 00:44:53.3726|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 32D0000, 0x 10000)
+2011-10-24 00:44:53.3886|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 32E0000, 0x 10000)
+2011-10-24 00:44:53.4066|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 32F0000, 0x  1000)
+2011-10-24 00:44:53.4066|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3300000, 0x 10000)
+## host[http://localhost:14080/Signpost.svc] Opened. Status=Opened, SingletonInstance=
+## host[{0}] Open...
+2011-10-24 00:44:53.4066|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3310000, 0x 10000)
+2011-10-24 00:44:53.4336|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3320000, 0x 10000)
+2011-10-24 00:44:53.4356|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3330000, 0x 10000)
+2011-10-24 00:44:53.4536|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3340000, 0x 10000)
+2011-10-24 00:44:53.4536|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3350000, 0x 10000)
+2011-10-24 00:44:53.4536|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3360000, 0x 10000)
+2011-10-24 00:44:53.4726|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3370000, 0x 10000)
+2011-10-24 00:44:53.4726|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3380000, 0x 10000)
+2011-10-24 00:44:53.4886|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3390000, 0x 10000)
+2011-10-24 00:44:53.5146|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 33A0000, 0x 10000)
+2011-10-24 00:44:53.5356|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 33B0000, 0x 10000)
+2011-10-24 00:44:53.5516|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 33C0000, 0x 10000)
+2011-10-24 00:44:53.5726|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 33D0000, 0x 10000)
+## host[http://localhost:14080/] Opened. Status=Opened, SingletonInstance=
+2011-10-24 00:44:53.6036|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 33E0000, 0x 10000)
+2011-10-24 00:44:53.6276|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 33F0000, 0x 10000)
+2011-10-24 00:44:53.6536|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3400000, 0x 10000)
+2011-10-24 00:44:53.6776|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3410000, 0x 10000)
+2011-10-24 00:44:53.6926|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3420000, 0x 10000)
+2011-10-24 00:44:53.7116|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3430000, 0x 10000)
+2011-10-24 00:44:53.7366|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3440000, 0x 10000)
+2011-10-24 00:44:53.7546|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3450000, 0x 10000)
+2011-10-24 00:44:53.7546|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3460000, 0x 10000)
+2011-10-24 00:44:53.7906|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3470000, 0x 10000)
+2011-10-24 00:44:53.8146|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3480000, 0x 10000)
+2011-10-24 00:44:53.8436|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3490000, 0x 10000)
+2011-10-24 00:44:53.8686|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 34A0000, 0x 10000)
+2011-10-24 00:44:53.8886|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 34B0000, 0x 10000)
+2011-10-24 00:44:53.9076|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 34C0000, 0x 10000)
+2011-10-24 00:44:53.9276|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 34D0000, 0x 10000)
+2011-10-24 00:44:53.9476|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 34E0000, 0x 10000)
+2011-10-24 00:44:53.9646|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 34F0000, 0x 10000)
+2011-10-24 00:44:53.9646|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3500000, 0x 10000)
+2011-10-24 00:44:53.9916|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3510000, 0x 10000)
+2011-10-24 00:44:54.0116|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3520000, 0x 10000)
+2011-10-24 00:44:54.0276|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3530000, 0x 10000)
+2011-10-24 00:44:54.0466|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3540000, 0x 10000)
+2011-10-24 00:44:54.0596|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3550000, 0x 10000)
+2011-10-24 00:44:54.0776|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3560000, 0x 10000)
+2011-10-24 00:44:54.1016|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3570000, 0x 10000)
+2011-10-24 00:44:54.1236|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3580000, 0x 10000)
+2011-10-24 00:44:54.1416|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3590000, 0x  3000)
+2011-10-24 00:44:54.1416|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 35A0000, 0x 10000)
+2011-10-24 00:44:54.1606|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 35B0000, 0x 10000)
+2011-10-24 00:44:54.1736|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 35C0000, 0x 10000)
+2011-10-24 00:44:54.1856|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 35D0000, 0x 10000)
+2011-10-24 00:44:54.1986|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 35E0000, 0x 10000)
+2011-10-24 00:44:54.1986|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 35F0000, 0x 10000)
+2011-10-24 00:44:54.2266|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3600000, 0x 10000)
+2011-10-24 00:44:54.2406|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3610000, 0x 10000)
+2011-10-24 00:44:54.2546|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3620000, 0x 10000)
+2011-10-24 00:44:54.2666|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3630000, 0x 10000)
+2011-10-24 00:44:54.2666|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3640000, 0x 10000)
+2011-10-24 00:44:54.2816|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3650000, 0x 10000)
+2011-10-24 00:44:54.2816|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3660000, 0x 10000)
+2011-10-24 00:44:54.2986|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3670000, 0x 10000)
+2011-10-24 00:44:54.2986|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3680000, 0x 10000)
+2011-10-24 00:44:54.3116|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3690000, 0x 10000)
+2011-10-24 00:44:54.3116|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 36A0000, 0x 10000)
+2011-10-24 00:44:54.3246|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 36B0000, 0x 10000)
+2011-10-24 00:44:54.3246|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 36C0000, 0x 10000)
+2011-10-24 00:44:54.3416|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 36D0000, 0x 10000)
+2011-10-24 00:44:54.3416|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 36E0000, 0x 10000)
+2011-10-24 00:44:54.3616|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 36F0000, 0x 10000)
+2011-10-24 00:44:54.3806|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3700000, 0x 10000)
+2011-10-24 00:44:54.3956|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3710000, 0x 10000)
+2011-10-24 00:44:54.4036|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3720000, 0x 10000)
+2011-10-24 00:44:54.4187|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3730000, 0x 10000)
+2011-10-24 00:44:54.4367|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3740000, 0x 10000)
+2011-10-24 00:44:54.4537|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3750000, 0x 10000)
+2011-10-24 00:44:54.4707|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3760000, 0x 10000)
+2011-10-24 00:44:54.4847|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3770000, 0x 10000)
+2011-10-24 00:44:54.5007|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3780000, 0x 10000)
+2011-10-24 00:44:54.5167|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3790000, 0x  C000)
+2011-10-24 00:44:54.5307|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 37A0000, 0x 10000)
+2011-10-24 00:44:54.5507|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 37B0000, 0x 10000)
+2011-10-24 00:44:54.5737|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 37C0000, 0x 10000)
+2011-10-24 00:44:54.5987|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 37D0000, 0x 10000)
+2011-10-24 00:44:54.6267|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 37E0000, 0x 10000)
+2011-10-24 00:44:54.6267|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 37F0000, 0x 10000)
+2011-10-24 00:44:54.6267|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3800000, 0x 10000)
+2011-10-24 00:44:54.6357|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3810000, 0x 10000)
+2011-10-24 00:44:54.6357|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3820000, 0x 10000)
+2011-10-24 00:44:54.6357|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3830000, 0x 10000)
+2011-10-24 00:44:54.6357|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3840000, 0x 10000)
+2011-10-24 00:44:54.6357|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3850000, 0x 10000)
+2011-10-24 00:44:54.6357|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3860000, 0x 10000)
+2011-10-24 00:44:54.6627|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3870000, 0x 10000)
+2011-10-24 00:44:54.6687|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3880000, 0x 10000)
+2011-10-24 00:44:54.6687|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3890000, 0x 10000)
+2011-10-24 00:44:54.6947|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 38A0000, 0x 10000)
+2011-10-24 00:44:54.7157|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 38B0000, 0x 10000)
+2011-10-24 00:44:54.7357|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 38C0000, 0x 10000)
+2011-10-24 00:44:54.7527|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 38D0000, 0x 10000)
+2011-10-24 00:44:54.7707|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 38E0000, 0x 10000)
+2011-10-24 00:44:54.7897|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 38F0000, 0x 10000)
+2011-10-24 00:44:54.8077|TRACE|FFXIVRuby.LogStatusSearcher|EnSearch[12](0x 3900000, 0x 10000)
+2011-10-24 00:44:54.8297|TRACE|FFXIVRuby.LogStatusSearcher|OnLogStatusFound(FFXIVLogStatus Entry=0x27563850)
+2011-10-24 00:44:54.8297|TRACE|FFXIVRuby.Watcher.XIVWathcer|Read XIV log...
+2011-10-24 00:44:54.8467|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 31 3A 53 79 61 6D 20 4C 65 6F 70 61 00
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 BB E3 81 84 EF BD 97 E3
+00000030: 81 8A E3 82 84 E3 81 99 E3 81 BF EF BD 9E EF BC
+00000040: BE 30 30 30 35 3A 53 68 69 72 6F 20 4E 6F 68 61
+00000050: 72 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000060: 00 00 00 00 00 00 3A E3 81 BE E3 81 AA E3 81 95
+00000070: E3 82 93 E3 81 A0 02 2E 05 06 F2 02 65 03 30 30
+00000080: 34 37 3A 3A 48 65 70 70 6F 6B 6F 20 4D 69 61 E3
+00000090: 81 AF E3 80 8C 02 13 06 FE FF F3 F3 F3 03 02 14
+000000A0: 06 FE FF 26 26 26 03 E2 80 A0 E3 82 A8 E3 83 AC
+000000B0: E3 82 AF E3 83 88 E3 83 A9 E3 83 A0 E3 83 AA E3
+000000C0: 83 B3 E3 82 B0 02 14 02 EC 03 02 13 02 EC 03 E3
+000000D0: 80 8D C3 97 31 E3 82 92 E5 AE 8C E6 88 90 E3 81
+000000E0: 95 E3 81 9B E3 81 9F EF BC 81 30 30 30 35 3A 43
+000000F0: 72 79 73 74 61 6C 20 4D 61 6E 61 00 00 00 00 00
+00000100: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 3A
+00000110: 02 2E 05 04 F2 01 9D 03 30 30 34 37 3A 3A 4A 69
+00000120: 6E 6E 20 41 69 72 7A 61 78 E3 81 AF E3 80 8C 02
+00000130: 13 06 FE FF F3 F3 F3 03 02 14 06 FE FF 26 26 26
+00000140: 03 E2 80 A0 E3 83 9F E3 82 B9 E3 83 AA E3 83 AB
+00000150: E3 83 81 E3 83 A7 E3 83 BC E3 82 AB E3 83 BC 02
+00000160: 14 02 EC 03 02 13 02 EC 03 E3 80 8D C3 97 31 E3
+00000170: 82 92 E5 AE 8C E6 88 90 E3 81 95 E3 81 9B E3 81
+00000180: 9F EF BC 81 30 30 30 35 3A 43 72 79 73 74 61 6C
+00000190: 20 4D 61 6E 61 00 00 00 00 00 00 00 00 00 00 00
+000001A0: 00 00 00 00 00 00 00 00 00 3A 02 2E 05 06 F2 02
+000001B0: 67 03 30 30 30 31 3A 4A 65 77 65 6C 20 46 69 73
+000001C0: 68 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+000001D0: 00 00 00 00 00 00 00 3A E3 81 8A E3 82 84 E3 81
+000001E0: 99 E3 81 BF E3 83 BC EF BC BE EF BC BE 30 30 36
+000001F0: 37 3A 3A 55 6E 69 20 51 6C 6F E3 81 AE E3 80 8C
+00000200: E3 83 97 E3 83 AD E3 83 86 E3 82 B9 E3 80 8D E3
+00000210: 81 AE E5 8A B9 E6 9E 9C E3 81 8C E5 88 87 E3 82
+00000220: 8C E3 81 9F E3 80 82 30 30 31 33 3A 5A 65 66 69
+00000230: 20 53 6E 6F 77 00 00 00 00 00 00 00 00 00 00 00
+00000240: 00 00 00 00 00 00 00 00 00 00 00 00 3A E3 81 AA
+00000250: E3 82 93 E3 81 8B E4 BB 96 E3 81 AB E6 AC B2 E3
+00000260: 81 97 E3 81 84 E7 89 A9 E3 81 8C E3 81 82 E3 82
+00000270: 8C E3 81 B0 E3 83 BC 30 30 36 37 3A 3A 55 6E 69
+00000280: 20 51 6C 6F E3 81 AE E3 80 8C E3 82 B7 E3 82 A7
+00000290: E3 83 AB E3 80 8D E3 81 AE E5 8A B9 E6 9E 9C E3
+000002A0: 81 8C E5 88 87 E3 82 8C E3 81 9F E3 80 82 30 30
+000002B0: 31 33 3A 55 6E 69 20 51 6C 6F 00 00 00 00 00 00
+000002C0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+000002D0: 00 00 00 3A E3 81 A7 E3 81 AF E3 81 8A E3 82 84
+000002E0: E3 81 86 EF BD 93 E3 81 BF E3 81 AA E3 81 95 E3
+000002F0: 81 84 E3 83 BC 30 30 30 35 3A 43 72 79 73 74 61
+00000300: 6C 20 4D 61 6E 61 00 00 00 00 00 00 00 00 00 00
+00000310: 00 00 00 00 00 00 00 00 00 00 3A 02 2E 05 09 F2
+00000320: 03 D7 03 02 2E 04 02 F0 D8 03 30 30 31 33 3A 5A
+00000330: 65 66 69 20 53 6E 6F 77 00 00 00 00 00 00 00 00
+00000340: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 3A
+00000350: E6 80 AA E3 81 97 E3 81 84 E3 82 AB E3 82 A6 E3
+00000360: 83 AB E3 81 A8 E3 81 8B E3 82 82 E3 81 82 E3 82
+00000370: 8A E3 81 BE E3 81 99 EF BD 97 30 30 31 33 3A 5A
+00000380: 65 66 69 20 53 6E 6F 77 00 00 00 00 00 00 00 00
+00000390: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 3A
+000003A0: 28 E3 81 A4 E2 88 80 2D 29 EF BD B5 EF BE 94 EF
+000003B0: BD BD EF BE 90 E3 83 BC 30 30 31 42 3A 3A 55 6E
+000003C0: 69 20 51 6C 6F E3 81 AF E6 89 8B E3 82 92 E6 8C
+000003D0: AF E3 81 A3 E3 81 9F E3 80 82 30 30 31 33 3A 4A
+000003E0: 69 6E 6E 20 41 69 72 7A 61 78 00 00 00 00 00 00
+000003F0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 3A
+00000400: E3 82 93 E3 83 BC E3 80 81 E3 81 8A E6 B4 8B E6
+00000410: 9C 8D E5 85 A8 E8 88 AC E3 81 A7 E3 81 97 E3 82
+00000420: 87 E3 81 86 E3 81 8B EF BD 97 30 30 31 33 3A 52
+00000430: 75 72 75 74 68 20 53 74 69 72 69 61 00 00 00 00
+00000440: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 3A
+00000450: E3 81 8A E3 82 84 E3 81 99 E3 81 BF E3 81 AA E3
+00000460: 81 95 E3 81 84 EF BD 9E 30 30 34 37 3A 3A 52 75
+00000470: 72 75 74 68 20 53 74 69 72 69 61 E3 81 AF E8 A3
+00000480: BD E4 BD 9C E3 81 AB E5 A4 B1 E6 95 97 E3 81 97
+00000490: E3 81 9F E2 80 A6 E2 80 A6 30 30 36 37 3A 3A 55
+000004A0: 6E 69 20 51 6C 6F E3 81 AE E3 80 8C E3 82 B9 E3
+000004B0: 83 88 E3 83 B3 E3 82 B9 E3 82 AD E3 83 B3 E3 80
+000004C0: 8D E3 81 AE E5 8A B9 E6 9E 9C E3 81 8C E5 88 87
+000004D0: E3 82 8C E3 81 9F E3 80 82 30 30 30 35 3A 43 72
+000004E0: 79 73 74 61 6C 20 4D 61 6E 61 00 00 00 00 00 00
+000004F0: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 3A E3
+00000500: 82 88 E3 81 84 E3 81 9E EF BD 9E E3 81 AA E3 81
+00000510: 8B E3 81 AA E3 81 8B E3 82 88 E3 81 84 E3 82 82
+00000520: E3 81 AE E3 81 A0 E3 81 9E EF BD 9E 30 30 31 33
+00000530: 3A 4D 75 67 69 20 4B 6F 74 6F 00 00 00 00 00 00
+00000540: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000550: 00 3A E3 81 8A E3 82 84 E3 81 99 E3 81 BF E3 81
+00000560: AA E3 81 95 E3 81 84 28 2A 27 CF 89 27 29 6F 30
+00000570: 30 31 33 3A 5A 65 66 69 20 53 6E 6F 77 00 00 00
+00000580: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000590: 00 00 00 00 3A E5 85 A8 E5 BB 83 E3 81 8B 28 C2
+000005A0: B4 3B E3 82 9C 3B CF 89 3B E3 82 9C 3B EF BD 80
+000005B0: 29 30 30 30 35 3A 43 72 79 73 74 61 6C 20 4D 61
+000005C0: 6E 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+000005D0: 00 00 00 00 00 00 3A E3 82 88 E3 81 97 E3 81 93
+000005E0: E3 82 8C E3 81 A7 E6 96 99 E7 90 86 E3 82 92 E4
+000005F0: BD 9C E3 81 A3 E3 81 A6 E3 81 AD E3 82 8B 30 30
+00000600: 30 35 3A 43 72 79 73 74 61 6C 20 4D 61 6E 61 00
+00000610: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000620: 00 00 00 3A E3 81 82 E3 81 AA E3 82 93 E3 81 8B
+00000630: E3 81 B2 E3 81 A3 E3 81 93 E3 82 93 E3 81 A0 EF
+00000640: BD 97 30 30 31 33 3A 4A 69 6E 6E 20 41 69 72 7A
+00000650: 61 78 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000660: 00 00 00 00 00 00 00 3A 64 28 EF BE 9F D0 94 EF
+00000670: BE 9F 20 29 E2 98 86 EF BD BD EF BE 8D EF BE 9F
+00000680: EF BD BC EF BD AC EF BE 99 EF BD BB EF BE 9D EF
+00000690: BD B8 EF BD BD E2 98 86 28 20 EF BE 9F D0 94 EF
+000006A0: BE 9F 29 62 30 30 30 35 3A 43 72 79 73 74 61 6C
+000006B0: 20 4D 61 6E 61 00 00 00 00 00 00 00 00 00 00 00
+000006C0: 00 00 00 00 00 00 00 00 00 3A E3 82 B6 E3 83 AA
+000006D0: E3 82 AC E3 83 8B E3 81 AB E5 A4 89 E3 82 8F E3
+000006E0: 81 A3 E3 81 9F EF BD 97 30 30 31 33 3A 5A 65 66
+000006F0: 69 20 53 6E 6F 77 00 00 00 00 00 00 00 00 00 00
+00000700: 00 00 00 00 00 00 00 00 00 00 00 00 00 3A E4 BD
+00000710: 9C E3 82 8A E3 81 8A E3 81 8D E3 81 97 E3 81 A6
+00000720: E3 81 8A E3 81 8F E3 81 AD 28 EF BD 80 E3 83 BB
+00000730: CF 89 E3 83 BB C2 B4 29 30 30 30 35 3A 43 72 79
+00000740: 73 74 61 6C 20 4D 61 6E 61 00 00 00 00 00 00 00
+00000750: 00 00 00 00 00 00 00 00 00 00 00 00 00 3A E3 81
+00000760: 82 E3 81 82 E3 82 93 E3 83 88 E3 83 9E E3 83 88
+00000770: EF BD 97 EF BD 97 30 30 31 33 3A 5A 65 66 69 20
+00000780: 53 6E 6F 77 00 00 00 00 00 00 00 00 00 00 00 00
+00000790: 00 00 00 00 00 00 00 00 00 00 00 3A E3 81 9D E3
+000007A0: 82 8C E4 BD 8E E3 83 AC E3 83 99 E3 83 AB E3 81
+000007B0: A7 E6 9C 80 E9 AB 98 E3 81 AB E3 81 84 E3 82 B9
+000007C0: E3 83 9A E3 83 83 E3 82 AF E3 83 BB E3 83 BB E3
+000007D0: 83 BB 30 30 31 33 3A 4A 69 6E 6E 20 41 69 72 7A
+000007E0: 61 78 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+000007F0: 00 00 00 00 00 00 00 3A E3 81 93 E3 82 8C E3 81
+00000800: AF E4 BD BF E3 81 88 E3 81 9D E3 81 86 E3 81 A0
+00000810: 28 EF BC 9B 20 EF BD A5 60 D0 B4 EF BD A5 C2 B4
+00000820: 29 E2 80 A6 EF BD BA EF BE 9E EF BD B8 EF BE 98
+00000830: E2 80 A6 28 60 EF BD A5 D0 B4 C2 B4 EF BD A5 20
+00000840: EF BC 9B 29 30 30 34 37 3A 3A 52 75 72 75 74 68
+00000850: 20 53 74 69 72 69 61 E3 81 AF E3 80 8C 02 13 06
+00000860: FE FF F3 F3 F3 03 02 14 06 FE FF 26 26 26 03 E2
+00000870: 80 A0 E3 83 B4 E3 82 A1 E3 83 BC E3 83 9F E3 83
+00000880: AA E3 82 AA E3 83 B3 EF BC 86 E3 82 BB E3 83 94
+00000890: E3 82 A2 E3 82 A2 E3 82 AF E3 83 88 E3 83 B3 02
+000008A0: 14 02 EC 03 02 13 02 EC 03 E3 80 8D C3 97 31 E3
+000008B0: 82 92 E5 AE 8C E6 88 90 E3 81 95 E3 81 9B E3 81
+000008C0: 9F EF BC 81
+2011-10-24 00:44:54.8797|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8497252+09:00 (Syam Leopa->) [TALK_SAY] ほいｗおやすみ～＾
+2011-10-24 00:44:54.8797|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547254+09:00 (Shiro Nohara->) [TALK_LS1] まなさんだ{022E0506F2026503}
+2011-10-24 00:44:54.8887|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547255+09:00 (->) [OTHER_CRAFT] Heppoko Miaは「�������&&&†エレクトラムリング��」×1を完成させた！
+2011-10-24 00:44:54.8887|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547256+09:00 (Crystal Mana->) [TALK_LS1] {022E0504F2019D03}
+2011-10-24 00:44:54.8887|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547257+09:00 (->) [OTHER_CRAFT] Jinn Airzaxは「�������&&&†ミスリルチョーカー��」×1を完成させた！
+2011-10-24 00:44:54.9007|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547258+09:00 (Crystal Mana->) [TALK_LS1] {022E0506F2026703}
+2011-10-24 00:44:54.9007|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547259+09:00 (Jewel Fish->) [TALK_SAY] おやすみー＾＾
+2011-10-24 00:44:54.9007|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547260+09:00 (->) [OTHER_EFFECT_REMOVED] Uni Qloの「プロテス」の効果が切れた。
+2011-10-24 00:44:54.9007|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547261+09:00 (Zefi Snow->) [TALK_LS6_CURRENT] なんか他に欲しい物があればー
+2011-10-24 00:44:54.9187|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547262+09:00 (->) [OTHER_EFFECT_REMOVED] Uni Qloの「シェル」の効果が切れた。
+2011-10-24 00:44:54.9187|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547263+09:00 (Uni Qlo->) [TALK_LS6_CURRENT] ではおやうｓみなさいー
+2011-10-24 00:44:54.9187|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547264+09:00 (Crystal Mana->) [TALK_LS1] {022E0509F203D703}{022E0402F0D803}
+2011-10-24 00:44:54.9187|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547265+09:00 (Zefi Snow->) [TALK_LS6_CURRENT] 怪しいカウルとかもありますｗ
+2011-10-24 00:44:54.9347|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547266+09:00 (Zefi Snow->) [TALK_LS6_CURRENT] (つ∀-)ｵﾔｽﾐー
+2011-10-24 00:44:54.9347|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547267+09:00 (->) [TALK_EMOTE] Uni Qloは手を振った。
+2011-10-24 00:44:54.9347|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547268+09:00 (Jinn Airzax->) [TALK_LS6_CURRENT] んー、お洋服全般でしょうかｗ
+2011-10-24 00:44:54.9477|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547269+09:00 (Ruruth Stiria->) [TALK_LS6_CURRENT] おやすみなさい～
+2011-10-24 00:44:54.9477|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547270+09:00 (->) [OTHER_CRAFT] Ruruth Stiriaは製作に失敗した……
+2011-10-24 00:44:54.9477|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547271+09:00 (->) [OTHER_EFFECT_REMOVED] Uni Qloの「ストンスキン」の効果が切れた。
+2011-10-24 00:44:54.9477|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547272+09:00 (Crystal Mana->) [TALK_LS1] よいぞ～なかなかよいものだぞ～
+2011-10-24 00:44:54.9477|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547273+09:00 (Mugi Koto->) [TALK_LS6_CURRENT] おやすみなさい(*'ω')o
+2011-10-24 00:44:54.9657|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547274+09:00 (Zefi Snow->) [TALK_LS6_CURRENT] 全廃か(´;゜;ω;゜;｀)
+2011-10-24 00:44:54.9657|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547275+09:00 (Crystal Mana->) [TALK_LS1] よしこれで料理を作ってねる
+2011-10-24 00:44:54.9657|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547276+09:00 (Crystal Mana->) [TALK_LS1] あなんかひっこんだｗ
+2011-10-24 00:44:54.9657|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547277+09:00 (Jinn Airzax->) [TALK_LS6_CURRENT] d(ﾟДﾟ )☆ｽﾍﾟｼｬﾙｻﾝｸｽ☆( ﾟДﾟ)b
+2011-10-24 00:44:54.9807|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547278+09:00 (Crystal Mana->) [TALK_LS1] ザリガニに変わったｗ
+2011-10-24 00:44:54.9807|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547279+09:00 (Zefi Snow->) [TALK_LS6_CURRENT] 作りおきしておくね(｀・ω・´)
+2011-10-24 00:44:54.9807|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547280+09:00 (Crystal Mana->) [TALK_LS1] ああんトマトｗｗ
+2011-10-24 00:44:54.9807|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547281+09:00 (Zefi Snow->) [TALK_LS6_CURRENT] それ低レベルで最高にいスペック・・・
+2011-10-24 00:44:54.9957|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547282+09:00 (Jinn Airzax->) [TALK_LS6_CURRENT] これは使えそうだ(； ･`д･´)…ｺﾞｸﾘ…(`･д´･ ；)
+2011-10-24 00:44:54.9957|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:54.8547283+09:00 (->) [OTHER_CRAFT] Ruruth Stiriaは「�������&&&†ヴァーミリオン＆セピアアクトン��」×1を完成させた！
+2011-10-24 00:45:05.8993|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 34 37 3A 3A 5A 65 66 69 20 53 6E 6F 77 E3
+00000010: 81 AF E3 80 8C 02 13 06 FE FF F3 F3 F3 03 02 14
+00000020: 06 FE FF 26 26 26 03 E3 83 95 E3 82 A7 E3 83 AB
+00000030: E3 83 88 E3 82 AC E3 82 B9 E3 82 AD E3 83 B3 EF
+00000040: BC BB EF BC A2 EF BC B2 EF BC BD 02 14 02 EC 03
+00000050: 02 13 02 EC 03 E3 80 8D E3 82 92 E4 BF AE E7 90
+00000060: 86 E3 81 97 E3 81 9F E3 80 82
+2011-10-24 00:45:05.8993|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:45:05.9003572+09:00 (->) [OTHER_CRAFT] Zefi Snowは「�������&&&フェルトガスキン［ＢＲ］��」を修理した。
+2011-10-24 00:45:06.3053|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 35 3A 53 68 69 72 6F 20 4E 6F 68 61 72
+00000010: 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 8B E3 81 88 E3 82 8B E3
+00000030: 80 81 E3 83 AA E3 82 A2 E3 83 AB E3 81 A7 E3 81
+00000040: 8D E3 82 89 E3 81 84 E3 81 AA E3 82 93 E3 81 A7
+00000050: E3 81 99 E3 81 91 E3 81 A9 E3 83 BB E3 83 BB E3
+00000060: 83 BB
+2011-10-24 00:45:06.3053|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:45:06.3073805+09:00 (Shiro Nohara->) [TALK_LS1] かえる、リアルできらいなんですけど・・・
+スレッド '<名前がありません>' (0x2248) はコード 0 (0x0) で終了しました。
+スレッド '<名前がありません>' (0x1c84) はコード 0 (0x0) で終了しました。
+スレッド '<名前がありません>' (0x2470) はコード 0 (0x0) で終了しました。
+スレッド '<名前がありません>' (0x1c24) はコード 0 (0x0) で終了しました。
+2011-10-24 00:45:12.1417|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 5A 65 66 69 20 53 6E 6F 77 00 00
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E9 AB B7 E5 A7 89 E5 A6 B9 28
+00000030: EF BD 80 E3 83 BB CF 89 E3 83 BB C2 B4 29
+2011-10-24 00:45:12.1417|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:45:12.1427143+09:00 (Zefi Snow->) [TALK_LS6_CURRENT] 髷姉妹(｀・ω・´)
+2011-10-24 00:45:13.2947|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 35 3A 43 72 79 73 74 61 6C 20 4D 61 6E
+00000010: 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 82 E3 81 82 E3 81 AA E3
+00000030: 82 93 E3 81 8B E3 81 9D E3 82 93 E3 81 AA E3 81
+00000040: 8B E3 82 93 E3 81 98 E3 81 97 E3 81 9F
+2011-10-24 00:45:13.2947|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:45:13.2947802+09:00 (Crystal Mana->) [TALK_LS1] ああなんかそんなかんじした
+2011-10-24 00:45:18.6310|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 52 75 72 75 74 68 20 53 74 69 72
+00000010: 69 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A 5F 28 2E 5F 2E 29 5F E3 81 82
+00000030: E3 82 8A E3 81 8C E3 81 A8 E3 81 86
+2011-10-24 00:45:18.6310|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:45:18.6320854+09:00 (Ruruth Stiria->) [TALK_LS6_CURRENT] _(._.)_ありがとう
+2011-10-24 00:45:19.9711|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 35 3A 43 72 79 73 74 61 6C 20 4D 61 6E
+00000010: 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E4 BB A5 E5 BF 83 E4 BC 9D E5
+00000030: BF 83 E3 81 A0 E3 81 AD EF BC 81
+2011-10-24 00:45:19.9711|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:45:19.9711620+09:00 (Crystal Mana->) [TALK_LS1] 以心伝心だね！
+2011-10-24 00:45:22.2192|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 5A 65 66 69 20 53 6E 6F 77 00 00
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A EF BE 9F EF BD A5 EF BD A1 EF
+00000030: BD A8 EF BD AA EF BD A8 EF BD AA 28 28 EF BD A1
+00000040: C2 B4 EF BD A5 CF 89 EF BD A5 29 EF BD A1 C2 B4
+00000050: 5F 20 5F 29 29 EF BE 84 EF BE 9E EF BD B3 EF BD
+00000060: B2 EF BE 80 EF BD BC EF BE 8F EF BD BC EF BE 83
+00000070: EF BE 9F EF BD A5 EF BD A1
+2011-10-24 00:45:22.2192|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:45:22.2202907+09:00 (Zefi Snow->) [TALK_LS6_CURRENT] ﾟ･｡ｨｪｨｪ((｡´･ω･)｡´_ _))ﾄﾞｳｲﾀｼﾏｼﾃﾟ･｡
+2011-10-24 00:45:24.2784|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 52 75 72 75 74 68 20 53 74 69 72
+00000010: 69 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 AC E3 81 84 E3 81 AC E3
+00000030: 81 84
+2011-10-24 00:45:24.2784|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:45:24.2794084+09:00 (Ruruth Stiria->) [TALK_LS6_CURRENT] ぬいぬい
+2011-10-24 00:45:33.4519|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 34 37 3A 3A 5A 65 66 69 20 53 6E 6F 77 E3
+00000010: 81 AF E3 80 8C 02 13 06 FE FF F3 F3 F3 03 02 14
+00000020: 06 FE FF 26 26 26 03 E3 83 95 E3 82 A7 E3 83 AB
+00000030: E3 83 88 E3 83 96 E3 83 AA E3 82 AA E3 83 BC EF
+00000040: BC BB EF BC A2 EF BC B2 EF BC BD 02 14 02 EC 03
+00000050: 02 13 02 EC 03 E3 80 8D E3 82 92 E4 BF AE E7 90
+00000060: 86 E3 81 97 E3 81 9F E3 80 82
+2011-10-24 00:45:33.4519|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:45:33.4529331+09:00 (->) [OTHER_CRAFT] Zefi Snowは「�������&&&フェルトブリオー［ＢＲ］��」を修理した。
+2011-10-24 00:45:33.9489|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 32 3A 4D 6F 6E 64 61 69 6E 20 44 65 61
+00000010: 74 68 73 63 79 74 68 65 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A 33 33 20 02 2E 03 14 03 03 20
+00000030: 02 2E 05 09 F2 03 8F 03 20 02 2E 05 09 F2 03 CD
+00000040: 03 20 02 2E 05 06 F2 02 59 03
+2011-10-24 00:45:33.9489|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:45:33.9499616+09:00 (Mondain Deathscythe->) [TALK_SHOUT] 33 {022E03140303} {022E0509F2038F03} {022E0509F203CD03} {022E0506F2025903}
+2011-10-24 00:45:43.2484|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 5A 65 66 69 20 53 6E 6F 77 00 00
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E7 A7 81 E3 81 AE E3 81 8A E5
+00000030: 8B A7 E3 82 81 E3 81 A7 E3 81 99 E3 81 8C
+2011-10-24 00:45:43.2484|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:45:43.2484934+09:00 (Zefi Snow->) [TALK_LS6_CURRENT] 私のお勧めですが
+2011-10-24 00:45:55.1961|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 34 37 3A 3A 52 75 62 69 72 61 20 42 65 6C
+00000010: 76 65 64 65 72 65 E3 81 AF E3 80 8C 02 13 06 FE
+00000020: FF F3 F3 F3 03 02 14 06 FE FF 26 26 26 03 E3 82
+00000030: B9 E3 83 94 E3 82 A2 E3 82 AF E3 83 A9 E3 82 B9
+00000040: E3 83 97 EF BC 88 E3 82 B9 E3 83 81 E3 83 BC E3
+00000050: 83 AB EF BC 89 02 14 02 EC 03 02 13 02 EC 03 E3
+00000060: 80 8D C3 97 31 E3 82 92 E5 AE 8C E6 88 90 E3 81
+00000070: 95 E3 81 9B E3 81 9F EF BC 81
+2011-10-24 00:45:55.1961|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:45:55.1961768+09:00 (->) [OTHER_CRAFT] Rubira Belvedereは「�������&&&スピアクラスプ（スチール）��」×1を完成させた！
+2011-10-24 00:45:58.1603|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 34 37 3A 3A 52 75 72 75 74 68 20 53 74 69
+00000010: 72 69 61 E3 81 AF E3 80 8C 02 13 06 FE FF F3 F3
+00000020: F3 03 02 14 06 FE FF 26 26 26 03 E2 80 A0 E3 83
+00000030: B4 E3 82 A1 E3 83 BC E3 83 9F E3 83 AA E3 82 AA
+00000040: E3 83 B3 EF BC 86 E3 82 BB E3 83 94 E3 82 A2 E3
+00000050: 82 A2 E3 82 AF E3 83 88 E3 83 B3 02 14 02 EC 03
+00000060: 02 13 02 EC 03 E3 80 8D C3 97 31 E3 82 92 E5 AE
+00000070: 8C E6 88 90 E3 81 95 E3 81 9B E3 81 9F EF BC 81
+2011-10-24 00:45:58.1603|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:45:58.1613464+09:00 (->) [OTHER_CRAFT] Ruruth Stiriaは「�������&&&†ヴァーミリオン＆セピアアクトン��」×1を完成させた！
+2011-10-24 00:46:02.4665|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 35 3A 43 72 79 73 74 61 6C 20 4D 61 6E
+00000010: 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 9F E3 82 8B E3 81 BF E3
+00000030: 81 95 E3 82 93 E9 AA A8 E8 91 A3 E3 82 84 E3 81
+00000040: 95 E3 82 93 E3 81 AB E3 81 8D E3 81 9F E3 82 89
+2011-10-24 00:46:02.4665|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:46:02.4675927+09:00 (Crystal Mana->) [TALK_LS1] たるみさん骨董やさんにきたら
+2011-10-24 00:46:04.5567|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 5A 65 66 69 20 53 6E 6F 77 00 00
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 82 AF E3 83 A9 E3 83 95 E3
+00000030: 82 BF E3 83 BC E8 A3 85 E5 82 99 E3 81 AF EF BC
+00000040: 94 EF BC 90 E3 81 8F E3 82 89 E3 81 84 E3 81 AE
+00000050: E3 82 92 E6 94 B9 E9 80 A0 E3 81 97 E3 81 9F E3
+00000060: 81 BB E3 81 86 E3 81 8C E5 AE 89 E4 B8 8A E3 81
+00000070: 8C E3 82 8A E3 81 A7 E3 81 84 E3 81 84 E7 89 A9
+00000080: E3 81 8C E3 81 A7 E3 81 8D E3 82 8B E3 80 82 E3
+00000090: 80 82 E3 80 82
+2011-10-24 00:46:04.5567|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:46:04.5587123+09:00 (Zefi Snow->) [TALK_LS6_CURRENT] クラフター装備は４０くらいのを改造したほうが安上がりでいい物ができる。。。
+2011-10-24 00:46:07.8018|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 35 3A 43 72 79 73 74 61 6C 20 4D 61 6E
+00000010: 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 97 E3 82 8D E3 81 A1 E3
+00000030: 82 83 E3 82 93 E3 81 8C E8 A3 85 E5 82 99 E3 81
+00000040: 8F E3 82 8C E3 82 8B E3 81 9D E3 81 86 E3 82 88
+2011-10-24 00:46:07.8018|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:46:07.8018978+09:00 (Crystal Mana->) [TALK_LS1] しろちゃんが装備くれるそうよ
+2011-10-24 00:46:17.4114|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 35 3A 43 72 79 73 74 61 6C 20 4D 61 6E
+00000010: 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E7 A7 81 E3 81 AB E3 81 AF E9
+00000030: AD 9A E3 81 A0 E3 81 A3 E3 81 9F E3 81 91 E3 81
+00000040: A9 E3 83 BB CF 89 E3 83 BB
+2011-10-24 00:46:17.4114|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:46:17.4124475+09:00 (Crystal Mana->) [TALK_LS1] 私には魚だったけど・ω・
+2011-10-24 00:46:21.1856|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 52 75 72 75 74 68 20 53 74 69 72
+00000010: 69 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 83 9E E3 83 86 E3 83 AA E3
+00000030: 82 A2 E3 81 8A E9 A1 98 E3 81 84 E3 81 97 E3 81
+00000040: BE E3 81 99 EF BD 9E
+2011-10-24 00:46:21.1856|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:46:21.1866633+09:00 (Ruruth Stiria->) [TALK_LS6_CURRENT] マテリアお願いします～
+スレッド '<名前がありません>' (0x2bfc) はコード 0 (0x0) で終了しました。
+2011-10-24 00:46:29.0821|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 5A 65 66 69 20 53 6E 6F 77 00 00
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 82 E3 81 84 E3 81 82 E3
+00000030: 81 84 EF BC 81
+2011-10-24 00:46:29.0821|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:46:29.0821149+09:00 (Zefi Snow->) [TALK_LS6_CURRENT] あいあい！
+2011-10-24 00:46:30.1411|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 35 3A 53 68 69 72 6F 20 4E 6F 68 61 72
+00000010: 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E4 B8 80 E5 B9 B4 E5 88 86 E3
+00000030: 81 8F E3 82 89 E3 81 84 E3 81 82 E3 81 92 E3 81
+00000040: BE E3 81 97 E3 81 9F E3 82 88 EF BC 9F
+2011-10-24 00:46:30.1411|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:46:30.1421756+09:00 (Shiro Nohara->) [TALK_LS1] 一年分くらいあげましたよ？
+2011-10-24 00:46:30.2041|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 32 30 3A 3A 5A 65 66 69 20 53 6E 6F 77 E3
+00000010: 81 AF 52 75 72 75 74 68 20 53 74 69 72 69 61 E3
+00000020: 81 AB E3 80 8C 02 13 06 FE FF F3 F3 F3 03 02 14
+00000030: 06 FE FF 26 26 26 03 E3 83 95 E3 83 AC E3 82 A4
+00000040: E3 83 A0 E3 83 88 E3 83 AC E3 83 BC E3 82 B5 E3
+00000050: 83 BC 02 14 02 EC 03 02 13 02 EC 03 E3 80 8D E3
+00000060: 82 92 E4 BD BF E3 81 A3 E3 81 9F E3 80 82
+2011-10-24 00:46:30.2041|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:46:30.2051792+09:00 (->) [SYSTEM_MY_ACTION] Zefi SnowはRuruth Stiriaに「�������&&&フレイムトレーサー��」を使った。
+2011-10-24 00:46:35.6974|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 32 30 3A 3A 5A 65 66 69 20 53 6E 6F 77 E3
+00000010: 81 AF 4D 75 67 69 20 4B 6F 74 6F E3 81 AB E3 80
+00000020: 8C 02 13 06 FE FF F3 F3 F3 03 02 14 06 FE FF 26
+00000030: 26 26 03 E3 82 B9 E3 83 88 E3 83 BC E3 83 A0 E3
+00000040: 83 88 E3 83 AC E3 83 BC E3 82 B5 E3 83 BC 02 14
+00000050: 02 EC 03 02 13 02 EC 03 E3 80 8D E3 82 92 E4 BD
+00000060: BF E3 81 A3 E3 81 9F E3 80 82
+2011-10-24 00:46:35.6974|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:46:35.6984934+09:00 (->) [SYSTEM_MY_ACTION] Zefi SnowはMugi Kotoに「�������&&&ストームトレーサー��」を使った。
+2011-10-24 00:46:36.3495|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 34 37 3A 3A 52 75 62 69 72 61 20 42 65 6C
+00000010: 76 65 64 65 72 65 E3 81 AF E3 80 8C 02 13 06 FE
+00000020: FF F3 F3 F3 03 02 14 06 FE FF 26 26 26 03 E3 82
+00000030: B9 E3 83 94 E3 82 A2 E3 82 AF E3 83 A9 E3 82 B9
+00000040: E3 83 97 EF BC 88 E3 82 B9 E3 83 81 E3 83 BC E3
+00000050: 83 AB EF BC 89 02 14 02 EC 03 02 13 02 EC 03 E3
+00000060: 80 8D C3 97 31 E3 82 92 E5 AE 8C E6 88 90 E3 81
+00000070: 95 E3 81 9B E3 81 9F EF BC 81
+2011-10-24 00:46:36.3495|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:46:36.3505307+09:00 (->) [OTHER_CRAFT] Rubira Belvedereは「�������&&&スピアクラスプ（スチール）��」×1を完成させた！
+2011-10-24 00:46:37.7856|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 34 37 3A 3A 4D 75 67 69 20 4B 6F 74 6F E3
+00000010: 81 AF E3 80 8C 02 13 06 FE FF F3 F3 F3 03 02 14
+00000020: 06 FE FF 26 26 26 03 E3 82 A6 E3 83 BC E3 83 AB
+00000030: E3 83 99 E3 83 AC E3 83 BC 02 14 02 EC 03 02 13
+00000040: 02 EC 03 E3 80 8D C3 97 31 E3 82 92 E5 AE 8C E6
+00000050: 88 90 E3 81 95 E3 81 9B E3 81 9F EF BC 81
+2011-10-24 00:46:37.7856|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:46:37.7856128+09:00 (->) [OTHER_CRAFT] Mugi Kotoは「�������&&&ウールベレー��」×1を完成させた！
+2011-10-24 00:46:37.8776|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 35 3A 43 72 79 73 74 61 6C 20 4D 61 6E
+00000010: 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 82 E3 81 82 E3 82 82 E3
+00000030: 81 86 E3 81 82 E3 81 92 E3 81 9F E3 82 93 E3 81
+00000040: A0
+2011-10-24 00:46:37.8776|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:46:37.8786181+09:00 (Crystal Mana->) [TALK_LS1] ああもうあげたんだ
+2011-10-24 00:47:00.4359|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 35 3A 43 72 79 73 74 61 6C 20 4D 61 6E
+00000010: 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E9 AD 9A E3 81 AE E8 A9 B1 E3
+00000030: 81 8B EF BD A5 EF BD A5 EF BD A5
+2011-10-24 00:47:00.4359|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:47:00.4369083+09:00 (Crystal Mana->) [TALK_LS1] 魚の話か･･･
+2011-10-24 00:47:09.6124|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 5A 65 66 69 20 53 6E 6F 77 00 00
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E9 AB B7 E3 81 A1 E3 82 83 E3
+00000030: 82 93 E3 81 8A E3 81 AD E3 83 BC E3 81 95 E3 82
+00000040: 93 E3 81 AE E3 82 82 E4 BB 8A E5 BA A6 E3 82 AF
+00000050: E3 83 A9 E3 83 95 E3 82 BF E3 83 BC E4 BD 9C E3
+00000060: 81 A3 E3 81 A6 E4 B8 8A E3 81 92 E3 81 A6 EF BC
+00000070: 81
+2011-10-24 00:47:09.6124|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:47:09.6134332+09:00 (Zefi Snow->) [TALK_LS6_CURRENT] 髷ちゃんおねーさんのも今度クラフター作って上げて！
+2011-10-24 00:47:22.4011|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 34 37 3A 3A 52 75 62 69 72 61 20 42 65 6C
+00000010: 76 65 64 65 72 65 E3 81 AF E3 80 8C 02 13 06 FE
+00000020: FF F3 F3 F3 03 02 14 06 FE FF 26 26 26 03 E3 82
+00000030: B9 E3 83 94 E3 82 A2 E3 82 AF E3 83 A9 E3 82 B9
+00000040: E3 83 97 EF BC 88 E3 82 B9 E3 83 81 E3 83 BC E3
+00000050: 83 AB EF BC 89 02 14 02 EC 03 02 13 02 EC 03 E3
+00000060: 80 8D C3 97 31 E3 82 92 E5 AE 8C E6 88 90 E3 81
+00000070: 95 E3 81 9B E3 81 9F EF BC 81
+2011-10-24 00:47:22.4011|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:47:22.4021647+09:00 (->) [OTHER_CRAFT] Rubira Belvedereは「�������&&&スピアクラスプ（スチール）��」×1を完成させた！
+2011-10-24 00:47:29.1715|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+2011-10-24 00:47:30.2956|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 5A 65 66 69 20 53 6E 6F 77 00 00
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 83 AB E3 83 AB E3 81 A1 E3
+00000030: 82 83 E3 82 93 E5 A7 89 E3 81 95 E3 82 93 E3 81
+00000040: A8 E3 82 82 E3 81 AB E3 81 9F E3 81 B6 E3 82 93
+00000050: E3 82 82 E3 81 A3 E3 81 A6 E3 81 AA E3 81 84 E3
+00000060: 83 BB E3 83 BB E3 83 BB
+2011-10-24 00:47:30.2956|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:47:30.2976163+09:00 (Zefi Snow->) [TALK_LS6_CURRENT] ルルちゃん姉さんともにたぶんもってない・・・
+2011-10-24 00:47:37.0970|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 4C 75 63 69 61 20 4E 65 69 74 68
+00000010: 3A E3 81 AB E3 82 83 E3 81 B5 EF BC 9F E6 9C A8
+00000020: E5 B7 A5 E3 81 BD E3 81 84 E3 81 AE E3 81 82 E3
+00000030: 81 A3 E3 81 9F E3 82 89 E5 AC 89 E3 81 97 E3 81
+00000040: 84
+2011-10-24 00:47:37.0970|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:47:37.0990053+09:00 (Lucia Neith->) [TALK_LS6_CURRENT] にゃふ？木工ぽいのあったら嬉しい
+2011-10-24 00:47:37.5640|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 35 3A 53 68 69 72 6F 20 4E 6F 68 61 72
+00000010: 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 9F E3 82 8B E3 81 BF E5
+00000030: 90 9B E3 80 81 E3 81 8D E3 81 A6 E3 81 8F E3 82
+00000040: 8C E3 82 8B E3 81 8B E3 81 AA E3 81 81 EF BC 88
+00000050: E3 81 A9 E3 81 8D E3 81 A9 E3 81 8D
+2011-10-24 00:47:37.5640|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:47:37.5650319+09:00 (Shiro Nohara->) [TALK_LS1] たるみ君、きてくれるかなぁ（どきどき
+2011-10-24 00:47:39.8441|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 5A 65 66 69 20 53 6E 6F 77 00 00
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 82 AC E3 82 A6 E3 83 B3 E3
+00000030: 81 A8 E3 82 B7 E3 83 A7 E3 83 BC E3 82 B9 EF BC
+00000040: 81
+2011-10-24 00:47:39.8441|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:47:39.8441623+09:00 (Zefi Snow->) [TALK_LS6_CURRENT] ガウンとショース！
+2011-10-24 00:47:48.4226|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 35 3A 54 61 72 75 20 4D 69 78 00 00 00
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 BE E3 81 98 E3 81 A7 E3
+00000030: 81 99 E3 81 8B E3 81 81 EF BD 9E
+2011-10-24 00:47:48.4226|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:47:48.4236530+09:00 (Taru Mix->) [TALK_LS1] まじですかぁ～
+2011-10-24 00:47:49.2947|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 4D 75 67 69 20 4B 6F 74 6F 00 00
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 AF E3 81 84 EF BC 81
+2011-10-24 00:47:49.2947|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:47:49.2957029+09:00 (Mugi Koto->) [TALK_LS6_CURRENT] はい！
+2011-10-24 00:48:03.5245|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 34 37 3A 3A 52 75 62 69 72 61 20 42 65 6C
+00000010: 76 65 64 65 72 65 E3 81 AF E3 80 8C 02 13 06 FE
+00000020: FF F3 F3 F3 03 02 14 06 FE FF 26 26 26 03 E3 82
+00000030: B9 E3 83 94 E3 82 A2 E3 82 AF E3 83 A9 E3 82 B9
+00000040: E3 83 97 EF BC 88 E3 82 B9 E3 83 81 E3 83 BC E3
+00000050: 83 AB EF BC 89 02 14 02 EC 03 02 13 02 EC 03 E3
+00000060: 80 8D C3 97 31 E3 82 92 E5 AE 8C E6 88 90 E3 81
+00000070: 95 E3 81 9B E3 81 9F EF BC 81
+2011-10-24 00:48:03.5245|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:48:03.5255168+09:00 (->) [OTHER_CRAFT] Rubira Belvedereは「�������&&&スピアクラスプ（スチール）��」×1を完成させた！
+2011-10-24 00:48:04.8975|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 52 75 72 75 74 68 20 53 74 69 72
+00000010: 69 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 8A E9 A1 98 E3 81 84 E3
+00000030: 81 97 E3 81 BE E3 81 99 5F 28 2E 5F 2E 29 5F
+2011-10-24 00:48:04.8975|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:48:04.8985953+09:00 (Ruruth Stiria->) [TALK_LS6_CURRENT] お願いします_(._.)_
+2011-10-24 00:48:08.7958|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 5A 65 66 69 20 53 6E 6F 77 00 00
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A 28 EF BD 80 E3 83 BB CF 89 E3
+00000030: 83 BB C2 B4 29
+2011-10-24 00:48:08.7958|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:48:08.7978184+09:00 (Zefi Snow->) [TALK_LS6_CURRENT] (｀・ω・´)
+スレッド '<名前がありません>' (0x37b4) はコード 0 (0x0) で終了しました。
+2011-10-24 00:48:14.5691|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 4D 75 67 69 20 4B 6F 74 6F 00 00
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A 28 EF BD 80 E3 83 BB CF 89 E3
+00000030: 83 BB C2 B4 29
+2011-10-24 00:48:14.5691|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:48:14.5691485+09:00 (Mugi Koto->) [TALK_LS6_CURRENT] (｀・ω・´)
+2011-10-24 00:48:16.5362|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 34 37 3A 3A 5A 65 66 69 20 53 6E 6F 77 E3
+00000010: 81 AF 02 13 06 FE FF F3 F3 F3 03 02 14 06 FE FF
+00000020: 26 26 26 03 E3 83 95 E3 82 A9 E3 83 83 E3 82 B7
+00000030: E3 83 AB E3 83 9E E3 82 BF E3 83 BC 02 14 02 EC
+00000040: 03 02 13 02 EC 03 E3 82 92 E6 B6 88 E8 B2 BB E3
+00000050: 81 97 E3 80 81 02 13 06 FE FF F3 F3 F3 03 02 14
+00000060: 06 FE FF 26 26 26 03 E3 83 95 E3 82 A7 E3 83 AB
+00000070: E3 83 88 E3 82 AC E3 82 B9 E3 82 AD E3 83 B3 EF
+00000080: BC BB EF BC A2 EF BC B2 EF BC BD 02 14 02 EC 03
+00000090: 02 13 02 EC 03 E3 81 B8 E3 81 AE 02 13 06 FE FF
+000000A0: F3 F3 F3 03 02 14 06 FE FF 26 26 26 03 E8 81 96
+000000B0: E4 BA BA E3 81 AE E3 83 9E E3 83 86 E3 83 AA E3
+000000C0: 82 AC 02 14 02 EC 03 02 13 02 EC 03 E8 A3 85 E7
+000000D0: 9D 80 E3 81 AB E6 88 90 E5 8A 9F E3 81 97 E3 81
+000000E0: 9F EF BC 81
+2011-10-24 00:48:16.5362|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:48:16.5372610+09:00 (->) [OTHER_CRAFT] Zefi Snowは�������&&&フォッシルマター��を消費し、�������&&&フェルトガスキン［ＢＲ］��への�������&&&聖人のマテリガ��装着に成功した！
+2011-10-24 00:48:16.7212|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 34 37 3A 3A 4D 75 67 69 20 4B 6F 74 6F E3
+00000010: 81 AF E3 80 8C 02 13 06 FE FF F3 F3 F3 03 02 14
+00000020: 06 FE FF 26 26 26 03 E3 82 A6 E3 83 BC E3 83 AB
+00000030: E3 83 99 E3 83 AC E3 83 BC 02 14 02 EC 03 02 13
+00000040: 02 EC 03 E3 80 8D C3 97 31 E3 82 92 E5 AE 8C E6
+00000050: 88 90 E3 81 95 E3 81 9B E3 81 9F EF BC 81
+2011-10-24 00:48:16.7212|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:48:16.7222716+09:00 (->) [OTHER_CRAFT] Mugi Kotoは「�������&&&ウールベレー��」×1を完成させた！
+2011-10-24 00:48:17.2543|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 35 3A 43 72 79 73 74 61 6C 20 4D 61 6E
+00000010: 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 97 E3 82 8D E3 81 A1 E3
+00000030: 82 83 E3 82 93 E6 9C 80 E8 BF 91 E3 81 AE E8 A1
+00000040: 9D E5 8B 95 E8 B2 B7 E3 81 84 E3 81 A7 02 2E 05
+00000050: 22 F2 71 32 03 E3 81 A0 E3 81 A3 E3 81 9F E3 82
+00000060: 93 E3 81 A0 E3 81 91 E3 81 A9
+2011-10-24 00:48:17.2543|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:48:17.2543020+09:00 (Crystal Mana->) [TALK_LS1] しろちゃん最近の衝動買いで{022E0522F2713203}だったんだけど
+2011-10-24 00:48:21.9935|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 4C 75 63 69 61 20 4E 65 69 74 68
+00000010: 3A E3 81 9D E3 82 8C E3 81 AB E3 81 97 E3 81 A6
+00000020: E3 82 82 E3 80 81 E5 BC 93 E3 81 AF E3 81 A9 E3
+00000030: 83 BC E3 81 AB E3 82 82 E3 81 AA E3 82 89 E3 81
+00000040: AA E3 81 84 E3 81 8F E3 82 89 E3 81 84 E5 BC B1
+00000050: E4 BD 93 E6 9D A5 E3 81 A6 E3 82 8B E3 82 88 E3
+00000060: 81 86 E3 81 AD E3 81 88 28 5E 5E 3B
+2011-10-24 00:48:21.9935|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:48:21.9935731+09:00 (Lucia Neith->) [TALK_LS6_CURRENT] それにしても、弓はどーにもならないくらい弱体来てるようねえ(^^;
+2011-10-24 00:48:26.0498|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 42 3A 3A 5A 65 66 69 20 53 6E 6F 77 E3
+00000010: 81 AF 52 75 72 75 74 68 20 53 74 69 72 69 61 E3
+00000020: 81 AB E8 82 AF E5 AE 9A E3 81 97 E3 81 A6 E3 81
+00000030: BF E3 81 9B E3 81 9F E3 80 82
+2011-10-24 00:48:26.0498|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:48:26.0508052+09:00 (->) [TALK_EMOTE] Zefi SnowはRuruth Stiriaに肯定してみせた。
+2011-10-24 00:48:32.8221|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 35 3A 53 68 69 72 6F 20 4E 6F 68 61 72
+00000010: 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E4 BD 95 E6 B0 97 E3 81 AB E3
+00000030: 80 81 E3 82 AF E3 83 A9 E3 83 95 E3 82 BF E3 81
+00000040: AF E6 97 A7 E8 A3 85 E5 82 99 E3 81 AE E3 81 8C
+00000050: E3 81 84 E3 81 84 E9 83 A8 E4 BD 8D E3 81 82 E3
+00000060: 82 8A E3 81 BE E3 81 99 E3 82 88 E3 81 AD
+2011-10-24 00:48:32.8221|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:48:32.8231925+09:00 (Shiro Nohara->) [TALK_LS1] 何気に、クラフタは旧装備のがいい部位ありますよね
+2011-10-24 00:48:35.9703|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 35 3A 43 72 79 73 74 61 6C 20 4D 61 6E
+00000010: 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 83 89 E3 83 89 E3 83 AC E3
+00000030: 82 92 E3 81 9D E3 82 8D E3 81 9D E3 82 8D E8 B2
+00000040: B7 E3 81 8A E3 81 86 E3 81 8B E3 81 AA E3 81 A3
+00000050: E3 81 A6 E6 80 9D E3 81 A3 E3 81 A6 E9 A7 86 E3
+00000060: 81 A3 E3 81 A1 E3 82 83 E3 81 A3 E3 81 9F E3 82
+00000070: 93 E3 81 A0 E3 81 91 E3 81 A9
+2011-10-24 00:48:35.9703|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:48:35.9713726+09:00 (Crystal Mana->) [TALK_LS1] ドドレをそろそろ買おうかなって思って駆っちゃったんだけど
+2011-10-24 00:48:39.3415|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 38 3A 4D 69 74 73 75 20 53 75 67 69 7A
+00000010: 6F 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E9 A3 9B E7 A9 BA E8 89 87 E9
+00000030: 99 8D E3 82 8A E5 A0 B4 E5 88 B0 E7 9D 80
+2011-10-24 00:48:39.3415|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:48:39.3425654+09:00 (Mitsu Sugizo->) [TALK_LS4] 飛空艇降り場到着
+2011-10-24 00:48:47.8900|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 52 75 72 75 74 68 20 53 74 69 72
+00000010: 69 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 82 82 E3 81 86 E4 B8 80 E7
+00000030: AE 87 E6 89 80 E3 81 82 E3 82 8A E3 81 BE E3 81
+00000040: 99 28 E3 82 9C E3 83 BC E3 82 9C 3B 29
+2011-10-24 00:48:47.8900|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:48:47.8900543+09:00 (Ruruth Stiria->) [TALK_LS6_CURRENT] もう一箇所あります(゜ー゜;)
+2011-10-24 00:48:49.3591|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 34 37 3A 3A 52 75 62 69 72 61 20 42 65 6C
+00000010: 76 65 64 65 72 65 E3 81 AF E3 80 8C 02 13 06 FE
+00000020: FF F3 F3 F3 03 02 14 06 FE FF 26 26 26 03 E3 82
+00000030: B9 E3 83 94 E3 82 A2 E3 82 AF E3 83 A9 E3 82 B9
+00000040: E3 83 97 EF BC 88 E3 82 B9 E3 83 81 E3 83 BC E3
+00000050: 83 AB EF BC 89 02 14 02 EC 03 02 13 02 EC 03 E3
+00000060: 80 8D C3 97 31 E3 82 92 E5 AE 8C E6 88 90 E3 81
+00000070: 95 E3 81 9B E3 81 9F EF BC 81
+2011-10-24 00:48:49.3591|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:48:49.3601384+09:00 (->) [OTHER_CRAFT] Rubira Belvedereは「�������&&&スピアクラスプ（スチール）��」×1を完成させた！
+2011-10-24 00:48:49.4181|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 35 3A 43 72 79 73 74 61 6C 20 4D 61 6E
+00000010: 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A 56 55 E3 81 A7 E5 85 A8 E7 84
+00000030: B6 E3 81 9D E3 82 8D E3 81 9D E3 82 8D E3 81 98
+00000040: E3 82 83 E3 81 AA E3 81 8B E3 81 A3 E3 81 9F
+2011-10-24 00:48:49.4181|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:48:49.4191418+09:00 (Crystal Mana->) [TALK_LS1] VUで全然そろそろじゃなかった
+2011-10-24 00:48:49.9831|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 5A 65 66 69 20 53 6E 6F 77 00 00
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 9F E3 81 B6 E3 82 93 E3
+00000030: 81 93 E3 81 AE E3 81 BE E3 81 BE E5 BE 8C E8 A1
+00000040: 9B E3 82 88 E3 82 8A E3 81 AE E3 82 A2 E3 82 BF
+00000050: E3 83 83 E3 82 AB E3 83 BC E3 81 BF E3 81 9F E3
+00000060: 81 84 E3 81 AA E7 AB 8B E3 81 A1 E5 9B 9E E3 82
+00000070: 8A E3 81 95 E3 81 9B E3 82 8B E3 82 93 E3 81 98
+00000080: E3 82 83 E3 81 AA E3 81 84 EF BC 9F
+2011-10-24 00:48:49.9831|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:48:49.9851741+09:00 (Zefi Snow->) [TALK_LS6_CURRENT] たぶんこのまま後衛よりのアタッカーみたいな立ち回りさせるんじゃない？
+2011-10-24 00:48:52.9143|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 38 3A 44 65 61 64 20 54 69 67 65 72 00
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 BC E3 81 86 E3 81 91 E3
+00000030: 82 93 E3 81 AB E3 81 84 E3 82 8B E3 82 88
+2011-10-24 00:48:52.9143|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:48:52.9153417+09:00 (Dead Tiger->) [TALK_LS4] ぼうけんにいるよ
+2011-10-24 00:48:57.9356|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 4C 75 63 69 61 20 4E 65 69 74 68
+00000010: 3A E5 BC 93 E3 82 84 E3 81 A3 E3 81 A6 E3 82 8B
+00000020: E4 BA BA E3 81 AF E3 83 A4 E3 83 AA E3 81 82 E3
+00000030: 81 92 E3 81 A6 E3 82 8B E3 81 93 E3 81 A8 E5 A4
+00000040: 9A E3 81 84 E3 81 8B E3 82 89 E3 80 81 E4 B8 8A
+00000050: E3 81 AE E6 96 B9 E3 81 AE E4 BA BA E3 81 AF E5
+00000060: 89 B2 E3 81 A8 E5 AE 9F E5 AE B3 E3 81 AA E3 81
+00000070: 84 E3 82 93 E3 81 A0 E3 81 91 E3 81 A9
+2011-10-24 00:48:57.9356|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:48:57.9356289+09:00 (Lucia Neith->) [TALK_LS6_CURRENT] 弓やってる人はヤリあげてること多いから、上の方の人は割と実害ないんだけど
+2011-10-24 00:49:01.0258|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 5A 65 66 69 20 53 6E 6F 77 00 00
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 82 E3 81 84 E3 81 82 E3
+00000030: 81 84 EF BC 81
+2011-10-24 00:49:01.0258|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:49:01.0258056+09:00 (Zefi Snow->) [TALK_LS6_CURRENT] あいあい！
+2011-10-24 00:49:02.5858|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 37 3A 4A 61 6D 20 50 61 6E 00 00 00 00
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 9D E3 82 8D E3 81 9D E3
+00000030: 82 8D E3 81 8A E3 82 84 E3 81 99 E3 81 BF E3 81
+00000040: 97 E3 81 BE E3 81 99 E3 83 BC
+2011-10-24 00:49:02.5858|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:49:02.5858949+09:00 (Jam Pan->) [TALK_LS3] そろそろおやすみしますー
+2011-10-24 00:49:07.7041|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 37 3A 4A 61 6D 20 50 61 6E 00 00 00 00
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 8A E3 82 84 E3 81 99 E3
+00000030: 81 BF E3 81 AA E3 81 95 E3 81 84 E3 81 BE E3 81
+00000040: 9B EF BD 9E EF BC BE EF BC BE
+2011-10-24 00:49:07.7041|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:49:07.7061877+09:00 (Jam Pan->) [TALK_LS3] おやすみなさいませ～＾＾
+2011-10-24 00:49:08.2332|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 38 3A 4D 69 74 73 75 20 53 75 67 69 7A
+00000010: 6F 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 82 E3 81 84 E3 81 AA EF
+00000030: BD 97
+2011-10-24 00:49:08.2332|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:49:08.2342179+09:00 (Mitsu Sugizo->) [TALK_LS4] あいなｗ
+スレッド '<名前がありません>' (0x1664) はコード 0 (0x0) で終了しました。
+2011-10-24 00:49:13.3505|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 4C 75 63 69 61 20 4E 65 69 74 68
+00000010: 3A E4 BB 8A E3 82 84 E3 81 A3 E3 81 A8 E5 BC 93
+00000020: EF BC 95 EF BC 90 E3 81 AB E3 81 AA E3 81 A3 E3
+00000030: 81 9F E3 81 A8 E3 81 8B E3 81 A3 E3 81 A6 E3 83
+00000040: 92 E3 83 88 E3 81 AF E3 82 82 E3 81 86 E3 81 AD
+00000050: E3 83 BB E3 83 BB E3 83 BB
+2011-10-24 00:49:13.3505|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:49:13.3505106+09:00 (Lucia Neith->) [TALK_LS6_CURRENT] 今やっと弓５０になったとかってヒトはもうね・・・
+2011-10-24 00:49:13.7855|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 35 3A 43 72 79 73 74 61 6C 20 4D 61 6E
+00000010: 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 82 E3 80 81 E3 81 93 E3
+00000030: 81 AE E3 81 82 E3 81 8B E3 81 84 E3 81 9D E3 81
+00000040: A7 E3 81 AE E3 81 B2 E3 81 A8 E3 81 AD
+2011-10-24 00:49:13.7855|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:49:13.7865355+09:00 (Crystal Mana->) [TALK_LS1] あ、このあかいそでのひとね
+2011-10-24 00:49:14.9095|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 37 3A 42 75 6F 20 55 79 67 68 75 72 00
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 8A E3 82 84 E3 81 99 E3
+00000030: 81 BF E3 81 AA E3 81 95 E3 81 84 E3 81 A7 E3 81
+00000040: 99
+2011-10-24 00:49:14.9095|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:49:14.9105998+09:00 (Buo Uyghur->) [TALK_LS3] おやすみなさいです
+スレッド '<名前がありません>' (0x23b8) はコード 0 (0x0) で終了しました。
+スレッド '<名前がありません>' (0x26ac) はコード 0 (0x0) で終了しました。
+2011-10-24 00:49:38.5909|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 35 3A 43 72 79 73 74 61 6C 20 4D 61 6E
+00000010: 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 82 93 E3 81 A7 E3 81 93 E3
+00000030: 81 AE E3 81 8A E3 81 95 E3 81 8B E3 81 AA E3 81
+00000040: AF E4 BD 95 E3 81 AB E3 81 AA E3 82 8B E3 81 AE
+00000050: E3 81 8B E3 81 AD E3 81 97 E3 82 8D E3 81 8F E3
+00000060: 82 93
+2011-10-24 00:49:38.5909|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:49:38.5919543+09:00 (Crystal Mana->) [TALK_LS1] んでこのおさかなは何になるのかねしろくん
+2011-10-24 00:49:40.1190|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 34 37 3A 3A 4C 61 65 74 69 74 69 61 20 46
+00000010: 61 69 72 63 68 69 6C 64 E3 81 AF E3 80 8C 02 13
+00000020: 06 FE FF F3 F3 F3 03 02 14 06 FE FF 26 26 26 03
+00000030: E3 83 9F E3 82 B9 E3 83 AA E3 83 AB E3 83 AA E3
+00000040: 83 B3 E3 82 B0 E3 82 BA 02 14 02 EC 03 02 13 02
+00000050: EC 03 E3 80 8D C3 97 33 E3 82 92 E5 AE 8C E6 88
+00000060: 90 E3 81 95 E3 81 9B E3 81 9F EF BC 81
+2011-10-24 00:49:40.1190|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:49:40.1200417+09:00 (->) [OTHER_CRAFT] Laetitia Fairchildは「�������&&&ミスリルリングズ��」×3を完成させた！
+2011-10-24 00:49:49.3545|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 4C 75 63 69 61 20 4E 65 69 74 68
+00000010: 3A E3 81 BE E3 81 82 E3 80 81 E3 81 95 E3 81 99
+00000020: E3 81 8C E3 81 AB E6 94 BB E6 92 83 E5 8A 9B E3
+00000030: 81 AF E5 B0 91 E3 81 97 E3 81 AF E6 88 BB E3 81
+00000040: 99 E3 81 A8 E6 80 9D E3 81 86 E3 82 88 E3 80 81
+00000050: E5 90 9F E9 81 8A E3 81 AF E7 84 A1 E3 81 84 E3
+00000060: 81 97 EF BC 88 E7 AC 91 EF BC 89
+2011-10-24 00:49:49.3545|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:49:49.3545699+09:00 (Lucia Neith->) [TALK_LS6_CURRENT] まあ、さすがに攻撃力は少しは戻すと思うよ、吟遊は無いし（笑）
+2011-10-24 00:49:50.4486|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 32 3A 50 61 70 61 20 53 68 61 6E 67 6F
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A 34 33 2D 34 38 20 02 2E 05 09
+00000030: F2 03 CD 03 20 02 2E 05 06 F2 02 5F 03 20 33 2F
+00000040: 38
+2011-10-24 00:49:50.4486|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:49:50.4496325+09:00 (Papa Shango->) [TALK_SHOUT] 43-48 {022E0509F203CD03} {022E0506F2025F03} 3/8
+2011-10-24 00:49:51.0696|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 37 3A 55 6D 79 6F 6E 20 55 6E 69 00 00
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 8A E3 81 A4 E3 81 8B E3
+00000030: 82 8C E3 81 95 E3 81 BE E3 81 A7 E3 81 97 E3 81
+00000040: 9F E3 83 BC
+2011-10-24 00:49:51.0696|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:49:51.0706680+09:00 (Umyon Uni->) [TALK_LS3] おつかれさまでしたー
+2011-10-24 00:49:53.3778|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 5A 65 66 69 20 53 6E 6F 77 00 00
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A EF BC 92 EF BC 91 E3 81 A7 E6
+00000030: AD 8C E3 81 A3 E3 81 A6 E8 B8 8A E3 82 8C E3 81
+00000040: BE E3 81 99 E3 81 97 E3 83 BB E3 83 BB E3 83 BB
+00000050: EF BD 97
+2011-10-24 00:49:53.3778|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:49:53.3788000+09:00 (Zefi Snow->) [TALK_LS6_CURRENT] ２１で歌って踊れますし・・・ｗ
+2011-10-24 00:49:54.4398|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 34 37 3A 3A 52 75 62 69 72 61 20 42 65 6C
+00000010: 76 65 64 65 72 65 E3 81 AF E3 80 8C 02 13 06 FE
+00000020: FF F3 F3 F3 03 02 14 06 FE FF 26 26 26 03 E3 82
+00000030: B9 E3 83 94 E3 82 A2 E3 82 AF E3 83 A9 E3 82 B9
+00000040: E3 83 97 EF BC 88 E3 82 B9 E3 83 81 E3 83 BC E3
+00000050: 83 AB EF BC 89 02 14 02 EC 03 02 13 02 EC 03 E3
+00000060: 80 8D C3 97 31 E3 82 92 E5 AE 8C E6 88 90 E3 81
+00000070: 95 E3 81 9B E3 81 9F EF BC 81
+2011-10-24 00:49:54.4398|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:49:54.4418608+09:00 (->) [OTHER_CRAFT] Rubira Belvedereは「�������&&&スピアクラスプ（スチール）��」×1を完成させた！
+2011-10-24 00:49:59.0881|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 37 3A 59 6F 75 20 53 75 6E 00 00 00 00
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 8A E3 82 84 E3 81 99 E3
+00000030: 81 BF E3 81 AA E3 81 A3 E3 81 95 E3 81 84
+2011-10-24 00:49:59.0881|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:49:59.0891267+09:00 (You Sun->) [TALK_LS3] おやすみなっさい
+2011-10-24 00:50:00.4012|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 36 37 3A 3A 48 65 70 70 6F 6B 6F 20 4D 69
+00000010: 61 E3 81 AE E3 82 AD E3 83 A3 E3 83 8E E3 83 B3
+00000020: E3 82 A2 E3 83 BC E3 83 A0 E3 81 AB E3 82 88 E3
+00000030: 81 A3 E3 81 A6 E3 80 81 48 65 70 70 6F 6B 6F 20
+00000040: 4D 69 61 E3 81 AB E3 80 8C E3 82 AD E3 83 A3 E3
+00000050: 83 8E E3 83 B3 E3 82 A2 E3 83 BC E3 83 A0 E3 80
+00000060: 8D E3 81 AE E5 8A B9 E6 9E 9C E3 81 8C E3 81 8B
+00000070: E3 81 8B E3 81 A3 E3 81 9F E3 80 82
+2011-10-24 00:50:00.4012|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:50:00.4022018+09:00 (->) [OTHER_EFFECT_REMOVED] Heppoko Miaのキャノンアームによって、Heppoko Miaに「キャノンアーム」の効果がかかった。
+2011-10-24 00:50:09.3227|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 35 3A 43 72 79 73 74 61 6C 20 4D 61 6E
+00000010: 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 83 95 E3 82 A1 E3 82 A4 E3
+00000030: 82 A2 E3 82 B7 E3 83 A3 E3 83 BC E3 83 89 E3 83
+00000040: BB E3 83 BB
+2011-10-24 00:50:09.3227|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:50:09.3247121+09:00 (Crystal Mana->) [TALK_LS1] ファイアシャード・・
+2011-10-24 00:50:16.4681|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 4C 75 63 69 61 20 4E 65 69 74 68
+00000010: 3A E5 BC 93 E3 82 84 E3 81 A3 E3 81 A6 E3 82 8B
+00000020: E3 81 B2 E3 81 A8 E3 81 A7 E5 90 9F E9 81 8A E3
+00000030: 81 97 E3 81 9F E3 81 8B E3 81 A3 E3 81 9F E3 81
+00000040: B2 E3 81 A8 E3 81 AA E3 82 93 E3 81 A6 E3 81 84
+00000050: E3 82 8B E3 81 AE E3 81 8B E3 81 97 E3 82 89 EF
+00000060: BC 9B EF BC 9B
+2011-10-24 00:50:16.4681|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:50:16.4681207+09:00 (Lucia Neith->) [TALK_LS6_CURRENT] 弓やってるひとで吟遊したかったひとなんているのかしら；；
+2011-10-24 00:50:17.7771|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 34 37 3A 3A 5A 65 66 69 20 53 6E 6F 77 E3
+00000010: 81 AF 02 13 06 FE FF F3 F3 F3 03 02 14 06 FE FF
+00000020: 26 26 26 03 E3 83 90 E3 83 BC E3 82 AF E3 83 9E
+00000030: E3 82 BF E3 83 BC 02 14 02 EC 03 02 13 02 EC 03
+00000040: E3 82 92 E6 B6 88 E8 B2 BB E3 81 97 E3 80 81 02
+00000050: 13 06 FE FF F3 F3 F3 03 02 14 06 FE FF 26 26 26
+00000060: 03 E3 83 95 E3 82 A7 E3 83 AB E3 83 88 E3 83 96
+00000070: E3 83 AA E3 82 AA E3 83 BC EF BC BB EF BC A2 EF
+00000080: BC B2 EF BC BD 02 14 02 EC 03 02 13 02 EC 03 E3
+00000090: 81 B8 E3 81 AE 02 13 06 FE FF F3 F3 F3 03 02 14
+000000A0: 06 FE FF 26 26 26 03 E6 99 BA E8 80 85 E3 81 AE
+000000B0: E3 83 9E E3 83 86 E3 83 AA E3 82 AC 02 14 02 EC
+000000C0: 03 02 13 02 EC 03 E8 A3 85 E7 9D 80 E3 81 AB E6
+000000D0: 88 90 E5 8A 9F E3 81 97 E3 81 9F EF BC 81
+2011-10-24 00:50:17.7771|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:50:17.7771955+09:00 (->) [OTHER_CRAFT] Zefi Snowは�������&&&バークマター��を消費し、�������&&&フェルトブリオー［ＢＲ］��への�������&&&智者のマテリガ��装着に成功した！
+2011-10-24 00:50:17.8091|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 35 3A 54 61 72 75 20 4D 69 78 00 00 00
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 88 E3 81 88 E3 81 88 E3
+00000030: 83 BC E3 81 93 E3 82 93 E3 81 AA E3 82 82 E3 82
+00000040: 89 E3 81 A3 E3 81 A6 E3 81 84 E3 81 84 E3 81 AE
+00000050: EF BC 9F EF BD 97
+2011-10-24 00:50:17.8091|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:50:17.8091974+09:00 (Taru Mix->) [TALK_LS1] えええーこんなもらっていいの？ｗ
+2011-10-24 00:50:22.5544|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 38 3A 4D 69 74 73 75 20 53 75 67 69 7A
+00000010: 6F 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E9 8D 9B E5 86 B6 E3 83 AC E3
+00000030: 82 B7 E3 83 94 E3 81 A7 E3 81 99 E3 82 93
+2011-10-24 00:50:22.5544|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:50:22.5544688+09:00 (Mitsu Sugizo->) [TALK_LS4] 鍛冶レシピですん
+2011-10-24 00:50:28.0127|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 35 3A 53 68 69 72 6F 20 4E 6F 68 61 72
+00000010: 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 82 E3 81 A8 E8 84 9A E3
+00000030: 82 92
+2011-10-24 00:50:28.0127|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:50:28.0137810+09:00 (Shiro Nohara->) [TALK_LS1] あと脚を
+2011-10-24 00:50:30.1659|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 38 3A 44 65 61 64 20 54 69 67 65 72 00
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E6 96 A7 E3 81 AD
+2011-10-24 00:50:30.1659|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:50:30.1679043+09:00 (Dead Tiger->) [TALK_LS4] 斧ね
+2011-10-24 00:50:31.6319|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 36 37 3A 3A 48 65 70 70 6F 6B 6F 20 4D 69
+00000010: 61 E3 81 AE E3 80 8C E3 82 AD E3 83 A3 E3 83 8E
+00000020: E3 83 B3 E3 82 A2 E3 83 BC E3 83 A0 E3 80 8D E3
+00000030: 81 AE E5 8A B9 E6 9E 9C E3 81 8C E5 88 87 E3 82
+00000040: 8C E3 81 9F E3 80 82
+2011-10-24 00:50:31.6319|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:50:31.6329881+09:00 (->) [OTHER_EFFECT_REMOVED] Heppoko Miaの「キャノンアーム」の効果が切れた。
+2011-10-24 00:50:33.9101|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 34 37 3A 3A 4C 61 65 74 69 74 69 61 20 46
+00000010: 61 69 72 63 68 69 6C 64 E3 81 AF E3 80 8C 02 13
+00000020: 06 FE FF F3 F3 F3 03 02 14 06 FE FF 26 26 26 03
+00000030: E2 80 A0 E3 83 9F E3 82 B9 E3 83 AA E3 83 AB E3
+00000040: 83 AA E3 82 B9 E3 83 88 E3 83 AC E3 83 83 E3 83
+00000050: 88 02 14 02 EC 03 02 13 02 EC 03 E3 80 8D C3 97
+00000060: 31 E3 82 92 E5 AE 8C E6 88 90 E3 81 95 E3 81 9B
+00000070: E3 81 9F EF BC 81
+2011-10-24 00:50:33.9101|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:50:33.9101183+09:00 (->) [OTHER_CRAFT] Laetitia Fairchildは「�������&&&†ミスリルリストレット��」×1を完成させた！
+2011-10-24 00:50:37.0582|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 52 75 72 75 74 68 20 53 74 69 72
+00000010: 69 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E9 81 A0 E9 9A 94 E6 94 BB E6
+00000030: 92 83 E5 A5 BD E3 81 8D E3 81 AA E4 BA BA E3 81
+00000040: 8C E3 82 84 E3 81 A3 E3 81 A6 E3 82 8B E3 82 88
+00000050: E3 81 86 E3 81 AA E3 83 BB E3 83 BB 6F 72 7A
+2011-10-24 00:50:37.0582|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:50:37.0602985+09:00 (Ruruth Stiria->) [TALK_LS6_CURRENT] 遠隔攻撃好きな人がやってるような・・orz
+2011-10-24 00:50:37.4653|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 36 37 3A 3A 4C 61 6C 61 20 41 6D 6D 69 63
+00000010: 63 6F E3 81 AB E3 80 8C E6 9D BF E9 87 91 E8 A8
+00000020: AD E5 82 99 EF BC 9A E5 88 A9 E7 94 A8 E8 AA 8D
+00000030: E5 8F AF E3 80 8D E3 81 AE E5 8A B9 E6 9E 9C E3
+00000040: 81 8C E3 81 8B E3 81 8B E3 81 A3 E3 81 9F E3 80
+00000050: 82
+2011-10-24 00:50:37.4653|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:50:37.4653216+09:00 (->) [OTHER_EFFECT_REMOVED] Lala Ammiccoに「板金設備：利用認可」の効果がかかった。
+2011-10-24 00:50:37.8093|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 38 3A 4D 69 74 73 75 20 53 75 67 69 7A
+00000010: 6F 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 A7 E3 81 99
+2011-10-24 00:50:37.8093|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:50:37.8093413+09:00 (Mitsu Sugizo->) [TALK_LS4] です
+2011-10-24 00:50:39.3384|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 34 37 3A 3A 52 75 62 69 72 61 20 42 65 6C
+00000010: 76 65 64 65 72 65 E3 81 AF E3 80 8C 02 13 06 FE
+00000020: FF F3 F3 F3 03 02 14 06 FE FF 26 26 26 03 E3 82
+00000030: B9 E3 83 94 E3 82 A2 E3 82 AF E3 83 A9 E3 82 B9
+00000040: E3 83 97 EF BC 88 E3 82 B9 E3 83 81 E3 83 BC E3
+00000050: 83 AB EF BC 89 02 14 02 EC 03 02 13 02 EC 03 E3
+00000060: 80 8D C3 97 31 E3 82 92 E5 AE 8C E6 88 90 E3 81
+00000070: 95 E3 81 9B E3 81 9F EF BC 81
+2011-10-24 00:50:39.3384|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:50:39.3394288+09:00 (->) [OTHER_CRAFT] Rubira Belvedereは「�������&&&スピアクラスプ（スチール）��」×1を完成させた！
+2011-10-24 00:50:41.7085|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 42 3A 3A 4C 61 72 6C 61 20 42 72 69 6C
+00000010: 69 6F 74 68 E3 81 AF 44 69 6F 64 61 79 6F 20 44
+00000020: 69 61 62 6C 6F E3 81 AB E3 81 86 E3 81 AA E3 81
+00000030: 9A E3 81 84 E3 81 A6 E3 81 BF E3 81 9B E3 81 9F
+00000040: E3 80 82
+2011-10-24 00:50:41.7085|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:50:41.7085643+09:00 (->) [TALK_EMOTE] Larla BriliothはDiodayo Diabloにうなずいてみせた。
+2011-10-24 00:50:41.8655|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 42 3A 3A 5A 65 66 69 20 53 6E 6F 77 E3
+00000010: 81 AF 52 75 72 75 74 68 20 53 74 69 72 69 61 E3
+00000020: 81 AB E5 8F 8C E8 9B 87 E5 85 9A E5 BC 8F E6 95
+00000030: AC E7 A4 BC E3 82 92 E3 81 97 E3 81 9F E3 80 82
+2011-10-24 00:50:41.8655|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:50:41.8665734+09:00 (->) [TALK_EMOTE] Zefi SnowはRuruth Stiriaに双蛇党式敬礼をした。
+2011-10-24 00:50:44.8297|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 52 75 72 75 74 68 20 53 74 69 72
+00000010: 69 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E9 8A 83 E3 81 BE E3 81 A0 E3
+00000030: 81 A7 E3 81 99 E3 81 97
+2011-10-24 00:50:44.8297|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:50:44.8307429+09:00 (Ruruth Stiria->) [TALK_LS6_CURRENT] 銃まだですし
+2011-10-24 00:50:49.2589|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 42 3A 3A 52 75 72 75 74 68 20 53 74 69
+00000010: 72 69 61 E3 81 AF 5A 65 66 69 20 53 6E 6F 77 E3
+00000020: 81 AB E9 BB 92 E6 B8 A6 E5 9B A3 E5 BC 8F E6 95
+00000030: AC E7 A4 BC E3 82 92 E3 81 97 E3 81 9F E3 80 82
+2011-10-24 00:50:49.2589|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:50:49.2589962+09:00 (->) [TALK_EMOTE] Ruruth StiriaはZefi Snowに黒渦団式敬礼をした。
+2011-10-24 00:50:59.8996|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 4C 75 63 69 61 20 4E 65 69 74 68
+00000010: 3A EF BC 95 E5 88 86 E3 81 AB EF BC 91 E5 9B 9E
+00000020: E3 81 AE E6 94 BB E6 92 83 E3 81 A7 E3 81 84 E3
+00000030: 81 84 E3 81 8B E3 82 89 E3 80 81 E5 B0 84 E7 A8
+00000040: 8B EF BC 93 EF BC 90 EF BC 90 EF BD 8D E3 81 BB
+00000050: E3 81 A9 E6 AC B2 E3 81 97 E3 81 84 E3 81 A7 E3
+00000060: 81 99 EF BC 88 E7 AC 91 EF BC 89
+2011-10-24 00:50:59.8996|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:50:59.9006049+09:00 (Lucia Neith->) [TALK_LS6_CURRENT] ５分に１回の攻撃でいいから、射程３００ｍほど欲しいです（笑）
+2011-10-24 00:51:03.5478|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 36 37 3A 3A 43 6F 75 6E 74 20 44 61 73 63
+00000010: 6F 72 70 E3 81 AB E3 80 8C E3 83 91 E3 83 BC E3
+00000020: 83 88 E3 83 8A E3 83 BC E3 82 B7 E3 83 83 E3 83
+00000030: 97 E3 83 9C E3 83 BC E3 83 8A E3 82 B9 E3 80 8D
+00000040: E3 81 AE E5 8A B9 E6 9E 9C E3 81 8C E3 81 8B E3
+00000050: 81 8B E3 81 A3 E3 81 9F E3 80 82
+2011-10-24 00:51:03.5478|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:51:03.5488135+09:00 (->) [OTHER_EFFECT_REMOVED] Count Dascorpに「パートナーシップボーナス」の効果がかかった。
+2011-10-24 00:51:12.0032|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+2011-10-24 00:51:13.2203|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 34 37 3A 3A 48 65 70 70 6F 6B 6F 20 4D 69
+00000010: 61 E3 81 AF E3 80 8C 02 13 06 FE FF F3 F3 F3 03
+00000020: 02 14 06 FE FF 26 26 26 03 E2 80 A0 E3 82 A8 E3
+00000030: 83 AC E3 82 AF E3 83 88 E3 83 A9 E3 83 A0 E3 83
+00000040: AA E3 83 B3 E3 82 B0 02 14 02 EC 03 02 13 02 EC
+00000050: 03 E3 80 8D C3 97 31 E3 82 92 E5 AE 8C E6 88 90
+00000060: E3 81 95 E3 81 9B E3 81 9F EF BC 81
+2011-10-24 00:51:13.2203|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:51:13.2213668+09:00 (->) [OTHER_CRAFT] Heppoko Miaは「�������&&&†エレクトラムリング��」×1を完成させた！
+2011-10-24 00:51:22.8609|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 35 3A 43 72 79 73 74 61 6C 20 4D 61 6E
+00000010: 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 84 E3 82 84 E3 81 BE E3
+00000030: 81 A6
+2011-10-24 00:51:22.8609|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:51:22.8609181+09:00 (Crystal Mana->) [TALK_LS1] いやまて
+スレッド '<名前がありません>' (0x12d4) はコード 0 (0x0) で終了しました。
+2011-10-24 00:51:27.3231|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 30 35 3A 54 61 72 75 20 4D 69 78 00 00 00
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 8A E3 80 81 E9 87 8E E8
+00000030: 89 AF E3 81 AE E5 8B 9F E9 9B 86 E3 81 8C E3 81
+00000040: 82 E3 82 8B E3 81 9E EF BD 97
+2011-10-24 00:51:27.3231|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:51:27.3231734+09:00 (Taru Mix->) [TALK_LS1] お、野良の募集があるぞｗ
+2011-10-24 00:51:38.4308|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 34 37 3A 3A 4C 61 65 74 69 74 69 61 20 46
+00000010: 61 69 72 63 68 69 6C 64 E3 81 AF E3 80 8C 02 13
+00000020: 06 FE FF F3 F3 F3 03 02 14 06 FE FF 26 26 26 03
+00000030: E3 83 9F E3 82 B9 E3 83 AA E3 83 AB E3 83 AA E3
+00000040: 83 B3 E3 82 B0 E3 82 BA 02 14 02 EC 03 02 13 02
+00000050: EC 03 E3 80 8D C3 97 31 E3 82 92 E5 AE 8C E6 88
+00000060: 90 E3 81 95 E3 81 9B E3 81 9F EF BC 81
+2011-10-24 00:51:38.4308|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:51:38.4308087+09:00 (->) [OTHER_CRAFT] Laetitia Fairchildは「�������&&&ミスリルリングズ��」×1を完成させた！
+2011-10-24 00:51:41.6439|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 34 37 3A 3A 52 75 62 69 72 61 20 42 65 6C
+00000010: 76 65 64 65 72 65 E3 81 AF E3 80 8C 02 13 06 FE
+00000020: FF F3 F3 F3 03 02 14 06 FE FF 26 26 26 03 E3 82
+00000030: B9 E3 83 94 E3 82 A2 E3 82 AF E3 83 A9 E3 82 B9
+00000040: E3 83 97 EF BC 88 E3 82 B9 E3 83 81 E3 83 BC E3
+00000050: 83 AB EF BC 89 02 14 02 EC 03 02 13 02 EC 03 E3
+00000060: 80 8D C3 97 31 E3 82 92 E5 AE 8C E6 88 90 E3 81
+00000070: 95 E3 81 9B E3 81 9F EF BC 81
+2011-10-24 00:51:41.6439|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:51:41.6449925+09:00 (->) [OTHER_CRAFT] Rubira Belvedereは「�������&&&スピアクラスプ（スチール）��」×1を完成させた！
+2011-10-24 00:51:42.3640|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 52 75 72 75 74 68 20 53 74 69 72
+00000010: 69 61 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E5 BE 8C E4 BD BF E3 81 84 E9
+00000030: 81 93 E3 82 8F E3 81 8B E3 82 89 E3 81 AA E3 81
+00000040: 84 E3 81 91 E3 81 A9 E5 8F 97 E3 81 91 E6 B5 81
+00000050: E3 81 97 E3 81 AE E3 81 84 E3 82 8A E3 81 BE E3
+00000060: 81 99 E3 81 8B E3 83 BB E3 83 BB EF BC 9F EF BD
+00000070: 97
+2011-10-24 00:51:42.3640|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:51:42.3640336+09:00 (Ruruth Stiria->) [TALK_LS6_CURRENT] 後使い道わからないけど受け流しのいりますか・・？ｗ
+2011-10-24 00:51:55.4047|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 34 37 3A 3A 48 65 70 70 6F 6B 6F 20 4D 69
+00000010: 61 E3 81 AF E3 80 8C 02 13 06 FE FF F3 F3 F3 03
+00000020: 02 14 06 FE FF 26 26 26 03 E2 80 A0 E3 82 A8 E3
+00000030: 83 AC E3 82 AF E3 83 88 E3 83 A9 E3 83 A0 E3 83
+00000040: AA E3 83 B3 E3 82 B0 02 14 02 EC 03 02 13 02 EC
+00000050: 03 E3 80 8D C3 97 31 E3 82 92 E5 AE 8C E6 88 90
+00000060: E3 81 95 E3 81 9B E3 81 9F EF BC 81
+2011-10-24 00:51:55.4047|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:51:55.4047795+09:00 (->) [OTHER_CRAFT] Heppoko Miaは「�������&&&†エレクトラムリング��」×1を完成させた！
+2011-10-24 00:52:00.3000|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 34 37 3A 3A 44 69 6F 64 61 79 6F 20 44 69
+00000010: 61 62 6C 6F E3 81 AF E3 80 8C 02 13 06 FE FF F3
+00000020: F3 F3 03 02 14 06 FE FF 26 26 26 03 E7 99 BD E7
+00000030: BE 8A E6 AF 9B E7 B3 B8 02 14 02 EC 03 02 13 02
+00000040: EC 03 E3 80 8D C3 97 31 E3 82 92 E5 AE 8C E6 88
+00000050: 90 E3 81 95 E3 81 9B E3 81 9F EF BC 81
+2011-10-24 00:52:00.3000|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:52:00.3010596+09:00 (->) [OTHER_CRAFT] Diodayo Diabloは「�������&&&白羊毛糸��」×1を完成させた！
+スレッド '<名前がありません>' (0x33f0) はコード 0 (0x0) で終了しました。
+2011-10-24 00:52:19.3961|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 5A 65 66 69 20 53 6E 6F 77 00 00
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 82
+2011-10-24 00:52:19.3961|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:52:19.3961518+09:00 (Zefi Snow->) [TALK_LS6_CURRENT] あ
+2011-10-24 00:52:21.9262|DEBUG|FFXIVRuby.FFXIVLogReader|DUMP:
+00000000: 30 30 31 33 3A 5A 65 66 69 20 53 6E 6F 77 00 00
+00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+00000020: 00 00 00 00 00 3A E3 81 BB E3 81 97 E3 81 84 E3
+00000030: 81 A7 E3 81 99 EF BC 81
+2011-10-24 00:52:21.9262|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:52:21.9262965+09:00 (Zefi Snow->) [TALK_LS6_CURRENT] ほしいです！

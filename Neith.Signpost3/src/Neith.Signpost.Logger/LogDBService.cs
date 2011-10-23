@@ -55,9 +55,11 @@ namespace Neith.Signpost.Logger
                             rec.Action = newAct;
                             Database.Instance.Save(rec);
                         }
+                        if (rec.Action == "SYSTEM_ERROR") Database.Instance.Delete(rec);
                     }
-#endif
+#else
                     logger.Debug(rec);
+#endif
                 }
             }
             catch (Exception ex)

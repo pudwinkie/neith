@@ -24,8 +24,9 @@ namespace FFXIVRuby.Watcher
 
         private async Task LogWatch(CancellationToken token)
         {
-            while (!token.IsCancellationRequested)
+            while (true)
             {
+                if (token.IsCancellationRequested) throw new OperationCanceledException(token);
                 var xiv = await ScanProcess(token); if (xiv == null) continue;
                 var reader = await SearchLogArea(xiv, token); if (reader == null) continue;
                 await ReadLog(reader, token);
@@ -39,9 +40,10 @@ namespace FFXIVRuby.Watcher
         private async Task<FFXIVProcess> ScanProcess(CancellationToken token)
         {
             logger.Trace("Scan XIV...");
-            while (!token.IsCancellationRequested)
+            while (true)
             {
-                Process p = FFXIVMemoryProvidor.GetFFXIVGameProcess();
+                if (token.IsCancellationRequested) throw new OperationCanceledException(token);
+                var p = FFXIVMemoryProvidor.GetFFXIVGameProcess();
                 if (p != null)
                 {
                     logger.Trace("FFXIV found.");
@@ -49,7 +51,6 @@ namespace FFXIVRuby.Watcher
                 }
                 await TaskEx.Delay(WaitScanProcess, token);
             }
-            return null;
         }
         private static readonly TimeSpan WaitScanProcess = TimeSpan.FromSeconds(5);
 
@@ -64,7 +65,7 @@ namespace FFXIVRuby.Watcher
         {
             for (var i = 0; i < 10; i++)
             {
-                if (token.IsCancellationRequested) return null;
+                if (token.IsCancellationRequested) throw new OperationCanceledException(token);
                 var search = new LogStatusSearcher(xiv);
                 var reader = search.SearchPLINQ(token);
                 if (reader != null) return reader;
@@ -84,7 +85,7 @@ namespace FFXIVRuby.Watcher
             var proc = reader.FFXIV.Proc;
             while (!proc.HasExited)
             {
-                if (token.IsCancellationRequested) return;
+                if (token.IsCancellationRequested) throw new OperationCanceledException(token);
                 if (from == reader.TerminalPoint)
                 {
                     await TaskEx.Delay(WaitReadLog, token);
@@ -94,7 +95,7 @@ namespace FFXIVRuby.Watcher
                 if (from > to) from = reader.EntryPoint;
                 foreach (var item in reader.GetLogs(from, to))
                 {
-                    if (token.IsCancellationRequested) return;
+                    if (token.IsCancellationRequested) throw new OperationCanceledException(token);
                     logBroadcast.Post(item);
                 }
                 from = to;

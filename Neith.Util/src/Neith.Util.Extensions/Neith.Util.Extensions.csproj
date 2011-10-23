@@ -66,6 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArrayExtensions.cs" />
     <Compile Include="ArraySegmentExtensions.cs" />
     <Compile Include="ConvertExtensions.cs" />
     <Compile Include="Data\DbDataReaderExtensions.cs" />

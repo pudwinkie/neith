@@ -11,6 +11,7 @@ namespace FFXIVRuby
     public class FFXIVLogReader
     {
         // Fields
+        private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
         private int Entry;
         public FFXIVProcess FFXIV { get; private set; }
 
@@ -69,14 +70,20 @@ namespace FFXIVRuby
             var buf = logData
                 .SkipWhile(a => a != 0x30)
                 .ToArray();
+            if (logger.IsDebugEnabled)
+            {
+                logger.Debug(("DUMP:\r\n" + buf.DumpHexText()).Trim());
+            }
+
             var input = enc.GetString(TABConvertor.TabEscape(buf));
             var matchs = regex.Matches(input);
             var strArray = regex.Split(input);
-            for (var j = 1; j < strArray.Length; j++) {
+            for (var j = 1; j < strArray.Length; j++)
+            {
                 var strArray2 = strArray[j].Split(new char[] { ':' }, 2, StringSplitOptions.None);
                 var strType = matchs[j - 1].Value.TrimEnd(new char[] { ':' });
                 var numType = int.Parse(strType, NumberStyles.AllowHexSpecifier);
-                var strWho = strArray2[0].Replace("\0", "").Trim(); 
+                var strWho = strArray2[0].Replace("\0", "").Trim();
                 var strMes = strArray2[1].Replace("\0", "");
                 var item = new FFXIVLog(numType, strWho, strMes);
                 yield return item;

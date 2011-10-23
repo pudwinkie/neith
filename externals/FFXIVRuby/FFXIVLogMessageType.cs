@@ -8,7 +8,7 @@ namespace FFXIVRuby
     /// <summary>
     /// メッセージ種別
     /// </summary>
-    public enum FFXILogMessageType
+    public enum FFXIVLogMessageType
     {
         UNNONE             = 0x01FFFF,
         INTERNAL_START     = 0x010001,
@@ -110,10 +110,10 @@ namespace FFXIVRuby
 
     public static class FFXILogMessageTypeExtensions
     {
-        public static FFXILogMessageType ToMessageType(this int numType)
+        public static FFXIVLogMessageType ToMessageType(this int numType)
         {
-            try { return (FFXILogMessageType)numType; }
-            catch { return FFXILogMessageType.UNNONE; }
+            try { return (FFXIVLogMessageType)numType; }
+            catch { return FFXIVLogMessageType.UNNONE; }
         }
 
 
