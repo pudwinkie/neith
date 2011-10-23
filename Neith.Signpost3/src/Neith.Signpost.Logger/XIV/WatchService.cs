@@ -26,7 +26,12 @@ namespace Neith.Signpost.Logger.XIV
         public WatchService()
         {
             var Watcher = new XIVWathcer().Add(Tasks);
-            var trans = new TransformBlock<FFXIVRuby.FFXIVLog, NeithLog>(a => a.ToNeithLog());
+            var trans = new TransformManyBlock<FFXIVRuby.FFXIVLog, NeithLog>(a =>
+            {
+                var item = a.ToNeithLog();
+                if (item.Action == "SYSTEM_ERROR") return Enumerable.Empty<NeithLog>();
+                return new[] { item };
+            });
             Watcher.LogSource.LinkTo(trans, false).Add(Tasks);
             LogSource = trans;
         }

@@ -11,7 +11,7 @@ namespace FFXIVRuby
     public class LogStatusSearcher
     {
         // Fields
-        private static NLog.Logger Log = NLog.LogManager.GetCurrentClassLogger();
+        private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
         private FFXIVLogReader _stat;
         private FFXIVProcess ffxiv;
         private Regex reLogEntry = new Regex(@"[0-9A-F]{4}::\w+|^[0-9A-F]{4}:[()\w\s\0]{32}:");
@@ -32,7 +32,7 @@ namespace FFXIVRuby
 
         private void OnLogStatusFound(FFXIVLogReader stat)
         {
-            Log.Trace("OnLogStatusFound({0})", stat);
+            logger.Trace("OnLogStatusFound({0})", stat);
 
             _stat = stat;
             if (LogStatusFound != null)
@@ -185,7 +185,7 @@ namespace FFXIVRuby
                 uint end = start + size;
                 for (uint i = start; i < end; i += READ_BLOCK_SIZE)
                 {
-                    if (token.IsCancellationRequested) yield break;
+                    if (token.IsCancellationRequested) throw new OperationCanceledException(token);
                     uint num2 = READ_BLOCK_SIZE;
                     if ((i + num2) > end) num2 = end - i;
                     yield return new SearchRange((int)i, (int)num2);
@@ -202,12 +202,12 @@ namespace FFXIVRuby
         {
 #if true
             var tid = Thread.CurrentThread.ManagedThreadId;
-            Log.Trace("EnSearch[{0,2}](0x{1,8:X}, 0x{2,6:X})",
+            logger.Trace("EnSearch[{0,2}](0x{1,8:X}, 0x{2,6:X})",
                 tid, ent, size);
 #endif
             foreach (var ptr in ffxiv.ReadBytesOrNull(ent, size).EnReadInt32())
             {
-                if (token.IsCancellationRequested) yield break;
+                if (token.IsCancellationRequested) throw new OperationCanceledException(token);
                 // ptr値が妥当なアドレスか？
                 if (!IsValidAddress(ptr)) continue;
 
@@ -232,8 +232,12 @@ namespace FFXIVRuby
                 var str = Encoding.UTF8.GetString(c2);
                 if (!reLogEntry.IsMatch(str)) continue;
 
+                // 最終チェック
+                var reader = new FFXIVLogReader(this.ffxiv, logEntry);
+
+
                 // 確定
-                yield return new FFXIVLogReader(this.ffxiv, logEntry);
+                yield return reader;
                 yield break;
             }
         }

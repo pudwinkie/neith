@@ -57,7 +57,7 @@
   <ItemGroup>
     <Compile Include="BinaryReaderExtensions.cs" />
     <Compile Include="DataDisguiser.cs" />
-    <Compile Include="FFXILogMessageType.cs" />
+    <Compile Include="FFXIVLogMessageType.cs" />
     <Compile Include="FFXIVLog.cs" />
     <Compile Include="FFXIVLogReader.cs" />
     <Compile Include="FFXIVMemoryProvidor.cs" />
