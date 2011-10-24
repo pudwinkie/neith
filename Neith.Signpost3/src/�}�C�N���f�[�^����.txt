@@ -1,0 +1,121 @@
+blog.udzura.jpGot on the Weird Rails
+
+Home
+About
+« ブログが浅ましくなりましたHaml で、複数のクラス属性を指定する »
+
+HTML5 の microdata について調べた
+5
+tweets
+retweet
+Time to Read
+5分
+microdata というものがある。いわゆるセマンティック(笑)ウェブ(爆)だ。セマンティックウェブの話が出た3年前ぐらいは、概念はすごいけど画餅みたいなところがあり、胡散臭いコンサルやスタートアップが出現してて怪しいイメージもあったが、 Google さんをはじめとした検索エンジンの技術向上とか、似たような規格として facebook とか SNS 系で人気の OGP(Open Graph Protocol) も出てきていて、ウェッブペ～ジにメタデ～タを埋め込むことが普通になりつつあるように思われる。
+今回、ちょっとした機会があって microdata などについて調べたので、そのメモなど。基本的に僕の独学だったりするので、学術的にとか色々おかしなところのツッコミとかが欲しい感じです。
+セマンティック☆ウェブってそもそも何なの？
+
+僕もよく分からないのだが、 HTML で記述した文章に、人間以外の、例えばクローラやボットが読めるかたちでメタ情報を付け加えたりして、それでインターネットを便利にするとかそんな感じらしい。 Wikipedia にも説明がある。
+Wikipedia では OGP は直接言及されていないが、 OGP はセマンティックウェブを実現する具体例の一つと思ってよいのだろう。例えばブログエントリなんかに、 facebook のボットが読める形でメタデータ、具体的にはページに紐づいている facebook のページ ID とか、イメージ画像とか、タイトルとかを一緒に組み込む。そうすることで、 facebook のアプリケーション側で整形してくれる、という感じ。
+OGP の具体的な記述は以下のサイトで詳細に説明されているので、ここでは触れない。
+フェイスブック、ミクシィ、グリーで使われている OGP とは何か
+OGPの事例について～coobooの場合～
+要するに、「ページをプログラム可読にすると色々いいことがあるよ」ということだと受け取れる。
+microdata って何？？？
+
+一言で言えば、ページにメタデータを埋め込む方式の一つ。で、 HTML5 の仕様の一つ。 Publickey のこの記事 – HTML5のMicrodataとは何か？ に詳しい。
+さて、たとえば Google では、 「リッチスニペット」 という呼び方をしていて、メタデータの埋め込みをサポートしている。
+構造化 HTML コンテンツは、microdata、microformats、RDFa のいずれかの形式でマークアップできます
+と言っているように、 microdata の他にもいくつかサポートしている形式があるが、個人的にざっくりみた感じでは microdata が一番記述が簡単なようなので、今回はそれを解説したい。
+具体的にはどう書くの？
+
+とりあえず、 Google 向けの最適化をターゲットにする。以下のような自己紹介があるとする。
+<div class="profile" itemscope itemtype="http://data-vocabulary.org/Person">
+<p>こんにちは！　僕は近藤あくびです。</p>
+
+<a href="http://udzura.jp/images/150709359.jpg">
+  <img src="http://udzura.jp/images/150709359.jpg" alt="僕の近影です" />
+</a>
+
+<ul>
+  <li>所属：株式会社わんこ</li>
+  <li>職業：プログラマー</li>
+</ul>
+
+<p>僕のサイトは、 <a href="http://udzura.jp/akubi">http://udzura.jp/akubi</a> です。
+また、愛知県あくび市に住んでいます。</p>
+</div>
+こういう場合、(人物の例)[http://www.google.com/support/webmasters/bin/answer.py?answer=146646] に書いてあるとおり、以下のようなイメージでマークアップする。
+<div class="profile" itemscope itemtype="http://data-vocabulary.org/Person">
+<p>こんにちは！　僕は<span itemprop="name">近藤あくび</span>です。</p>
+
+<a href="http://udzura.jp/images/150709359.jpg" itemprop="photo">
+  <img src="http://udzura.jp/images/150709359.jpg" alt="僕の近影です" />
+</a>
+
+<ul>
+  <li>所属：<span itemprop="affiliation">株式会社わんこ</span></li>
+  <li>職業：<span itemprop="title">プログラマー</span></li>
+</ul>
+
+<p>僕のサイトは、 <a href="http://udzura.jp/akubi" itemprop="url">http://udzura.jp/akubi</a> です。
+また、
+<span itemprop="name" itemscope
+    itemtype="http://data-vocabulary.org/Address">
+  <span itemprop="region">愛知県</span>
+  <span itemprop="locality">あくび市</span>
+</span>
+に住んでいます。</p>
+</div>
+ポイントは以下のあたりだろう。
+itemscope 宣言をした要素で、メタ情報がある範囲全体を囲む。また、情報の種類を、 itemtype 属性で指定する。上の例のとおり、 http://data-vocabulary.org/Person" , http://data-vocabulary.org/Address などがある。
+具体的な内容を、 itemprop 属性を持ったタグで囲む。そのタグの種類は span でも a でも何でも良いようだ。
+itemscope は入れ子にできる。なので、上記のように Person の中に Adress がある、という書き方が可能。
+もっと実際的なメリットがありそうなのは、 EC サイト、レビューサイトでの記述だろう、以下のような商品紹介があれば、
+<div>
+<h2>あくび特製ドッグフード (メーカー：わんこ食品)</h2>
+<ul>
+  <li>価格：1,500円</li>
+  <li>在庫：あり</li>
+</ul>
+<h3>レビュー</h3>
+<ul>
+  <li>レビュアー：中井 喜一</li>
+  <li>評価：★★★★☆</li>
+  <li>コメント：うちのペットのきつね君も大喜びで食べています！</li>
+</ul>
+</div>
+サンプルを参考 にして、この様にマークアップできる。
+<div itemscope itemtype="http://data-vocabulary.org/Product">
+<h2><span itemprop="name">あくび特製ドッグフード</span>
+  (メーカー：<span itemprop="brand">わんこ食品</span>)</h2>
+<ul itemprop="offerDetails" itemscope itemtype="http://data-vocabulary.org/Offer">
+  <meta itemprop="currency" content="JPY" />
+  <li>価格：<span itemprop="price">1,500円</span></li>
+  <li>在庫：<span itemprop="availability" content="in_stock">あり</span></li>
+</ul>
+<div class="review" itemprop="review" itemscope itemtype="http://data-vocabulary.org/Review">
+<h3>レビュー</h3>
+<ul>
+  <li>レビュアー：<span itemprop="reviewer">中井 喜一</span></li>
+  <li>評価：<span itemprop="rating" content="4">★★★★☆</span></li>
+  <li>コメント：<span itemprop="description">うちのペットのきつね君も大喜びで食べています！</span></li>
+</ul>
+</div>
+</div>
+細かい点として、人間には見えないけれど Google その他には読める属性を meta タグで付与できるとか、 (レビューは meta タグのほか画像の alt 属性を認識)[http://www.google.com/support/webmasters/bin/answer.py?answer=172705] するとか、詳細は Google のドキュメントが詳しいので追いかけると良さそう。
+で、前述したとおり Google は microdata をサポートするので、この記述がされたページをクロールした場合、もしくは Google Merchant Center にフィードをアップロードした後に 、表示結果にレビューの星や価格情報が出てくる、というわけ。
+
+どうやってエラーを検証するの？
+
+Google では、 Rich Snippets Testing Tool を提供している。上述の Person の記述では、例えばこのように解釈される。
+
+
+上記のように表示のプレビューも可能だ。
+ということで
+
+SEO 的にも重要なようだし、検索結果的にも評価の星や写真が出ている方が目立つだろう。ということで、少しずつでもあなたのサイトにメタデータを埋め込んでおくといいことがあるかも？　と思った。　ジャンルにもよるけれど、何かを売っているサイトや、口コミ系のサイトでは対応しておいて損は無さそう。
+参考
+
+コーディングとSEOの概念が変わるかもしれない、Microdataについての概要
+HTML5のmicrodataAdd Star
+上記サイトの方が詳しい……。あとは、 Google 公式ドキュメント など。

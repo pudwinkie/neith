@@ -23,7 +23,7 @@ namespace Neith.Signpost.Logger
         internal LogDBFileInstance(LogDBService service, DateTime date)
         {
             Service = service;
-            DBPath = string.Format("logger/{0:yyyyMM}/{0:dd}/", date.ToUniversalTime());
+            DBPath = string.Format("logger/{0:yyyyMM}/", date.ToUniversalTime());
             var db = Service.DBEngine.SterlingDatabase;
             Instance = db.RegisterDatabase<LogDB>(new FileSystemDriver(DBPath));
         }

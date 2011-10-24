@@ -8,9 +8,8 @@
 3A       | :
 E3 80 8C | 「
 
-02 13
-06 FE FF F3 F3 F3 03 02 
-14 06 FE FF 26 26 26 03 
+02 13 06 FE FF F3 F3 F3 03
+02 14 06 FE FF 26 26 26 03
 
 E3 82 A4 | イ
 E3 82 AF | ク
@@ -20,8 +19,8 @@ E6 9F B3 | 柳
 E6 9C A8 | 木
 E8 B2 A8 | 貨
 
-02 14 
-02 EC 03 02 13 02 EC 03 
+02 14 02 EC 03
+02 13 02 EC 03
 
 E3 80 8D | 」
 C3 97    | ×
@@ -30,7 +29,7 @@ E3 81 8C | が
 48       | H
 75       | u
 67       | g
-20       |  
+20       |
 43       | C
 6F       | o
 69       | i
@@ -79,7 +78,7 @@ E3 80 82 | 。
 'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'D:\home\Documents\hg\neith\Neith.Signpost3\src\Neith.Signpost\bin\Debug\Wintellect.Sterling.Server.dll が読み込まれました。シンボルが読み込まれました。
 'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'D:\home\Documents\hg\neith\Neith.Signpost3\src\Neith.Signpost\bin\Debug\FFXIVRuby.dll が読み込まれました。シンボルが読み込まれました。
 2011-10-24 00:44:52.3495|INFO|FFXIVRuby.Watcher.XIVWathcer|XIVWathcer Start
-2011-10-24 00:44:52.3495|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:52.3235807+09:00 (Neith.Signpost.Logger->) [START SERVICE] 
+2011-10-24 00:44:52.3495|DEBUG|Neith.Signpost.Logger.LogDBService|2011-10-24T00:44:52.3235807+09:00 (Neith.Signpost.Logger->) [START SERVICE]
 2011-10-24 00:44:52.3865|TRACE|FFXIVRuby.Watcher.XIVWathcer|Scan XIV...
 2011-10-24 00:44:52.3905|TRACE|FFXIVRuby.Watcher.XIVWathcer|FFXIV found.
 'Neith.Signpost.vshost.exe' (マネージ (v4.0.30319)): 'C:\Windows\Microsoft.Net\assembly\GAC_MSIL\System.ServiceModel.Web\v4.0_4.0.0.0__31bf3856ad364e35\System.ServiceModel.Web.dll' が読み込まれました

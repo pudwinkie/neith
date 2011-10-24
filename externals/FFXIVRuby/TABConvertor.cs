@@ -11,10 +11,13 @@ namespace FFXIVRuby
     public class TABConvertor
     {
         // Fields
-        private static byte[] TABHead = new byte[] { 2, 0x2e };
+        private const byte TAB_HEADER = 0x02;
+
         public static readonly string TabStartString = "{";
-        private static Regex TabStringRegex = new Regex(@"\{02\w\w\w\w\w+03\}");
         public static readonly string TabTerminalString = "}";
+
+        private static readonly Regex TabStringRegex = new Regex(@"\{02\w\w\w\w\w+03\}", RegexOptions.Compiled);
+
 
         // Methods
         public static byte[] TabEscape(byte[] data)
@@ -24,30 +27,35 @@ namespace FFXIVRuby
             }
             MemoryStream stream = new MemoryStream();
             for (int i = 0; i < (data.Length - 1); i++) {
-                if ((data[i] == TABHead[0]) && (data[i + 1] == TABHead[1])) {
-                    StringBuilder builder = new StringBuilder();
-                    builder.Append("{");
-                    builder.Append(TABHead[0].ToString("X").PadLeft(2, '0'));
-                    builder.Append(TABHead[1].ToString("X").PadLeft(2, '0'));
-                    int num2 = data[i + 2];
-                    builder.Append(num2.ToString("X").PadLeft(2, '0'));
-                    for (int j = 0; j < num2; j++) {
-                        builder.Append(data[(i + 3) + j].ToString("X").PadLeft(2, '0'));
-                    }
-                    builder.Append("}");
-                    string s = builder.ToString();
-                    foreach (byte num4 in Encoding.ASCII.GetBytes(s)) {
-                        stream.WriteByte(num4);
-                    }
-                    i += num2 + 2;
-                }
-                else {
-                    stream.WriteByte(data[i]);
-                }
+                if (data[i] != TAB_HEADER) i += ConvertTagString(stream, data, i);
+                else stream.WriteByte(data[i]);
             }
             stream.WriteByte(data[data.Length - 1]);
             return stream.ToArray();
         }
+
+        private static int ConvertTagString(MemoryStream stream, byte[] data, int index)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append("{");
+            builder.Append(ToHex(data[index]));
+            builder.Append(ToHex(data[index + 1]));
+
+            int length = data[index + 2];
+            builder.Append(ToHex(data[index + 2]));
+            for (int j = 0; j < length; j++) {
+                builder.Append(ToHex(data[index + 3 + j]));
+            }
+            builder.Append("}");
+            string s = builder.ToString();
+            foreach (byte num4 in Encoding.ASCII.GetBytes(s)) {
+                stream.WriteByte(num4);
+            }
+            return length + 2;
+        }
+
+        private static string ToHex(byte data) { return data.ToString("X").PadLeft(2, '0'); }
+
 
         public static byte[] TabReEscape(string text, Encoding enc)
         {

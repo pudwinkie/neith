@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Reactive.Disposables;
+using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
+using System.Windows.Threading;
 using FFXIVRuby.Watcher;
 using Neith.Signpost.Logger;
 using Neith.Signpost.Logger.Model;
+using Neith.Util.RX.ComponentModel;
 
 namespace Neith.Signpost.Logger.XIV
 {
     public class WatchService : IDisposable, ISourceBlock<NeithLog>
     {
+        private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+
         private CompositeDisposable Tasks = new CompositeDisposable();
         public void Dispose()
         {
@@ -21,11 +25,19 @@ namespace Neith.Signpost.Logger.XIV
 
         private XIVWathcer Watcher { get; set; }
         private ISourceBlock<NeithLog> LogSource { get; set; }
+        private readonly Dispatcher Dispatcher;
+
+        /// <summary>プロセスを見つけた状態。</summary>
+        public RxProperty<bool> IsOnline { get { return Watcher.IsOnline; } }
+
+        /// <summary>ログ読み込み中の状態。</summary>
+        public RxProperty<bool> IsReading { get { return Watcher.IsReading; } }
 
 
-        public WatchService()
+        public WatchService(Dispatcher dispatcher)
         {
-            var Watcher = new XIVWathcer().Add(Tasks);
+            Dispatcher = dispatcher;
+            var Watcher = new XIVWathcer(Dispatcher).Add(Tasks);
             var trans = new TransformManyBlock<FFXIVRuby.FFXIVLog, NeithLog>(a =>
             {
                 var item = a.ToNeithLog();

@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Windows.Threading;
 using System.Text;
 
-namespace Neith.ComponentModel
+namespace Neith.Util.RX.ComponentModel
 {
     public class RxValidationProperty<T> : RxProperty<T>, IDataErrorInfo
     {

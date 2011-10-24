@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Windows.Threading;
 using System.Collections.Generic;
 
-namespace Neith.ComponentModel
+namespace Neith.Util.RX.ComponentModel
 {
     /// <summary>
     /// 通知を行なうプロパティ。

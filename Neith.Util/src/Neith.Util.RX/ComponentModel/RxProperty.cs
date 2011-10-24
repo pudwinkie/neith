@@ -4,7 +4,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows.Threading;
 
-namespace Neith.ComponentModel
+namespace Neith.Util.RX.ComponentModel
 {
     /// <summary>
     /// IObservableを実装するプロパティ。
@@ -136,6 +136,34 @@ namespace Neith.ComponentModel
         {
             return source.ToRxProperty(Dispatcher.CurrentDispatcher);
         }
+
+        /// <summary>
+        /// 開始時・開放時に値を設定するIDisposableを作成します。
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="property"></param>
+        /// <param name="enterValue"></param>
+        /// <param name="leaveValue"></param>
+        /// <returns></returns>
+        public static IDisposable ToSwitchDisposable<T>(this RxProperty<T> property, T enterValue, T leaveValue)
+        {
+            property.Value = enterValue;
+            return Disposable.Create(() => property.Value = leaveValue);
+        }
+
+        /// <summary>
+        /// 開始時に値を設定し、開放時にもとに戻すIDisposableを作成します。
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="property"></param>
+        /// <param name="enterValue"></param>
+        /// <param name="leaveValue"></param>
+        /// <returns></returns>
+        public static IDisposable ToSwitchDisposable<T>(this RxProperty<T> property, T enterValue)
+        {
+            return property.ToSwitchDisposable(enterValue, property.Value);
+        }
+
 
     }
 }

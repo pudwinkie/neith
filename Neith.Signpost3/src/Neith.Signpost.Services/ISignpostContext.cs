@@ -61,6 +61,17 @@ namespace Neith.Signpost.Services
         IAsyncResult BeginSendKeys(string command, AsyncCallback callback, object state);
         TimeSpan EndSendKeys(IAsyncResult result);
 
+        /// <summary>
+        /// ログ情報を取得します。最大2秒待機します。
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        [OperationContract(AsyncPattern = true)]
+        IAsyncResult BeginGetLogs(AsyncCallback callback, object state);
+        string[] EndGetLogs(IAsyncResult result);
+
+
     }
 
     // サービス操作に複合型を追加するには、以下のサンプルに示すようにデータ コントラクトを使用します。

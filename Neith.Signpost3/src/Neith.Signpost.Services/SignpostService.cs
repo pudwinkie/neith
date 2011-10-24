@@ -15,6 +15,16 @@ namespace Neith.Signpost.Services
     /// </summary>
     public class SignpostService : ISignpostContext
     {
+        #region コンストラクタ
+
+        private readonly IApm<string[]> ApmGetLogs;
+
+        public SignpostService()
+        {
+            ApmGetLogs = NeithTaskEx.ToApm<string[]>(GetLogs);
+        }
+
+        #endregion
         #region サーバ時刻取得
         public static  DateTimeOffset GetServerTime()
         {
@@ -62,6 +72,26 @@ namespace Neith.Signpost.Services
             return ApmSendKeys.EndInvoke(result);
         }
 
+
         #endregion
+        #region ログ取得
+        public async Task<string[]> GetLogs()
+        {
+            await TaskEx.Delay(2000);
+            return new string[0];
+        }
+
+        public IAsyncResult BeginGetLogs(AsyncCallback callback, object state)
+        {
+            Debug.WriteLine("[SignpostService::BeginGetLogs]");
+            return ApmGetLogs.BeginInvoke(callback, state);
+        }
+        public string[] EndGetLogs(IAsyncResult result)
+        {
+            return ApmGetLogs.EndInvoke(result);
+        }
+
+        #endregion
+
     }
 }

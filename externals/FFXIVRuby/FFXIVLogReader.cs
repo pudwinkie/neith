@@ -36,7 +36,7 @@ namespace FFXIVRuby
         /// <returns></returns>
         public IEnumerable<FFXIVLog> GetLogs()
         {
-            return GetLogs(GetLogData(), TextEncoding, FFXIV);
+            return GetLogs(GetLogData(), TextEncoding);
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace FFXIVRuby
         /// <returns></returns>
         public IEnumerable<FFXIVLog> GetLogs(int from)
         {
-            return GetLogs(GetLogData(from, TerminalPoint - from), TextEncoding, FFXIV);
+            return GetLogs(GetLogData(from, TerminalPoint - from), TextEncoding);
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace FFXIVRuby
         /// <returns></returns>
         public IEnumerable<FFXIVLog> GetLogs(int from, int to)
         {
-            return GetLogs(GetLogData(from, to - from), TextEncoding, FFXIV);
+            return GetLogs(GetLogData(from, to - from), TextEncoding);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace FFXIVRuby
         /// <param name="logData"></param>
         /// <param name="enc"></param>
         /// <returns></returns>
-        public static IEnumerable<FFXIVLog> GetLogs(byte[] logData, Encoding enc, FFXIVProcess ff14)
+        public static IEnumerable<FFXIVLog> GetLogs(byte[] logData, Encoding enc)
         {
             var buf = logData
                 .SkipWhile(a => a != 0x30)
@@ -96,7 +96,7 @@ namespace FFXIVRuby
         public static IEnumerable<FFXIVLog> GetLogs(string path, Encoding enc)
         {
             var buf = File.ReadAllBytes(path);
-            return GetLogs(buf, enc, null);
+            return GetLogs(buf, enc);
         }
 
 

@@ -4,7 +4,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows.Input;
 
-namespace Neith.ComponentModel
+namespace Neith.Util.RX.ComponentModel
 {
     /// <summary>
     /// Represents ReactiveCommand&lt;object&gt;

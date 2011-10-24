@@ -62,7 +62,7 @@
     <Compile Include="ComponentModel\RxValidationProperty.cs" />
     <Compile Include="Concurrency\DispatcherPriorityScheduler.cs" />
     <Compile Include="Concurrency\ScheduleCounter.cs" />
-    <Compile Include="Disposables\CompositeDisposableExtensions.cs" />
+    <Compile Include="Disposables\NeithDisposable.cs" />
     <Compile Include="Internal\Util.cs" />
     <Compile Include="IO\FileSystemWatcherRX.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
