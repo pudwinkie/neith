@@ -24,27 +24,27 @@ namespace FFXIVRuby
             return memory.GetMemoryInfos(Proc);
         }
 
-        public byte[] ReadBytes(int address, int size)
+        public byte[] ReadBytes(IntPtr address, int size)
         {
-            return FFXIVMemoryProvidor.ReadProcessMemory(this.Proc.Handle, (IntPtr)address, size);
+            return FFXIVMemoryProvidor.ReadProcessMemory(this.Proc.Handle, address, size);
         }
-        public byte[] ReadBytesOrNull(int address, int size)
+        public byte[] ReadBytesOrNull(IntPtr address, int size)
         {
             try { return ReadBytes(address, size); }
             catch { return null; }
         }
 
-        public int ReadInt32(int address)
+        public int ReadInt32(IntPtr address)
         {
-            byte[] buffer = FFXIVMemoryProvidor.ReadProcessMemory(this.Proc.Handle, (IntPtr)address, 4);
+            byte[] buffer = FFXIVMemoryProvidor.ReadProcessMemory(this.Proc.Handle, address, 4);
             return (((buffer[0] + (buffer[1] * 0x100)) + (buffer[2] * 0x10000)) + (buffer[3] * 0x1000000));
         }
-        public int? ReadInt32OrNull(int address)
+        public int? ReadInt32OrNull(IntPtr address)
         {
             try { return ReadInt32(address); }
             catch { return null; }
         }
-        public int ReadInt32OrZero(int address)
+        public int ReadInt32OrZero(IntPtr address)
         {
             try { return ReadInt32(address); }
             catch { return 0; }

@@ -95,7 +95,7 @@ namespace FFXIVRuby.Watcher
         private async Task ReadLog(FFXIVLogReader reader, CancellationToken token)
         {
             logger.Trace("Read XIV log...");
-            var from = int.MaxValue;
+            var from = (IntPtr)long.MaxValue;
             var proc = reader.FFXIV.Proc;
             while (!proc.HasExited) {
                 if (token.IsCancellationRequested) throw new OperationCanceledException(token);
@@ -104,7 +104,7 @@ namespace FFXIVRuby.Watcher
                     continue;
                 }
                 var to = reader.TerminalPoint;
-                if (from > to) from = reader.EntryPoint;
+                if ((long)from > (long)to) from = reader.EntryPoint;
                 foreach (var item in reader.GetLogs(from, to)) {
                     if (token.IsCancellationRequested) throw new OperationCanceledException(token);
                     logBroadcast.Post(item);
@@ -116,5 +116,30 @@ namespace FFXIVRuby.Watcher
 
 
 
+
+
+        /// <summary>
+        /// ログ領域を検索します。
+        /// </summary>
+        /// <param name="en14"></param>
+        /// <returns></returns>
+        private async Task<IEnumerable<Tuple<IntPtr, int>>> SearchText(FFXIVProcess xiv, CancellationToken token)
+        {
+            await TaskEx.Yield();
+            var search = new LogStatusSearcher(xiv);
+            var rc = search.SearchPLINQ(MACRO_MARK, 0, 0x0100, 5, token);
+            if (rc == null) logger.Debug("SearchText = null");
+            else {
+                logger.Debug("SearchText Found !!");
+                foreach (var item in rc) {
+                    logger.Trace("    (0x{1,8:X}, 0x{2,6:X})", (int)item.Item1, item.Item2);
+                }
+                logger.Debug("########");
+            }
+
+            return rc;
+        }
+
+        private const string MACRO_MARK = "/X8OuPVr3t>$Z";
     }
 }
