@@ -36,11 +36,20 @@ namespace Neith.Util.Input
         internal const int MAPVK_VSC_TO_VK_EX = 0x03;
         internal const int MAPVK_VK_TO_VSC_EX = 0x04;
 
-
+        ///<summary>メッセージコードを表す。</summary>
         internal enum WM : int
         {
+            ///<summary>キーが押された。</summary>
             KEYDOWN = 0x0100,
+
+            ///<summary>キーが放された。</summary>
             KEYUP = 0x0101,
+
+            ///<summary>システムキーが押された。</summary>
+            SYSKEYDOWN = 0x104,
+
+            ///<summary>システムキーが放された。</summary>
+            SYSKEYUP = 0x105,
         }
 
         #endregion
@@ -102,7 +111,7 @@ namespace Neith.Util.Input
 
 
         #endregion
-        #region API呼び出し
+        #region API呼び出し(KEY送信)
         [DllImport("user32.dll", SetLastError = true)]
         internal static extern int mouse_event(int dwFlags, int dx, int dy, int dwData, int dwExtraInfo);
 
@@ -127,6 +136,18 @@ namespace Neith.Util.Input
 
         [DllImport("user32.dll")]
         internal static extern IntPtr GetForegroundWindow();
+
+
+        #endregion
+        #region API呼び出し(KEY HOOK)
+        [DllImport("user32.dll", SetLastError = true)]
+        internal static extern IntPtr SetWindowsHookEx(int hookType, KeyboardHookDelegate hookDelegate, IntPtr hInstance, uint threadId);
+        [DllImport("user32.dll", SetLastError = true)]
+        internal static extern int CallNextHookEx(IntPtr hook, int code, WM message, ref KeyboardState state);
+        [DllImport("user32.dll", SetLastError = true)]
+        internal static extern bool UnhookWindowsHookEx(IntPtr hook);
+
+        internal delegate int KeyboardHookDelegate(int code, WM message, ref KeyboardState state);
 
         #endregion
         #region Input構造体の作成

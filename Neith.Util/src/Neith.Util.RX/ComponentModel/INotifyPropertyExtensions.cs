@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Reactive.Linq;
 
-namespace Neith.ComponentModel
+namespace Neith.Util.RX.ComponentModel
 {
     public static class INotifyPropertyExtensions
     {

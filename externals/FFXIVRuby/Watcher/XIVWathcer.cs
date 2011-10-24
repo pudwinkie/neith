@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Threading;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
@@ -31,10 +32,16 @@ namespace FFXIVRuby.Watcher
             logger.Info("XIVWathcer Disposed");
         }
 
-        public XIVWathcer()
+        private readonly Dispatcher Dispatcher;
+
+        public XIVWathcer(Dispatcher dispatcher)
         {
             logger.Info("XIVWathcer Start");
+            Dispatcher = dispatcher;
             logBroadcast = new BroadcastBlock<FFXIVLog>(a => a);
+
+            InitLog();
+
             Start();
         }
 

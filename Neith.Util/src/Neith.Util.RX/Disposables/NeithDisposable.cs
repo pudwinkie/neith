@@ -5,8 +5,8 @@ using System.Text;
 
 namespace System.Reactive.Disposables
 {
-    /// <summary>CompositeDisposable拡張</summary>
-    public static class CompositeDisposableExtensions
+    /// <summary>Disposable拡張</summary>
+    public static class NeithDisposable
     {
         /// <summary>
         /// CompositeDisposableに要素を登録します。
@@ -30,6 +30,18 @@ namespace System.Reactive.Disposables
         public static void Add(this CompositeDisposable disp, Action act)
         {
             disp.Add(Disposable.Create(act));
+        }
+
+        /// <summary>
+        /// Enter,Leaveアクションを指定したIDisposableを作成します。
+        /// </summary>
+        /// <param name="enter"></param>
+        /// <param name="leave"></param>
+        /// <returns></returns>
+        public static IDisposable Create(Action enter, Action leave)
+        {
+            enter();
+            return Disposable.Create(leave);
         }
 
     }
