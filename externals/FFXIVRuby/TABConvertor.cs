@@ -27,7 +27,7 @@ namespace FFXIVRuby
             }
             MemoryStream stream = new MemoryStream();
             for (int i = 0; i < (data.Length - 1); i++) {
-                if (data[i] != TAB_HEADER) i += ConvertTagString(stream, data, i);
+                if (data[i] == TAB_HEADER) i += ConvertTagString(stream, data, i);
                 else stream.WriteByte(data[i]);
             }
             stream.WriteByte(data[data.Length - 1]);
