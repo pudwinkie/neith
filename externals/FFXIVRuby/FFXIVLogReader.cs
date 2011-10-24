@@ -12,7 +12,7 @@ namespace FFXIVRuby
     {
         // Fields
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-        private int Entry;
+        private IntPtr Entry;
         public FFXIVProcess FFXIV { get; private set; }
 
         private static readonly Encoding TextEncoding = Encoding.UTF8;
@@ -24,7 +24,7 @@ namespace FFXIVRuby
         }
 
         // Methods
-        public FFXIVLogReader(FFXIVProcess _ffxiv, int entry)
+        public FFXIVLogReader(FFXIVProcess _ffxiv, IntPtr entry)
         {
             FFXIV = _ffxiv;
             Entry = entry;
@@ -44,9 +44,9 @@ namespace FFXIVRuby
         /// </summary>
         /// <param name="from"></param>
         /// <returns></returns>
-        public IEnumerable<FFXIVLog> GetLogs(int from)
+        public IEnumerable<FFXIVLog> GetLogs(IntPtr from)
         {
-            return GetLogs(GetLogData(from, TerminalPoint - from), TextEncoding);
+            return GetLogs(GetLogData(from, TerminalPoint), TextEncoding);
         }
 
         /// <summary>
@@ -54,9 +54,9 @@ namespace FFXIVRuby
         /// </summary>
         /// <param name="from"></param>
         /// <returns></returns>
-        public IEnumerable<FFXIVLog> GetLogs(int from, int to)
+        public IEnumerable<FFXIVLog> GetLogs(IntPtr from, IntPtr to)
         {
-            return GetLogs(GetLogData(from, to - from), TextEncoding);
+            return GetLogs(GetLogData(from, to), TextEncoding);
         }
 
         /// <summary>
@@ -70,16 +70,14 @@ namespace FFXIVRuby
             var buf = logData
                 .SkipWhile(a => a != 0x30)
                 .ToArray();
-            if (logger.IsDebugEnabled)
-            {
+            if (logger.IsDebugEnabled) {
                 logger.Debug(("DUMP:\r\n" + buf.DumpHexText()).Trim());
             }
 
             var input = enc.GetString(TABConvertor.TabEscape(buf));
             var matchs = regex.Matches(input);
             var strArray = regex.Split(input);
-            for (var j = 1; j < strArray.Length; j++)
-            {
+            for (var j = 1; j < strArray.Length; j++) {
                 var strArray2 = strArray[j].Split(new char[] { ':' }, 2, StringSplitOptions.None);
                 var strType = matchs[j - 1].Value.TrimEnd(new char[] { ':' });
                 var numType = int.Parse(strType, NumberStyles.AllowHexSpecifier);
@@ -106,29 +104,33 @@ namespace FFXIVRuby
             return GetLogData(EntryPoint, Size);
         }
 
-        private byte[] GetLogData(int from, int size)
+        private byte[] GetLogData(IntPtr from, int size)
         {
             return FFXIV.ReadBytes(from, size);
+        }
+        private byte[] GetLogData(IntPtr from, IntPtr to)
+        {
+            return GetLogData(from, (int)to - (int)from);
         }
 
 
         /// <summary>ログ領域開始位置。</summary>
-        public int EntryPoint { get { return GetEntryPoint(); } }
+        public IntPtr EntryPoint { get { return GetEntryPoint(); } }
 
         /// <summary>ログ領域終了位置。</summary>
-        public int TerminalPoint { get { return GetTerminalPoint(); } }
+        public IntPtr TerminalPoint { get { return GetTerminalPoint(); } }
 
         /// <summary>ログ領域のサイズ。</summary>
-        public int Size { get { return TerminalPoint - EntryPoint; } }
+        public int Size { get { return TerminalPoint.ToInt32() - EntryPoint.ToInt32(); } }
 
 
-        private int GetTerminalPoint()
+        private IntPtr GetTerminalPoint()
         {
-            return this.FFXIV.ReadInt32(Entry + 4);
+            return (IntPtr)this.FFXIV.ReadInt32(Entry + 4);
         }
-        private int GetEntryPoint()
+        private IntPtr GetEntryPoint()
         {
-            return FFXIV.ReadInt32(this.Entry);
+            return (IntPtr)FFXIV.ReadInt32(this.Entry);
         }
 
     }
