@@ -1,3 +1,31 @@
+■ログ加工案
+
+
+<p itemscope>
+  <time itemprop="Time" datetime="2010-01-15">Jan 15, 2010</time>
+  <b itemprop="ActionGroup">SYSTEM_MY_ACTION</b>「
+  <b itemprop="Item">イクサル柳木貨</b>」×
+  <b itemprop="Value">1</b>が
+  <b itemprop="Target">Hug Coin</b>の
+  <b itemprop="Attribute">戦利品目録</b>に加わった。
+  <meta itemprop="source" content="" />
+</p>
+
+
+
+
+
+[SYSTEM_MY_ACTION] 「�������&&&イクサル柳木貨��」×1がHug Coinの戦利品目録に加わった。
+
+
+
+
+
+
+
+
+
+
 HTML5 の microdata について調べた
 
 microdata というものがある。いわゆるセマンティック(笑)ウェブ(爆)だ。セマンティックウェブの話が出た3年前ぐらいは、概念はすごいけど画餅みたいなところがあり、胡散臭いコンサルやスタートアップが出現してて怪しいイメージもあったが、 Google さんをはじめとした検索エンジンの技術向上とか、似たような規格として facebook とか SNS 系で人気の OGP(Open Graph Protocol) も出てきていて、ウェッブペ～ジにメタデ～タを埋め込むことが普通になりつつあるように思われる。
