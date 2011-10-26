@@ -17,14 +17,6 @@ namespace Neith.Signpost.Logger
     {
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
 
-        public static LogDBService Instance { get; private set; }
-
-        static LogDBService()
-        {
-            Instance = new LogDBService();
-        }
-
-
         private readonly CompositeDisposable Tasks = new CompositeDisposable();
         public void Dispose()
         {
@@ -78,12 +70,8 @@ namespace Neith.Signpost.Logger
         private ITargetBlock<NeithLog> LogTarget { get; set; }
 
 
-        private LogDBService()
+        public LogDBService(string rootPath)
         {
-            // ルートパスを切り替える
-            var rootPath = Neith.Util.Reflection.AssemblyUtil
-                .GetCallingAssemblyDirctory()
-                .PathCombine("database");
             var pathProvider = new Neith.Sterling.Server.FileSystem.PathProvider(rootPath);
 
             // DB作成
@@ -109,6 +97,15 @@ namespace Neith.Signpost.Logger
                 Action = "START SERVICE",
             });
         }
+
+        public LogDBService()
+            : this(Neith.Util.Reflection.AssemblyUtil
+                .GetCallingAssemblyDirctory()
+                .PathCombine("database"))
+        {
+        }
+
+
 
 
         public DataflowMessageStatus OfferMessage(DataflowMessageHeader messageHeader, NeithLog messageValue, ISourceBlock<NeithLog> source, bool consumeToAccept)

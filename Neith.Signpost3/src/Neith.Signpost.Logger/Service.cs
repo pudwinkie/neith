@@ -15,14 +15,16 @@ namespace Neith.Signpost.Logger
             Tasks.Dispose();
         }
 
+        public LogDBService DBService { get; private set; }
+
         private readonly Dispatcher Dispatcher;
 
         private Service(Dispatcher dispatcher)
         {
             Dispatcher = dispatcher;
-            LogDBService.Instance.Add(Tasks);
+            DBService = new LogDBService().Add(Tasks);
             var watch = new XIV.WatchService(Dispatcher).Add(Tasks);
-            watch.LinkTo(LogDBService.Instance, false).Add(Tasks);
+            watch.LinkTo(DBService, false).Add(Tasks);
         }
 
         public static Service Instance { get; private set; }
