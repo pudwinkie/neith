@@ -16,23 +16,31 @@ namespace Neith.Sterling.Server.FileSystem
         private const string BASE = "Databases/";
         private readonly List<Type> _tables = new List<Type>();
         private bool _dirtyType;
-        
-        public FileSystemDriver() : this(BASE)
+
+        public FileSystemDriver()
+            : this(BASE)
         {
             PathProvider = new PathProvider();
         }
 
-        public FileSystemDriver(string basePath) 
+        public FileSystemDriver(string basePath)
         {
             PathProvider = new PathProvider();
             Initialize(basePath);
         }
-       
-        public FileSystemDriver(string databaseName, ISterlingSerializer serializer, Action<SterlingLogLevel, string, Exception> log) : this(databaseName, serializer, log, BASE)
+
+        public FileSystemDriver(PathProvider pathProvider, string basePath)
+        {
+            PathProvider = pathProvider;
+            Initialize(basePath);
+        }
+
+        public FileSystemDriver(string databaseName, ISterlingSerializer serializer, Action<SterlingLogLevel, string, Exception> log)
+            : this(databaseName, serializer, log, BASE)
         {
             PathProvider = new PathProvider();
         }
-        
+
         public FileSystemDriver(string databaseName, ISterlingSerializer serializer, Action<SterlingLogLevel, string, Exception> log, string basePath)
             : base(databaseName, serializer, log)
         {
@@ -42,12 +50,12 @@ namespace Neith.Sterling.Server.FileSystem
 
         private FileSystemHelper _fileHelper;
         private string _basePath;
-        private PathProvider PathProvider { get; set; }
+        public PathProvider PathProvider { get; private set; }
 
         public void Initialize(string basePath)
         {
-            _fileHelper = new FileSystemHelper();            
-            _basePath = basePath; 
+            _fileHelper = new FileSystemHelper();
+            _basePath = basePath;
         }
 
         /// <summary>
@@ -60,13 +68,13 @@ namespace Neith.Sterling.Server.FileSystem
         {
             _fileHelper.EnsureDirectory(PathProvider.GetTablePath(_basePath, DatabaseName, type, this));
             var pathLock = PathLock.GetLock(type.FullName);
-            lock(pathLock)
+            lock (pathLock)
             {
                 var keyPath = PathProvider.GetKeysPath(_basePath, DatabaseName, type, this);
                 using (var keyFile = _fileHelper.GetWriter(keyPath))
                 {
                     keyFile.Write(keyMap.Count);
-                    foreach(var key in keyMap.Keys)
+                    foreach (var key in keyMap.Keys)
                     {
                         DatabaseSerializer.Serialize(key, keyFile);
                         keyFile.Write((int)keyMap[key]);
@@ -117,12 +125,12 @@ namespace Neith.Sterling.Server.FileSystem
         {
             var indexPath = PathProvider.GetIndexPath(_basePath, DatabaseName, type, this, indexName);
             var pathLock = PathLock.GetLock(type.FullName);
-            lock(pathLock)
+            lock (pathLock)
             {
                 using (var indexFile = _fileHelper.GetWriter(indexPath))
                 {
                     indexFile.Write(indexMap.Count);
-                    foreach(var index in indexMap)
+                    foreach (var index in indexMap)
                     {
                         DatabaseSerializer.Serialize(index.Key, indexFile);
                         DatabaseSerializer.Serialize(index.Value, indexFile);
@@ -214,7 +222,7 @@ namespace Neith.Sterling.Server.FileSystem
                         for (var x = 0; x < count; x++)
                         {
                             dictionary.Add((TKey)DatabaseSerializer.Deserialize(typeof(TKey), indexFile),
-                                Tuple.Create(           
+                                Tuple.Create(
                                 (TIndex1)DatabaseSerializer.Deserialize(typeof(TIndex1), indexFile),
                                 (TIndex2)DatabaseSerializer.Deserialize(typeof(TIndex2), indexFile)));
                         }
@@ -261,7 +269,7 @@ namespace Neith.Sterling.Server.FileSystem
         /// </summary>
         public override void SerializeTypes()
         {
-            var pathLock = PathLock.GetLock(TypeIndex.GetType().FullName);            
+            var pathLock = PathLock.GetLock(TypeIndex.GetType().FullName);
             lock (pathLock)
             {
                 var typePath = PathProvider.GetTypesPath(_basePath, DatabaseName, this);
@@ -284,7 +292,7 @@ namespace Neith.Sterling.Server.FileSystem
         public override int GetTypeIndex(string type)
         {
             var pathLock = PathLock.GetLock(TypeIndex.GetType().FullName);
-            lock(pathLock)
+            lock (pathLock)
             {
                 if (!TypeIndex.Contains(type))
                 {
@@ -304,7 +312,7 @@ namespace Neith.Sterling.Server.FileSystem
         {
             return TypeIndex[index];
         }
-        
+
         /// <summary>
         ///     Save operation
         /// </summary>
@@ -312,15 +320,15 @@ namespace Neith.Sterling.Server.FileSystem
         /// <param name="keyIndex">Index for the key</param>
         /// <param name="bytes">The byte stream</param>
         public override void Save(Type type, int keyIndex, byte[] bytes)
-        {            
+        {
             var instanceFolder = PathProvider.GetInstanceFolder(_basePath, DatabaseName, type, this, keyIndex);
             _fileHelper.EnsureDirectory(instanceFolder);
             var instancePath = PathProvider.GetInstancePath(_basePath, DatabaseName, type, this, keyIndex);
-            
+
             // lock on this while saving, but remember that anyone else loading can now grab the
             // copy 
             lock (PathLock.GetLock(instancePath))
-            {             
+            {
                 using (
                     var instanceFile =
                         _fileHelper.GetWriter(instancePath))
@@ -328,15 +336,15 @@ namespace Neith.Sterling.Server.FileSystem
                     instanceFile.Write(bytes);
                     instanceFile.Flush();
                     instanceFile.Close();
-                }                
+                }
             }
 
             if (!_dirtyType) return;
 
             _dirtyType = false;
             SerializeTypes();
-        }   
-            
+        }
+
         /// <summary>
         ///     Load from the store
         /// </summary>
@@ -346,7 +354,7 @@ namespace Neith.Sterling.Server.FileSystem
         public override BinaryReader Load(Type type, int keyIndex)
         {
             var instancePath = PathProvider.GetInstancePath(_basePath, DatabaseName, type, this, keyIndex);
-            
+
             // otherwise let's wait for it to be released and grab it from disk
             lock (PathLock.GetLock(instancePath))
             {
@@ -370,7 +378,7 @@ namespace Neith.Sterling.Server.FileSystem
                 {
                     _fileHelper.Delete(instancePath);
                 }
-            }            
+            }
         }
 
         /// <summary>
@@ -380,7 +388,7 @@ namespace Neith.Sterling.Server.FileSystem
         public override void Truncate(Type type)
         {
             var folderPath = PathProvider.GetTablePath(_basePath, DatabaseName, type, this);
-            lock(PathLock.GetLock(type.FullName))
+            lock (PathLock.GetLock(type.FullName))
             {
                 _fileHelper.Purge(folderPath);
             }
@@ -391,10 +399,10 @@ namespace Neith.Sterling.Server.FileSystem
         /// </summary>
         public override void Purge()
         {
-            lock(PathLock.GetLock(DatabaseName))
+            lock (PathLock.GetLock(DatabaseName))
             {
                 _fileHelper.Purge(PathProvider.GetDatabasePath(_basePath, DatabaseName, this));
             }
-        }        
+        }
     }
 }

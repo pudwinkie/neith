@@ -20,12 +20,12 @@ namespace Neith.Signpost.Logger
 
         public List<TableKey<NeithLog, DateTime>> AllLogsKV { get { return Instance.Query<NeithLog, DateTime>(); } }
 
-        internal LogDBFileInstance(LogDBService service, DateTime date)
+        internal LogDBFileInstance(LogDBService service, DateTime date, PathProvider pathProvider)
         {
             Service = service;
             DBPath = string.Format("logger/{0:yyyyMM}/", date.ToUniversalTime());
             var db = Service.DBEngine.SterlingDatabase;
-            Instance = db.RegisterDatabase<LogDB>(new FileSystemDriver(DBPath));
+            Instance = db.RegisterDatabase<LogDB>(new FileSystemDriver(pathProvider, DBPath));
         }
 
     }

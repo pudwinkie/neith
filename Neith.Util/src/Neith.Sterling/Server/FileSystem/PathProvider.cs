@@ -16,12 +16,16 @@ namespace Neith.Sterling.Server.FileSystem
         public const string TYPE = "types.dat";
         public const string KEY = "keys.dat";
 
-        public string RootPath { get; set; }
+        public string RootPath { get; private set; }
+
+        public PathProvider(string rootPath)
+        {
+            RootPath = rootPath;
+        }
 
         public PathProvider()
+            : this(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), STERLING_ROOT))
         {
-            RootPath =
-                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), STERLING_ROOT);
         }
 
 
@@ -35,13 +39,15 @@ namespace Neith.Sterling.Server.FileSystem
         ///     Validate base path
         /// </summary>
         /// <param name="basePath"></param>
-        private  void _ContractForBasePath(string basePath)
+        private void _ContractForBasePath(string basePath)
         {
-            if (string.IsNullOrEmpty(basePath)) {
+            if (string.IsNullOrEmpty(basePath))
+            {
                 throw new ArgumentNullException("basePath");
             }
 
-            if (!basePath.EndsWith(@"/")) {
+            if (!basePath.EndsWith(@"/"))
+            {
                 throw new ArgumentOutOfRangeException("basePath");
             }
         }
@@ -50,9 +56,10 @@ namespace Neith.Sterling.Server.FileSystem
         ///     Validate database
         /// </summary>
         /// <param name="databaseName">The database name</param>
-        private  void _ContractForDatabaseName(string databaseName)
+        private void _ContractForDatabaseName(string databaseName)
         {
-            if (string.IsNullOrEmpty(databaseName)) {
+            if (string.IsNullOrEmpty(databaseName))
+            {
                 throw new ArgumentNullException("databaseName");
             }
         }
@@ -61,9 +68,10 @@ namespace Neith.Sterling.Server.FileSystem
         ///     Contract for driver
         /// </summary>
         /// <param name="driver">The driver</param>
-        private  void _ContractForDriver(ISterlingDriver driver)
+        private void _ContractForDriver(ISterlingDriver driver)
         {
-            if (driver == null) {
+            if (driver == null)
+            {
                 throw new ArgumentNullException("driver");
             }
         }
@@ -72,9 +80,10 @@ namespace Neith.Sterling.Server.FileSystem
         ///     Contract for table type
         /// </summary>
         /// <param name="tableType">The table type</param>
-        private  void _ContractForTableType(Type tableType)
+        private void _ContractForTableType(Type tableType)
         {
-            if (tableType == null) {
+            if (tableType == null)
+            {
                 throw new ArgumentException("tableType");
             }
         }
@@ -83,9 +92,10 @@ namespace Neith.Sterling.Server.FileSystem
         ///     Contract for table type
         /// </summary>
         /// <param name="indexName">The index name</param>
-        private  void _ContractForIndexName(string indexName)
+        private void _ContractForIndexName(string indexName)
         {
-            if (string.IsNullOrEmpty(indexName)) {
+            if (string.IsNullOrEmpty(indexName))
+            {
                 throw new ArgumentException("indexName");
             }
         }
@@ -131,15 +141,19 @@ namespace Neith.Sterling.Server.FileSystem
             var dbCode = databaseName.GetHashCode();
 
             var pathLock = PathLock.GetLock(TABLEMASTER);
-            lock (pathLock) {
-                if (!_tableMaster.ContainsKey(dbCode)) {
+            lock (pathLock)
+            {
+                if (!_tableMaster.ContainsKey(dbCode))
+                {
                     _tableMaster.Add(dbCode, new Dictionary<Type, int>());
                 }
             }
 
             pathLock = PathLock.GetLock(tableType.FullName);
-            lock (pathLock) {
-                if (!_tableMaster[dbCode].ContainsKey(tableType)) {
+            lock (pathLock)
+            {
+                if (!_tableMaster[dbCode].ContainsKey(tableType))
+                {
                     _tableMaster[dbCode].Add(tableType, _tableMaster[dbCode].Count);
                 }
             }
