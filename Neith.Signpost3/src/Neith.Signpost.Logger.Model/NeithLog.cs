@@ -23,12 +23,14 @@ namespace Neith.Signpost.Logger.Model
 
 
 
+        /// <summary>行為ID</summary>
+        public string ActionID { get; set; }
+
         /// <summary>行為名</summary>
         public string Action { get; set; }
 
         /// <summary>行為グループ</summary>
         public string ActionGroup { get; set; }
-
 
 
         /// <summary>行為の詳細</summary>
@@ -42,8 +44,14 @@ namespace Neith.Signpost.Logger.Model
         /// <summary>行為対象のグループ</summary>
         public string TargetGroup { get; set; }
 
+
+        /// <summary>アイテム</summary>
+        public string Item { get; set; }
+
+
         /// <summary>影響を受ける属性</summary>
         public string Property { get; set; }
+
 
         /// <summary>その他、影響を受ける属性</summary>
         public string[] MoreAttributes { get; set; }
@@ -53,6 +61,11 @@ namespace Neith.Signpost.Logger.Model
 
         /// <summary>値の更新モード</summary>
         public ValueUpdateMode ValueUpdateMode { get; set; }
+
+
+
+        /// <summary>microdata表現のHTML</summary>
+        public string MicroData { get; set; }
 
 
 
