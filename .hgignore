@@ -12,3 +12,4 @@ syntax: glob
 */Generated_Code/*
 Neith.Signpost.SL.xap
 *.vspscc
+*/test/database/*
