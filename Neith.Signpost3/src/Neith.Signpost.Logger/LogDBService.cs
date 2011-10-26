@@ -84,12 +84,12 @@ namespace Neith.Signpost.Logger
             var rootPath = Neith.Util.Reflection.AssemblyUtil
                 .GetCallingAssemblyDirctory()
                 .PathCombine("database");
-            Neith.Sterling.Server.FileSystem.PathProvider.RootPath = rootPath;
+            var pathProvider = new Neith.Sterling.Server.FileSystem.PathProvider(rootPath);
 
             // DB作成
             DBEngine = new SterlingEngine().Add(Tasks);
             DBEngine.Activate();
-            Database = new LogDBFileInstance(this, DateTime.UtcNow);
+            Database = new LogDBFileInstance(this, DateTime.UtcNow, pathProvider);
 
             var instance = Database.Instance;
 
