@@ -194,12 +194,12 @@ namespace Neith.Sterling.Server.FileSystem
             {
                 throw new SterlingFileSystemException(ex);
             }
-        }        
-        
-        public static void PurgeAll()
+        }
+
+        public static void PurgeAll(PathProvider pathProvider)
         {
             var fileHelper = new FileSystemHelper();
-            fileHelper.Purge(PathProvider.RootPath);
+            fileHelper.Purge(pathProvider.RootPath);
         }
     }
 }

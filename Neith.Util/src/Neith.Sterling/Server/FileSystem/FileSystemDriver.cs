@@ -18,27 +18,31 @@ namespace Neith.Sterling.Server.FileSystem
         private bool _dirtyType;
         
         public FileSystemDriver() : this(BASE)
-        {            
+        {
+            PathProvider = new PathProvider();
         }
 
         public FileSystemDriver(string basePath) 
         {
+            PathProvider = new PathProvider();
             Initialize(basePath);
         }
        
         public FileSystemDriver(string databaseName, ISterlingSerializer serializer, Action<SterlingLogLevel, string, Exception> log) : this(databaseName, serializer, log, BASE)
         {
+            PathProvider = new PathProvider();
         }
         
         public FileSystemDriver(string databaseName, ISterlingSerializer serializer, Action<SterlingLogLevel, string, Exception> log, string basePath)
             : base(databaseName, serializer, log)
         {
+            PathProvider = new PathProvider();
             Initialize(basePath);
         }
 
         private FileSystemHelper _fileHelper;
         private string _basePath;
-        private readonly PathProvider _pathProvider = new PathProvider();
+        private PathProvider PathProvider { get; set; }
 
         public void Initialize(string basePath)
         {
@@ -54,11 +58,11 @@ namespace Neith.Sterling.Server.FileSystem
         /// <param name="keyMap">Key map</param>
         public override void SerializeKeys(Type type, Type keyType, IDictionary keyMap)
         {
-            _fileHelper.EnsureDirectory(_pathProvider.GetTablePath(_basePath, DatabaseName, type, this));
+            _fileHelper.EnsureDirectory(PathProvider.GetTablePath(_basePath, DatabaseName, type, this));
             var pathLock = PathLock.GetLock(type.FullName);
             lock(pathLock)
             {
-                var keyPath = _pathProvider.GetKeysPath(_basePath, DatabaseName, type, this);
+                var keyPath = PathProvider.GetKeysPath(_basePath, DatabaseName, type, this);
                 using (var keyFile = _fileHelper.GetWriter(keyPath))
                 {
                     keyFile.Write(keyMap.Count);
@@ -81,7 +85,7 @@ namespace Neith.Sterling.Server.FileSystem
         /// <returns>The key list</returns>
         public override IDictionary DeserializeKeys(Type type, Type keyType, IDictionary dictionary)
         {
-            var keyPath = _pathProvider.GetKeysPath(_basePath, DatabaseName, type, this);
+            var keyPath = PathProvider.GetKeysPath(_basePath, DatabaseName, type, this);
             if (_fileHelper.FileExists(keyPath))
             {
                 var pathLock = PathLock.GetLock(type.FullName);
@@ -111,7 +115,7 @@ namespace Neith.Sterling.Server.FileSystem
         /// <param name="indexMap">The index map</param>
         public override void SerializeIndex<TKey, TIndex>(Type type, string indexName, Dictionary<TKey, TIndex> indexMap)
         {
-            var indexPath = _pathProvider.GetIndexPath(_basePath, DatabaseName, type, this, indexName);
+            var indexPath = PathProvider.GetIndexPath(_basePath, DatabaseName, type, this, indexName);
             var pathLock = PathLock.GetLock(type.FullName);
             lock(pathLock)
             {
@@ -138,7 +142,7 @@ namespace Neith.Sterling.Server.FileSystem
         /// <param name="indexMap">The index map</param>        
         public override void SerializeIndex<TKey, TIndex1, TIndex2>(Type type, string indexName, Dictionary<TKey, Tuple<TIndex1, TIndex2>> indexMap)
         {
-            var indexPath = _pathProvider.GetIndexPath(_basePath, DatabaseName, type, this, indexName);
+            var indexPath = PathProvider.GetIndexPath(_basePath, DatabaseName, type, this, indexName);
             var pathLock = PathLock.GetLock(type.FullName);
             lock (pathLock)
             {
@@ -165,7 +169,7 @@ namespace Neith.Sterling.Server.FileSystem
         /// <returns>The index map</returns>
         public override Dictionary<TKey, TIndex> DeserializeIndex<TKey, TIndex>(Type type, string indexName)
         {
-            var indexPath = _pathProvider.GetIndexPath(_basePath, DatabaseName, type, this, indexName);
+            var indexPath = PathProvider.GetIndexPath(_basePath, DatabaseName, type, this, indexName);
             var dictionary = new Dictionary<TKey, TIndex>();
             if (_fileHelper.FileExists(indexPath))
             {
@@ -197,7 +201,7 @@ namespace Neith.Sterling.Server.FileSystem
         /// <returns>The index map</returns>        
         public override Dictionary<TKey, Tuple<TIndex1, TIndex2>> DeserializeIndex<TKey, TIndex1, TIndex2>(Type type, string indexName)
         {
-            var indexPath = _pathProvider.GetIndexPath(_basePath, DatabaseName, type, this, indexName);
+            var indexPath = PathProvider.GetIndexPath(_basePath, DatabaseName, type, this, indexName);
             var dictionary = new Dictionary<TKey, Tuple<TIndex1, TIndex2>>();
             if (_fileHelper.FileExists(indexPath))
             {
@@ -226,9 +230,9 @@ namespace Neith.Sterling.Server.FileSystem
         /// <param name="tables">The list of tables</param>
         public override void PublishTables(Dictionary<Type, ITableDefinition> tables)
         {
-            _fileHelper.EnsureDirectory(_pathProvider.GetDatabasePath(_basePath, DatabaseName, this));
+            _fileHelper.EnsureDirectory(PathProvider.GetDatabasePath(_basePath, DatabaseName, this));
 
-            var typePath = _pathProvider.GetTypesPath(_basePath, DatabaseName, this);
+            var typePath = PathProvider.GetTypesPath(_basePath, DatabaseName, this);
 
             if (!_fileHelper.FileExists(typePath)) return;
 
@@ -247,7 +251,7 @@ namespace Neith.Sterling.Server.FileSystem
                 foreach (var type in tables.Keys)
                 {
                     _tables.Add(type);
-                    _fileHelper.EnsureDirectory(_pathProvider.GetTablePath(_basePath, DatabaseName, type, this));
+                    _fileHelper.EnsureDirectory(PathProvider.GetTablePath(_basePath, DatabaseName, type, this));
                 }
             }
         }
@@ -260,7 +264,7 @@ namespace Neith.Sterling.Server.FileSystem
             var pathLock = PathLock.GetLock(TypeIndex.GetType().FullName);            
             lock (pathLock)
             {
-                var typePath = _pathProvider.GetTypesPath(_basePath, DatabaseName, this);
+                var typePath = PathProvider.GetTypesPath(_basePath, DatabaseName, this);
                 using (var typeFile = _fileHelper.GetWriter(typePath))
                 {
                     typeFile.Write(TypeIndex.Count);
@@ -309,9 +313,9 @@ namespace Neith.Sterling.Server.FileSystem
         /// <param name="bytes">The byte stream</param>
         public override void Save(Type type, int keyIndex, byte[] bytes)
         {            
-            var instanceFolder = _pathProvider.GetInstanceFolder(_basePath, DatabaseName, type, this, keyIndex);
+            var instanceFolder = PathProvider.GetInstanceFolder(_basePath, DatabaseName, type, this, keyIndex);
             _fileHelper.EnsureDirectory(instanceFolder);
-            var instancePath = _pathProvider.GetInstancePath(_basePath, DatabaseName, type, this, keyIndex);
+            var instancePath = PathProvider.GetInstancePath(_basePath, DatabaseName, type, this, keyIndex);
             
             // lock on this while saving, but remember that anyone else loading can now grab the
             // copy 
@@ -341,7 +345,7 @@ namespace Neith.Sterling.Server.FileSystem
         /// <returns>The byte stream</returns>
         public override BinaryReader Load(Type type, int keyIndex)
         {
-            var instancePath = _pathProvider.GetInstancePath(_basePath, DatabaseName, type, this, keyIndex);
+            var instancePath = PathProvider.GetInstancePath(_basePath, DatabaseName, type, this, keyIndex);
             
             // otherwise let's wait for it to be released and grab it from disk
             lock (PathLock.GetLock(instancePath))
@@ -359,7 +363,7 @@ namespace Neith.Sterling.Server.FileSystem
         /// <param name="keyIndex">The index of the key</param>
         public override void Delete(Type type, int keyIndex)
         {
-            var instancePath = _pathProvider.GetInstancePath(_basePath, DatabaseName, type, this, keyIndex);
+            var instancePath = PathProvider.GetInstancePath(_basePath, DatabaseName, type, this, keyIndex);
             lock (PathLock.GetLock(instancePath))
             {
                 if (_fileHelper.FileExists(instancePath))
@@ -375,7 +379,7 @@ namespace Neith.Sterling.Server.FileSystem
         /// <param name="type">The type to truncate</param>
         public override void Truncate(Type type)
         {
-            var folderPath = _pathProvider.GetTablePath(_basePath, DatabaseName, type, this);
+            var folderPath = PathProvider.GetTablePath(_basePath, DatabaseName, type, this);
             lock(PathLock.GetLock(type.FullName))
             {
                 _fileHelper.Purge(folderPath);
@@ -389,7 +393,7 @@ namespace Neith.Sterling.Server.FileSystem
         {
             lock(PathLock.GetLock(DatabaseName))
             {
-                _fileHelper.Purge(_pathProvider.GetDatabasePath(_basePath, DatabaseName, this));
+                _fileHelper.Purge(PathProvider.GetDatabasePath(_basePath, DatabaseName, this));
             }
         }        
     }
