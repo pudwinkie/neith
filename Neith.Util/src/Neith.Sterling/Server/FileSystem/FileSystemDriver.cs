@@ -38,7 +38,6 @@ namespace Neith.Sterling.Server.FileSystem
         public FileSystemDriver(string databaseName, ISterlingSerializer serializer, Action<SterlingLogLevel, string, Exception> log)
             : this(databaseName, serializer, log, BASE)
         {
-            PathProvider = new PathProvider();
         }
 
         public FileSystemDriver(string databaseName, ISterlingSerializer serializer, Action<SterlingLogLevel, string, Exception> log, string basePath)
