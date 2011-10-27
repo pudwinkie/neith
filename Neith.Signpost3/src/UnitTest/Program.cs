@@ -7,8 +7,9 @@ namespace UnitTest
 {
     class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
+            return Neith.Util.UnitTest.ConsoleRunner.Run(args);
         }
     }
 }

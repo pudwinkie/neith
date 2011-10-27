@@ -77,7 +77,7 @@ namespace Neith.Signpost.Logger
             // DB作成
             DBEngine = new SterlingEngine().Add(Tasks);
             DBEngine.Activate();
-            Database = new LogDBFileInstance(this, DateTime.UtcNow, pathProvider);
+            Database = new LogDBFileInstance(this.DBEngine, DateTime.UtcNow, pathProvider);
 
             var instance = Database.Instance;
 
