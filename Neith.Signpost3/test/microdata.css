@@ -1,0 +1,9 @@
+p {
+  color: black;
+  font-family:'メイリオ',Meiryo,'ＭＳ Ｐゴシック',sans-serif;
+  font-size: 10pt;
+  line-height:1.0;
+}
+b{  font-weight: normal;}
+b[itemprop="actionGroup"] { color: darkcyan     ; }
+b[itemprop="item"]        { color: royalblue; font-weight: bold; text-shadow: 1px 1px 3px dimgray;}

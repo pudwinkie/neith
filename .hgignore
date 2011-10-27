@@ -13,3 +13,4 @@ syntax: glob
 Neith.Signpost.SL.xap
 *.vspscc
 */test/database/*
+*/test/log/*

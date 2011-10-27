@@ -14,18 +14,20 @@ namespace Neith.Signpost.Logger
     {
         public string DBPath { get; private set; }
 
-        public LogDBService Service { get; private set; }
-
         public ISterlingDatabaseInstance Instance { get; private set; }
 
         public List<TableKey<NeithLog, DateTime>> AllLogsKV { get { return Instance.Query<NeithLog, DateTime>(); } }
 
-        internal LogDBFileInstance(LogDBService service, DateTime date, PathProvider pathProvider)
+        public LogDBFileInstance(SterlingEngine engine, DateTime date, PathProvider pathProvider)
         {
-            Service = service;
             DBPath = string.Format("logger/{0:yyyyMM}/", date.ToUniversalTime());
-            var db = Service.DBEngine.SterlingDatabase;
+            var db = engine.SterlingDatabase;
             Instance = db.RegisterDatabase<LogDB>(new FileSystemDriver(pathProvider, DBPath));
+        }
+
+        public LogDBFileInstance(SterlingEngine engine, DateTime date, string rootPath)
+            : this(engine, date, new PathProvider(rootPath))
+        {
         }
 
     }
