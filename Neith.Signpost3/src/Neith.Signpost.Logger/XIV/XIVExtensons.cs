@@ -31,44 +31,32 @@ namespace Neith.Signpost.Logger.XIV
             };
         }
 
-        private static readonly XName _P = "p";
-        private static readonly XName _B = "b";
-        private static readonly XName _LI = "li";
-        private static readonly XName _UL = "ul";
-        private static readonly XName _DIV = "div";
-        private static readonly XName _SPAN = "span";
-        private static readonly XName _DATETIME = "datetime";
-        private static readonly XName _TIME = "time";
+        private static readonly XAttribute SCOPE = new XAttribute(XN.itemscope, "");
 
-        private static readonly XName _ITEMSCOPE = "itemscope";
-        private static readonly XName _ITEMPROP = "itemprop";
-
-        private static readonly XAttribute SCOPE = new XAttribute(_ITEMSCOPE, "");
-
-        private static XAttribute PROP(object name) { return new XAttribute(_ITEMPROP, name); }
+        private static XAttribute PROP(object name) { return new XAttribute(XN.itemprop, name); }
 
         private static XElement TIME(string name, DateTimeOffset time)
         {
             var t1 = time.ToUniversalTime();
             var t2 = time.ToLocalTime().ToString("G");
             return new XElement(
-                _TIME,
+                XN.time,
                 PROP(name),
-                new XAttribute(_DATETIME, t1),
+                new XAttribute(XN.datetime, t1),
                 t2);
         }
 
         private static XElement B(string name, object value)
         {
             return new XElement(
-                _B,
+                XN.b,
                 PROP(name),
                 value);
         }
         private static XElement LI(string name, object value)
         {
             return new XElement(
-                _B,
+                XN.b,
                 PROP(name),
                 value);
         }
@@ -82,14 +70,14 @@ namespace Neith.Signpost.Logger.XIV
         /// <returns></returns>
         public static XElement ToMicroData(this FFXIVLog item)
         {
-            var source = new XElement(_UL, PROP("source"), SCOPE,
+            var source = new XElement(XN.ul, PROP("source"), SCOPE,
                 LI("message", item.Message),
                 LI("actId", item.MessageTypeID),
                 LI("action", item.MessageType.ToString()));
 
-            return new XElement(_P, SCOPE,
+            return new XElement(XN.p, SCOPE,
                 TIME("time", item.Time),
-                new XElement(_SPAN,
+                new XElement(XN.span,
                     B("application", "XIVWathcer"),
                     B("sender", item.Who),
                     B("actId" , "0x" + (item.MessageTypeID.ToString("X")).PadLeft(4, '0')),

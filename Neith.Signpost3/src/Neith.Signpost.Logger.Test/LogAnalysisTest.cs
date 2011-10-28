@@ -36,10 +36,18 @@ namespace Neith.Signpost.Logger.Test
             using (var st = GetLogStream())
             using (var reader = XmlReader.Create(st, setting)) {
                 var doc = XDocument.Load(reader);
-                var logCount = doc.Descendants("p").Count();
-                Debug.WriteLine(string.Format("log count={0}", logCount));
+                var items = doc
+                    .Descendants("p")
+                    .Where(a => a.Attribute(XN.itemscope) != null)
+                    ;
+                Debug.WriteLine(string.Format("items.Count={0}", items.Count()));
+                foreach (var item in items) {
+
+                }
             }
         }
+
+
 
 
     }
