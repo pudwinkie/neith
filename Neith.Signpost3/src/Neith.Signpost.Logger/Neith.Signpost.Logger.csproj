@@ -65,9 +65,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CombineReadStream.cs" />
+    <Compile Include="Const.cs" />
     <Compile Include="LogDB.cs" />
     <Compile Include="LogDBFileInstance.cs" />
     <Compile Include="LogDBService.cs" />
+    <Compile Include="MicroDataExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="XIV\WatchService.cs" />

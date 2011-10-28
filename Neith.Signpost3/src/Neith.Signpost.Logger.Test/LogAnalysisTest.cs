@@ -37,15 +37,21 @@ namespace Neith.Signpost.Logger.Test
             using (var reader = XmlReader.Create(st, setting)) {
                 var doc = XDocument.Load(reader);
                 var items = doc
-                    .Descendants("p")
+                    .Descendants(XN.p)
                     .Where(a => a.Attribute(XN.itemscope) != null)
                     ;
                 Debug.WriteLine(string.Format("items.Count={0}", items.Count()));
                 foreach (var item in items) {
-
+                    var property = item.ToItemPropertyDictionary();
+                    var source = property["source"];
+                    if (source == null) continue;
+                    var srcProp = source.ToItemPropertyDictionary();
+                    var actId = srcProp["actId"];
                 }
             }
         }
+
+
 
 
 

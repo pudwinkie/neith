@@ -56,7 +56,7 @@ namespace Neith.Signpost.Logger.XIV
         private static XElement LI(string name, object value)
         {
             return new XElement(
-                XN.b,
+                XN.li,
                 PROP(name),
                 value);
         }
@@ -71,9 +71,9 @@ namespace Neith.Signpost.Logger.XIV
         public static XElement ToMicroData(this FFXIVLog item)
         {
             var source = new XElement(XN.ul, PROP("source"), SCOPE,
-                LI("message", item.Message),
-                LI("actId", item.MessageTypeID),
-                LI("action", item.MessageType.ToString()));
+                LI("id", item.MessageTypeID),
+                LI("who", item.Who),
+                LI("mes", item.Message));
 
             return new XElement(XN.p, SCOPE,
                 TIME("time", item.Time),
@@ -85,6 +85,26 @@ namespace Neith.Signpost.Logger.XIV
                     B("body"  , item.Message)),
                 source
                 );
+        }
+
+        /// <summary>
+        /// microdataをToFFXIVLogに変換します。
+        /// </summary>
+        /// <param name="el"></param>
+        /// <returns></returns>
+        public static FFXIVLog ToFFXIVLog(this XElement microdata)
+        {
+            var p = microdata.ToItemPropertyDictionary();
+            var time = (DateTime)(p["time"].Attribute(XN.datetime));
+            var source = p["source"];
+            var sp = source.ToItemPropertyDictionary();
+            var item = new FFXIVLog { 
+                Time = time,
+                MessageTypeID = int.Parse(sp["id"].Value),
+                Who = sp["who"].Value,
+                Message = sp["mes"].Value
+            };
+            return item;
         }
 
 
