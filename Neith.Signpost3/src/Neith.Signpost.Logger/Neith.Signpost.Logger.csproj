@@ -72,6 +72,7 @@
     <Compile Include="Service.cs" />
     <Compile Include="XIV\WatchService.cs" />
     <Compile Include="XIV\XIVExtensons.cs" />
+    <Compile Include="XN.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
