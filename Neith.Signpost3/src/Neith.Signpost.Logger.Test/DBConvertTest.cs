@@ -1,21 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Neith.Util.Reflection;
-using Wintellect.Sterling;
 using Neith.Signpost.Logger.XIV;
+using Wintellect.Sterling;
 
 namespace Neith.Signpost.Logger.Test
 {
     using NUnit.Framework;
 
-    [TestFixture]
+    //[TestFixture]
     public class DBConvertTest
     {
         private CompositeDisposable Tasks;
@@ -38,18 +34,7 @@ namespace Neith.Signpost.Logger.Test
             DBEngine.Activate();
             // dbのroot
             var date = DateTime.Parse("2011/10/27");
-            Database = new LogDBFileInstance(DBEngine, date, DBPath);
-        }
-
-        private static string DBPath
-        {
-            get
-            {
-                return AssemblyUtil
-                    .GetCallingAssemblyDirctory()
-                    .PathCombine("..", "..", "..", "..", "test", "database")
-                    .GetFullPath();
-            }
+            Database = new LogDBFileInstance(DBEngine, date,Const.DBPath);
         }
 
         [Test]
@@ -84,30 +69,27 @@ namespace Neith.Signpost.Logger.Test
         [Test]
         public void ToMicroDataTest()
         {
-            var path = DBPath.PathCombine("..", "log.html");
             var items = Database.AllLogsKV
                 .Select(a => a.LazyValue.Value)
                 .Select(a => a.Source)
                 .OfType<FFXIVRuby.FFXIVLog>()
                 .Where(a => !a.Message.Contains('\u0003'))
                 .Select(a => a.ToMicroData());
-            using (var writer = File.CreateText(path)) {
+            using (var writer = File.CreateText(Const.XmlLogPath)) {
                 writer.WriteLine(MICRO_DATA_HTML_HEADER);
                 foreach (var el in items) {
                     writer.WriteLine(el.ToString());
                 }
             }
-
-
         }
 
-        private const string MICRO_DATA_HTML_HEADER = @"<!DOCTYPE html>
-<html xmlns=""http://www.w3.org/1999/xhtml\"">
+        private const string MICRO_DATA_HTML_HEADER = @"<?xml version=""1.0"" encoding=""UTF-8""?>
+<!DOCTYPE html>
+<html xmlns=""http://www.w3.org/1999/xhtml"">
 <head>
-  <meta charset=""utf-8"">
+  <meta charset=""utf-8"" />
   <title>title</title>
-  <link rel=""stylesheet"" href=""microdata.css"">
-  <script src=""script.js""></script>
+  <link rel=""stylesheet"" href=""microdata.css"" />
 </head>
 <body>";
 

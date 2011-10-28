@@ -36,6 +36,7 @@
       <HintPath>..\..\..\externals\Async-CTP\samples\AsyncCtpLibrary.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -46,6 +47,7 @@
     <Reference Include="System.Reactive.Windows.Threading, Version=1.1.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\..\Neith.Signpost3\src\packages\Rx_Experimental-Xaml.1.1.10621\lib\Net4\System.Reactive.Windows.Threading.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -67,6 +69,7 @@
     <Compile Include="IO\FileSystemWatcherRX.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Windows\DepedencyPropertyRx.cs" />
+    <Compile Include="Windows\ResourceExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
