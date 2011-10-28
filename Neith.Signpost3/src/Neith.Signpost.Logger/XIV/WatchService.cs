@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Text;
@@ -38,6 +39,8 @@ namespace Neith.Signpost.Logger.XIV
         {
             Dispatcher = dispatcher;
             var Watcher = new XIVWathcer(Dispatcher).Add(Tasks);
+
+            // DBへの書き出し
             var trans = new TransformManyBlock<FFXIVRuby.FFXIVLog, NeithLog>(async a =>
             {
                 var item = await a.ToNeithLog();
@@ -46,7 +49,18 @@ namespace Neith.Signpost.Logger.XIV
             });
             Watcher.LogSource.LinkTo(trans, false).Add(Tasks);
             LogSource = trans;
+
+            // microdata書き出し
+            var st = File.CreateText(Const.XmlLogPath).Add(Tasks);
+            TaskEx.RunEx(() => st.WriteAsync(Const.MICRO_DATA_HTML_HEADER));
+            var write = new ActionBlock<FFXIVRuby.FFXIVLog>(async a =>
+            {
+                await st.WriteAsync(a.ToMicroData().ToString());
+            });
+            Watcher.LogSource.LinkTo(write, false).Add(Tasks);
         }
+
+
 
         public void Start()
         {
