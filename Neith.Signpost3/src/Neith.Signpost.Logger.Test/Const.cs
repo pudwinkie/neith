@@ -21,9 +21,19 @@ namespace Neith.Signpost.Logger.Test
             .PathCombine("database")
             .GetFullPath();
 
-        public static readonly string XmlLogPath
+        public static readonly string InputLogPath
             = TestDataRootPath
             .PathCombine("log", "log.html")
+            .GetFullPath();
+
+        public static readonly string ConvertLogPath
+            = TestDataRootPath
+            .PathCombine("log", "convert.html")
+            .GetFullPath();
+
+        public static readonly string OutputLogPath
+            = TestDataRootPath
+            .PathCombine("log", "out.html")
             .GetFullPath();
 
 
