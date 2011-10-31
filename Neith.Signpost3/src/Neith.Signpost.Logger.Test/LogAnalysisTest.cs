@@ -6,6 +6,8 @@ using System.IO;
 using System.Xml;
 using System.Xml.Linq;
 using System.Diagnostics;
+using Neith.Signpost.Logger.XIV;
+using Neith.Signpost.Logger.Model;
 
 namespace Neith.Signpost.Logger.Test
 {
@@ -14,43 +16,41 @@ namespace Neith.Signpost.Logger.Test
     [TestFixture]
     public class LogAnalysisTest
     {
-        private static Stream GetLogStream()
+        [Test]
+        public void Test01()
         {
-            var log = File.OpenRead(Const.XmlLogPath);
-            var mem = new MemoryStream(Encoding.UTF8.GetBytes("</body></html>"));
-            return new CombineReadStream(log, mem);
+            Debug.WriteLine("Test01");
+            var items = XIVExtensons.EnXElement(Const.InputLogPath, XN.p.LocalName)
+                .Where(a => a.Attribute(XN.itemscope) != null)
+                ;
+            var output = Convert2(items)
+                .CreateLogDocument("log");
+            output.Save(Const.ConvertLogPath);
         }
 
-
+        private static IEnumerable<XElement> Convert2(IEnumerable<XElement> items)
+        {
+            var count = 0;
+            foreach (var item in items) {
+                var xiv = item.ToFFXIVLogOld();
+                yield return xiv.ToMicroData();
+                count++;
+            }
+            Debug.WriteLine(string.Format("items.Count={0}", count));
+        }
 
 
         [Test]
-        public void ReadTest()
+        public void Test02()
         {
-            var setting = new XmlReaderSettings
-            {
-                DtdProcessing = System.Xml.DtdProcessing.Parse,
-                IgnoreComments = true,
+            var items = XIVExtensons.EnXElement(Const.ConvertLogPath, XN.p.LocalName)
+                .Where(a => a.Attribute(XN.itemscope) != null)
+                ;
+            foreach (var src in items.ToSrcItem()) {
+                src.mes.IsNot(null);
 
-            };
-            using (var st = GetLogStream())
-            using (var reader = XmlReader.Create(st, setting)) {
-                var doc = XDocument.Load(reader);
-                var items = doc
-                    .Descendants(XN.p)
-                    .Where(a => a.Attribute(XN.itemscope) != null)
-                    ;
-                Debug.WriteLine(string.Format("items.Count={0}", items.Count()));
-                foreach (var item in items) {
-                    var property = item.ToItemPropertyDictionary();
-                    var source = property["source"];
-                    if (source == null) continue;
-                    var srcProp = source.ToItemPropertyDictionary();
-                    var actId = srcProp["actId"];
-                }
             }
         }
-
 
 
 

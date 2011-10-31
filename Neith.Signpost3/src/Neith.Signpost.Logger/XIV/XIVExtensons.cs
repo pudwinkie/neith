@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml;
 using System.Xml.Linq;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
@@ -71,42 +72,93 @@ namespace Neith.Signpost.Logger.XIV
         public static XElement ToMicroData(this FFXIVLog item)
         {
             var source = new XElement(XN.ul, PROP("source"), SCOPE,
+                TIME("time", item.Time),
                 LI("id", item.MessageTypeID),
                 LI("who", item.Who),
                 LI("mes", item.Message));
 
             return new XElement(XN.p, SCOPE,
                 TIME("time", item.Time),
-                new XElement(XN.span,
-                    B("application", "XIVWathcer"),
-                    B("sender", item.Who),
-                    B("actId" , "0x" + (item.MessageTypeID.ToString("X")).PadLeft(4, '0')),
-                    B("action", item.MessageType.ToString()),
-                    B("body"  , item.Message)),
+                B("application", "XIVWathcer"),
+                B("sender", item.Who),
+                B("actId", "0x" + (item.MessageTypeID.ToString("X")).PadLeft(4, '0')),
+                B("action", item.MessageType.ToString()),
+                B("body", item.Message),
                 source
                 );
         }
+
 
         /// <summary>
         /// microdataをToFFXIVLogに変換します。
         /// </summary>
         /// <param name="el"></param>
         /// <returns></returns>
-        public static FFXIVLog ToFFXIVLog(this XElement microdata)
+        public static FFXIVLog ToFFXIVLogOld(this XElement microdata)
         {
             var p = microdata.ToItemPropertyDictionary();
             var time = (DateTime)(p["time"].Attribute(XN.datetime));
             var source = p["source"];
             var sp = source.ToItemPropertyDictionary();
-            var item = new FFXIVLog { 
+            var item = new FFXIVLog
+            {
                 Time = time,
-                MessageTypeID = int.Parse(sp["id"].Value),
-                Who = sp["who"].Value,
-                Message = sp["mes"].Value
+                MessageTypeID = int.Parse(sp["actId"].Value),
+                Who = p["sender"].Value,
+                Message = sp["message"].Value
             };
             return item;
         }
 
+
+
+
+
+        /// <summary>
+        /// log一括書き込み用の
+        /// </summary>
+        /// <param name="items"></param>
+        /// <param name="title"></param>
+        /// <returns></returns>
+        public static XDocument CreateLogDocument(this IEnumerable<XElement> items, string title)
+        {
+            return new XDocument(
+                new XDocumentType("html", null, null, null),
+                new XElement(XN.html,
+                    new XElement(XN.head,
+                        new XElement(XN.meta, new XAttribute(XN.charset, "utf-8")),
+                        new XElement(XN.title, title)),
+                        new XElement(XN.link,
+                            new XAttribute(XN.rel, "stylesheet"),
+                            new XAttribute(XN.href, "../microdata.css")),
+                    new XStreamingElement(XN.body, items)));
+        }
+
+        /// <summary>
+        /// 指定エレメント名のXElementを読めるだけ読み切ります。
+        /// </summary>
+        /// <param name="uri"></param>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static IEnumerable<XElement> EnXElement(string uri, string key)
+        {
+            using (XmlReader reader = XmlReader.Create(uri, xmlSetting)) {
+                reader.MoveToContent();
+                while (true) {
+                    try {
+                        if (!reader.Read()) yield break;
+                    }
+                    catch (XmlException) { yield break; }
+                    if (reader.NodeType == XmlNodeType.Element && reader.Name == key) {
+                        yield return XElement.ReadFrom(reader) as XElement;
+                    }
+                }
+            }
+        }
+        private static readonly XmlReaderSettings xmlSetting = new XmlReaderSettings
+        {
+            DtdProcessing = DtdProcessing.Parse,
+        };
 
 
     }

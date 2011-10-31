@@ -75,7 +75,7 @@ namespace Neith.Signpost.Logger.Test
                 .OfType<FFXIVRuby.FFXIVLog>()
                 .Where(a => !a.Message.Contains('\u0003'))
                 .Select(a => a.ToMicroData());
-            using (var writer = File.CreateText(Const.XmlLogPath)) {
+            using (var writer = File.CreateText(Const.InputLogPath)) {
                 writer.WriteLine(MICRO_DATA_HTML_HEADER);
                 foreach (var el in items) {
                     writer.WriteLine(el.ToString());
