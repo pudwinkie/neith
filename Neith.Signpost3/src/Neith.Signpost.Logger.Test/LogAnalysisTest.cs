@@ -41,14 +41,38 @@ namespace Neith.Signpost.Logger.Test
 
 
         [Test]
-        public void Test02()
+        public void Test03()
         {
-            var items = XIVExtensons.EnXElement(Const.ConvertLogPath, XN.p.LocalName)
+            var q1 = XIVExtensons.EnXElement(Const.ConvertLogPath, XN.p.LocalName)
                 .Where(a => a.Attribute(XN.itemscope) != null)
-                ;
-            foreach (var src in items.ToSrcItem()) {
-                src.mes.IsNot(null);
+                .ToSrcItem();
+            XIVAnalysis.SrcItem ngSrc = null;
 
+            var items = q1
+                .Select(a =>
+                {
+                    var ng = a.AnalysisElement == null ? "!" : "";
+                    var cv = a.AnalysisElement == null ? "" : a.AnalysisElement.ToString();
+                    if (a.AnalysisElement == null && ngSrc == null) ngSrc = a;
+
+                    return new string[] {
+                        a.time.ToString("O"),
+                        ng,
+                        a.id.ToString(),
+                        a.who,
+                        a.mes,
+                        cv,
+                    };
+                });
+            var header = new string[] { "time", "!", "id", "who", "mes", "cv" };
+            var csv = Enumerable
+                .Repeat(header, 1)
+                .Concat(items);
+
+            Neith.Util.CsvUtil.WriteCsv(Const.ConvertCsvPath, csv);
+            if (ngSrc != null) {
+                Debug.WriteLine("■NG Item");
+                Debug.WriteLine(ngSrc.InputElement.ToString());
             }
         }
 

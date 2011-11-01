@@ -32,11 +32,12 @@ namespace Neith.Signpost.Logger.XIV
             };
         }
 
-        private static readonly XAttribute SCOPE = new XAttribute(XN.itemscope, "");
+        #region 簡略タグ作成コマンド群
+        public static readonly XAttribute SCOPE = new XAttribute(XN.itemscope, "");
 
-        private static XAttribute PROP(object name) { return new XAttribute(XN.itemprop, name); }
+        public static XAttribute PROP(object name) { return new XAttribute(XN.itemprop, name); }
 
-        private static XElement TIME(string name, DateTimeOffset time)
+        public static XElement TIME(string name, DateTimeOffset time)
         {
             var t1 = time.ToUniversalTime();
             var t2 = time.ToLocalTime().ToString("G");
@@ -47,21 +48,43 @@ namespace Neith.Signpost.Logger.XIV
                 t2);
         }
 
-        private static XElement B(string name, object value)
+        public static XElement B(string name, object value)
         {
             return new XElement(
                 XN.b,
                 PROP(name),
                 value);
         }
-        private static XElement LI(string name, object value)
+        public static XElement I(string name, object value)
+        {
+            return new XElement(
+                XN.i,
+                PROP(name),
+                value);
+        }
+        public static XElement LI(string name, object value)
         {
             return new XElement(
                 XN.li,
                 PROP(name),
                 value);
         }
+        public static XElement META(string name, object value)
+        {
+            return new XElement(
+                XN.meta,
+                PROP(name),
+                new XAttribute(XN.content, value));
+        }
 
+
+        public static XElement SPAN(params object[] values)
+        {
+            return new XElement(XN.span, values);
+        }
+
+
+        #endregion
 
 
         /// <summary>
@@ -78,12 +101,13 @@ namespace Neith.Signpost.Logger.XIV
                 LI("mes", item.Message));
 
             return new XElement(XN.p, SCOPE,
-                TIME("time", item.Time),
-                B("application", "XIVWathcer"),
-                B("sender", item.Who),
-                B("actId", "0x" + (item.MessageTypeID.ToString("X")).PadLeft(4, '0')),
-                B("action", item.MessageType.ToString()),
-                B("body", item.Message),
+                SPAN(
+                    TIME("time", item.Time),
+                    B("application", "XIVWathcer"),
+                    B("sender", item.Who),
+                    B("actId", "0x" + (item.MessageTypeID.ToString("X")).PadLeft(4, '0')),
+                    B("action", item.MessageType.ToString()),
+                    B("body", item.Message)),
                 source
                 );
         }
