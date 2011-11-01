@@ -31,6 +31,11 @@ namespace Neith.Signpost.Logger.Test
             .PathCombine("log", "convert.html")
             .GetFullPath();
 
+        public static readonly string ConvertCsvPath
+            = TestDataRootPath
+            .PathCombine("log", "convert.csv")
+            .GetFullPath();
+
         public static readonly string OutputLogPath
             = TestDataRootPath
             .PathCombine("log", "out.html")

@@ -74,6 +74,7 @@
     <Compile Include="Service.cs" />
     <Compile Include="XIV\WatchService.cs" />
     <Compile Include="XIV\XIVAnalysis.cs" />
+    <Compile Include="XIV\XIVAnalysis_Modules.cs" />
     <Compile Include="XIV\XIVExtensons.cs" />
     <Compile Include="XN.cs" />
   </ItemGroup>
