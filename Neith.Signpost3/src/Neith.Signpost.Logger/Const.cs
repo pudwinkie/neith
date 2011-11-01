@@ -20,7 +20,7 @@ namespace Neith.Signpost.Logger
 
         public static readonly string XmlLogPath
             = XmlLogDirectory
-            .PathCombine(string.Format("{0:yyyyMM}{1}log{0:O}.html", DateTime.UtcNow, Path.DirectorySeparatorChar))
+            .PathCombine(string.Format("{0:yyyyMM}{1}log{0:yyyyMMdd-HHmmss-FFFFFFF}.html", DateTime.UtcNow, Path.DirectorySeparatorChar))
             .GetFullPath();
 
         internal const string MICRO_DATA_HTML_HEADER = @"<?xml version=""1.0"" encoding=""UTF-8""?>

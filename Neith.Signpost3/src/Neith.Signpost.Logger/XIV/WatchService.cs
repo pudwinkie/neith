@@ -51,6 +51,8 @@ namespace Neith.Signpost.Logger.XIV
             LogSource = trans;
 
             // microdata書き出し
+            var dir = Const.XmlLogPath.GetDirectoryName();
+            Directory.CreateDirectory(dir);
             var st = File.CreateText(Const.XmlLogPath).Add(Tasks);
             TaskEx.RunEx(() => st.WriteAsync(Const.MICRO_DATA_HTML_HEADER));
             var write = new ActionBlock<FFXIVRuby.FFXIVLog>(async a =>
