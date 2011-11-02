@@ -98,6 +98,12 @@ namespace Neith.Signpost.Logger.XIV.Converters
         protected static XElement XB(string name, object value) {
             return new XElement(XN.b, new XAttribute(XN.class_, name), value);
         }
+        protected static XElement HIDDEN(string name, object value)
+        {
+            var el = B(name, value);
+            el.Add(new XAttribute(XN.class_, "hidden"));
+            return el;
+        }
 
                             
 

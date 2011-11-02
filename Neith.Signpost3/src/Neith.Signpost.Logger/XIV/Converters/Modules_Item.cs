@@ -19,7 +19,7 @@ namespace Neith.Signpost.Logger.XIV.Converters
                 var sender = m.Groups["sender"].Value;
                 var item = m.Groups["item"].Value;
                 return SPAN(
-                    ACT(src.idAct + "use item "),
+                    ACT(src.idAct("use item ")),
                     B("sender", sender),
                     "は「",
                     I("item", item),
@@ -42,7 +42,7 @@ namespace Neith.Signpost.Logger.XIV.Converters
                 var sender = m.Groups["sender"].Value;
                 var item = m.Groups["item"].Value;
                 return SPAN(
-                    ACT(src.idAct + "use item drink "),
+                    ACT(src.idAct("use item drink ")),
                     B("sender", sender),
                     "は「",
                     I("item", item),

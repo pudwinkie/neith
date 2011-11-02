@@ -20,7 +20,16 @@ namespace Neith.Signpost.Logger.XIV
         public string mes { get; set; }
 
         // 計算
-        public string idAct { get { return XIVAnalysis.AnalysisIdDic[id]; } }
+        public string idAct(string keys = "")
+        {
+            var text = XIVAnalysis.AnalysisIdDic[id] + " " + keys;
+            var items = text
+                .Split(' ')
+                .Where(a => !string.IsNullOrWhiteSpace(a))
+                .Distinct();
+            var rc = string.Join(" ", items.ToArray());
+            return rc;
+        }
 
         // 出力情報
         public XElement AnalysisElement { get; set; }
