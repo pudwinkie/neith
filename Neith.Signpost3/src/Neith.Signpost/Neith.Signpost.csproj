@@ -109,6 +109,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\externals\wpf-notifyicon\NotifyIconWpf\NotifyIconWpf.csproj">
+      <Project>{7AC63864-7638-41C4-969C-D3197EF2BED9}</Project>
+      <Name>NotifyIconWpf</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Neith.Signpost.Services\Neith.Signpost.Services.csproj">
       <Project>{EB3132DB-7653-4FEF-A575-F4E40E7E5DA1}</Project>
       <Name>Neith.Signpost.Services</Name>

@@ -9,53 +9,13 @@ namespace Neith.Signpost.Logger.XIV
 {
     public static partial class XIVAnalysis
     {
-        /// <summary>入力情報</summary>
-        public class SrcItem
+        /// <summary>
+        /// 初期化。
+        /// </summary>
+        static XIVAnalysis()
         {
-            // 入力XML情報
-            public XElement InputElement { get; set; }
-            public IDictionary<string, XElement> Property { get; set; }
-            public IDictionary<string, XElement> Source { get; set; }
-
-            // 入力情報
-            public DateTimeOffset time { get; set; }
-            public int id { get; set; }
-            public string who { get; set; }
-            public string mes { get; set; }
-
-            // 計算
-            public string idAct { get { return AnalysisIdDic[id]; } }
-
-            // 出力情報
-            public XElement AnalysisElement { get; set; }
+            InitConverters(Const.MEFContainer);
         }
-
-        /// <summary>コンバートモジュール</summary>
-        public class ConvertModule
-        {
-            public Regex Regex { get; private set; }
-            public Func<SrcItem, Match, XElement> Calc { get; private set; }
-            public ConvertModule(string text, Func<SrcItem, Match, XElement> func)
-            {
-                Regex = new Regex("^" + text + "$", RegexOptions.Compiled);
-                Calc = func;
-            }
-        }
-
-        #region 簡略タグ作成コマンド群
-        public static XAttribute SCOPE { get { return XIVExtensons.SCOPE; } }
-        public static XElement B(string name, object value) { return XIVExtensons.B(name, value); }
-        public static XElement I(string name, object value) { return XIVExtensons.I(name, value); }
-        public static XElement LI(string name, object value) { return XIVExtensons.LI(name, value); }
-        public static XElement META(string name, object value) { return XIVExtensons.META(name, value); }
-
-        public static XElement SPAN(params object[] values) { return XIVExtensons.SPAN(values); }
-        public static XAttribute PROP(object name) { return XIVExtensons.PROP(name); }
-        public static XElement TIME(string name, DateTimeOffset time) { return XIVExtensons.TIME(name, time); }
-        public static XElement ACT(object value) { return XIVExtensons.B("action", value); }
-
-        #endregion
-
 
         public static IEnumerable<SrcItem> ToSrcItem(this IEnumerable<XElement> items)
         {

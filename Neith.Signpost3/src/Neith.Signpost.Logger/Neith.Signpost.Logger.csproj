@@ -41,6 +41,7 @@
     </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Reactive, Version=1.1.11011.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -69,9 +70,17 @@
     <Compile Include="LogDB.cs" />
     <Compile Include="LogDBFileInstance.cs" />
     <Compile Include="LogDBService.cs" />
+    <Compile Include="MEF.cs" />
     <Compile Include="MicroDataExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service.cs" />
+    <Compile Include="XIV\Converters\BaseConvertModule.cs" />
+    <Compile Include="XIV\Converters\IConvertModule.cs" />
+    <Compile Include="XIV\Converters\Modules_Claft.cs" />
+    <Compile Include="XIV\Converters\Modules_Etc.cs" />
+    <Compile Include="XIV\Converters\Modules_Item.cs" />
+    <Compile Include="XIV\Converters\Modules_Skill.cs" />
+    <Compile Include="XIV\SrcItem.cs" />
     <Compile Include="XIV\WatchService.cs" />
     <Compile Include="XIV\XIVAnalysis.cs" />
     <Compile Include="XIV\XIVAnalysis_Modules.cs" />

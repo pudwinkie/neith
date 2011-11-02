@@ -17,36 +17,12 @@ namespace Neith.Signpost.Logger.Test
     public class LogAnalysisTest
     {
         [Test]
-        public void Test01()
+        public void Test03_2Analysis()
         {
-            Debug.WriteLine("Test01");
-            var items = XIVExtensons.EnXElement(Const.InputLogPath, XN.p.LocalName)
-                .Where(a => a.Attribute(XN.itemscope) != null)
-                ;
-            var output = Convert2(items)
-                .CreateLogDocument("log");
-            output.Save(Const.ConvertLogPath);
-        }
-
-        private static IEnumerable<XElement> Convert2(IEnumerable<XElement> items)
-        {
-            var count = 0;
-            foreach (var item in items) {
-                var xiv = item.ToFFXIVLogOld();
-                yield return xiv.ToMicroData();
-                count++;
-            }
-            Debug.WriteLine(string.Format("items.Count={0}", count));
-        }
-
-
-        [Test]
-        public void Test03()
-        {
-            var q1 = XIVExtensons.EnXElement(Const.ConvertLogPath, XN.p.LocalName)
+            var q1 = XIVExtensons.EnXElement(Const.InputLogPath, XN.p.LocalName)
                 .Where(a => a.Attribute(XN.itemscope) != null)
                 .ToSrcItem();
-            XIVAnalysis.SrcItem ngSrc = null;
+            SrcItem ngSrc = null;
 
             var items = q1
                 .Select(a =>
@@ -70,10 +46,33 @@ namespace Neith.Signpost.Logger.Test
                 .Concat(items);
 
             Neith.Util.CsvUtil.WriteCsv(Const.ConvertCsvPath, csv);
+
+            // 結果の情報
             if (ngSrc != null) {
                 Debug.WriteLine("■NG Item");
                 Debug.WriteLine(ngSrc.InputElement.ToString());
             }
+            {
+                Debug.WriteLine("■呼び出しが０のモジュール");
+                var qModule = XIVAnalysis.AnalysisModules
+                    .Where(a => a.CallCount == 0)
+                    .OrderByDescending(a => a.CallCount);
+                foreach (var item in qModule) {
+                    Debug.WriteLine(item);
+                }
+            }
+#if false
+            {
+                Debug.WriteLine("■モジュール呼び出し回数");
+                var qModule = XIVAnalysis.AnalysisModules
+                    .Where(a => a.CallCount > 0)
+                    .OrderByDescending(a => a.CallCount);
+                foreach (var item in qModule) {
+                    Debug.WriteLine(item);
+                }
+            }
+#endif
+
         }
 
 
