@@ -1,11 +1,17 @@
 ﻿using System;
 using System.IO;
 using Neith.Util.Reflection;
+using System.ComponentModel.Composition.Hosting;
 
 namespace Neith.Signpost.Logger
 {
     public static class Const
     {
+        /// <summary>MEFコンポーザ</summary>
+        public static CompositionContainer MEFContainer { get { return _MEFContainer.Value; } }
+        private static readonly Lazy<CompositionContainer> _MEFContainer = new Lazy<CompositionContainer>(MEF.Compose);
+
+
         public static readonly string AssemblyUtilDirPath = AssemblyUtil.GetCallingAssemblyDirctory();
 
         public static readonly string DBPath
