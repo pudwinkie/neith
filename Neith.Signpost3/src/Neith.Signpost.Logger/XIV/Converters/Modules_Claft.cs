@@ -20,7 +20,7 @@ namespace Neith.Signpost.Logger.XIV.Converters
                 var item = m.Groups["item"].Value;
                 var value = m.Groups["value"].Value;
                 return SPAN(
-                    ACT(src.idAct + "create item "),
+                    ACT(src.idAct("create item ")),
                     B("sender", sender),
                     "は「",
                     I("item", item),
@@ -44,7 +44,7 @@ namespace Neith.Signpost.Logger.XIV.Converters
             {
                 var sender = m.Groups["sender"].Value;
                 return SPAN(
-                    ACT(src.idAct + "miss "),
+                    ACT(src.idAct("miss ")),
                     B("sender", sender),
                     "は製作に失敗した……"
                     );
@@ -65,7 +65,7 @@ namespace Neith.Signpost.Logger.XIV.Converters
                 var sender = m.Groups["sender"].Value;
                 var item = m.Groups["item"].Value;
                 return SPAN(
-                    ACT(src.idAct + "repair item "),
+                    ACT(src.idAct("repair item ")),
                     B("sender", sender),
                     "は「",
                     I("item", item),
@@ -89,7 +89,7 @@ namespace Neith.Signpost.Logger.XIV.Converters
                 var target = m.Groups["target"].Value;
                 var item = m.Groups["item"].Value;
                 return SPAN(
-                    ACT(src.idAct + "materia create "),
+                    ACT(src.idAct("materia create ")),
                     B("sender", sender),
                     "の",
                     I("target", target),
