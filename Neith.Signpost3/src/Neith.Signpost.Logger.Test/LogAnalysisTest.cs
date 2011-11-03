@@ -31,7 +31,7 @@ namespace Neith.Signpost.Logger.Test
                     var cv = a.AnalysisElement == null ? "" : a.AnalysisElement.ToString();
                     if (a.AnalysisElement == null && ngSrc == null) ngSrc = a;
 
-                    return new string[] {
+                    var rc = new string[] {
                         a.time.ToString("O"),
                         ng,
                         a.id.ToString(),
@@ -39,6 +39,8 @@ namespace Neith.Signpost.Logger.Test
                         a.mes,
                         cv,
                     };
+                    foreach (var item in rc) item.IsNot(null);
+                    return rc;
                 });
             var header = new string[] { "time", "!", "id", "who", "mes", "cv" };
             var csv = Enumerable
@@ -48,7 +50,8 @@ namespace Neith.Signpost.Logger.Test
             Neith.Util.CsvUtil.WriteCsv(Const.ConvertCsvPath, csv);
 
             // 結果の情報
-            if (ngSrc != null) {
+            if (ngSrc != null)
+            {
                 Debug.WriteLine("■NG Item");
                 Debug.WriteLine(ngSrc.InputElement.ToString());
             }
@@ -57,7 +60,8 @@ namespace Neith.Signpost.Logger.Test
                 var qModule = XIVAnalysis.AnalysisModules
                     .Where(a => a.CallCount == 0)
                     .OrderByDescending(a => a.CallCount);
-                foreach (var item in qModule) {
+                foreach (var item in qModule)
+                {
                     Debug.WriteLine(item);
                 }
             }
