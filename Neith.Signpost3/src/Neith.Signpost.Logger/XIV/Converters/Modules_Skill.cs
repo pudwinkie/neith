@@ -37,21 +37,13 @@ namespace Neith.Signpost.Logger.XIV.Converters
     public sealed class SkillSuccess : BaseConvertModule
     {
         public SkillSuccess()
-            : base(
-            reNAME("sender") + "は" +
-            reNAME("target") + @"に「(?<skill>.+)」を実行した。　⇒　\k<skill>は成功した。", (src, m) =>
+            : base(reATTACK + @"　⇒　\k<skill>は成功した。", (src, m) =>
             {
-                var sender = m.Groups["sender"].Value;
-                var target = m.Groups["target"].Value;
                 var skill = m.Groups["skill"].Value;
-                return SPAN(
+
+                return ATTACK(m,
                     ACT(src.idAct("skill success")),
-                    B("sender", sender),
-                    "は",
-                    B("target", target),
-                    "に「",
-                    B("skill", skill),
-                    "」を実行した。　⇒　",
+                    "　⇒　",
                     XB("skill", skill),
                     "は成功した。"
                     );
@@ -67,21 +59,14 @@ namespace Neith.Signpost.Logger.XIV.Converters
     public sealed class SkillNothing : BaseConvertModule
     {
         public SkillNothing()
-            : base(
-            reNAME("sender") + "は" +
-            reNAME("target") + @"に「(?<skill>.+)」　⇒　しかし、効果がなかった。", (src, m) =>
+            : base(reATTACK + @"　⇒　しかし、効果がなかった。", (src, m) =>
             {
                 var sender = m.Groups["sender"].Value;
                 var target = m.Groups["target"].Value;
                 var skill = m.Groups["skill"].Value;
-                return SPAN(
+                return ATTACK(m,
                     ACT(src.idAct("skill miss nothing")),
-                    B("sender", sender),
-                    "は",
-                    B("target", target),
-                    "に「",
-                    B("skill", skill),
-                    "」　⇒　しかし、効果がなかった。"
+                    "　⇒　しかし、効果がなかった。"
                     );
             }) { }
     }
@@ -90,48 +75,21 @@ namespace Neith.Signpost.Logger.XIV.Converters
 
     /// <summary>スキル：攻撃を外してしまった</summary>
     [Export(typeof(IConvertModule))]
-    [ConverterMetadata(9990, 91)]
+    [ConverterMetadata(9990, 87, 91)]
     [DisplayName("スキル：攻撃を外してしまった"), Category("スキル")]
     public sealed class SkillNotHit : BaseConvertModule
     {
         public SkillNotHit()
-            : base(
-            reNAME("sender") + "は" +
-            reNAME("target") + @"に「(?<skill>.+)」　⇒　攻撃を外してしまった。", (src, m) =>
+            : base(reATTACK + @"　⇒　攻撃を外してしまった。", (src, m) =>
             {
                 var sender = m.Groups["sender"].Value;
                 var target = m.Groups["target"].Value;
+                var direction = m.Groups["direction"].Value;
                 var skill = m.Groups["skill"].Value;
-                return SPAN(
+                return ATTACK(m,
                     ACT(src.idAct("skill miss nothit")),
-                    B("sender", sender),
-                    "は",
-                    B("target", target),
-                    "に「",
-                    B("skill", skill),
-                    "」　⇒　攻撃を外してしまった。"
-                    );
-            }) { }
-    }
-
-    /// <summary>スキル：範囲攻撃を外してしまった</summary>
-    [Export(typeof(IConvertModule))]
-    [ConverterMetadata(9990, 91)]
-    [DisplayName("スキル：範囲攻撃を外してしまった"), Category("スキル")]
-    public sealed class SkillNotHitRange : BaseConvertModule
-    {
-        public SkillNotHitRange()
-            : base(
-            reNAME("sender") + @"は「(?<skill>.+)」　⇒　攻撃を外してしまった。", (src, m) =>
-            {
-                var sender = m.Groups["sender"].Value;
-                var skill = m.Groups["skill"].Value;
-                return SPAN(
-                    ACT(src.idAct("skill miss nothit range")),
-                    B("sender", sender),
-                    "は「",
-                    B("skill", skill),
-                    "」　⇒　攻撃を外してしまった。"
+                    "　⇒　",
+                    "攻撃を外してしまった。"
                     );
             }) { }
     }
@@ -145,22 +103,12 @@ namespace Neith.Signpost.Logger.XIV.Converters
     public sealed class SkillDamage : BaseConvertModule
     {
         public SkillDamage()
-            : base(
-            reNAME("sender") + "は" +
-            reNAME("target") + @"に「(?<skill>.+)」　⇒　(?<value>\d+)ダメージを与えた。", (src, m) =>
+            : base(reATTACK + @"　⇒　(?<value>\d+)ダメージを与えた。", (src, m) =>
             {
-                var sender = m.Groups["sender"].Value;
-                var target = m.Groups["target"].Value;
-                var skill = m.Groups["skill"].Value;
                 var value = m.Groups["value"].Value;
-                return SPAN(
+                return ATTACK( m,
                     ACT(src.idAct("skill damage")),
-                    B("sender", sender),
-                    "は",
-                    B("target", target),
-                    "に「",
-                    B("skill", skill),
-                    "」　⇒　",
+                    "　⇒　",
                     B("value", value),
                     "ダメージを与えた。",
                     META("attribute", "HP")
@@ -177,22 +125,13 @@ namespace Neith.Signpost.Logger.XIV.Converters
     public sealed class MagicAided : BaseConvertModule
     {
         public MagicAided()
-            : base(
-            reNAME("sender") + "は" +
-            reNAME("target") + @"に「(?<skill>.+)」　⇒　\k<target>はＨＰを(?<value>\d+)回復した。", (src, m) =>
+            : base(reATTACK + @"　⇒　\k<target>はＨＰを(?<value>\d+)回復した。", (src, m) =>
             {
-                var sender = m.Groups["sender"].Value;
                 var target = m.Groups["target"].Value;
-                var skill = m.Groups["skill"].Value;
                 var value = m.Groups["value"].Value;
-                return SPAN(
+                return ATTACK(m,
                     ACT(src.idAct("skill aided")),
-                    B("sender", sender),
-                    "は",
-                    B("target", target),
-                    "に「",
-                    B("skill", skill),
-                    "」　⇒　",
+                    "　⇒　",
                     XB("target", target),
                     "」はＨＰを",
                     B("value", value),

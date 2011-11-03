@@ -24,11 +24,23 @@ namespace Neith.Signpost.Logger.XIV
                 .Select(item =>
                 {
                     if (item.Source == null) return item;
-                    try {
-                        item.time = (DateTimeOffset)(item.Source["time"].Attribute(XN.datetime));
-                        item.id = int.Parse(item.Source["id"].Value);
-                        item.who = item.Source["who"].Value;
-                        item.mes = item.Source["mes"].Value;
+                    try
+                    {
+                        if (item.Source.ContainsKey("who"))
+                        {
+                            item.time = (DateTimeOffset)(item.Source["time"].Attribute(XN.datetime));
+                            item.id = int.Parse(item.Source["id"].Value);
+                            item.who = item.Source["who"].Value;
+                            item.mes = item.Source["mes"].Value;
+                        }
+                        else
+                        {
+                            item.time = (DateTimeOffset)(item.Property["time"].Attribute(XN.datetime));
+                            item.id = int.Parse(item.Source["actId"].Value);
+                            item.who = item.Property["sender"].Value;
+                            item.mes = item.Source["message"].Value;
+                        }
+
                         // コンバート
                         if (!AnalysisModulesDic.ContainsKey(item.id)) return item;
                         var cvItems = AnalysisModulesDic[item.id];

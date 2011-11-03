@@ -37,16 +37,24 @@ namespace FFXIVRuby.Watcher
 
         private async Task LogWatch(CancellationToken token)
         {
-            while (true) {
-                var xiv = await ScanProcess(token);
-                if (xiv == null) continue;
-                using (IsOnline.ToSwitchDisposable(true)) {
-                    var reader = await SearchLogArea(xiv, token);
-                    if (reader == null) continue;
-                    using (IsReading.ToSwitchDisposable(true)) {
-                        await ReadLog(reader, token);
+            while (true)
+            {
+                try
+                {
+                    var xiv = await ScanProcess(token);
+                    if (xiv == null) continue;
+                    using (IsOnline.ToSwitchDisposable(true))
+                    {
+                        var reader = await SearchLogArea(xiv, token);
+                        if (reader == null) continue;
+                        using (IsReading.ToSwitchDisposable(true))
+                        {
+                            await ReadLog(reader, token);
+                        }
                     }
                 }
+                catch (OperationCanceledException) { throw; }
+                catch (Exception) { }
             }
         }
 
@@ -57,10 +65,12 @@ namespace FFXIVRuby.Watcher
         private async Task<FFXIVProcess> ScanProcess(CancellationToken token)
         {
             logger.Trace("Scan XIV...");
-            while (true) {
+            while (true)
+            {
                 if (token.IsCancellationRequested) throw new OperationCanceledException(token);
                 var p = FFXIVMemoryProvidor.GetFFXIVGameProcess();
-                if (p != null) {
+                if (p != null)
+                {
                     logger.Trace("FFXIV found.");
                     return new FFXIVProcess(p);
                 }
@@ -78,7 +88,8 @@ namespace FFXIVRuby.Watcher
         /// <returns></returns>
         private async Task<FFXIVLogReader> SearchLogArea(FFXIVProcess xiv, CancellationToken token)
         {
-            for (var i = 0; i < 10; i++) {
+            for (var i = 0; i < 10; i++)
+            {
                 if (token.IsCancellationRequested) throw new OperationCanceledException(token);
                 var search = new LogStatusSearcher(xiv);
                 var reader = search.SearchPLINQ(token);
@@ -97,15 +108,18 @@ namespace FFXIVRuby.Watcher
             logger.Trace("Read XIV log...");
             var from = (IntPtr)long.MaxValue;
             var proc = reader.FFXIV.Proc;
-            while (!proc.HasExited) {
+            while (!proc.HasExited)
+            {
                 if (token.IsCancellationRequested) throw new OperationCanceledException(token);
-                if (from == reader.TerminalPoint) {
+                if (from == reader.TerminalPoint)
+                {
                     await TaskEx.Delay(WaitReadLog, token);
                     continue;
                 }
                 var to = reader.TerminalPoint;
                 if ((long)from > (long)to) from = reader.EntryPoint;
-                foreach (var item in reader.GetLogs(from, to)) {
+                foreach (var item in reader.GetLogs(from, to))
+                {
                     if (token.IsCancellationRequested) throw new OperationCanceledException(token);
                     logBroadcast.Post(item);
                 }
@@ -129,9 +143,11 @@ namespace FFXIVRuby.Watcher
             var search = new LogStatusSearcher(xiv);
             var rc = search.SearchPLINQ(MACRO_MARK, 0, 0x0100, 5, token);
             if (rc == null) logger.Debug("SearchText = null");
-            else {
+            else
+            {
                 logger.Debug("SearchText Found !!");
-                foreach (var item in rc) {
+                foreach (var item in rc)
+                {
                     logger.Trace("    (0x{1,8:X}, 0x{2,6:X})", (int)item.Item1, item.Item2);
                 }
                 logger.Debug("########");

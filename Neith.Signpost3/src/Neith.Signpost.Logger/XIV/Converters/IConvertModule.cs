@@ -12,6 +12,7 @@ namespace Neith.Signpost.Logger.XIV.Converters
     {
         Regex Regex { get; }
         int CallCount { get; }
+        SrcItem LastItem { get; }
         XElement Calc(SrcItem src, Match m);
     }
 
