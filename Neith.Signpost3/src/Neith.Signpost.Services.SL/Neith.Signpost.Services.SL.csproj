@@ -50,21 +50,25 @@
       <HintPath>..\..\..\externals\Async-CTP\samples\AsyncCtpLibrary_Silverlight.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
-    <Reference Include="ReactiveUI.Blend_SL4">
-      <HintPath>..\packages\reactiveui-xaml.2.4.5.0\lib\SL4\ReactiveUI.Blend_SL4.dll</HintPath>
-    </Reference>
-    <Reference Include="ReactiveUI.Xaml_SL4">
-      <HintPath>..\packages\reactiveui-xaml.2.4.5.0\lib\SL4\ReactiveUI.Xaml_SL4.dll</HintPath>
-    </Reference>
-    <Reference Include="ReactiveUI_SL4">
-      <HintPath>..\packages\reactiveui-core.2.4.5.0\lib\SL4\ReactiveUI_SL4.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Reactive, Version=1.1.11011.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+    <Reference Include="ReactiveUI.Blend_SL4, Version=2.5.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Rx_Experimental-Main.1.1.11011\lib\SL4\System.Reactive.dll</HintPath>
+      <HintPath>..\packages\reactiveui-xaml.2.5.2.0\lib\SL4\ReactiveUI.Blend_SL4.dll</HintPath>
     </Reference>
-    <Reference Include="System.Reactive.Windows.Threading, Version=1.1.10621.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Rx_Experimental-Xaml.1.1.10621\lib\SL4\System.Reactive.Windows.Threading.dll</HintPath>
+    <Reference Include="ReactiveUI.Xaml_SL4, Version=2.5.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\reactiveui-xaml.2.5.2.0\lib\SL4\ReactiveUI.Xaml_SL4.dll</HintPath>
+    </Reference>
+    <Reference Include="ReactiveUI_SL4, Version=2.5.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\reactiveui-core.2.5.2.0\lib\SL4\ReactiveUI_SL4.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive, Version=1.1.11111.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rx_Experimental-Main.1.1.11111\lib\SL4\System.Reactive.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Windows.Threading, Version=1.1.11111.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rx_Experimental-Xaml.1.1.11111\lib\SL4\System.Reactive.Windows.Threading.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
